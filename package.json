@@ -19,6 +19,8 @@
     "test": "node --test \"tests/**/*.test.js\" \"tools/*.test.mjs\"",
     "typecheck": "tsc -p tsconfig.json",
     "vendor": "node tools/vendor.mjs",
+    "stamp": "node tools/stamp.mjs",
+    "version": "node tools/stamp.mjs",
     "fixture": "python3 -I blender/scripts/export_kinematics_fixture.py",
     "poses:m1": "node tools/export-m1-poses.mjs",
     "poses:m2": "node tools/export-m2-poses.mjs",

@@ -259,7 +259,7 @@ function setupHover(root) {
 
 // ---- load ---------------------------------------------------------------------------------------
 viewer
-  .load("../../assets/m0-digit-slice.glb")
+  .load("../../assets/m0-digit-slice.glb" + new URL(import.meta.url).search)
   .then((root) => {
     rig = new Rig(root, M0_NODES);
     (/** @type {HTMLInputElement} */ ($("didactic"))).addEventListener("change", (e) => {

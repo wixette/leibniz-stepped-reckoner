@@ -18,6 +18,17 @@ python3 -m http.server 8000
 
 Then open <http://localhost:8000/> for the lessons, or <http://localhost:8000/dev/> for the developer pages (one per milestone; add `?selftest` to run a page's acceptance checks). To deploy, copy the whole directory to a web server, with the Git LFS files checked out. Pages cannot be opened from `file://`, because browsers do not load modules from there.
 
+### Deploying behind a cache
+
+Every file a page names carries the version, `css/style.css?v=0.1.0`, and so does every module the scripts import, through the page's import map, and every model they load. A release asks for new names, so a cache can keep each file as long as it likes and still never give an old one to a new page. Only the pages themselves (`index.html` and the `index.html` files in `dev/`) must not be kept. On a server or a CDN that lets you set the headers:
+
+| What | `Cache-Control` |
+| --- | --- |
+| The pages (`index.html`, `/`, `dev/…/`) | `no-cache`: kept, but checked with the server each time |
+| Everything asked for with `?v=` | `public, max-age=31536000, immutable` |
+
+A CDN must count the query string in its cache key (most do unless told not to). GitHub Pages sets no headers you can change and keeps everything for 10 minutes, so there a release reaches everyone within 10 minutes. The stamps are written by `pnpm version` (or `pnpm stamp`, [tools/stamp.mjs](tools/stamp.mjs)); `pnpm test` fails while a page and `package.json` disagree.
+
 ### Requirements
 
 - **Git LFS**, for the 3D models and other binary assets: run `git lfs install` once, then clone as usual (or `git lfs pull` in an existing clone).
@@ -36,7 +47,7 @@ CI runs them on every push and pull request, together with the REUSE lint ([docs
 
 ### Versions and releases
 
-The version is kept in one place, `package.json`. Set it with `pnpm version <x.y.z>`, which does not commit or tag ([.npmrc](.npmrc)). A release is a pull request named for its version; it is tagged `vX.Y.Z` on GitHub, on the merge commit. Each push to `main` deploys the site to GitHub Pages ([.github/workflows/pages.yml](.github/workflows/pages.yml)).
+The version is kept in one place, `package.json`. Set it with `pnpm version <x.y.z>`, which also writes it into the pages' file names (see *Deploying behind a cache*) and does not commit or tag ([.npmrc](.npmrc)). A release is a pull request named for its version; it is tagged `vX.Y.Z` on GitHub, on the merge commit. Each push to `main` deploys the site to GitHub Pages ([.github/workflows/pages.yml](.github/workflows/pages.yml)).
 
 ### Documents
 
@@ -63,7 +74,7 @@ The version is kept in one place, `package.json`. Set it with `pnpm version <x.y
 | `dev/` | Developer pages, one per milestone |
 | `vendor/` | three.js and three-mesh-bvh, copied from npm (`pnpm vendor`) |
 | `tests/` | `node --test` tests |
-| `tools/` | Reference check, vendoring and pose export scripts |
+| `tools/` | Reference check, vendoring, version stamps and pose export scripts |
 
 ## Credits
 

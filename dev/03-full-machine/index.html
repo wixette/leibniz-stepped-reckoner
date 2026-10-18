@@ -4,15 +4,59 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>M2 · The full Leibniz stepped reckoner</title>
-    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./style.css?v=0.0.0" />
+    <!-- Every file name here carries the version (?v=), and so does each module the
+         scripts import, through this map: bare names ("three") lead to the copies in
+         vendor/ (pnpm vendor), and a release asks for new names, so no cache can serve
+         an old file to a new page. pnpm version writes them, or pnpm stamp
+         (tools/stamp.mjs); do not edit them by hand. -->
     <script type="importmap">
-      {
-        "imports": {
-          "three": "../../vendor/three/build/three.module.js",
-          "three/addons/": "../../vendor/three/examples/jsm/",
-          "three-mesh-bvh": "../../vendor/three-mesh-bvh/build/index.module.js"
-        }
+    {
+      "imports": {
+        "three": "../../vendor/three/build/three.module.js?v=0.0.0",
+        "three-mesh-bvh": "../../vendor/three-mesh-bvh/build/index.module.js?v=0.0.0",
+        "three/addons/controls/OrbitControls.js": "../../vendor/three/examples/jsm/controls/OrbitControls.js?v=0.0.0",
+        "three/addons/loaders/GLTFLoader.js": "../../vendor/three/examples/jsm/loaders/GLTFLoader.js?v=0.0.0",
+        "three/addons/utils/BufferGeometryUtils.js": "../../vendor/three/examples/jsm/utils/BufferGeometryUtils.js?v=0.0.0",
+        "three/addons/utils/SkeletonUtils.js": "../../vendor/three/examples/jsm/utils/SkeletonUtils.js?v=0.0.0",
+        "../../js/accept/collisions.js": "../../js/accept/collisions.js?v=0.0.0",
+        "../../js/accept/harness.js": "../../js/accept/harness.js?v=0.0.0",
+        "../../js/accept/m0Checks.js": "../../js/accept/m0Checks.js?v=0.0.0",
+        "../../js/accept/m1Checks.js": "../../js/accept/m1Checks.js?v=0.0.0",
+        "../../js/accept/m2Checks.js": "../../js/accept/m2Checks.js?v=0.0.0",
+        "../../js/accept/m3Checks.js": "../../js/accept/m3Checks.js?v=0.0.0",
+        "../../js/accept/selftestPanel.js": "../../js/accept/selftestPanel.js?v=0.0.0",
+        "../../js/main.js": "../../js/main.js?v=0.0.0",
+        "../../js/scene/m0Pose.js": "../../js/scene/m0Pose.js?v=0.0.0",
+        "../../js/scene/m1Pose.js": "../../js/scene/m1Pose.js?v=0.0.0",
+        "../../js/scene/m2Pose.js": "../../js/scene/m2Pose.js?v=0.0.0",
+        "../../js/scene/rig.js": "../../js/scene/rig.js?v=0.0.0",
+        "../../js/scene/teachScene.js": "../../js/scene/teachScene.js?v=0.0.0",
+        "../../js/scene/viewer.js": "../../js/scene/viewer.js?v=0.0.0",
+        "../../js/sim/carrySlice.js": "../../js/sim/carrySlice.js?v=0.0.0",
+        "../../js/sim/digitSlice.js": "../../js/sim/digitSlice.js?v=0.0.0",
+        "../../js/sim/kinematics.js": "../../js/sim/kinematics.js?v=0.0.0",
+        "../../js/sim/kinematicsM1.js": "../../js/sim/kinematicsM1.js?v=0.0.0",
+        "../../js/sim/machine.js": "../../js/sim/machine.js?v=0.0.0",
+        "../../js/sim/narrate.js": "../../js/sim/narrate.js?v=0.0.0",
+        "../../js/sim/operations.js": "../../js/sim/operations.js?v=0.0.0",
+        "../../js/teach/i18n.js": "../../js/teach/i18n.js?v=0.0.0",
+        "../../js/teach/lessons.js": "../../js/teach/lessons.js?v=0.0.0",
+        "../../js/teach/partActions.js": "../../js/teach/partActions.js?v=0.0.0",
+        "../../js/teach/partInfo.js": "../../js/teach/partInfo.js?v=0.0.0",
+        "../../js/teach/player.js": "../../js/teach/player.js?v=0.0.0",
+        "../../js/tools/m1Scenarios.js": "../../js/tools/m1Scenarios.js?v=0.0.0",
+        "../../js/tools/m2Scenarios.js": "../../js/tools/m2Scenarios.js?v=0.0.0",
+        "../../params/machine.json": "../../params/machine.json?v=0.0.0",
+        "../../vendor/three-mesh-bvh/build/index.module.js": "../../vendor/three-mesh-bvh/build/index.module.js?v=0.0.0",
+        "../../vendor/three/build/three.core.js": "../../vendor/three/build/three.core.js?v=0.0.0",
+        "../../vendor/three/build/three.module.js": "../../vendor/three/build/three.module.js?v=0.0.0",
+        "../../vendor/three/examples/jsm/controls/OrbitControls.js": "../../vendor/three/examples/jsm/controls/OrbitControls.js?v=0.0.0",
+        "../../vendor/three/examples/jsm/loaders/GLTFLoader.js": "../../vendor/three/examples/jsm/loaders/GLTFLoader.js?v=0.0.0",
+        "../../vendor/three/examples/jsm/utils/BufferGeometryUtils.js": "../../vendor/three/examples/jsm/utils/BufferGeometryUtils.js?v=0.0.0",
+        "../../vendor/three/examples/jsm/utils/SkeletonUtils.js": "../../vendor/three/examples/jsm/utils/SkeletonUtils.js?v=0.0.0"
       }
+    }
     </script>
   </head>
   <body>
@@ -124,6 +168,6 @@
         <p>Reconstruction (target B): documented mechanism and angles, estimated part sizes. See <code>design/m2-notes.md</code>. Add <code>?selftest</code> to run the M2 acceptance checks.</p>
       </footer>
     </aside>
-    <script type="module" src="./main.js"></script>
+    <script type="module" src="./main.js?v=0.0.0"></script>
   </body>
 </html>

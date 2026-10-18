@@ -21,7 +21,9 @@ import { applyAction, presentation, replayTo } from "./teach/player.js";
  * @param {string} id
  */
 const $ = (id) => /** @type {T} */ (document.getElementById(id));
-const MODEL = "assets/m2-full-machine.glb";
+// The version this module was loaded with (?v=, see tools/stamp.mjs), so a cache never
+// pairs an old model with new code.
+const MODEL = "assets/m2-full-machine.glb" + new URL(import.meta.url).search;
 const CASING = ["frame.case", "frame.base", "frame.register_cover", "pm.carriage_cover"];
 
 const machine = new Machine();

@@ -16,7 +16,8 @@ import { registerValue } from "../../js/sim/operations.js";
  * @param {string} id
  */
 const $ = (id) => /** @type {T} */ (document.getElementById(id));
-const MODEL = "../../assets/m2-full-machine.glb";
+// The version this module was loaded with (?v=, see tools/stamp.mjs).
+const MODEL = "../../assets/m2-full-machine.glb" + new URL(import.meta.url).search;
 
 const machine = new Machine();
 const R = machine.registerDigits;
@@ -594,7 +595,7 @@ viewer
       status.textContent = "Running the M2 self-test (about 15 s)…";
       setTimeout(() => {
         const t0 = performance.now();
-        const entry = /** @type {PerformanceResourceTiming | undefined} */ (performance.getEntriesByType("resource").find((e) => e.name.endsWith(MODEL)));
+        const entry = /** @type {PerformanceResourceTiming | undefined} */ (performance.getEntriesByType("resource").find((e) => e.name === new URL(MODEL, location.href).href));
         const results = runM2Checks(r, { bytes: entry?.decodedBodySize || undefined });
         showSelftest($("panel"), results, performance.now() - t0);
         status.textContent = "";

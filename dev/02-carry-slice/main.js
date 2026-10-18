@@ -298,7 +298,7 @@ function setupHover(root) {
 
 // ---- load -----------------------------------------------------------------------------------------
 viewer
-  .load("../../assets/m1-carry-slice.glb")
+  .load("../../assets/m1-carry-slice.glb" + new URL(import.meta.url).search)
   .then((root) => {
     rig = /** @type {Rig<string>} */ (new Rig(root, m1NodeNames(N)));
     (/** @type {HTMLInputElement} */ ($("didactic"))).addEventListener("change", (e) => {
