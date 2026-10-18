@@ -1,0 +1,2547 @@
+{
+ "generated_by": "blender/scripts/export_kinematics_fixture.py",
+ "samples": [
+  {
+   "setting": 0,
+   "digit_start": 0,
+   "theta": 0,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 0,
+   "theta": 60,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 0,
+   "theta": 85.3,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 0,
+   "theta": 150,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 0,
+   "theta": 200.5,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 0,
+   "theta": 258.75,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 0,
+   "theta": 270,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 0,
+   "theta": 281.25,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 0,
+   "theta": 286,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 0,
+   "theta": 300,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 0,
+   "theta": 360,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 0,
+   "theta": -40,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 0,
+   "theta": -90,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 0,
+   "theta": -120.7,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 0,
+   "theta": -200,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 0,
+   "theta": -283,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 0,
+   "theta": -330,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 0,
+   "theta": -360,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 5,
+   "theta": 0,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 5,
+   "theta": 60,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 5,
+   "theta": 85.3,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 5,
+   "theta": 150,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 5,
+   "theta": 200.5,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 5,
+   "theta": 258.75,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 5,
+   "theta": 270,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 5,
+   "theta": 281.25,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 5,
+   "theta": 286,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 5,
+   "theta": 300,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 5,
+   "theta": 360,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 5,
+   "theta": -40,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 5,
+   "theta": -90,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 5,
+   "theta": -120.7,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 5,
+   "theta": -200,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 5,
+   "theta": -283,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 5,
+   "theta": -330,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 5,
+   "theta": -360,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 9,
+   "theta": 0,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 9,
+   "theta": 60,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 9,
+   "theta": 85.3,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 9,
+   "theta": 150,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 9,
+   "theta": 200.5,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 9,
+   "theta": 258.75,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 9,
+   "theta": 270,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 9,
+   "theta": 281.25,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 9,
+   "theta": 286,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 9,
+   "theta": 300,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 9,
+   "theta": 360,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 9,
+   "theta": -40,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 9,
+   "theta": -90,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 9,
+   "theta": -120.7,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 9,
+   "theta": -200,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 9,
+   "theta": -283,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 9,
+   "theta": -330,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 0,
+   "digit_start": 9,
+   "theta": -360,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 18.0,
+   "dial_angle": 0.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 0,
+   "theta": 0,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 0,
+   "theta": 60,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 0,
+   "theta": 85.3,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 0,
+   "theta": 150,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 0,
+   "theta": 200.5,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 0,
+   "theta": 258.75,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 0,
+   "theta": 270,
+   "v": 0.5,
+   "wheel_angle": -18.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 0,
+   "theta": 281.25,
+   "v": 1.0,
+   "wheel_angle": -36.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 0,
+   "theta": 286,
+   "v": 1.0,
+   "wheel_angle": -36.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 0,
+   "theta": 300,
+   "v": 1.0,
+   "wheel_angle": -36.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 0,
+   "theta": 360,
+   "v": 1.0,
+   "wheel_angle": -36.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 0,
+   "theta": -40,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 0,
+   "theta": -90,
+   "v": -0.5,
+   "wheel_angle": 18.0,
+   "store_angle": -11.624673067926775,
+   "store_angle_not_executed": -11.624673067926775,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 0,
+   "theta": -120.7,
+   "v": -1.0,
+   "wheel_angle": 36.0,
+   "store_angle": -18.0,
+   "store_angle_not_executed": -18.0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 0,
+   "theta": -200,
+   "v": -1.0,
+   "wheel_angle": 36.0,
+   "store_angle": -18.0,
+   "store_angle_not_executed": -18.0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 0,
+   "theta": -283,
+   "v": -1.0,
+   "wheel_angle": 36.0,
+   "store_angle": -18.0,
+   "store_angle_not_executed": -18.0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 0,
+   "theta": -330,
+   "v": -1.0,
+   "wheel_angle": 36.0,
+   "store_angle": -72.0,
+   "store_angle_not_executed": -18.0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 0,
+   "theta": -360,
+   "v": -1.0,
+   "wheel_angle": 36.0,
+   "store_angle": -72.0,
+   "store_angle_not_executed": -18.0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 5,
+   "theta": 0,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 5,
+   "theta": 60,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 5,
+   "theta": 85.3,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 5,
+   "theta": 150,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 5,
+   "theta": 200.5,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 5,
+   "theta": 258.75,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 5,
+   "theta": 270,
+   "v": 5.5,
+   "wheel_angle": -198.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 5,
+   "theta": 281.25,
+   "v": 6.0,
+   "wheel_angle": -216.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 5,
+   "theta": 286,
+   "v": 6.0,
+   "wheel_angle": -216.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 5,
+   "theta": 300,
+   "v": 6.0,
+   "wheel_angle": -216.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 5,
+   "theta": 360,
+   "v": 6.0,
+   "wheel_angle": -216.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 5,
+   "theta": -40,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 5,
+   "theta": -90,
+   "v": 4.5,
+   "wheel_angle": -162.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 5,
+   "theta": -120.7,
+   "v": 4.0,
+   "wheel_angle": -144.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 5,
+   "theta": -200,
+   "v": 4.0,
+   "wheel_angle": -144.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 5,
+   "theta": -283,
+   "v": 4.0,
+   "wheel_angle": -144.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 5,
+   "theta": -330,
+   "v": 4.0,
+   "wheel_angle": -144.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 5,
+   "theta": -360,
+   "v": 4.0,
+   "wheel_angle": -144.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 9,
+   "theta": 0,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 9,
+   "theta": 60,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 9,
+   "theta": 85.3,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 9,
+   "theta": 150,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 9,
+   "theta": 200.5,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 9,
+   "theta": 258.75,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 9,
+   "theta": 270,
+   "v": 9.5,
+   "wheel_angle": -342.0,
+   "store_angle": 11.624673067926775,
+   "store_angle_not_executed": 11.624673067926775,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 9,
+   "theta": 281.25,
+   "v": 10.0,
+   "wheel_angle": -360.0,
+   "store_angle": 18.0,
+   "store_angle_not_executed": 18.0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 9,
+   "theta": 286,
+   "v": 10.0,
+   "wheel_angle": -360.0,
+   "store_angle": 18.0,
+   "store_angle_not_executed": 18.0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 9,
+   "theta": 300,
+   "v": 10.0,
+   "wheel_angle": -360.0,
+   "store_angle": 72.0,
+   "store_angle_not_executed": 18.0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 9,
+   "theta": 360,
+   "v": 10.0,
+   "wheel_angle": -360.0,
+   "store_angle": 72.0,
+   "store_angle_not_executed": 18.0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 9,
+   "theta": -40,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 9,
+   "theta": -90,
+   "v": 8.5,
+   "wheel_angle": -306.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 9,
+   "theta": -120.7,
+   "v": 8.0,
+   "wheel_angle": -288.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 9,
+   "theta": -200,
+   "v": 8.0,
+   "wheel_angle": -288.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 9,
+   "theta": -283,
+   "v": 8.0,
+   "wheel_angle": -288.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 9,
+   "theta": -330,
+   "v": 8.0,
+   "wheel_angle": -288.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 1,
+   "digit_start": 9,
+   "theta": -360,
+   "v": 8.0,
+   "wheel_angle": -288.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 14.0,
+   "dial_angle": 36.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 0,
+   "theta": 0,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 0,
+   "theta": 60,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 0,
+   "theta": 85.3,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 0,
+   "theta": 150,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 0,
+   "theta": 200.5,
+   "v": 0.4111111111111111,
+   "wheel_angle": -14.799999999999999,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 0,
+   "theta": 258.75,
+   "v": 3.0,
+   "wheel_angle": -108.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 0,
+   "theta": 270,
+   "v": 3.5,
+   "wheel_angle": -126.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 0,
+   "theta": 281.25,
+   "v": 4.0,
+   "wheel_angle": -144.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 0,
+   "theta": 286,
+   "v": 4.0,
+   "wheel_angle": -144.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 0,
+   "theta": 300,
+   "v": 4.0,
+   "wheel_angle": -144.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 0,
+   "theta": 360,
+   "v": 4.0,
+   "wheel_angle": -144.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 0,
+   "theta": -40,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 0,
+   "theta": -90,
+   "v": -0.5,
+   "wheel_angle": 18.0,
+   "store_angle": -11.624673067926775,
+   "store_angle_not_executed": -11.624673067926775,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 0,
+   "theta": -120.7,
+   "v": -1.8644444444444446,
+   "wheel_angle": 67.12,
+   "store_angle": -18.0,
+   "store_angle_not_executed": -18.0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 0,
+   "theta": -200,
+   "v": -4.0,
+   "wheel_angle": 144.0,
+   "store_angle": -18.0,
+   "store_angle_not_executed": -18.0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 0,
+   "theta": -283,
+   "v": -4.0,
+   "wheel_angle": 144.0,
+   "store_angle": -18.0,
+   "store_angle_not_executed": -18.0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 0,
+   "theta": -330,
+   "v": -4.0,
+   "wheel_angle": 144.0,
+   "store_angle": -72.0,
+   "store_angle_not_executed": -18.0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 0,
+   "theta": -360,
+   "v": -4.0,
+   "wheel_angle": 144.0,
+   "store_angle": -72.0,
+   "store_angle_not_executed": -18.0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 5,
+   "theta": 0,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 5,
+   "theta": 60,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 5,
+   "theta": 85.3,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 5,
+   "theta": 150,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 5,
+   "theta": 200.5,
+   "v": 5.411111111111111,
+   "wheel_angle": -194.8,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 5,
+   "theta": 258.75,
+   "v": 8.0,
+   "wheel_angle": -288.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 5,
+   "theta": 270,
+   "v": 8.5,
+   "wheel_angle": -306.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 5,
+   "theta": 281.25,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 5,
+   "theta": 286,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 5,
+   "theta": 300,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 5,
+   "theta": 360,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 5,
+   "theta": -40,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 5,
+   "theta": -90,
+   "v": 4.5,
+   "wheel_angle": -162.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 5,
+   "theta": -120.7,
+   "v": 3.1355555555555554,
+   "wheel_angle": -112.88,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 5,
+   "theta": -200,
+   "v": 1.0,
+   "wheel_angle": -36.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 5,
+   "theta": -283,
+   "v": 1.0,
+   "wheel_angle": -36.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 5,
+   "theta": -330,
+   "v": 1.0,
+   "wheel_angle": -36.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 5,
+   "theta": -360,
+   "v": 1.0,
+   "wheel_angle": -36.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 9,
+   "theta": 0,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 9,
+   "theta": 60,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 9,
+   "theta": 85.3,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 9,
+   "theta": 150,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 9,
+   "theta": 200.5,
+   "v": 9.411111111111111,
+   "wheel_angle": -338.8,
+   "store_angle": 7.16822037077389,
+   "store_angle_not_executed": 7.16822037077389,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 9,
+   "theta": 258.75,
+   "v": 12.0,
+   "wheel_angle": -432.0,
+   "store_angle": 18.0,
+   "store_angle_not_executed": 18.0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 9,
+   "theta": 270,
+   "v": 12.5,
+   "wheel_angle": -450.0,
+   "store_angle": 18.0,
+   "store_angle_not_executed": 18.0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 9,
+   "theta": 281.25,
+   "v": 13.0,
+   "wheel_angle": -468.0,
+   "store_angle": 18.0,
+   "store_angle_not_executed": 18.0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 9,
+   "theta": 286,
+   "v": 13.0,
+   "wheel_angle": -468.0,
+   "store_angle": 18.0,
+   "store_angle_not_executed": 18.0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 9,
+   "theta": 300,
+   "v": 13.0,
+   "wheel_angle": -468.0,
+   "store_angle": 72.0,
+   "store_angle_not_executed": 18.0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 9,
+   "theta": 360,
+   "v": 13.0,
+   "wheel_angle": -468.0,
+   "store_angle": 72.0,
+   "store_angle_not_executed": 18.0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 9,
+   "theta": -40,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 9,
+   "theta": -90,
+   "v": 8.5,
+   "wheel_angle": -306.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 9,
+   "theta": -120.7,
+   "v": 7.135555555555555,
+   "wheel_angle": -256.88,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 9,
+   "theta": -200,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 9,
+   "theta": -283,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 9,
+   "theta": -330,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 4,
+   "digit_start": 9,
+   "theta": -360,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": 2.0,
+   "dial_angle": 144.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 0,
+   "theta": 0,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 0,
+   "theta": 60,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 0,
+   "theta": 85.3,
+   "v": 0.291111111111111,
+   "wheel_angle": -10.479999999999995,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 0,
+   "theta": 150,
+   "v": 3.1666666666666665,
+   "wheel_angle": -114.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 0,
+   "theta": 200.5,
+   "v": 5.411111111111111,
+   "wheel_angle": -194.8,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 0,
+   "theta": 258.75,
+   "v": 8.0,
+   "wheel_angle": -288.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 0,
+   "theta": 270,
+   "v": 8.5,
+   "wheel_angle": -306.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 0,
+   "theta": 281.25,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 0,
+   "theta": 286,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 0,
+   "theta": 300,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 0,
+   "theta": 360,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 0,
+   "theta": -40,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 0,
+   "theta": -90,
+   "v": -0.5,
+   "wheel_angle": 18.0,
+   "store_angle": -11.624673067926775,
+   "store_angle_not_executed": -11.624673067926775,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 0,
+   "theta": -120.7,
+   "v": -1.8644444444444446,
+   "wheel_angle": 67.12,
+   "store_angle": -18.0,
+   "store_angle_not_executed": -18.0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 0,
+   "theta": -200,
+   "v": -5.388888888888889,
+   "wheel_angle": 194.0,
+   "store_angle": -18.0,
+   "store_angle_not_executed": -18.0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 0,
+   "theta": -283,
+   "v": -9.0,
+   "wheel_angle": 324.0,
+   "store_angle": -18.0,
+   "store_angle_not_executed": -18.0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 0,
+   "theta": -330,
+   "v": -9.0,
+   "wheel_angle": 324.0,
+   "store_angle": -72.0,
+   "store_angle_not_executed": -18.0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 0,
+   "theta": -360,
+   "v": -9.0,
+   "wheel_angle": 324.0,
+   "store_angle": -72.0,
+   "store_angle_not_executed": -18.0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 5,
+   "theta": 0,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 5,
+   "theta": 60,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 5,
+   "theta": 85.3,
+   "v": 5.291111111111111,
+   "wheel_angle": -190.48000000000002,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 5,
+   "theta": 150,
+   "v": 8.166666666666666,
+   "wheel_angle": -294.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 5,
+   "theta": 200.5,
+   "v": 10.411111111111111,
+   "wheel_angle": -374.8,
+   "store_angle": 18.0,
+   "store_angle_not_executed": 18.0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 5,
+   "theta": 258.75,
+   "v": 13.0,
+   "wheel_angle": -468.0,
+   "store_angle": 18.0,
+   "store_angle_not_executed": 18.0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 5,
+   "theta": 270,
+   "v": 13.5,
+   "wheel_angle": -486.0,
+   "store_angle": 18.0,
+   "store_angle_not_executed": 18.0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 5,
+   "theta": 281.25,
+   "v": 14.0,
+   "wheel_angle": -504.0,
+   "store_angle": 18.0,
+   "store_angle_not_executed": 18.0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 5,
+   "theta": 286,
+   "v": 14.0,
+   "wheel_angle": -504.0,
+   "store_angle": 18.0,
+   "store_angle_not_executed": 18.0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 5,
+   "theta": 300,
+   "v": 14.0,
+   "wheel_angle": -504.0,
+   "store_angle": 72.0,
+   "store_angle_not_executed": 18.0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 5,
+   "theta": 360,
+   "v": 14.0,
+   "wheel_angle": -504.0,
+   "store_angle": 72.0,
+   "store_angle_not_executed": 18.0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 5,
+   "theta": -40,
+   "v": 5.0,
+   "wheel_angle": -180.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 5,
+   "theta": -90,
+   "v": 4.5,
+   "wheel_angle": -162.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 5,
+   "theta": -120.7,
+   "v": 3.1355555555555554,
+   "wheel_angle": -112.88,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 5,
+   "theta": -200,
+   "v": -0.3888888888888893,
+   "wheel_angle": 14.000000000000014,
+   "store_angle": -5.908509861401418,
+   "store_angle_not_executed": -5.908509861401418,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 5,
+   "theta": -283,
+   "v": -4.0,
+   "wheel_angle": 144.0,
+   "store_angle": -18.0,
+   "store_angle_not_executed": -18.0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 5,
+   "theta": -330,
+   "v": -4.0,
+   "wheel_angle": 144.0,
+   "store_angle": -72.0,
+   "store_angle_not_executed": -18.0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 5,
+   "theta": -360,
+   "v": -4.0,
+   "wheel_angle": 144.0,
+   "store_angle": -72.0,
+   "store_angle_not_executed": -18.0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 9,
+   "theta": 0,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 9,
+   "theta": 60,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 9,
+   "theta": 85.3,
+   "v": 9.29111111111111,
+   "wheel_angle": -334.47999999999996,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0.0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 9,
+   "theta": 150,
+   "v": 12.166666666666666,
+   "wheel_angle": -438.0,
+   "store_angle": 18.0,
+   "store_angle_not_executed": 18.0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 9,
+   "theta": 200.5,
+   "v": 14.411111111111111,
+   "wheel_angle": -518.8,
+   "store_angle": 18.0,
+   "store_angle_not_executed": 18.0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 9,
+   "theta": 258.75,
+   "v": 17.0,
+   "wheel_angle": -612.0,
+   "store_angle": 18.0,
+   "store_angle_not_executed": 18.0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 9,
+   "theta": 270,
+   "v": 17.5,
+   "wheel_angle": -630.0,
+   "store_angle": 18.0,
+   "store_angle_not_executed": 18.0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 9,
+   "theta": 281.25,
+   "v": 18.0,
+   "wheel_angle": -648.0,
+   "store_angle": 18.0,
+   "store_angle_not_executed": 18.0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 9,
+   "theta": 286,
+   "v": 18.0,
+   "wheel_angle": -648.0,
+   "store_angle": 18.0,
+   "store_angle_not_executed": 18.0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 9,
+   "theta": 300,
+   "v": 18.0,
+   "wheel_angle": -648.0,
+   "store_angle": 72.0,
+   "store_angle_not_executed": 18.0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 9,
+   "theta": 360,
+   "v": 18.0,
+   "wheel_angle": -648.0,
+   "store_angle": 72.0,
+   "store_angle_not_executed": 18.0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 9,
+   "theta": -40,
+   "v": 9.0,
+   "wheel_angle": -324.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 9,
+   "theta": -90,
+   "v": 8.5,
+   "wheel_angle": -306.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 9,
+   "theta": -120.7,
+   "v": 7.135555555555555,
+   "wheel_angle": -256.88,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 9,
+   "theta": -200,
+   "v": 3.6111111111111107,
+   "wheel_angle": -130.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 9,
+   "theta": -283,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 9,
+   "theta": -330,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  },
+  {
+   "setting": 9,
+   "digit_start": 9,
+   "theta": -360,
+   "v": 0.0,
+   "wheel_angle": -0.0,
+   "store_angle": 0.0,
+   "store_angle_not_executed": 0,
+   "drum_front_y": -18.0,
+   "dial_angle": 324.0
+  }
+ ],
+ "push": [
+  {
+   "v": 9.0,
+   "push": 0.0
+  },
+  {
+   "v": 9.025,
+   "push": 0.0
+  },
+  {
+   "v": 9.05,
+   "push": 0.0
+  },
+  {
+   "v": 9.075,
+   "push": 0.0
+  },
+  {
+   "v": 9.1,
+   "push": 0.0
+  },
+  {
+   "v": 9.125,
+   "push": 0.0
+  },
+  {
+   "v": 9.15,
+   "push": 0.0
+  },
+  {
+   "v": 9.175,
+   "push": 0.0
+  },
+  {
+   "v": 9.2,
+   "push": 0.0
+  },
+  {
+   "v": 9.225,
+   "push": 0.0
+  },
+  {
+   "v": 9.25,
+   "push": 0.0
+  },
+  {
+   "v": 9.275,
+   "push": 0.0
+  },
+  {
+   "v": 9.3,
+   "push": 0.15325337031759118
+  },
+  {
+   "v": 9.325,
+   "push": 1.908116828872101
+  },
+  {
+   "v": 9.35,
+   "push": 3.5471477676401
+  },
+  {
+   "v": 9.375,
+   "push": 5.089249834782091
+  },
+  {
+   "v": 9.4,
+   "push": 6.546143660725664
+  },
+  {
+   "v": 9.425,
+   "push": 7.925055076393654
+  },
+  {
+   "v": 9.45,
+   "push": 9.230145154779125
+  },
+  {
+   "v": 9.475,
+   "push": 10.463316318600825
+  },
+  {
+   "v": 9.5,
+   "push": 11.624673067926775
+  },
+  {
+   "v": 9.525,
+   "push": 12.712767408684169
+  },
+  {
+   "v": 9.55,
+   "push": 13.724687602771178
+  },
+  {
+   "v": 9.575,
+   "push": 14.656006927998504
+  },
+  {
+   "v": 9.6,
+   "push": 15.500575040568933
+  },
+  {
+   "v": 9.625,
+   "push": 16.250092666286942
+  },
+  {
+   "v": 9.65,
+   "push": 16.893339038033446
+  },
+  {
+   "v": 9.675,
+   "push": 17.414773352847998
+  },
+  {
+   "v": 9.7,
+   "push": 17.79187661515606
+  },
+  {
+   "v": 9.725,
+   "push": 17.989615109454455
+  },
+  {
+   "v": 9.75,
+   "push": 18.0
+  },
+  {
+   "v": 9.775,
+   "push": 18.0
+  },
+  {
+   "v": 9.8,
+   "push": 18.0
+  },
+  {
+   "v": 9.825,
+   "push": 18.0
+  },
+  {
+   "v": 9.85,
+   "push": 18.0
+  },
+  {
+   "v": 9.875,
+   "push": 18.0
+  },
+  {
+   "v": 9.9,
+   "push": 18.0
+  },
+  {
+   "v": 9.925,
+   "push": 18.0
+  },
+  {
+   "v": 9.95,
+   "push": 18.0
+  },
+  {
+   "v": 9.975,
+   "push": 18.0
+  },
+  {
+   "v": 10.0,
+   "push": 18.0
+  }
+ ]
+}

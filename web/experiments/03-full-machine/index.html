@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>M2 · The full Leibniz stepped reckoner</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main id="stage">
+      <div id="hover" hidden></div>
+      <div id="status" role="status">Loading model…</div>
+    </main>
+    <aside id="panel">
+      <header>
+        <h1>Leibniz's calculating machine</h1>
+        <p class="sub">M2 prototype · 16-digit register, 8-digit carriage, Magna Rota</p>
+      </header>
+
+      <section>
+        <h2>Result register <small style="text-transform:none;letter-spacing:0">(purple = under the carriage)</small></h2>
+        <div class="windows windows16" id="windows"></div>
+        <div class="meta3">
+          <div><span class="big" id="counter">0</span><label>Magna Rota turns (red: subtracting)</label></div>
+          <div><span class="big" id="offset">0</span><label>carriage shift</label></div>
+          <div><span class="big" id="overflow">0</span><label>overflow</label></div>
+        </div>
+        <p id="phase" class="phase">Set a number and turn the crank.</p>
+        <button id="reset" class="reset" title="Crank to rest, everything to 0, carriage home, pin out">↺ Reset machine</button>
+      </section>
+
+      <section>
+        <h2>Worked examples</h2>
+        <div class="examples">
+          <button data-example="mul">1709 × 365</button>
+          <button data-example="div">623785 ÷ 1709</button>
+          <button data-example="beyond">999 999 999 + 1</button>
+          <button data-example="hist">9999 + 1 (historical)</button>
+        </div>
+        <p class="script" id="script"></p>
+      </section>
+
+      <section>
+        <h2>1 · Set the input and the carriage</h2>
+        <div class="inputrow">
+          <input id="input" type="number" min="0" max="99999999" value="0" aria-label="Input number (up to 8 digits)" style="width: 140px" />
+          <span class="hint">up to 8 digits</span>
+        </div>
+        <div class="row" style="margin-top: 8px">
+          <button id="shiftLeft" title="Turn the end crank: carriage one place to the left (×10)">◀ Shift left</button>
+          <button id="shiftRight" title="Carriage one place to the right (÷10)">Shift right ▶</button>
+        </div>
+      </section>
+
+      <section>
+        <h2>2 · Magna Rota pin</h2>
+        <div class="pins" id="pins"></div>
+        <p class="hint">With a pin in hole m, the crank stops after m turns (multiplication by one digit). Without a pin the ring just counts turns.</p>
+      </section>
+
+      <section>
+        <h2>3 · Turn the crank</h2>
+        <div class="row">
+          <button id="add">＋ Add (one turn)</button>
+          <button id="sub">− Subtract</button>
+          <button id="toStop">⟳ Turn to the stop</button>
+        </div>
+        <div class="row">
+          <button id="stepAdd" title="Turn the crank forward (adding) to the next moment something has visibly changed">Step ▸ (adding)</button>
+          <button id="stepSub" title="Turn the crank backward (subtracting) to the next moment something has visibly changed">Step ▸ (subtracting)</button>
+        </div>
+        <div class="row">
+          <select id="speed" aria-label="Speed">
+            <option value="2">2× speed</option>
+            <option value="1" selected>Real time</option>
+            <option value="0.25">¼ speed</option>
+            <option value="0.1">1/10 speed</option>
+          </select>
+        </div>
+        <label class="slider">Crank angle <output id="thetaOut">0°</output>
+          <input id="theta" type="range" min="-360" max="360" step="0.25" value="0" />
+        </label>
+      </section>
+
+      <section>
+        <h2>Carry mode</h2>
+        <div class="seg" role="radiogroup" aria-label="Carry mode">
+          <button id="modeRipple" class="on" role="radio" aria-checked="true">Ripple (Lehmann)</button>
+          <button id="modeHistorical" role="radio" aria-checked="false">Historical (deferred)</button>
+        </div>
+      </section>
+
+      <section>
+        <h2>View</h2>
+        <div class="row">
+          <button data-view="overview">Overview</button>
+          <button data-view="front">Magna Rota</button>
+          <button data-view="register">Register</button>
+          <button data-view="carry">Carry chain</button>
+        </div>
+        <label class="check"><input id="casing" type="checkbox" checked /> Show the case, base and cover plates (the original look)</label>
+        <label class="check"><input id="cutaway" type="checkbox" /> Remove the carriage front panel</label>
+        <label class="check"><input id="didactic" type="checkbox" /> Colour parts by function</label>
+        <ul class="legend" id="legend" hidden>
+          <li><i style="background:#3d6fd6"></i>setting (knobs, pinions, racks)</li>
+          <li><i style="background:#8a4fd1"></i>stepped drums and drive gears</li>
+          <li><i style="background:#2f9e5b"></i>result wheels</li>
+          <li><i style="background:#e0782c"></i>carry stores</li>
+          <li><i style="background:#c2412d"></i>carry levers (Zweihorn)</li>
+          <li><i style="background:#b8860b"></i>Magna Rota, carriage, lead screw</li>
+        </ul>
+      </section>
+
+      <footer>
+        <p>Reconstruction (target B): documented mechanism and angles, estimated part sizes. See <code>design/m2-notes.md</code>. Add <code>?selftest</code> to run the M2 acceptance checks.</p>
+      </footer>
+    </aside>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

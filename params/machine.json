@@ -1,0 +1,1190 @@
+{
+  "_schema": "Every numeric entry is {v, unit, conf, src, note?}. conf: doc = documented in a source; est = photo-scaled estimate; design = our own choice where sources are silent. Units: mm and deg (see docs/conventions.md). Source tags: research/sources/bibliography.md. Photo scaling: digit pitch P = 37 mm used as the ruler.",
+  "version": "0.1.0",
+  "fidelity_target": "B",
+  "reference_machine": "Surviving 'younger' machine, GWLB Hannover (8/16/1 digits); proportions read from the true-to-scale Lehmann/TU Dresden replica (2001) photos on Wikimedia Commons",
+  "layout": {
+    "input_digits": {
+      "v": 8,
+      "unit": "count",
+      "conf": "doc",
+      "src": "STEIN16, TUD, ARITH-REPLICA"
+    },
+    "result_digits": {
+      "v": 16,
+      "unit": "count",
+      "conf": "doc",
+      "src": "STEIN16, TUD, ARITH-REPLICA"
+    },
+    "counter_digits": {
+      "v": 1,
+      "unit": "count",
+      "conf": "doc",
+      "src": "STEIN16, ARITH-REPLICA"
+    },
+    "digit_pitch": {
+      "v": 37,
+      "unit": "mm",
+      "conf": "doc",
+      "src": "BURKHARDT1897 (screw pitch 37 mm, 1 turn = 1 place)",
+      "note": "Confirmed in photo TSD (10): lead-screw groove spacing equals drum spacing; 16 x 37 = 592 mm fits the 670 mm length."
+    },
+    "carriage_positions": {
+      "v": 9,
+      "unit": "count",
+      "conf": "design",
+      "src": "16 - 8 + 1",
+      "note": "Carriage offset 0 = units drum under result digit 0."
+    },
+    "shaft_axis": {
+      "v": "Y",
+      "unit": "axis",
+      "conf": "est",
+      "src": "photos TSD (10), Nachbau 08/09; STEIN16 Kopp drawing",
+      "note": "Drums, receiving gears, result discs, carry stores and Magna Rota all turn about front-back (machine Y) axes; the carriage translates along X."
+    }
+  },
+  "overall": {
+    "mechanism_length": {
+      "v": 670,
+      "unit": "mm",
+      "conf": "doc",
+      "src": "JORDAN1897, WIKI"
+    },
+    "mechanism_width": {
+      "v": 270,
+      "unit": "mm",
+      "conf": "doc",
+      "src": "MYTIME, SOLCOVA (secondary)"
+    },
+    "mechanism_height": {
+      "v": 170,
+      "unit": "mm",
+      "conf": "doc",
+      "src": "MYTIME, SOLCOVA (secondary)",
+      "note": "Photo Nachbau 08: top of register about 170 mm above the table, consistent."
+    },
+    "oak_case": {
+      "v": [
+        970,
+        300,
+        250
+      ],
+      "unit": "mm",
+      "conf": "doc",
+      "src": "MYTIME, SOLCOVA",
+      "note": "Optional; the replicas are shown without the case."
+    },
+    "weight": {
+      "v": 14,
+      "unit": "kg",
+      "conf": "doc",
+      "src": "HANNOVER, HNF"
+    }
+  },
+  "pars_mobilis": {
+    "_note": "Input carriage. All parts are children of pm.carriage.",
+    "carriage_box_length": {
+      "v": 468,
+      "unit": "mm",
+      "conf": "est",
+      "src": "photo Nachbau 03 (front elevation, 1.556 px/mm in the front plane); 469 in DD-TS, 463 in the 1690 photo of the original (design/m2-notes.md)"
+    },
+    "carriage_front_height": {
+      "v": 121,
+      "unit": "mm",
+      "conf": "est",
+      "src": "photo Nachbau 03 (front elevation, 1.56 px/mm in the front plane)"
+    },
+    "drum": {
+      "count": {
+        "v": 8,
+        "unit": "count",
+        "conf": "doc",
+        "src": "BURKHARDT1897"
+      },
+      "ribs": {
+        "v": 9,
+        "unit": "count",
+        "conf": "doc",
+        "src": "BURKHARDT1897, LUDWIG2006"
+      },
+      "rib_pitch": {
+        "v": 22.5,
+        "unit": "deg",
+        "conf": "doc",
+        "src": "BURKHARDT1897, LUDWIG2006, STEIN16"
+      },
+      "rib_sector": {
+        "v": 202.5,
+        "unit": "deg",
+        "conf": "doc",
+        "src": "LUDWIG2006 (9/16 of circumference)"
+      },
+      "core_diameter": {
+        "v": 28,
+        "unit": "mm",
+        "conf": "est",
+        "src": "photo TSD (10): 0.76 P"
+      },
+      "outer_diameter": {
+        "v": 33,
+        "unit": "mm",
+        "conf": "est",
+        "src": "photo TSD (10): 0.9 P"
+      },
+      "length": {
+        "v": 40,
+        "unit": "mm",
+        "conf": "est",
+        "src": "photo TSD (10), foreshortened",
+        "note": "The rib for digit 1 has the full length; the length steps down for higher digits (STEIN16)."
+      },
+      "rib_length_step": {
+        "v": 4.0,
+        "unit": "mm",
+        "conf": "design",
+        "src": "length / 10, rounded",
+        "note": "This is also the axial travel of the drum per setting digit."
+      },
+      "axial_setting": {
+        "v": "drum slides along its shaft under a fixed receiving gear",
+        "unit": "-",
+        "conf": "doc",
+        "src": "STEIN16 (Kopp drawing)"
+      }
+    },
+    "setting_dial": {
+      "diameter": {
+        "v": 29,
+        "unit": "mm",
+        "conf": "est",
+        "src": "photo Nachbau 08"
+      },
+      "positions": {
+        "v": 10,
+        "unit": "count",
+        "conf": "doc",
+        "src": "LEUPOLD1727"
+      },
+      "linkage": {
+        "v": "knob on vertical axis -> pinion -> rack slider -> drum axial position",
+        "unit": "-",
+        "conf": "doc",
+        "src": "STEIN16"
+      }
+    },
+    "magna_rota": {
+      "diameter": {
+        "v": 126,
+        "unit": "mm",
+        "conf": "est",
+        "src": "photo Nachbau 03 (front elevation); 128 in DD-TS, 127 in the 1690 photo, 124 in Nachbau 08"
+      },
+      "holes": {
+        "v": 10,
+        "unit": "count",
+        "conf": "doc",
+        "src": "LEUPOLD1727, WIKI"
+      },
+      "handle_radius": {
+        "v": 62,
+        "unit": "mm",
+        "conf": "est",
+        "src": "photo Nachbau 03 (crank axis to knob centre)"
+      },
+      "stop_position": {
+        "v": "top, between 0 and 9",
+        "unit": "-",
+        "conf": "doc",
+        "src": "LEUPOLD1727"
+      },
+      "drum_ratio": {
+        "v": 1.0,
+        "unit": "turns/turn",
+        "conf": "design",
+        "src": "one handle turn = one addition (WIKI, LEUPOLD1727); BURKHARDT1897 timing assumes 1:1"
+      }
+    },
+    "revolution_counter_dial": {
+      "diameter": {
+        "v": 68,
+        "unit": "mm",
+        "conf": "est",
+        "src": "photo Nachbau 08/09 (top right of carriage); centre 77 mm right of knob 0 in Nachbau 03"
+      }
+    },
+    "drive_chain": {
+      "gears": {
+        "v": 17,
+        "unit": "count",
+        "conf": "doc",
+        "src": "BURKHARDT1897 (17 crown wheels)"
+      },
+      "layout": {
+        "v": "alternating drum-drive and carry-lever gears along X",
+        "unit": "-",
+        "conf": "est",
+        "src": "LUDWIG2006 Bild 2; 2 x 8 + 1 = 17",
+        "note": "Adjacent meshing gears counter-rotate, which matters for the Zweihorn horn used in each direction."
+      }
+    },
+    "zweihorn": {
+      "count": {
+        "v": 8,
+        "unit": "count",
+        "conf": "doc",
+        "src": "BURKHARDT1897 (8 carry transmissions)"
+      },
+      "spread_dresden": {
+        "v": [
+          135,
+          102,
+          69,
+          39,
+          36,
+          69,
+          102,
+          132
+        ],
+        "unit": "deg",
+        "conf": "doc",
+        "src": "LUDWIG2006 Bild 3",
+        "note": "Mapping to digit index and absolute phase is not given. See design/decisions/0001."
+      },
+      "spread_burkhardt": {
+        "v": 80,
+        "unit": "deg",
+        "conf": "doc",
+        "src": "LUDWIG2006 (about 80 deg on all digits after the 1896 restoration)"
+      }
+    }
+  },
+  "pars_immobilis": {
+    "_note": "Fixed result register (the 'Lineal').",
+    "sum_wheel_step": {
+      "v": 36,
+      "unit": "deg",
+      "conf": "doc",
+      "src": "LUDWIG2006, STEIN16"
+    },
+    "receiving_gear_teeth": {
+      "v": 10,
+      "unit": "count",
+      "conf": "est",
+      "src": "LUDWIG2006 Bild 1; one rib advances one tooth = one digit"
+    },
+    "result_disc_diameter": {
+      "v": 30,
+      "unit": "mm",
+      "conf": "est",
+      "src": "photos Nachbau 08/09 (through the top glass)"
+    },
+    "einzahn_store_rotation": {
+      "v": 18,
+      "unit": "deg",
+      "conf": "doc",
+      "src": "LUDWIG2006, STEIN16"
+    },
+    "fuenfhorn_pitch": {
+      "v": 72,
+      "unit": "deg",
+      "conf": "doc",
+      "src": "BURKHARDT1897"
+    },
+    "muldenrad_offset": {
+      "v": 18,
+      "unit": "deg",
+      "conf": "doc",
+      "src": "STEIN16"
+    },
+    "detent_pitch": {
+      "v": 18,
+      "unit": "deg",
+      "conf": "doc",
+      "src": "LUDWIG2006"
+    },
+    "pentagon_disc_size": {
+      "v": 30,
+      "unit": "mm",
+      "conf": "est",
+      "src": "photo TSD (10), across flats"
+    },
+    "carry_stores": {
+      "v": 15,
+      "unit": "count",
+      "conf": "design",
+      "src": "one per result digit except the top one"
+    }
+  },
+  "frame": {
+    "lead_screw_pitch": {
+      "v": 37,
+      "unit": "mm",
+      "conf": "doc",
+      "src": "BURKHARDT1897"
+    },
+    "lead_screw_diameter": {
+      "v": 16,
+      "unit": "mm",
+      "conf": "est",
+      "src": "photo TSD (10)"
+    },
+    "end_crank_radius": {
+      "v": 120,
+      "unit": "mm",
+      "conf": "est",
+      "src": "photo Nachbau 08"
+    },
+    "rail_length": {
+      "v": 670,
+      "unit": "mm",
+      "conf": "doc",
+      "src": "= mechanism_length"
+    }
+  },
+  "geometry": {
+    "_note": "DESIGN values that make the parts mesh and stay clear of each other. They are derived from the documented angles and the photo estimates above; where they differ from an estimate, the geometry wins and the estimate stays for reference. All in mm/deg. Frame: shafts along +Y (toward the back), +Z up; slice origin at the base centre.",
+    "drum": {
+      "module": {
+        "v": 1.875,
+        "unit": "mm",
+        "conf": "design",
+        "src": "16 virtual teeth x 22.5 deg on a 15 mm pitch radius"
+      },
+      "virtual_teeth": {
+        "v": 16,
+        "unit": "count",
+        "conf": "doc",
+        "src": "rib pitch 22.5 deg = 360/16 (BURKHARDT1897)"
+      },
+      "length": {
+        "v": 40,
+        "unit": "mm",
+        "conf": "est",
+        "src": "photo TSD (10)"
+      },
+      "rib_length_step": {
+        "v": 4.0,
+        "unit": "mm",
+        "conf": "design",
+        "src": "rib k spans the last k x step of the drum; the gear plane sits at L - (9.5 - s) x step"
+      },
+      "rib_thickness_factor": {
+        "v": 0.8,
+        "unit": "ratio",
+        "conf": "design",
+        "src": "backlash so that ribs leave an idle receiving gear cleanly"
+      },
+      "rib_first_angle": {
+        "v": 180,
+        "unit": "deg",
+        "conf": "design",
+        "src": "rib k sits at 180 + (k-1) x 22.5 in drum-local angle, so it is centred under the gear at theta = 90 + (k-1) x 22.5"
+      },
+      "axis_z": {
+        "v": 40,
+        "unit": "mm",
+        "conf": "design",
+        "src": "slice layout"
+      },
+      "tooth_addendum": {
+        "v": 0.6,
+        "unit": "module",
+        "conf": "design",
+        "src": "stub teeth: contact ratio 0.94 < 1, so each rib's contact (drum -10.2..+11.0 deg about mid-window) stays inside its 22.5 deg window; the detent completes the last ~2 deg"
+      },
+      "tooth_dedendum": {
+        "v": 1.0,
+        "unit": "module",
+        "conf": "design",
+        "src": "0.4 module tip clearance"
+      }
+    },
+    "receiving_gear": {
+      "teeth": {
+        "v": 10,
+        "unit": "count",
+        "conf": "est",
+        "src": "one rib = one tooth = 36 deg"
+      },
+      "module": {
+        "v": 1.875,
+        "unit": "mm",
+        "conf": "design",
+        "src": "meshes with the drum"
+      },
+      "thickness": {
+        "v": 3,
+        "unit": "mm",
+        "conf": "design",
+        "src": "< rib_length_step so it engages one rib length class at a time"
+      },
+      "y": {
+        "v": 20,
+        "unit": "mm",
+        "conf": "design",
+        "src": "slice layout"
+      }
+    },
+    "setting": {
+      "pinion_teeth": {
+        "v": 10,
+        "unit": "count",
+        "conf": "design",
+        "src": "36 deg per digit"
+      },
+      "pinion_module": {
+        "v": 1.2732,
+        "unit": "mm",
+        "conf": "design",
+        "src": "pitch = rib_length_step = 4.0 mm"
+      },
+      "pinion_y": {
+        "v": -30,
+        "unit": "mm",
+        "conf": "design",
+        "src": "slice layout"
+      },
+      "rack_pitch_line_x": {
+        "v": 19,
+        "unit": "mm",
+        "conf": "design",
+        "src": "slice layout; 19 (was 20) keeps the rack of digit i + 1 0.6 mm outside drum i's rib-tip circle (M2 all-pairs sweep)"
+      }
+    },
+    "result": {
+      "disc_radius": {
+        "v": 15,
+        "unit": "mm",
+        "conf": "est",
+        "src": "~ result_disc_diameter 30"
+      },
+      "disc_y": {
+        "v": [
+          62,
+          70
+        ],
+        "unit": "mm",
+        "conf": "design",
+        "src": "behind the drum's travel range"
+      },
+      "einzahn_radius": {
+        "v": 10,
+        "unit": "mm",
+        "conf": "design",
+        "src": "capsule-contact solve"
+      },
+      "einzahn_pin_radius": {
+        "v": 1.5,
+        "unit": "mm",
+        "conf": "design",
+        "src": "contact solve"
+      },
+      "einzahn_angle": {
+        "v": 180,
+        "unit": "deg",
+        "conf": "design",
+        "src": "pin crosses the S-F line at v = 9.5"
+      },
+      "einzahn_pin_y": {
+        "v": [
+          72,
+          79
+        ],
+        "unit": "mm",
+        "conf": "design",
+        "src": "slice layout"
+      }
+    },
+    "carry_store": {
+      "offset_xz": {
+        "v": [
+          -17.119,
+          5.562
+        ],
+        "unit": "mm",
+        "conf": "design",
+        "src": "18 mm from the result shaft at 162 deg (toward the next higher digit, -X); capsule-contact solve (sandbox/2026-10-17 notes in design/m0-notes.md)"
+      },
+      "horns": {
+        "v": 5,
+        "unit": "count",
+        "conf": "doc",
+        "src": "Fünfhorn (LUDWIG2006, STEIN16)"
+      },
+      "horn_width": {
+        "v": 2.0,
+        "unit": "mm",
+        "conf": "design",
+        "src": "contact solve"
+      },
+      "horn_y": {
+        "v": [
+          75,
+          78
+        ],
+        "unit": "mm",
+        "conf": "design",
+        "src": "slice layout"
+      },
+      "pentagon_circumradius": {
+        "v": 13,
+        "unit": "mm",
+        "conf": "design",
+        "src": "clears the result shaft (centre distance 19.45 mm)"
+      },
+      "pentagon_y": {
+        "v": [
+          101,
+          103
+        ],
+        "unit": "mm",
+        "conf": "design",
+        "src": "behind the rear bracket, at the machine's back edge as on the original (BURKHARDT1897: 'hinten aufgesetzte Fünfeckscheiben')"
+      },
+      "horn_length": {
+        "v": 5.925,
+        "unit": "mm",
+        "conf": "design",
+        "src": "capsule horn (segment length from the store axis, radius horn_width/2) solved for an exact 18 deg push; min clearance 0.61 mm at rest and during completion"
+      }
+    },
+    "m1": {
+      "_note": "M1 three-digit slice: carry execution (Zweihorn -> Fünfhorn), carry transfer (Muldenrad teeth -> star on the next result shaft) and the drive chain. Digit i sits at x = -digit_pitch * i. Values solved numerically (design/m1-notes.md).",
+      "digits": {
+        "v": 3,
+        "unit": "count",
+        "conf": "design",
+        "src": "M1 scope"
+      },
+      "lever_axis_dx": {
+        "v": -18.5,
+        "unit": "mm",
+        "conf": "design",
+        "src": "half a digit pitch toward the next higher digit (between drum i and i+1)"
+      },
+      "lever_axis_z": {
+        "v": 44.0,
+        "unit": "mm",
+        "conf": "design",
+        "src": "Zweihorn solve: rest clearance 1.39 mm, push 18->40 deg in 5.2 deg of crank, release at 54 deg"
+      },
+      "drive_gear_teeth": {
+        "v": 19,
+        "unit": "count",
+        "conf": "design",
+        "src": "equal drum and lever gears; module = centre distance / 19"
+      },
+      "drive_gear_y": {
+        "v": [
+          80.0,
+          83.0
+        ],
+        "unit": "mm",
+        "conf": "design",
+        "src": "behind the Einzahn pins (<= 79)"
+      },
+      "zweihorn_pin_path_radius": {
+        "v": 17.0,
+        "unit": "mm",
+        "conf": "design",
+        "src": "Zweihorn solve"
+      },
+      "zweihorn_pin_radius": {
+        "v": 1.0,
+        "unit": "mm",
+        "conf": "design",
+        "src": "Zweihorn solve"
+      },
+      "zweihorn_arm_width": {
+        "v": 3.0,
+        "unit": "mm",
+        "conf": "design",
+        "src": "visual"
+      },
+      "zweihorn_arm_y": {
+        "v": [
+          97.3,
+          98.5
+        ],
+        "unit": "mm",
+        "conf": "design",
+        "src": "arm plane between the Fünfhorn plane and the rear wall"
+      },
+      "zweihorn_pin_y": {
+        "v": [
+          93.5,
+          97.3
+        ],
+        "unit": "mm",
+        "conf": "design",
+        "src": "pin reaches into the Fünfhorn plane"
+      },
+      "fuenfhorn_horn_length": {
+        "v": 7.5,
+        "unit": "mm",
+        "conf": "design",
+        "src": "Zweihorn solve (capsule segment length)"
+      },
+      "fuenfhorn_horn_radius": {
+        "v": 1.0,
+        "unit": "mm",
+        "conf": "design",
+        "src": "Zweihorn solve (capsule radius)"
+      },
+      "fuenfhorn_hub_radius": {
+        "v": 2.0,
+        "unit": "mm",
+        "conf": "design",
+        "src": "Zweihorn solve"
+      },
+      "fuenfhorn_y": {
+        "v": [
+          94.0,
+          97.0
+        ],
+        "unit": "mm",
+        "conf": "design",
+        "src": "plane C"
+      },
+      "fuenfhorn_rest": {
+        "v": "bisected by the line store-axis -> lever-axis (horns at +-36 deg)",
+        "unit": "-",
+        "conf": "design",
+        "src": "so the lever pin passes between two horns at rest and catches a horn turned 18 deg"
+      },
+      "muldenrad_module": {
+        "v": 1.376,
+        "unit": "mm",
+        "conf": "design",
+        "src": "virtual 20-tooth wheel meshing a 10-tooth star: centre distance 20.64 = 3 x star pitch radius; 2:1 (18 deg store -> 36 deg wheel, LUDWIG2006)"
+      },
+      "muldenrad_virtual_teeth": {
+        "v": 20,
+        "unit": "count",
+        "conf": "design",
+        "src": "see module"
+      },
+      "muldenrad_teeth": {
+        "v": 5,
+        "unit": "count",
+        "conf": "design",
+        "src": "one per Fünfhorn pitch (72 deg)"
+      },
+      "muldenrad_crossing_store_angle": {
+        "v": 36,
+        "unit": "deg",
+        "conf": "design",
+        "src": "teeth cross the line to the next result shaft at store 36 (+72k), symmetric for carry (+) and borrow (-); stub teeth keep contact within store 27..45"
+      },
+      "muldenrad_y_planes": {
+        "v": [
+          [
+            85.0,
+            88.0
+          ],
+          [
+            89.5,
+            92.5
+          ]
+        ],
+        "unit": "mm",
+        "conf": "design",
+        "src": "alternate by digit parity so a Muldenrad never meets its own digit's star"
+      },
+      "star_teeth": {
+        "v": 10,
+        "unit": "count",
+        "conf": "design",
+        "src": "one tooth per digit step"
+      },
+      "rear_wall_y": {
+        "v": [
+          99.0,
+          102.0
+        ],
+        "unit": "mm",
+        "conf": "design",
+        "src": "full-width rear wall; shafts end in it"
+      },
+      "pentagon_y": {
+        "v": [
+          104.0,
+          106.0
+        ],
+        "unit": "mm",
+        "conf": "design",
+        "src": "behind the rear wall"
+      },
+      "store_shaft_y": {
+        "v": [
+          73.8,
+          107.0
+        ],
+        "unit": "mm",
+        "conf": "design",
+        "src": "store shaft spans the Einzahn plane to the pentagon"
+      },
+      "result_shaft_y": {
+        "v": [
+          6.0,
+          102.0
+        ],
+        "unit": "mm",
+        "conf": "design",
+        "src": "result shafts end in the rear wall"
+      },
+      "window_y": {
+        "v": [
+          58.0,
+          73.0
+        ],
+        "unit": "mm",
+        "conf": "design",
+        "src": "clear of the store shafts (>= 73.8)"
+      },
+      "transfer_tooth_addendum": {
+        "v": 0.5,
+        "unit": "module",
+        "conf": "design",
+        "src": "Muldenrad/star teeth: with 0.6 a stored (18 deg) Muldenrad tooth flank dips into the next star's swept circle while that star still turns under its ribs (M1 sweep). 0.5 gives 0.4 mm clearance; contact ratio 0.82"
+      }
+    },
+    "m2": {
+      "_note": "M2 full machine. Register (fixed): 16 result wheels and stores at x = -37 k. Carriage (pm.carriage, shifts by -37 mm per place): 8 drums, knobs, drive chain, levers, Magna Rota. Planes along Y (mm) are listed so nothing on the carriage meets the register.",
+      "register_digits": {
+        "v": 16,
+        "unit": "count",
+        "conf": "doc",
+        "src": "STEIN16, TUD"
+      },
+      "carriage_digits": {
+        "v": 8,
+        "unit": "count",
+        "conf": "doc",
+        "src": "STEIN16, TUD"
+      },
+      "drive_gear_y": {
+        "v": [
+          80.0,
+          83.0
+        ],
+        "unit": "mm",
+        "conf": "design",
+        "src": "as M1"
+      },
+      "muldenrad_y_planes": {
+        "v": [
+          [
+            84.0,
+            87.0
+          ],
+          [
+            88.0,
+            91.0
+          ]
+        ],
+        "unit": "mm",
+        "conf": "design",
+        "src": "alternate by digit parity"
+      },
+      "fuenfhorn_y": {
+        "v": [
+          92.0,
+          95.0
+        ],
+        "unit": "mm",
+        "conf": "design",
+        "src": "plane C"
+      },
+      "zweihorn_add_arm_y": {
+        "v": [
+          95.6,
+          96.6
+        ],
+        "unit": "mm",
+        "conf": "design",
+        "src": "adding horn arm plane"
+      },
+      "zweihorn_sub_arm_y": {
+        "v": [
+          97.2,
+          98.2
+        ],
+        "unit": "mm",
+        "conf": "design",
+        "src": "subtracting horn arm in its own plane: high levers' spreads shrink to ~29 deg (M1 notes)"
+      },
+      "zweihorn_pin_y0": {
+        "v": 91.5,
+        "unit": "mm",
+        "conf": "design",
+        "src": "pins reach into plane C from their arm planes"
+      },
+      "rear_wall_y": {
+        "v": [
+          99.0,
+          102.0
+        ],
+        "unit": "mm",
+        "conf": "design",
+        "src": "full width; carries the front bar and window plate"
+      },
+      "pentagon_y": {
+        "v": [
+          104.0,
+          106.0
+        ],
+        "unit": "mm",
+        "conf": "design",
+        "src": "behind the rear wall"
+      },
+      "carriage_floor": {
+        "v": {
+          "x_margin_right": 32,
+          "x_margin_left": 35,
+          "y": [
+            -109,
+            79
+          ],
+          "z": [
+            4.3,
+            7.3
+          ]
+        },
+        "unit": "mm",
+        "conf": "design",
+        "src": "slides on the base plate; left end 60 mm left of knob 7 as in the photos (photo overlay 2026-10-18, design/m2-notes.md); right end just right of digit 0's setting pinion, clear of the right screw bearing"
+      },
+      "carriage_front_panel_y": {
+        "v": [
+          -112.0,
+          -109.0
+        ],
+        "unit": "mm",
+        "conf": "design",
+        "src": "hideable (cut-away); 116 mm in front of the carriage top's back edge, as in the top views (photo overlay 2026-10-18, design/m2-notes.md)"
+      },
+      "carriage_front_panel_z": {
+        "v": [
+          -25.0,
+          94.0
+        ],
+        "unit": "mm",
+        "conf": "design",
+        "src": "front 121 mm high with the cover, as in the front elevation (photo overlay 2026-10-18, design/m2-notes.md): it hangs below the carriage floor, in front of the base plate"
+      },
+      "carriage_counter_section": {
+        "v": {
+          "top_dx": 50.0,
+          "top_z": 84.0,
+          "step_dx": 112.0,
+          "end_dx": 174.0,
+          "step_z": 30.0,
+          "dial_dx": 102.0,
+          "dial_radius": 34.0
+        },
+        "unit": "mm",
+        "conf": "design",
+        "src": "right part of the carriage (photo overlay 2026-10-18): from digit 0 + top_dx its top is 12 mm lower (cover at top_z); full height to digit 0 + step_dx, then only the part above step_z to digit 0 + end_dx, so it passes over the frame's right end at offset 0 (step_z clears the lead screw). The revolution-counter dial plate sits on the lower top at digit 0 + dial_dx",
+        "note": "The dial plate is static: the counter is not modelled, the Magna Rota counts the turns."
+      },
+      "knob_plate_z": {
+        "v": 98.0,
+        "unit": "mm",
+        "conf": "design",
+        "src": "on the carriage cover (z 94-96)"
+      },
+      "magna_rota_center": {
+        "v": {
+          "x": -137.0,
+          "z": 35.5
+        },
+        "unit": "mm",
+        "conf": "design",
+        "src": "162 mm left of knob 0 and in the middle of the carriage front, as in the photos (photo overlay 2026-10-18)"
+      },
+      "magna_rota_radius": {
+        "v": 63.0,
+        "unit": "mm",
+        "conf": "design",
+        "src": "126 mm diameter, 5 mm more than the carriage front's height, as in the front elevation (pars_mobilis.magna_rota.diameter; photo overlay 2026-10-18)"
+      },
+      "magna_rota_ring_y": {
+        "v": [
+          -117.0,
+          -114.5
+        ],
+        "unit": "mm",
+        "conf": "design",
+        "src": "ring with 10 holes, turns 36 deg per crank turn"
+      },
+      "magna_rota_hole_radius": {
+        "v": 55.0,
+        "unit": "mm",
+        "conf": "design",
+        "src": "pin circle 55 (was 50): holes near the rim, digit rings inside, so the stop finger only spans the edge-to-hole band (digit_labels)."
+      },
+      "magna_rota_ring_hole_radius": {
+        "v": 6.0,
+        "unit": "mm",
+        "conf": "design",
+        "src": "the main crank shaft (r 3) passes through the ring"
+      },
+      "magna_rota_gear_ratio": {
+        "v": 10,
+        "unit": "turns of crank per dial turn",
+        "conf": "design",
+        "src": "one hole per operation (Leupold: the pin stops the dial after m operations)"
+      },
+      "main_crank": {
+        "v": {
+          "radius": 60.0,
+          "arm_y": [
+            -129.5,
+            -128.0
+          ],
+          "knob_y": -148.0,
+          "knob_radius": 5.5
+        },
+        "unit": "mm",
+        "conf": "design",
+        "src": "crank in the middle of the Magna Rota; arm in front of the pin heads; knob 60 mm out, near the ring's rim (front elevation about 65 mm), above the case floor"
+      },
+      "lead_screw": {
+        "v": {
+          "y": -77.0,
+          "z": 20.0,
+          "radius": 6.0
+        },
+        "unit": "mm",
+        "conf": "design",
+        "src": "fixed to the frame, behind the carriage front panel (clear of the Magna Rota and its crank); the carriage nut rides on it; 37 mm pitch (BURKHARDT1897)"
+      },
+      "frame": {
+        "v": {
+          "x_margin_left": 53.0,
+          "x_margin_right": 59.0,
+          "y": [
+            -106.0,
+            112.0
+          ],
+          "bearing_inset_left": 10.0,
+          "bearing_inset_right": 20.0,
+          "screw_start_dx": -16.0
+        },
+        "unit": "mm",
+        "conf": "design",
+        "src": "base plate from digit 15 - x_margin_left to digit 0 + x_margin_right: 667 mm, the 670 mm mechanism length (JORDAN1897). The left bearing clears the carriage at offset 8 and the right one the carriage floor at offset 0. The screw starts screw_start_dx left of the base, outside the case's left wall, where the end crank is (photos)."
+      },
+      "casing": {
+        "v": {
+          "wall": 8.0,
+          "floor": 8.0,
+          "inner_x": [
+            -611.0,
+            179.0
+          ],
+          "inner_y": [
+            -154.0,
+            120.0
+          ],
+          "front_height": 18.0,
+          "register_cover_z": [
+            86.0,
+            87.5
+          ],
+          "register_cover_y0": 10.0,
+          "carriage_cover_z": [
+            94.0,
+            96.0
+          ],
+          "carriage_cover_y": [
+            -112.0,
+            4.0
+          ],
+          "carriage_wall_z0": 30.0,
+          "register_cover_skirt_z0": 72.0,
+          "floor_top_z": -60.0,
+          "wall_top_z": 140.0,
+          "bearer_length": 50.0
+        },
+        "unit": "mm",
+        "conf": "design",
+        "src": "oak case with brass cover plates (machine_spec: oak case, polished brass). Outer 806 x 290 mm, 182 mm high without the lid: the photos of the original give about 800 mm long (photo overlay 2026-10-18, design/m2-notes.md); the secondary sources give 970 x 300 x 250 mm with the lid. The mechanism stands on two oak bearers (34 mm) so the carriage front and the Magna Rota hang below the base plate, as in the 1892 photo. The end crank is outside the left wall. Register cover above the Muldenrad tips (84.4) and the rear wall (85); carriage cover on the front panel, under the knob plates (98); low front wall keeps the Magna Rota visible. No lid. Carriage cover ends at y 4, in front of the result-wheel shafts (y >= 6). Main crank (2026-10-18): the crank rests pointing down, so its knob (lowest z -30 at radius 60 around z 35.5) sits at the bottom of its sweep whenever it is at rest. The case floor is lowered from -34 to -60, with taller bearers, and the front wall top sits at -42: the knob clears it by 12 mm and the floor by 30 mm, so a hand can follow it round. Before, the knob ran in a 6 mm slot behind a wall 16 mm higher than its lowest point."
+      },
+      "digit_labels": {
+        "v": {
+          "result_disc_r": 17.5,
+          "result_rim": [
+            0.4,
+            0.5
+          ],
+          "result_disc_y": [
+            59.2,
+            73.2
+          ],
+          "result_glyph_size": 14.3,
+          "window_y": [
+            59.6,
+            72.8
+          ],
+          "window_half_x": 6.3,
+          "window_rail_y": [
+            55.0,
+            75.5
+          ],
+          "read_half_size": [
+            4.0,
+            4.0
+          ],
+          "cover_opening_y": [
+            58.2,
+            74.2
+          ],
+          "cover_opening_half_x": 7.3,
+          "setting_plate_r": 18.0,
+          "setting_glyph_r": 14.3,
+          "setting_glyph_size": 6.6,
+          "pointer_r": 10.5,
+          "magna_glyph_size": 13.0,
+          "magna_black_dr": -10.0,
+          "magna_red_dr": -23.0
+        },
+        "unit": "mm",
+        "conf": "design",
+        "src": "TEACHING DEVIATION, not a documented size: the sources give no digit sizes (Leupold 1727 only says the digits are inscribed). Enlarged so the digits read on the whole 16-digit machine. Digit height = 0.70 x glyph size. Result: 10.0 mm digits (was 4.3) on a disc r 17.5 (was 15), 14 mm wide (was 8), between the drum end at y 58 and the store horns at y 75; window 12.6 x 13.2 mm leaves about 3 mm of white beside and 1.6 mm above/below the digit, and neighbouring digits stay out of view; adjacent rims 1.2 mm apart. Setting dials: 4.6 mm digits (was 2.7) on r 14.3, plate r 18 (was 17; plates 1 mm apart on the 37 mm pitch), pointer 10.5. Magna Rota: 9.1 mm digits (was 4.2); rings from the edge: holes r 55, black digits r 45, red digits r 32, so the stop finger never covers a digit. M0/M1 slices keep their sizes."
+      },
+      "explode": {
+        "v": {
+          "frame.case": [
+            0,
+            0,
+            -120
+          ],
+          "frame.base": [
+            0,
+            0,
+            -70
+          ],
+          "frame.register_cover": [
+            0,
+            0,
+            120
+          ],
+          "pi.window": [
+            0,
+            0,
+            70
+          ],
+          "pi.carry_store.*": [
+            0,
+            50,
+            30
+          ],
+          "pm.carriage": [
+            0,
+            -170,
+            0
+          ],
+          "pm.carriage_cover": [
+            0,
+            0,
+            110
+          ],
+          "pm.carriage_panel": [
+            0,
+            -40,
+            0
+          ],
+          "pm.magna_plate": [
+            0,
+            -80,
+            0
+          ],
+          "pm.magna_rota": [
+            0,
+            -95,
+            0
+          ],
+          "pm.magna_pin": [
+            0,
+            -95,
+            0
+          ],
+          "pm.main_crank": [
+            0,
+            -125,
+            0
+          ],
+          "pm.setting_dial.*": [
+            0,
+            0,
+            60
+          ],
+          "pm.setting_plate.*": [
+            0,
+            0,
+            45
+          ]
+        },
+        "unit": "mm",
+        "conf": "design",
+        "src": "M3 exploded view (teaching only): offset per part group in Blender mm (y towards the rear, z up), in the parent frame (carriage parts move with the carriage, then by their own offset). The page adds factor x offset to the posed transform. Groups not listed stay in place."
+      }
+    }
+  },
+  "timing": {
+    "_note": "Crank angle theta of one operation, 0-360 deg, 1:1 with the drums. Addition turns one way, subtraction the other; the layout is symmetric about the rest position. Values are DESIGN choices that satisfy every documented constraint. See design/modelling-and-animation-plan.md section 5.",
+    "rest_free_arc_before_ribs": {
+      "v": 78.75,
+      "unit": "deg",
+      "conf": "design",
+      "src": "(360 - 202.5) / 2, symmetric for both directions"
+    },
+    "rib_window": {
+      "v": [
+        78.75,
+        281.25
+      ],
+      "unit": "deg",
+      "conf": "design",
+      "src": "rib_sector placed after the free arc"
+    },
+    "carry_window": {
+      "v": [
+        292.0,
+        360.0
+      ],
+      "unit": "deg",
+      "conf": "design",
+      "src": "design: a carry may only turn a wheel once that wheel's last rib is >= 22 deg past the receiving gear (rib 9 mid-window 270 + 22 = 292); found by the M1 collision sweep"
+    },
+    "per_carry_angle": {
+      "v": 6.5,
+      "unit": "deg",
+      "conf": "design",
+      "src": "design (M2): stagger between carry levers. The secondary carry is stored 5.1 deg after a lever's first contact, so 6.5 leaves 1.4 deg margin (ripple); 8 levers fit 292..347.5 with every early 'other horn' pass in 6.9..52.4 (before the ribs)",
+      "note": "9.8 in M0 planning, 8.5 in M1; LUDWIG2006 reports ~10 deg needed per carry in the original"
+    },
+    "spring_snap_deg": {
+      "v": 2.0,
+      "unit": "deg",
+      "conf": "design",
+      "src": "after the Zweihorn releases, the detent spring completes the store to 72 deg within 2 deg of crank (LUDWIG2006: Rastfedern complete the carry)"
+    },
+    "historical_order": {
+      "v": "highest digit first",
+      "unit": "-",
+      "conf": "design",
+      "src": "decision 0001: reversing the lever stagger makes secondary carries wait for the next turn (reproduces GWLB 9999+1 -> 9900 -> 0000 -> 10000)"
+    },
+    "spring_from_store": {
+      "v": 45.0,
+      "unit": "deg",
+      "conf": "design",
+      "src": "once the store passes 45 deg the next wheel has finished its step; the detent spring then completes the store to 72 deg (Rastfedern, LUDWIG2006). Shortens a carry execution to ~10 deg of crank"
+    }
+  }
+}

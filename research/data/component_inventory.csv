@@ -1,0 +1,26 @@
+id,part,german_term,assembly,qty,motion,driven_by,drives,geometry_data_available,confidence,notes
+P01,Base / oak case,Eichenkasten,case,1,static,,,overall size 97x30x25 cm (MYTIME/SOLCOVA); photos,medium,Lid with internal decoration in GWLB photos
+P02,Frame of fixed part (result register),"Lineal / Rahmen Pars immobilis",pars_immobilis,1,static,,,length 67 cm; photos of original and replicas,medium,Burkhardt: best-made part
+P03,Result digit disc (vertical),Ergebnisscheibe / Zahlenscheibe,pars_immobilis,16,"rotate, 36 deg steps",P05,,photos only; diameter unknown,low,Read through rectangular windows on top
+P04,Result window plate,Schaulöcher,pars_immobilis,1 (16 windows),static,,,photos + Jordan Fig.2,medium,Rectangular windows (Jordan corrects sector-shaped drawing)
+P05,Result/sum counting wheel,Zählrad (ZR) / Summenrad (S),pars_immobilis,16,"rotate, 36 deg per unit",P12 (receiving gear) / P18 carry,P03; P14,Kopp drawing (shape) ; no dims,low,10 positions
+P06,Receiving gear on result shaft,Aufnahmezahnrad (AZ),pars_immobilis,16,rotate,P10 drum ribs,P05,Kopp drawing; shape only,low,Engages drum ribs; fixed axial position
+P07,Detent spring + notch wheel,Haltefeder / Rastkerbenrad (RKR),pars_immobilis,16+,"snap, spring",,,Kopp drawing; 18 deg notch pitch on carry store (LUDWIG2006),low,Needed for visual realism; logic can be idealised
+P08,Single carry tooth,Einzahn (EZ / E_i),pars_immobilis,16,rotates with P05,P05,P09 (18 deg),Kopp drawing; Ludwig schematic,medium,Trips on 9->0
+P09,Carry store: trough wheel + five-horn,Muldenrad (MR) + Fünfhorn (FH / Ü_i),pars_immobilis,15-16,"rotate 18 deg (store) then complete 72 deg",P08 and P17,P11 -> next P05,Kopp drawing; Ludwig schematic; Burkhardt 72 deg,medium,
+P10,Stepped drum,Staffelwalze (SW),pars_mobilis,8,"rotate (crank) + axial slide (setting)",P15 via P16,P06,"9 ribs, 22.5 deg pitch, 180 deg span; diameter/length unknown",medium,Core lesson object
+P11,Intermediate star wheel,Zwischenrad (ZW),pars_immobilis,15,rotate,P09,next P05,Ludwig schematic only,low,
+P12,Pentagon indicator/zeroing disc,Pentagon-/Fünfeckscheibe,pars_immobilis,15-16,rotate with carry shaft,P09,,Kopp drawing; Burkhardt; photos (back row),medium,Shows pending carry; zero by pressing straight edge
+P13,Setting knob + digit disc (small dials),Stellgriff / Rotae minusculae,pars_mobilis,8,"rotate 0-9",user,P14,photos; Kopp drawing; Leupold engraving,medium,Pointer + digits 0-9
+P14,Setting rack slider,Schieber mit Zahnstange,pars_mobilis,8,translate axially,P13 pinion,P10 axial position,Kopp drawing,low,
+P15,Main drive gear chain,Kronräder / Z1..Z17,pars_mobilis,17,rotate,P20 crank,P16; P17,"count from Burkhardt; layout from Ludwig schematic",low,Layout partly inferred
+P16,Long gear + sliding gear,Langes Zahnrad / Verschiebezahnrad,pars_mobilis,8 pairs,rotate (+ slide),P15,P10,Kopp drawing,low,Allows drum to be driven at any axial setting
+P17,Two-horn carry drive lever,Zweihorn (ZH / H_i),pars_mobilis,8,rotate with drive,P15,P09 (completes carry),Kopp drawing; Ludwig spread angles,medium,Staggered phase per digit; one horn per direction
+P18,Carry drive member,Antrieb Übertrag (AÜ_i),pars_immobilis,15-16,rotate,P17,P09,Ludwig schematic,low,
+P19,Multiplier dial (Magna Rota),Magna Rota / Multiplikationsscheibe,pars_mobilis,1,"rotate; inner ring with 10 holes; fixed stop",user via P20,P15,photos (Dresden detail); Leupold engraving; Jordan Fig.2,medium,Outer black digits (multiply) + red digits (divide)
+P20,Main operating handle,Kurbel an Magna Rota,pars_mobilis,1,rotate (CW add / CCW subtract),user,P19; P15,photos,medium,
+P21,Stylus / pin,Stift,pars_mobilis,1,inserted in hole,user,P19 stop,Leupold text,medium,
+P22,Revolution counter,Umdrehungszählwerk,pars_mobilis,1 digit,rotate,P15,,mentioned only,low,Internals unknown
+P23,Carriage (input section frame),Eingabeschlitten / Pars mobilis,pars_mobilis,1,"translate in 37 mm steps",P25,,photos; Jordan Fig.2,medium,
+P24,Carriage rails,Führungen,frame,2,static,,,photos (Dresden underside),low,
+P25,Lead screw + end crank,Schraube 37 mm Steigung + Seitenkurbel,frame,1,rotate (1 turn = 1 place),user,P23,"pitch 37 mm (Burkhardt)",high,Spring catch (Einfallfeder) indexes positions

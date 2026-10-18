@@ -1,0 +1,88 @@
+:root {
+  --bg: #f6f4ef;
+  --panel: #ffffff;
+  --ink: #23211d;
+  --muted: #6d675c;
+  --line: #e2ddd2;
+  --accent: #9a6a12;
+  --accent-ink: #ffffff;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body { display: grid; grid-template-columns: 1fr 340px; height: 100vh; }
+
+#stage { position: relative; min-height: 0; }
+#stage canvas { display: block; width: 100%; height: 100%; }
+#status {
+  position: absolute; left: 16px; bottom: 16px; padding: 6px 10px; border-radius: 6px;
+  background: rgba(255, 255, 255, 0.85); font-size: 13px; color: var(--muted);
+}
+#status:empty { display: none; }
+#hover {
+  position: absolute; pointer-events: none; padding: 4px 8px; border-radius: 4px;
+  background: rgba(35, 33, 29, 0.85); color: #fff; font-size: 12px; transform: translate(12px, 12px);
+}
+
+#panel {
+  background: var(--panel); border-left: 1px solid var(--line); padding: 16px 18px;
+  overflow-y: auto; display: flex; flex-direction: column; gap: 14px;
+}
+h1 { font-size: 17px; margin: 0; }
+h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 0 0 8px; }
+.sub, .hint, footer p { font-size: 12px; color: var(--muted); margin: 4px 0 0; }
+section { border-top: 1px solid var(--line); padding-top: 12px; }
+
+.readout { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; text-align: center; }
+.readout label { display: block; font-size: 11px; color: var(--muted); }
+.big { font-size: 30px; font-variant-numeric: tabular-nums; font-weight: 650; }
+.phase { font-size: 13px; min-height: 5.2em; margin: 8px 0 0; padding: 6px 8px; border-radius: 6px; background: #f3efe6; }
+.phase.active { background: #fdebd8; }
+
+.digits { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+button, select {
+  font: inherit; font-size: 14px; padding: 7px 10px; border-radius: 6px; border: 1px solid var(--line);
+  background: #fbfaf7; color: var(--ink); cursor: pointer;
+}
+button:hover:not(:disabled) { border-color: var(--accent); }
+button:disabled { opacity: 0.45; cursor: not-allowed; }
+button.on { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+button.reset { width: 100%; margin-top: 8px; }
+.row { display: flex; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; }
+.row > * { flex: 1; }
+.slider { display: block; font-size: 13px; margin: 6px 0; }
+.slider input { width: 100%; }
+.check { font-size: 13px; display: flex; gap: 6px; align-items: center; margin-top: 6px; }
+.legend { list-style: none; padding: 0; margin: 6px 0 0; font-size: 12px; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; }
+
+@media (max-width: 760px) {
+  body { grid-template-columns: 1fr; grid-template-rows: 55vh auto; height: auto; }
+  #panel { border-left: none; border-top: 1px solid var(--line); }
+}
+
+.selftest { border: 2px solid #2f9e5b; border-radius: 8px; padding: 10px 12px; }
+.selftest:has(li.fail) { border-color: #c2412d; }
+.selftest h2 { color: var(--ink); text-transform: none; letter-spacing: 0; font-size: 14px; }
+.selftest small { color: var(--muted); font-weight: 400; }
+.selftest ul { list-style: none; padding: 0; margin: 0; font-size: 12px; }
+.selftest li { padding: 2px 0; }
+.selftest li.pass { color: #1f7a45; }
+.selftest li.fail { color: #c2412d; font-weight: 600; }
+.selftest .detail { font-weight: 400; color: var(--muted); margin-left: 1.2em; }
+
+.windows { display: flex; gap: 6px; justify-content: center; }
+.windows .win { width: 44px; text-align: center; border: 1px solid var(--line); border-radius: 6px; padding: 4px 0; }
+.windows .win .big { display: block; }
+.windows .win .flag { font-size: 11px; color: var(--muted); min-height: 1.2em; }
+.windows .win.pending { border-color: #e0782c; background: #fdebd8; }
+.windows .win.pending .flag { color: #b5531a; }
+.meta { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; text-align: center; margin-top: 6px; }
+.meta label { display: block; font-size: 11px; color: var(--muted); }
+.inputrow { display: flex; gap: 6px; align-items: center; }
+.inputrow input[type=number] { width: 90px; font: inherit; font-size: 18px; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--line); }
+.seg { display: flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.seg button { border: none; border-radius: 0; flex: 1; }

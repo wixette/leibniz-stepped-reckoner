@@ -1,0 +1,371 @@
+Aus dem Uebergang der Schwarzburg-Sondershausenschen Vermessung 
+in die Neuzeit haben wir ib der Zeitschr. S. 318—319 und S. 382—385 
+ein Vermarkungsgesetz mitgetheilt. 
+
+
+Die Leibniz'sche Rechenmaschine; 
+
+von Arthur Burkhardt. *) 
+
+Als mir im Jahre 1893 die Ehre zu Tbeil wurde, die Leibniz'sche 
+Rechen-Maschine in der Königlichen Bibliothek zu Hannover besichtigen za 
+dürfen, war ich hocherfreut und noch mehr, als ich dieses für die da- 
+maligen Zeiten wundervolle Werk selbst vor Augen hatte. 
+
+Nach den mir bekannten Darstellungen bezw. Uebersetzungen der 
+Leibniz'schen Manuscripte in der Zeitschrift für Vermessungswesen (vergl. 
+S. 289—292) hegte ich bei dieser Besichtigung die feste Hoffnung, dass 
+es mir unter allen Umständen gelingen müsste, mit der Maschine alle 
+die Manipulationen und Rechnungen vornehmen zu können, die, wie 
+Leibniz selbst geschrieben, jedes Kind spielend leicht s. Z. hätte aus- 
+führen können. 
+
+
+*) Als Fortsetzung der in dieser Zeitschrift S. 289 —315 gegebenen Naeh- 
+richten über die Leibniz^sche Rechenmaschine bringen wir hier eine Darlegmig 
+von Herrn Rechenmaschinen-Fabrikanten Civ.-Ing. Arthur Burkhardt in Glas- 
+hütte, welche von demselben in amtlichem Auftrage ausgearbeitet und zur Ver- 
+öffentlichung in unserer Zeitschrift übergeben worden ist. D. Red. «7. 
+
+
+Burkhardt. Die Leibniz'sche KechenmaBchine. 393 
+
+Im März 1894 kam die Maschine in meinen Besitz und ging ich 
+sofort daran das thenre und werthvolle^ mir anvertraute Gut von dem 
+Koste der Jahrhunderte erst einmal zu säubern. Dazu war die Maschine 
+in ihre kleinsten Theile zu zerlegen^ da jeder einzeln behandelt werden 
+musste. 
+
+Ich werde das Auseinandernehmen der Maschine eingehend schildern 
+und dabei aber auch gleich Gelegenheit, nehmen^ alle Abänderungen und 
+Ergänzungen, wie sie sofort oder später nothwendig waren, mit anzubringen 
+und einzuflechten. 
+
+Mit gi*osser Raffinirtheit hatte man die letzten Verschlusstheile und 
+das Antriebsrad angelegt und gehörte erst ein Studium dazu, dieses 
+Rad von dem üeberdeckungskasten zu entfernen, um zu dem eigentlichen 
+Werke zu gelangen. Ich habe dieses heute etwas vereinfacht, ohne jedoch 
+dem Original dadurch seine Eigenheiten zu nehmen. Ich will hier auch gleich 
+noch einschalten, dass mein ganzes Bestreben darauf hinausging, dass 
+ich bei allen Arbeiten und Veränderungen, die an der Maschine vor- 
+genommen werden mussten, immer nur die nothwendigsten ausführte und 
+stets in solcher Weise, dass das Original nie darunter leiden durfte. 
+
+Nachdem der Verschlusstlieil des Schaltwerkes entfernt war, purzelten 
+mir alle Stelltriebe mit den Zahlenscheiben entgegen. Sie waren nur in 
+dem Verschlusskasten und dem Rahmen gelagert. Ich versuchte sie 
+sofort wieder an ihre Stellen zu bringen, was nur mit schwerer Mühe 
+gelang. Um dieser zeitraubenden Arbeit fernerhin überhoben zu sein 
+habe ich auf den Rahmen eine Brücke aufgesetzt, in der sich die Triebe 
+nun mitführen, so dass ich nun die Triebe jederzeit auch ohne den 
+Verschlussdeckel einsetzen und benutzen konnte. Dabei stellte sich 
+heraus, dass man dieselben nur einfach eingepresst, aber noch nie be- 
+nutzt hatte, denn sie waren nicht einmal richtig eingepasst, was ich erst 
+vorgenommen habe. Es waren an einzelnen Trieben, um sie passend 
+zu erhalten, bis 2,5 mm wegzudrehen. Nachdem diese eingepasst, 
+und die durch sie angetriebenen Zahnstangen leidlich functionirten, stellte 
+sich weiter heraus, dass die Antriebscylinder, wie auch die Staffel - 
+walzen zu kurz waren, so dass bei voller Verstellung der Schalttrommel 
+von 9 auf 0 die diese treibenden, auf derselben Achse sitzenden Zahn* 
+räd^r ausser Eingriff kamen, was sich auch schwer ändern Hesse. — 
+Zum weiteren Auseinandernehmen war nunmehr erst das Lineal zu ent- 
+fernen. Auch hier hatte man sich die Sache sehr schwer und sauer 
+gemacht. Dazu war erst das vollständige Auseinandernehmen des ganzen 
+Grestelles nothwendig. Die an der Seite angebrachten messingnen 
+Verzierungen waren breit umgebördelt und die Lagerungen waren beider- 
+seits voll. Hier habe ich die Vereinfachung gemacht, diese Um- 
+bördelung beiderseits wegzunehmen und an der rechton Seitenwand die 
+Lagerlücher nach oben zu öffnen. Dadurch lässt sich nunmehr bei voll- 
+ständig fest verschraubtem Gestelle das Lineal mit Leichtigkeit entfernen 
+
+
+394 Burkhardt. Die Leibniz^sche Becheumaschine. 
+
+und wieder ao&etzen. An der Maschine selbst ist aber damit nichts 
+Wesentliches geändert worden. Ich behandele gleich das Lin«al weiter. 
+Es stellt den best gearbeiteten Theil der Maschine dar und zeigt 
+Finessen, die mit erstaunlicher Mtthe angefertigt sein müssen. Ich habe 
+eigentlich hier nichts finden können, was nicht mit grosser Sorgfalt ge- 
+arb^tet und eingepasst gewesen wäre. Nur eins ist zu bemerken. In 
+der Photographie Fig. 4, S. 291 der Zeitschrift für Vermessungswesen 
+fehlt an 15. Stelle eine Zahlenscheibe, die Mutter und alles Andere ist 
+aber vorhanden. Man muss diese wohlweislich weggelassen haben, es 
+zeigt sich dort der Fehler, dass das Antriebsrad um eine halbe Theihing 
+verdreht, also verkehrt aufgesetzt ist« Ich habe heute zur Oompletirung 
+eine Scheibe ohne Zahlen angebracht, die auch durch ihr neueres Aus- 
+sehen besonders hervortritt. 
+
+Die Ausnützung des Baumes an diesem Ldneal, die Anordnung all 
+der Haltefederchen ftlr die Zahlenseheiben, wie auch der Vermittlungs- 
+räder für die Zehnerttbertragung ist mit erstaunlicher Geschicklichkeit 
+und ausserordentlicher Genauigkeit ausgeführt und als genial zu bezeichnen. 
+
+Lange Zeit waren für mich die an den Zehnervermittlern hinten 
+aufgesetzten Fünfeckescheiben, die kunterbunt durcheinander standen, 
+ein schwer zu lösendes Bäthsel. Beim Justiren der Maschine und nach- 
+dem sie richtig aufgesetzt waren, erkannte ich sie jedoch sofort als 
+Theile der einfachsten Nullstellung. Stellt man diese Scheiben so, dass 
+sämmtliche Seiten, ganz einerlei welche, eine Gerade bilden, so stehen 
+die sämmtlichen Zehnervermittler in Nullstellung. Es lässt sich dieses 
+sehr einfach durch Aufdrücken eines breiten Lineals bewerkstelligen und 
+können wir darin die heutige sogenannte Aüslöschung in einfachster 
+Form erkennen. lieber die Zahlenscheiben Hess sich dieselbe aus leicht 
+ersichtlichen Gründen dort nicht ausdehnen. Diese Zehnerübertragungen, 
+beziehentlich eigentlich die Vorbereiter zu denselben, sind ganz vorzüglich 
+ausgedacht und ausgeführt. Ich darf also über das Lineal nur wieder- 
+holen, dass es der beste^ jedenfalls zuletzt ausgeführte Theil der Ma- 
+schine ist und für sich schon grosse Bewunderung erregt. 
+
+Büt dem Abnehmen des Lineals war, wie ich schon vorher bemerkte^ 
+das ganze Gestell und damit eigentlich auch das ganze Werk in Theilen. 
+Es war nur noch der wiederum für sich ausgebildete Bahmen für die 
+Antriebsr und Schaltwalzentheile in -Zusammenhang, den man als Schalt- 
+werk bezeichnen kann. Mit ihm hing nur noch die ihn bewegende 
+Schraube von 37 mm Steigung zusammen. Eine Schraube von 37 mm 
+Steigung für damalige Zeit, und was für eine Schraube. Man könnte 
+sie heute mit den besten Werkzeugen kaum 4)esser herstellen. Nach 
+ihren Abmessungen und ihrer Ausführung zu urtheilen, muss der Er- 
+finder sich eine besondere Hilfsvorrichtung zmr Herstellung erdacht 
+haben, denn nur mit Hand, Auge und Feile kann sie nicht hergestellt 
+worden sein. Ausserdem muss sie noch viele , Versuchsstadieu durch- 
+
+
+Burkhardt. Die Leibniz^sche Rechenmaschine. 395 
+
+gemacht haben. Man scheint sich ganz besondere Mühe gegeben zu 
+liaben^ sie so einzurichten^ dass sie das Schaltwerk, den oben so be- 
+zeichneten Rahmen, nicht nur um eine Ordnungsstelle durch eine Um- 
+drehung weiter bewegte, sondern dass dieses auch nach einer solchen 
+Umdrehung in seiner neu einzunehmenden Lage sicher und fest ge- 
+halten wurde. 
+
+Es deuten verschiedene Vorrichtungen an dem Schaltwerksrahmen 
+and der Schraube darauf hin, für die sich nur diese Erklärung finden 
+lässt. Zu einem festen Resultate ist man jedoch nicht gekommen und 
+hat die heute noch an der Maschine thätige Einfallfeder nach allen 
+diesen Versuchen behalten mtlssen, oder vielleicht auch als letzten Ausweg 
+angewandt. 
+
+Ich komme nun zum letzten Theil, dem Schaltwerksrahmen, der 
+den eigentlichen wirksamen Mechanismus der Maschine birgt und der 
+mir und jedenfalls auch dem Erfinder grosse Mtlhen und Sorgen be- 
+reitet hat und als das Schmerzenskind" der Maschine bezeichnet werden 
+kann. Ihm ist es allein zuzuschreiben, dass nahezu 2^/2 Jahre ver- 
+gangen sind, ehe die Maschine in ihrer heutigen, etwas verjtlngten Ge- 
+stalt wieder in ihr eigenes Ruhmeshaus zurückkehren konnte. 
+
+Traurig wackelnd, ohne jeden festen Halt, hingen die Schaltwalzen 
+auf den Wellen, deren Vierecke, ebenso wie die Rundungen, aus weichen 
+sie hervorgingen, etwas zweifelhafter Natur waren. Der ganze Rahmen 
+überhaupt hatte weder scharfe Winkel noch festes Gefttge gesehen, 
+oder waren diese erst an ihm durch jedenfalls hundertfaches Auseinander- 
+nehmen etc. verlorengegangen. Unbarmherzig habe ich ihn erst einmal 
+zerlegt und gründlich gesäubert. Dann hat er sich verschiedene 
+Hammerschläge und Feilstriche gefallen lassen müssen, um erst einmal 
+rechtwinklig und fest zusammengefügt zu werden. Was mag an diesem 
+Rahmen sich geübt haben, was mag er alles schon in sich geborgen 
+haben. Viele Hammerschläge hat er aushalten müssen, manches Loch 
+ist in ihm gebohrt worden, dann wieder verhunzt, dann wieder ganz 
+zagemacht, von Neuem gebohrt, gebunzt und sofort. Sein Aeusseres 
+zeugt von einer ganzen Geschichte für den, der sozusagen seine Sprache 
+versteht und verstehen gelernt hat. 
+
+Ich kehre zu den Wellen zurück, die rund gemacht und ausge- 
+richtet wurden. Die Schaltwalzen habe ich durch Einsetzen runder 
+Ringe so hergestellt, dass sie fest, wie mit der Welle verbunden, passen 
+und habe sie durch kleine Halteschrauben an ihren Ort gebannt. 
+Wellen und Trommeln waren mit Leichtigkeit bezwungen, nun aber 
+kam der Antrieb, bestehend aus 17 Kronrädern. Alles Bemühen, sie 
+in harmonischen Eingriff zu bringen, war und blieb vorerst erfolglos. 
+Stets zeigten sie an irgend einer, immer wechselnden Stelle störrisch 
+Widerstand. Ich hätte sie ja ändern können, ohne davon etwas merken 
+zu lassen, doch das widersprach der hohen Achtung, die ich vor dem 
+
+
+396 Burkhardt. Die Leibniz^sche Rechenmaschine. 
+
+Werke selbst hatte und vor Allem besonders glaubte ich mich nimmer 
+befugt, eingehende Aendernngen und Ersetzungen an dem Werke selbst 
+vornehmen zu dürfen. 
+
+Verschiedene Umstände theilweise amtlicher Art, über welche hier 
+weiter nicht berichtet wird, verzögerten die weitere Behandlung, und als 
+ich sie im Juni 1896 wieder aufnahm, hielt ich es für das Noth wendigste, 
+erst einmal die Theorie der Maschine bestimmt zu ergründen und festzu- 
+stellen, wie im Nachfolgenden mitgetheilt werden wird. 
+
+Nachdem ich diese genau festgestellt hatte, schien es mir nicht 
+mehr rathsam den Antrieb zu erneuern, sondern vorerst nochmals zu 
+versuchen, ob ich nicht mit den alten Theilen das Schaltwerk gang- 
+fähig erhielte. Den Antrieb habe ich in einem Modelle, welches tadellos 
+functionirt, ausgeführt und der Maschine beigelgt. 
+
+Alle Mühen waren aber wiederum vergeblich. Ich versuchte nun- 
+mehr an einer Stelle vorerst ein neues Stahlrad einzusetzen und da es 
+mit diesem nach einigen Versuchen gelang, einen leidlichen Gang zu 
+erzielen, habe ich nach und nach alle Stahlräder durch neue ersetzt 
+und einen ganz leidlichen Gang des Antriebes dadurch gewonnen. 
+Jedes einzelne Rad musste dabei Zahn auf Zahn eingepasst werden 
+und muss natürlich nunmehr auch an dieser Stelle verharren. Der etwas 
+schleifende Gang rührt nicht vom Antrieb her, sondern wird durch das 
+Schleifen der verzierten Antriebscheibe an den Verschlusskasten ver- 
+ursacht. 
+
+Nachdem dieses gelungen, habe ich die Maschine Theil für Theil 
+nacheinander zusammengebaut, sie in den verschiedenen Arbeitsstadien 
+photographisch aufgenommen, dann der Theorie entsprechend eingestellt 
+und justirt und liefere sie heute, soweit es sich ermöglichen Hess, als 
+gangbar ab, gern erbötig mehr daran vorzunehmen, wenn ich eines 
+Anderen belehrt werden sollte. 
+
+Theorie der Leibniz'schen Rechenmaschine. 
+
+Die Leibniz^schen Rechenmaschine hat als Grundlage die noch heute 
+gebräuchliche Schaltwalze, Trommel, und dürfen wir dies wohl Leibniz 
+als den ersten Schöpfer dieses Grundstückes ^ller Rechenmaschinen, 
+hoch anerkennen. Diese Schaltwalze besteht aus Zähnen verschiedener 
+Länge, entsprechend den Zahlen 1— <9 und sind dieselben so angeordnet, 
+Uass der Zahn 1 gleichzeitig Schlusszahn auch für die 9 ist und die 
+andern sich staffelweise davor setzen. 
+
+Seine Staffelwalze hat Leibniz für die vorliegende Maschine so 
+construirt, dass die Theilung der Zähne .^/jg der Ereistheilung beträgt, 
+dass also 16 Zähne auf eine volle Ereistheilung entfallen würden. 
+
+Die Entfernung der Theilungsradien beträgt demnach — -^- — =22,5", 
+
+16 
+
+die ich bei meinen ersten Studien über Rechenmaschinen als Tempi 
+bezeichnete und welche Bezeichnung ich auch hier wieder anwenden will. 
+
+
+Burkhardt. Die Leibniz^sche Bechenmaschine. 397 
+
+Die bier vorliegende Maschine besteht aus 8 Trommeln und auch 
+aus 8 Zehnerttbertragnngen; welch letztere nach einander, also Tempi 
+bezw. nach oder auf Tempi wirken müssen. Sollte die Maschine daher 
+in allen ihren Theilen wirksam gebraucht werden, so hat sie zu leisten: 
+
+9 Tempi für die Zahlen 1—9; 
+
+8 Tempi nach einander für die Zehner, 
+
+sind 17 bereits, während bei einem Umgang doch uns nur 16 zur Ver- 
+fügung stehen, wir könnten demnach uns nur 7 Zehnerübertragungen 
+nutzbar machen und müssten die 8. fallen lassen. Beachten wir aber 
+weiter, dass die Maschine auf Addition, wie auf Subtraction gleichmässig 
+arbeiten soll, so haben wir in der Nullstellung der Trommel eine solche 
+Lage zu geben, dass der Anfangs- wie der Schlnsszahn gleichmässig 
+auf das entsprechende Antriebrad wirken, dass sie also symmetrisch zu 
+diesem stehen muss. Aus beistehender Zeichnung, in der diese Lage 
+festgestellt ist, ersehen wir aber, dass beide Zähne, ehe sie dann zum 
+Eingriff kommen dürfen, einen todten Weg von 3 Tempi für jede dieser 
+Rechnungsarten laufen müssen. Ferner haben sie, um vollständig aus- 
+wirken zu können, noch weitere 2 Tempi zurückzulegen. Summiren 
+wir, so ergiebt sich: 
+
+3 Tempi todter Weg, 
+
+9 „ für 1—0, 
+
+2 „ für die Auswirkung, 
+
+sind 14 Tempi ä 22,5*» oder 315^ Weg. Es bleiben uns demnach für 
+die 7 Zehnerübertragungen, wie wir sie vorhin angenommen hatten, nun- 
+mehr nur noch 45^ oder 2 Tempi. 
+
+Betrachten wir ferner nur eine Zehnerübertragung für sich, so 
+sehen wir vorerst, dass dieselbe 5theilig angeordnet ist. 
+
+Um sie um eine Einheit zu verändern ist daher nicht ein Weg von 
+
+1 Tempi oder 22,5®, sondern ein solcher von — - — = 72® nöthig. 
+
+o 
+
+Die jeweilig vorbereitende Einerstelle bei A und Zehnerstelle bei 
+
+72 
+
+S verschiebt sie jedoch vorher als Einleitung um— —=14,5®, so dass 
+
+für den auf sie wirkenden Zahn noch 72® — 14,5= 57,5® Wirkungsweg 
+tibrig blieben. Wir hätten demnach für die Herstellung von 9 -f 1 = 10 
+nothwendig 
+
+315® + 57,5® = 372,5®, 
+
+langen also mit einer Umdrehung nicht aus, sondern müssten um 12, 5® 
+weiter drehen, wir müssten daher, was sich leicht bewerkstelligen Hesse, 
+die Zahnform des Fünfeckes so anordnen, dass sich schon bei 45® Weg 
+die volle Wirkung erzielen lässt und der treibende Zahn dann to dt 
+weiter läuft, was auch theilweise geschehen ist. 
+
+
+398 Bnrkhardt Die Leibniz'Bche Rechenmascbine. 
+
+Kommen wir zu unserer Anfangsaufstellnng über die ganze MaBchine 
+zarttcky so wäre jetzt einzustellen: 
+
+Statt 9 Tempi, 14 Tempi ä 22,5 <* = 315 «^j 
+
+„ 8 „ 22,5^ 8 „ a 45<* = 360« 
+
+oder, alle kleinen Fehlerausgleichungen =45« dazu gerechnet, 2 volle 
+Kurbelumgänge. 
+
+Zum Vergleich will ich hier einschalten, dass Thomas mit 22 Tempi, 
+da mir diese nicht genügten, meine Maschine mit 25 Tempi und die 
+Brunsviga, wie Odtmer nach 16 jährigem Nachdenken enit finden musste, 
+was aber, wie obige Abhandlung zeigt, fttr eine zweiseitig arbeitende 
+Maschine unerlässlich, mit 32 Tempi arbeitet. 
+
+Aus diesen Betrachtungen können wir nur den einen Schluss ziehen, 
+dass die hier vorliegende Leibniz'sche Maschine auf ein Element sehr 
+genial construirt und ausgeführt worden ist, dass aber Leibniz seiner 
+Zeit in dem Glauben gelebt haben muss, dass nunmehr durch Anreihung 
+einer Anzahl solcher Elemente jedwede Maschine dementsprechende 
+Resultate liefern müsste, denn nur so lässt sich die hier vorliegende 
+Znsammenstellung erklären. 
+
+Hiernach müssen wir aber weiter folgern, dass die hier vor- 
+liegende Maschine niemals gegangen sein kann. Dass eine zweite 
+von Leibniz erbaute Maschine (von welcher in Zeitschrift S. 292 die 
+Rede ist) ganz anderer Construction gewesen sein dürfte und alle Eigen- 
+schaften, die der Erfinder anführt und eingehend beschreibt, gehabt haben 
+wird, können wir wohl kaum in Zweifel stellen und wäre es hochinteressant, 
+wenn dieses zweite Exemplar aufgefunden und zu weiteren Aufklärungen 
+zur Verfügung gestellt werden würde. 
+
+Die Behauptung aber bewahrheitet sich schon an dieser, wenn auch 
+nicht gangfähigen Maschine und kann auf alle Fälle festgehalten werden, 
+dass Leibniz Constructeur und Ausführer des ersten Rechenmaschinen- 
+Elementes gewesen ist und damit die eigentliche Grundlage für alle 
+Rechenmaschinen geschaffen hat. 
+
+Glashütte, October 1896. ^^^ Burkhardt. 
+
+Nach diesem Ergebnisse der von Herrn Burkhardt vorgenommenen 
+Untersuchung des in der Königlichen Bibliothek zu Hannover befind- 
+lichen Werkes (Zeitschr. S. 291, Fig. 4) scheint die Fortsetzung der be- 
+reits auf S. 301 — 314 begonnenen Klarstellung und Uebersetzung des 
+werthvoUen handschriftiichen Nachlasses von Leibniz der nächste Schritt 
+zu sein zur Sicherstellnng des Princips der Staffelwalzen-Rechenmaschine 
+als Erfindung des deutschen Philosophen aus dem Ende des 17. Jahr- 
+hunderts, nachdem lange Zeit eine nicht deutsche Erfindung am Anfang 
+dieses Jahrhunderts angenommen war. 
+
+
+Reinhertz, lieber die Ablesungsgenauigkeit an Nivellirscalen. 399 
+
+Die Fortsetzung der Herausgabe der auf S. 300—301 summarisch 
+aufgeführten Archiv- Acten dürfte um so mehr zu betreiben Sein, als das 
+auf 8. 301 nur kurz als „Fascikel von 69 Blättern 2®" bezeichnete 
+Stück bei kürzlich vorgenommener Besichtigung als sehr wertbvoll, 
+auch gute Zeichnungen enthaltend und meist mit Datum versehen^ auch 
+grossentheils nicht za schwer lesbar^ sich herausgestellt hat. J. 
+
+
+lieber die Ablesungsgenauigkeit an Nivellirscalen. 
+

@@ -3,8 +3,8 @@ version = 1
 # Default: code is Apache-2.0, everything else original (3D models, textures,
 # research notes, lesson material, docs) is CC-BY-SA-4.0. More specific
 # annotations below override these defaults (REUSE: last match wins).
-# Third-party material gets its own annotation, with its own licence, when it
-# is added; its licence text goes in LICENSES/.
+# Third-party material has its own annotations at the end, with its own
+# licences; their texts are in LICENSES/.
 
 [[annotations]]
 path = "**"
@@ -24,3 +24,55 @@ path = ["research/data/**", "params/**"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2026 leibniz-stepped-reckoner contributors"
 SPDX-License-Identifier = "CC-BY-SA-4.0"
+
+# ---- Third-party material ----------------------------------------------------
+
+# Scans from Zeitschrift für Vermessungswesen 26 (1897), including Leupold's
+# 1727 engraving reproduced there, and their OCR text: public domain.
+[[annotations]]
+path = ["research/images/zfv1897_*.png", "research/sources/raw-ocr/**"]
+precedence = "override"
+SPDX-FileCopyrightText = "W. Jordan, A. Burkhardt (1897); J. Leupold (1727) - public domain"
+SPDX-License-Identifier = "LicenseRef-PublicDomain"
+
+# Wikimedia Commons images. The per-file licence, author and source URL are in
+# research/data/wikimedia_commons_catalog.json (summary: research/images/ATTRIBUTION.md).
+# Most are CC BY-SA 4.0 photos of the TU Dresden replica; the exceptions follow.
+[[annotations]]
+path = "research/images/commons/**"
+precedence = "override"
+SPDX-FileCopyrightText = "Wikimedia Commons contributors Dr. Bernd Gross, Eremeev, Plenuska, Wuselig, Barbarah, SchiDD, Jeremy Wolf (see research/data/wikimedia_commons_catalog.json)"
+SPDX-License-Identifier = "CC-BY-SA-4.0"
+
+[[annotations]]
+path = "research/images/commons/Leibnitzrechenmaschine.jpg"
+precedence = "override"
+SPDX-FileCopyrightText = "Kolossos (Wikimedia Commons)"
+SPDX-License-Identifier = "CC-BY-SA-3.0"
+
+[[annotations]]
+path = "research/images/commons/Leibniz-Rechenmaschine_hg.jpg"
+precedence = "override"
+SPDX-FileCopyrightText = "Hannes Grobe (Wikimedia Commons)"
+SPDX-License-Identifier = "CC-BY-3.0"
+
+[[annotations]]
+path = "research/images/commons/Leibniz_Rechenmaschine_(1690).jpg"
+precedence = "override"
+SPDX-FileCopyrightText = "Hajotthu (de.wikipedia, Wikimedia Commons)"
+SPDX-License-Identifier = "CC-BY-3.0"
+
+# Public domain: Leibniz's own sketches, Meyers drawings (1893, 1904), Turck (1921)
+# and Leupold's engraving (1727, Library of Congress scan).
+[[annotations]]
+path = [
+  "research/images/commons/Leibniz_Calculator_Using_The_Pascaline.jpg",
+  "research/images/commons/Sprossenrad_leibniz.png",
+  "research/images/commons/Leibniz_Stepped_Reckoner.png",
+  "research/images/commons/Leibniz_Stepped_Reckoner_drawing.png",
+  "research/images/commons/Leibniz_Stepped_Reckoner_mechanism.png",
+  "research/images/commons/Details_of_the_mechanisms_of_the_Leibniz_calculator_the_most_advanced_of_its_time_LCCN2006690495.jpg",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "G. W. Leibniz; H. J. Meyer (1893); W. F. Meyer (1904); J. A. V. Turck (1921); J. Leupold (1727) - public domain"
+SPDX-License-Identifier = "LicenseRef-PublicDomain"

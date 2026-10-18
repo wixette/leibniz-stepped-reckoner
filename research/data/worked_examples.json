@@ -1,0 +1,38 @@
+{
+  "_about": "Worked examples from historical/technical sources, usable as animation scripts and as test cases for an emulator.",
+  "brevis_descriptio_multiplication": {
+    "source": "Leibniz 1710 Brevis descriptio, as quoted by Leupold 1727 (Jordan 1897 pp. 294-295)",
+    "task": "1709 x 365",
+    "setup": "Clear result windows to 0. Set 1709 on the 4 rightmost small dials. Align carriage so units drum is under units result window.",
+    "steps": [
+      {"carriage_offset": 0, "multiplier_pin_hole": 5, "action": "turn Magna Rota until pin hits stop (5 crank turns)", "result_after": 8545},
+      {"carriage_offset": 1, "multiplier_pin_hole": 6, "action": "shift carriage one place left, turn until stop (6 turns)", "result_after": 111085},
+      {"carriage_offset": 2, "multiplier_pin_hole": 3, "action": "shift carriage one more place, turn until stop (3 turns)", "result_after": 623785}
+    ],
+    "final": 623785
+  },
+  "two_phase_carry_addition": {
+    "source": "Ludwig 2006 (after Lehmann)",
+    "task": "0448 + 0254 (first addend already in result register, second set on drums)",
+    "phase1_parallel_steps": {
+      "_note": "Each step = one rib pitch (22.5 deg). Column values may exceed 9; the excess is the stored carry (Fünfhorn position).",
+      "columns": ["10^3", "10^2", "10^1", "10^0"],
+      "rows": [
+        [0, 4, 4, 8], [0, 4, 4, 8], [0, 4, 4, 8], [0, 4, 4, 8], [0, 4, 4, 8],
+        [0, 4, 5, 8], [0, 4, 6, 9], [0, 4, 7, 10], [0, 5, 8, 11], [0, 6, 9, 12]
+      ]
+    },
+    "phase2_serial_carries": {
+      "_note": "Lowest digit first; in step 2 a secondary carry arises in the 10^1 column (9 -> 10).",
+      "rows": [[0, 6, 9, 12], [0, 6, 10, 2], [0, 7, 0, 2]]
+    },
+    "result": 702
+  },
+  "burkhardt_timing_budget": {
+    "source": "Burkhardt 1897 p. 397 (historically refuted by Lehmann)",
+    "tempo_deg": 22.5,
+    "budget": {"dead_travel_tempi": 3, "digits_tempi": 9, "run_out_tempi": 2, "total_deg": 315, "left_for_carries_deg": 45},
+    "claim": "9+1 carry needs 315 + 57.5 = 372.5 deg > 360 deg, so 'the machine can never have worked'",
+    "refutation": "Lehmann: carry needs only ~10 deg thanks to detent springs; phases independent (Ludwig 2006)."
+  }
+}

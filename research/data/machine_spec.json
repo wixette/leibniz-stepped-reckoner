@@ -1,0 +1,78 @@
+{
+  "_about": "Known parameters of the surviving Leibniz four-species stepped-drum machine (GWLB Hannover, 'younger machine'), compiled for 3D modelling. confidence: high = stated by a primary/engineering source and corroborated; medium = single reliable source; low = secondary/unverified or inferred. Source tags are defined in ../sources/bibliography.md.",
+  "compiled": "2026-10-17",
+  "identity": {
+    "names": ["Stepped reckoner", "Staffelwalzenmaschine", "Vier-Spezies-Rechenmaschine", "machina arithmetica", "jüngere große Maschine"],
+    "location_original": "Gottfried Wilhelm Leibniz Bibliothek (GWLB), Hannover",
+    "build_period": {"value": "c. 1693 begun, 1698 completed, corrections to 1716", "source": "STEIN16", "alternatives": ["1690-1720 (WIKI)", "1700-1716 (LUDWIG2006, TUD)"], "confidence": "medium"}
+  },
+  "capacity": {
+    "input_digits": {"value": 8, "source": ["STEIN16", "TUD", "ARITH-REPLICA", "WIKI"], "confidence": "high"},
+    "result_digits": {"value": 16, "source": ["STEIN16", "TUD", "ARITH-REPLICA", "WIKI"], "confidence": "high", "note": "Leibniz's 1710 description and Jordan/Leupold figures show 12 result windows (older machine/description)."},
+    "revolution_counter_digits": {"value": 1, "source": ["STEIN16", "ARITH-REPLICA"], "confidence": "high"},
+    "stepped_drums": {"value": 8, "source": "BURKHARDT1897", "confidence": "high"},
+    "carry_units_on_carriage": {"value": 8, "source": "BURKHARDT1897", "confidence": "high", "note": "Burkhardt: 8 drums and 8 carry transmissions."}
+  },
+  "overall_dimensions_mm": {
+    "mechanism_length": {"value": 670, "source": ["JORDAN1897", "WIKI"], "confidence": "high"},
+    "mechanism_width": {"value": 270, "source": ["MYTIME", "SOLCOVA"], "confidence": "medium"},
+    "mechanism_height": {"value": 170, "source": ["MYTIME", "SOLCOVA"], "confidence": "medium"},
+    "oak_case_LxWxH": {"value": [970, 300, 250], "source": ["MYTIME", "SOLCOVA"], "confidence": "medium"},
+    "weight_kg": {"value": 14, "source": ["HANNOVER", "HNF"], "confidence": "medium"}
+  },
+  "materials": {"value": ["polished brass", "steel (shafts, crown wheels replaced 1896)", "oak case"], "source": ["WIKI", "BURKHARDT1897"], "confidence": "high"},
+  "stepped_drum": {
+    "ribs": {"value": 9, "source": ["BURKHARDT1897", "LUDWIG2006"], "confidence": "high"},
+    "rib_pitch_deg": {"value": 22.5, "source": ["BURKHARDT1897", "LUDWIG2006", "STEIN16"], "confidence": "high"},
+    "rib_sector_fraction": {"value": "9/16 (202.5 deg); free sector 7/16 (157.5 deg)", "source": "LUDWIG2006", "confidence": "high"},
+    "rib_span_first_to_last_deg": {"value": 180, "source": "STEIN16", "confidence": "high"},
+    "rib_lengths": {"value": "graduated, digit 1 = full length ... digit 9 = shortest (drum shifts axially under fixed receiving gear)", "source": "STEIN16", "confidence": "high", "missing": "absolute lengths, step increment, drum diameter"},
+    "setting_method": {"value": "knob on horizontal digit disc -> pinion -> rack slider -> axial shift of drum; drum driven through sliding gear on a long gear", "source": "STEIN16 (Kopp drawing)", "confidence": "high"},
+    "diameter_mm": {"value": null, "confidence": "unknown", "how_to_get": "Lehmann drawings NL 183/465, Stein&Kopp 2010, or photo-scaling from 37 mm digit pitch"}
+  },
+  "result_register": {
+    "sum_wheel_positions": {"value": 10, "confidence": "high"},
+    "sum_wheel_step_deg": {"value": 36, "source": ["LUDWIG2006", "STEIN16"], "confidence": "high"},
+    "display": {"value": "vertical digit discs (horizontal axes) behind rectangular windows on top of Pars immobilis", "source": ["JORDAN1897", "STEIN16"], "confidence": "high"},
+    "detent": {"value": "holding springs + detent-notch wheels (Rastkerbenräder), 18 deg notch pitch on carry storage axis", "source": ["BURKHARDT1897", "STEIN16", "LUDWIG2006"], "confidence": "medium"},
+    "digit_pitch_mm": {"value": 37, "source": "BURKHARDT1897 (carriage screw pitch 37 mm = one decimal place)", "confidence": "medium", "note": "inference: screw pitch equals digit spacing because one screw turn shifts carriage one place"}
+  },
+  "carry_mechanism": {
+    "principle": {"value": "two-phase: phase 1 parallel digit addition with carries stored (Einzahn turns Fünfhorn/Muldenrad 18 deg); phase 2 serial carry execution by staggered Zweihorn levers during rib-free drum sector, lowest digit first, cascading secondary carries", "source": ["LUDWIG2006", "ARITH", "STEIN16"], "confidence": "high"},
+    "parts": ["Einzahn (EZ, single tooth on sum-wheel shaft)", "Muldenrad (MR, trough wheel)", "Fünfhorn (FH, five-horned carry store)", "Zweihorn (ZH, two-horned drive lever; one horn per direction)", "Zwischenrad (ZW, intermediate star wheel)", "Rastkranz/Rastkerbenrad (RKR, detent wheel)", "Pentagon-Scheibe (pentagonal indicator/zeroing disc)"],
+    "store_rotation_deg": {"value": 18, "source": ["LUDWIG2006", "STEIN16"], "confidence": "high", "note": "Hannover model: 14 deg"},
+    "fuenfhorn_pitch_deg": {"value": 72, "source": "BURKHARDT1897", "confidence": "high"},
+    "muldenrad_fuenfhorn_offset_deg": {"value": 18, "source": "STEIN16", "confidence": "medium"},
+    "sum_wheel_advance_by_carry_original_deg": {"value": 21.5, "target": 36, "source": "STEIN16", "confidence": "medium"},
+    "crank_angle_per_carry_original_deg": {"value": 10, "source": "LUDWIG2006 (Lehmann measurement)", "confidence": "medium"},
+    "crank_angle_per_carry_dresden_deg": {"value": 16.5, "source": "LUDWIG2006", "confidence": "medium"},
+    "zweihorn_spread_burkhardt_deg": {"value": 80, "note": "approx., same on all digits", "source": "LUDWIG2006", "confidence": "medium"},
+    "zweihorn_spread_dresden_deg": {"value": [135, 102, 69, 39, 36, 69, 102, 132], "source": "LUDWIG2006 Bild 3", "confidence": "medium", "note": "Order as printed under Bild 3; mapping to digit index and to add/subtract horn not stated explicitly. Gap of 36 deg between H4 and H5; H5 spread +3 deg vs H4."},
+    "zweihorn_horn_angle_arithmeum_deg": {"value": 90, "source": "ARITH", "confidence": "low"},
+    "hannover_model_optimisation": {"value": "spread delta-phi 31.5 deg; drum pitch 21 deg; +87 deg extra crank to finish carries", "source": "STEIN16", "confidence": "medium"}
+  },
+  "drive_train": {
+    "crown_wheels": {"value": 17, "source": "BURKHARDT1897", "confidence": "high"},
+    "layout": {"value": "gear chain Z1..Z17 along carriage driven by crank; alternating drum-drive gears and carry-lever (H_i) gears", "source": "LUDWIG2006 Bild 2 + inference (2x8+1=17)", "confidence": "low"},
+    "operation_per_crank_turn": {"value": "one addition (one direction) or subtraction (other direction)", "confidence": "high"}
+  },
+  "carriage_shift": {
+    "actuator": {"value": "crank at left end turning a lead screw", "source": ["BURKHARDT1897", "WIKI", "JORDAN1897 Fig.2 'K'"], "confidence": "high"},
+    "screw_pitch_mm": {"value": 37, "source": "BURKHARDT1897", "confidence": "high"},
+    "positions": {"value": "16-8+1 = 9 alignments of the 8-digit carriage on the 16-digit register", "confidence": "low", "note": "inference"},
+    "detent": {"value": "spring catch (Einfallfeder)", "source": "BURKHARDT1897", "confidence": "high"}
+  },
+  "multiplier_dial_magna_rota": {
+    "holes": {"value": 10, "source": ["LEUPOLD1727", "WIKI"], "confidence": "high"},
+    "rings": {"value": "outer digits 0-9 (multiplication, black), inner rotating ring with holes, third ring digits (division/subtraction, red)", "source": ["LEUPOLD1727", "WIKI"], "confidence": "high"},
+    "stop": {"value": "fixed stop between 0 and 9 at top", "source": "LEUPOLD1727", "confidence": "high"},
+    "handle": {"value": "handle on the big wheel = main operation crank", "source": ["LEUPOLD1727", "STEIN16 'Magna-Rota-Kurbel'"], "confidence": "high"}
+  },
+  "known_unknowns": [
+    "Absolute dimensions of every part (drum diameter/length, rib step, gear modules and tooth counts, shaft spacings, heights of the two decks)",
+    "Exact phase relationships (crank angle at which each drum rib and each Zweihorn engages) for the original as opposed to replicas",
+    "Tooth profiles (historic, not involute) and the shape of the Fünfhorn/Muldenrad/Zweihorn",
+    "Revolution counter internals",
+    "Decorative casing details (engraving on Magna Rota, end frames) - photographs exist"
+  ]
+}
