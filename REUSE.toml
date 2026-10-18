@@ -1,0 +1,26 @@
+version = 1
+
+# Default: code is Apache-2.0, everything else original (3D models, textures,
+# research notes, lesson material, docs) is CC-BY-SA-4.0. More specific
+# annotations below override these defaults (REUSE: last match wins).
+# Third-party material gets its own annotation, with its own licence, when it
+# is added; its licence text goes in LICENSES/.
+
+[[annotations]]
+path = "**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 leibniz-stepped-reckoner contributors"
+SPDX-License-Identifier = "CC-BY-SA-4.0"
+
+[[annotations]]
+path = ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.mjs", "**/*.py", "**/*.sh", "**/*.json", "**/*.toml", "**/*.yaml", "**/*.yml", "**/*.html", "**/*.css", ".gitattributes", ".gitignore", ".editorconfig", ".github/**"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 leibniz-stepped-reckoner contributors"
+SPDX-License-Identifier = "Apache-2.0"
+
+# Research data and parameters are content, not code.
+[[annotations]]
+path = ["research/data/**", "params/**"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 leibniz-stepped-reckoner contributors"
+SPDX-License-Identifier = "CC-BY-SA-4.0"

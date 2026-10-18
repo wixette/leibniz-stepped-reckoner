@@ -1,0 +1,19 @@
+.DS_Store
+node_modules/
+dist/
+.vite/
+coverage/
+*.log
+
+# Blender autosaves and backups
+*.blend1
+*.blend2
+*.blend@
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Local renders, pose exports and scratch output
+blender/out/

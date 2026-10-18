@@ -1,0 +1,4 @@
+# The web app (web/) is the one package; the root holds the repository-wide
+# scripts (the reference check) and the version, kept in one place.
+packages:
+  - "web"

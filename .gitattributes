@@ -1,0 +1,18 @@
+# Text normalisation
+* text=auto eol=lf
+
+# Git LFS: 3D sources and generated binary assets.
+# Research reference images stay in plain git (small and stable).
+*.blend      filter=lfs diff=lfs merge=lfs -text
+*.glb        filter=lfs diff=lfs merge=lfs -text
+*.gltf       filter=lfs diff=lfs merge=lfs -text
+*.bin        filter=lfs diff=lfs merge=lfs -text
+*.fbx        filter=lfs diff=lfs merge=lfs -text
+*.obj        filter=lfs diff=lfs merge=lfs -text
+*.exr        filter=lfs diff=lfs merge=lfs -text
+*.hdr        filter=lfs diff=lfs merge=lfs -text
+*.ktx2       filter=lfs diff=lfs merge=lfs -text
+*.mp4        filter=lfs diff=lfs merge=lfs -text
+*.webm       filter=lfs diff=lfs merge=lfs -text
+blender/textures/**  filter=lfs diff=lfs merge=lfs -text
+assets/**            filter=lfs diff=lfs merge=lfs -text

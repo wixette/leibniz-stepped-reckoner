@@ -1,0 +1,21 @@
+{
+  "name": "leibniz-stepped-reckoner",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Leibniz's stepped reckoner, the first calculating machine for all four operations of arithmetic, as an interactive 3D simulator in the browser.",
+  "license": "Apache-2.0",
+  "homepage": "https://wixette.github.io/leibniz-stepped-reckoner/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wixette/leibniz-stepped-reckoner.git"
+  },
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "check:refs": "node tools/check-refs.mjs",
+    "test": "node --test \"tools/*.test.mjs\""
+  }
+}

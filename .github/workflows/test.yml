@@ -1,0 +1,35 @@
+name: Tests
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # The acceptance tests load the real .glb, which is kept in Git LFS.
+          lfs: true
+      - uses: pnpm/action-setup@v4 # the version comes from package.json's packageManager
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+      # Repository-wide: no private references, local paths or broken links
+      # (tools/check-refs.mjs), and the check's own tests.
+      - run: pnpm check:refs
+      - run: pnpm test
+      # Every file's licence is declared (REUSE.toml, LICENSES/).
+      - uses: fsfe/reuse-action@v5
+      # The simulator itself, once web/ is in the repository.
+      - name: Install the web app
+        if: hashFiles('web/package.json') != ''
+        run: pnpm install --frozen-lockfile
+      - name: Typecheck the web app
+        if: hashFiles('web/package.json') != ''
+        run: pnpm --dir web typecheck
+      - name: Test the web app (logic, kinematics, acceptance tests on the .glb)
+        if: hashFiles('web/package.json') != ''
+        run: pnpm --dir web test

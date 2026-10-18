@@ -1,0 +1,60 @@
+name: Deploy to GitHub Pages
+
+# Builds the simulator and publishes web/dist. GitHub Pages does not serve
+# files kept in Git LFS, so the site is built here, from an LFS checkout, and
+# published as an artifact. Repository settings: Pages > Source: GitHub Actions.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      has_web: ${{ steps.web.outputs.has_web }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - id: web
+        name: Is the web app here yet?
+        run: |
+          if [ -f web/package.json ]; then echo "has_web=true" >> "$GITHUB_OUTPUT"; else echo "has_web=false" >> "$GITHUB_OUTPUT"; fi
+      - uses: pnpm/action-setup@v4
+        if: steps.web.outputs.has_web == 'true'
+      - uses: actions/setup-node@v4
+        if: steps.web.outputs.has_web == 'true'
+        with:
+          node-version: '24.x'
+      - if: steps.web.outputs.has_web == 'true'
+        run: pnpm install --frozen-lockfile
+      - if: steps.web.outputs.has_web == 'true'
+        run: pnpm --dir web build
+      - uses: actions/configure-pages@v5
+        if: steps.web.outputs.has_web == 'true'
+      - uses: actions/upload-pages-artifact@v3
+        if: steps.web.outputs.has_web == 'true'
+        with:
+          path: web/dist
+
+  deploy:
+    needs: build
+    if: needs.build.outputs.has_web == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
