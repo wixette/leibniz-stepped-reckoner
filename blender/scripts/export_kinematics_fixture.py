@@ -1,7 +1,8 @@
-"""Write sample poses from lib/kinematics.py for the TypeScript cross-check test.
+"""Write sample poses from lib/kinematics.py for the JavaScript cross-check test
+(tests/sim/kinematics.test.js).
 
 Plain Python (no Blender needed):  python3 export_kinematics_fixture.py
-Output: web/src/sim/__fixtures__/kinematics.json
+Output: tests/fixtures/kinematics.json
 """
 
 import json
@@ -12,7 +13,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from lib import kinematics, params  # noqa: E402
 
-OUT = os.path.join(params.MACHINE_DIR, "web", "src", "sim", "__fixtures__", "kinematics.json")
+OUT = os.path.join(params.MACHINE_DIR, "tests", "fixtures", "kinematics.json")
 
 
 def main():

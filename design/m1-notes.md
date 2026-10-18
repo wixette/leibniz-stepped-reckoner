@@ -2,7 +2,7 @@
 
 - **Status:** done 2026-10-17. The acceptance spec passes (A1-1…A1-6 in `pnpm test`; A1-7 = the M0 spec, also in `pnpm test`).
 - **Plan:** [modelling-and-animation-plan.md](modelling-and-animation-plan.md) §10, §10.1
-- **Page:** `web/experiments/02-carry-slice/` (add `?selftest` to run A1 in the browser)
+- **Page:** `dev/02-carry-slice/` (add `?selftest` to run A1 in the browser)
 
 ## What M1 adds
 
@@ -48,7 +48,7 @@ Plus a shared `pi.window` (three openings), a full-width rear wall and a front b
 
 ## One source of truth for M1+ motion
 
-From M1 on, multi-digit motion lives **only in the TypeScript sim** (`src/sim/carrySlice.ts`, `kinematicsM1.ts`). The Blender sweep does not re-implement it. `pnpm poses:m1` exports scripted scenarios as per-node values, and `check_m1_clearance.py` replays them on the Blender model. (M0 keeps its Python kinematics and the Python→TS fixture test.)
+From M1 on, multi-digit motion lives **only in the JavaScript sim** (`js/sim/carrySlice.js`, `kinematicsM1.js`). The Blender sweep does not re-implement it. `pnpm poses:m1` exports scripted scenarios as per-node values, and `check_m1_clearance.py` replays them on the Blender model. (M0 keeps its Python kinematics and the Python→JS fixture test.)
 
 ## Known simplifications / for M2
 

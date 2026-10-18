@@ -1,4 +1,4 @@
-"""Crank-angle kinematics of one digit (no bpy). Mirrors web/src/sim/kinematics.ts.
+"""Crank-angle kinematics of one digit (no bpy). Mirrors js/sim/kinematics.js.
 
 theta: crank angle in degrees within one operation, 0..360 for addition and
 0..-360 for subtraction (drums turn 1:1 with the crank).

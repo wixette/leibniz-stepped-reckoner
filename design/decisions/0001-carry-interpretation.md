@@ -38,7 +38,7 @@ The drawings upgrade our *design* timing to *documented* timing, which is the st
 
 ## Decision
 
-1. **Implement the carry as a policy in the simulation logic** (`web/src/sim/`), with two modes and the same 3D parts:
+1. **Implement the carry as a policy in the simulation logic** (`js/sim/`), with two modes and the same 3D parts:
    - **`ripple`** (default, after Lehmann, I2): all stored carries inside the carriage window are executed in order from the lowest digit within one turn. Best for teaching, because it *is* a **ripple-carry adder**.
    - **`historical`** (after GWLB/Badur, I3): carries stored by the ribs (phase 1) are executed in this turn's carry window. A **secondary carry created during the carry window stays stored** (its pentagon tilts) until a later turn, which the learner makes with the input set to 0. This reproduces GWLB's worked example: 9999 + 1 shows **9900** after the first turn. It is a sim parameter, `cascade_per_turn` (0 = this behaviour, ∞ = `ripple`), because GWLB's text ("only two carries at once") is too loose to fix the exact number. Also valuable, because it is a **deferred carry / carry-save** scheme with a visible "carry pending" flag and a human in the loop.
 

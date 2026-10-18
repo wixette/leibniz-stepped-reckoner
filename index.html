@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Leibniz's calculating machine</title>
+    <meta name="description" content="Leibniz's stepped reckoner, the first calculating machine for all four operations of arithmetic, as an interactive 3D simulator with guided lessons in English and German." />
+    <link rel="stylesheet" href="css/style.css" />
+    <!-- Bare imports ("three") resolve to the copies in vendor/ (pnpm vendor). -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "./vendor/three/build/three.module.js",
+          "three/addons/": "./vendor/three/examples/jsm/",
+          "three-mesh-bvh": "./vendor/three-mesh-bvh/build/index.module.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <main id="stage">
+      <div id="hover" hidden></div>
+      <div id="status" role="status">Loading model…</div>
+      <div id="perf" hidden></div>
+    </main>
+    <aside id="panel">
+      <header>
+        <div class="top">
+          <h1 data-ui="title"></h1>
+          <button id="lang" title="Language / Sprache"></button>
+        </div>
+        <p class="sub" data-ui="subtitle"></p>
+      </header>
+
+      <section>
+        <div class="readline">
+          <div><label data-ui="result"></label><span class="big" id="result">0</span></div>
+          <div><label data-ui="turns"></label><span class="big" id="counter">0</span></div>
+          <div><label data-ui="shift"></label><span class="big" id="offset">0</span></div>
+        </div>
+      </section>
+
+      <section id="menu">
+        <h2 data-ui="lessons"></h2>
+        <div class="lessonlist" id="lessonlist"></div>
+        <div class="lessonlist" style="margin-top: 8px">
+          <button id="freeplay"><b data-ui="freePlay"></b><span data-ui="freePlayHint"></span></button>
+        </div>
+      </section>
+
+      <section id="player" hidden>
+        <h2 id="lessonTitle"></h2>
+        <div id="progress"></div>
+        <p id="stepText"></p>
+        <div id="taskline" hidden></div>
+        <div class="navrow">
+          <button id="back"></button>
+          <button id="next" class="primary"></button>
+        </div>
+        <p style="margin: 8px 0 0"><a href="#" id="toMenu" data-ui="allLessons"></a></p>
+      </section>
+
+      <section id="controls" class="controls">
+        <div id="lockednote" class="lockednote" hidden></div>
+        <div class="inputrow" data-control="input">
+          <label data-ui="input" style="font-size: 12px; color: var(--muted); display: block"></label>
+          <input id="input" type="number" min="0" max="99999999" value="0" style="width: 160px" />
+        </div>
+        <div class="row" style="margin-top: 8px">
+          <button id="add" data-control="add"></button>
+          <button id="sub" data-control="sub"></button>
+        </div>
+        <div class="row" data-control="shift">
+          <button id="shiftLeft"></button>
+          <button id="shiftRight"></button>
+        </div>
+        <div data-control="pin">
+          <label data-ui="pin" style="font-size: 12px; color: var(--muted); display: block; margin-bottom: 4px"></label>
+          <div class="pins" id="pins"></div>
+        </div>
+        <div class="row" style="margin-top: 6px">
+          <button id="toStop" data-control="toStop"></button>
+          <button id="reset" data-control="reset"></button>
+        </div>
+      </section>
+
+      <section>
+        <h2 data-ui="views"></h2>
+        <div class="row">
+          <button data-view="overview" data-ui="viewOverview"></button>
+          <button data-view="register" data-ui="viewRegister"></button>
+          <button data-view="front" data-ui="viewFront"></button>
+          <button data-view="drum" data-ui="viewDrum"></button>
+          <button data-view="carry" data-ui="viewCarry"></button>
+        </div>
+        <label class="check"><input id="casing" type="checkbox" checked /> <span data-ui="showCase"></span></label>
+        <label class="check"><input id="cutaway" type="checkbox" /> <span data-ui="cutaway"></span></label>
+        <label class="check"><input id="explode" type="checkbox" /> <span data-ui="explode"></span></label>
+        <label class="check"><input id="focus" type="checkbox" /> <span data-ui="focus"></span></label>
+      </section>
+
+      <footer>
+        <p data-ui="reconstruction"></p>
+        <p><a href="dev/" data-ui="morePages"></a></p>
+      </footer>
+    </aside>
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>

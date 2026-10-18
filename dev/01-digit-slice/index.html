@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>M0 · One digit of the Leibniz stepped reckoner</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "../../vendor/three/build/three.module.js",
+          "three/addons/": "../../vendor/three/examples/jsm/",
+          "three-mesh-bvh": "../../vendor/three-mesh-bvh/build/index.module.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <main id="stage">
+      <div id="hover" hidden></div>
+      <div id="status" role="status">Loading model…</div>
+    </main>
+    <aside id="panel">
+      <header>
+        <h1>One digit of Leibniz's machine</h1>
+        <p class="sub">M0 prototype · stepped drum, result wheel and carry store</p>
+      </header>
+
+      <section>
+        <h2>Result window</h2>
+        <div class="readout">
+          <div><span class="big" id="shown">0</span><label>digit</label></div>
+          <div><span class="big" id="carryOut">0</span><label>carried to next digit</label></div>
+          <div><span class="big" id="turns">0</span><label>turns (counter)</label></div>
+        </div>
+        <p id="phase" class="phase">Turn the crank to add the set digit.</p>
+        <button id="reset" class="reset" title="Crank to rest, setting 0, result 0, carry 0, counter 0">↺ Reset machine</button>
+      </section>
+
+      <section>
+        <h2>1 · Set a digit</h2>
+        <div id="digits" class="digits"></div>
+        <p class="hint">The knob turns a pinion, the rack slides the stepped drum along its shaft: more ribs reach the gear.</p>
+      </section>
+
+      <section>
+        <h2>2 · Turn the crank</h2>
+        <div class="row">
+          <button id="add">＋ Add (one turn)</button>
+          <button id="sub">− Subtract</button>
+        </div>
+        <div class="row">
+          <button id="stepAdd" title="Turn the crank forward (adding) to the next moment something has visibly changed">Step ▸ (adding)</button>
+          <button id="stepSub" title="Turn the crank backward (subtracting) to the next moment something has visibly changed">Step ▸ (subtracting)</button>
+          <select id="speed" aria-label="Speed">
+            <option value="1">Real time</option>
+            <option value="0.25">¼ speed</option>
+            <option value="0.1" selected>1/10 speed</option>
+          </select>
+        </div>
+        <label class="slider">Crank angle <output id="thetaOut">0°</output>
+          <input id="theta" type="range" min="-360" max="360" step="0.25" value="0" />
+        </label>
+      </section>
+
+      <section>
+        <h2>View</h2>
+        <div class="row">
+          <button data-view="overview">Overview</button>
+          <button data-view="gear">Drum &amp; gear</button>
+          <button data-view="carry">Carry store</button>
+        </div>
+        <label class="check"><input id="didactic" type="checkbox" /> Colour parts by function</label>
+        <ul class="legend" id="legend" hidden>
+          <li><i style="background:#3d6fd6"></i>setting (knob, pinion, rack)</li>
+          <li><i style="background:#8a4fd1"></i>stepped drum and shaft</li>
+          <li><i style="background:#2f9e5b"></i>result wheel and Einzahn</li>
+          <li><i style="background:#e0782c"></i>carry store (Fünfhorn, pentagon)</li>
+        </ul>
+      </section>
+
+      <footer>
+        <p>Reconstruction after Lehmann (TU Dresden) and the documented geometry; part sizes are scaled estimates. See <code>design/modelling-and-animation-plan.md</code>.</p>
+      </footer>
+    </aside>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

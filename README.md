@@ -10,33 +10,29 @@ The simulator is **kinematically faithful**: every part that matters for the cal
 
 ## For developers
 
+There is nothing to build: the pages are plain HTML, CSS and JavaScript modules, and three.js is vendored. Serve the directory over HTTP and open it:
+
+```
+python3 -m http.server 8000
+```
+
+Then open <http://localhost:8000/> for the lessons, or <http://localhost:8000/dev/> for the developer pages (one per milestone; add `?selftest` to run a page's acceptance checks). To deploy, copy the whole directory to a web server, with the Git LFS files checked out. Pages cannot be opened from `file://`, because browsers do not load modules from there.
+
 ### Requirements
 
-- **Node.js** 24 (22 or later works) and **pnpm** (the version is pinned in `package.json`; `corepack enable` installs it).
-- **Git LFS**, for the 3D model and other binary assets: run `git lfs install` once, then clone as usual (or `git lfs pull` in an existing clone).
-
-### Run it locally
-
-```
-pnpm install
-pnpm --dir web dev     # http://localhost:5173/
-```
-
-The main page links to the lessons and to the developer pages (`web/experiments/`, one per milestone). `pnpm --dir web build` writes the static site to `web/dist/`, which works from any path on any static web server.
+- **Git LFS**, for the 3D models and other binary assets: run `git lfs install` once, then clone as usual (or `git lfs pull` in an existing clone).
+- For the checks only: **Node.js** 24 (22 or later works) and **pnpm** (the version is pinned in `package.json`; `corepack enable` installs it). `pnpm install` fetches three.js for the tests and TypeScript's checker; the pages do not use them.
 
 ### Checks
 
 ```
+pnpm install
 pnpm check:refs   # no private references, local paths or broken links
-pnpm test         # the tests
+pnpm typecheck    # the JSDoc types, checked strictly (tsconfig.json); nothing is compiled
+pnpm test         # simulator logic, kinematics, acceptance tests on the .glb, vendor/ and the import maps
 ```
 
-```
-pnpm --dir web typecheck
-pnpm --dir web test   # simulator logic, kinematics, and acceptance tests on the .glb
-```
-
-CI runs them on every push and pull request, together with the REUSE lint ([docs/licensing.md](docs/licensing.md)).
+CI runs them on every push and pull request, together with the REUSE lint ([docs/licensing.md](docs/licensing.md)). How the code is typed, tested and vendored: [docs/conventions.md](docs/conventions.md).
 
 ### Versions and releases
 
@@ -63,7 +59,11 @@ The version is kept in one place, `package.json`. Set it with `pnpm version <x.y
 | `params/` | Single source of truth for geometry and timing |
 | `blender/scripts/` | Headless Blender scripts that build the model from `params/` and check it |
 | `assets/` | Generated `.glb` models (Git LFS) |
-| `web/` | The simulator: Vite + three.js + TypeScript (`src/sim/`, `src/scene/`, `src/teach/`, `experiments/`) |
+| `index.html`, `css/`, `js/` | The simulator's main page (the lessons) and its code: `js/sim/` (the machine), `js/scene/` (three.js), `js/teach/` (lessons, text), `js/accept/` (acceptance checks) |
+| `dev/` | Developer pages, one per milestone |
+| `vendor/` | three.js and three-mesh-bvh, copied from npm (`pnpm vendor`) |
+| `tests/` | `node --test` tests |
+| `tools/` | Reference check, vendoring and pose export scripts |
 
 ## Credits
 

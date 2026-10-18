@@ -19,14 +19,14 @@ The model has about 8.6 k triangles and the `.glb` is about 300 KB.
 
 ## How to rebuild and check
 
-From `web/`:
+From the repository root:
 
 ```bash
-pnpm build:model     # params -> Blender (headless) -> ../assets/m0-digit-slice.glb
+pnpm build:model     # params -> Blender (headless) -> assets/m0-digit-slice.glb
 pnpm check:model     # collision sweep (~9.5 k poses, 0.05 mm margin) -> M0_CLEARANCE_OK
-pnpm fixture         # re-export the Python kinematics fixture for the TS cross-check
-pnpm test            # sim + kinematics tests (230), including the Python/TS agreement
-pnpm dev             # http://localhost:5173/experiments/01-digit-slice/
+pnpm fixture         # re-export the Python kinematics fixture for the JS cross-check
+pnpm test            # sim + kinematics tests (230), including the Python/JS agreement
+python3 -m http.server   # http://localhost:8000/dev/01-digit-slice/
 ```
 
 Preview renders: `Blender --background --factory-startup --python ../blender/scripts/render_m0_previews.py` writes to `blender/out/previews/` (git-ignored).
@@ -43,7 +43,7 @@ Preview renders: `Blender --background --factory-startup --python ../blender/scr
 
 1. **Stub teeth for the drum and receiving gear** (addendum 0.6 m, dedendum 1.0 m). With full-height involute teeth the contact ratio is about 1.43, so a rib touches the idle gear before its 22.5° window opens. Stub teeth give a contact ratio of about 0.94, which keeps every contact inside its window (drum −10.2° … +11.0° about mid-window). Real intermittent counters rely on a detent for the last couple of degrees, and so do we.
 2. **Rib order depends on direction.** Turning forward, ribs 1…9 pass the gear in that order; turning backward, 9…1. Setting *s* engages ribs *k* ≥ 10 − *s*, so the engaged ribs fill the **last** *s* windows when adding and the **first** *s* when subtracting. The result digit therefore changes late in an addition turn and early in a subtraction turn.
-3. **Einzahn ↔ Fünfhorn contact must use the horn's full shape.** The first model treated the horn as a line and missed tip contact. The final model uses capsule horns (segment 5.925 mm, radius 1 mm), an Einzahn pin of radius 1.5 mm on radius 10 mm, and a store axis 18 mm from the result shaft at 162°. This gives exactly 18° of push between v = 9.30 and 9.73, with at least 0.6 mm clearance at every resting digit and through the 54° completion. Solved numerically. The same solver runs in Python (`lib/kinematics.py`) and TS (`src/sim/kinematics.ts`) as a push table.
+3. **Einzahn ↔ Fünfhorn contact must use the horn's full shape.** The first model treated the horn as a line and missed tip contact. The final model uses capsule horns (segment 5.925 mm, radius 1 mm), an Einzahn pin of radius 1.5 mm on radius 10 mm, and a store axis 18 mm from the result shaft at 162°. This gives exactly 18° of push between v = 9.30 and 9.73, with at least 0.6 mm clearance at every resting digit and through the 54° completion. Solved numerically. The same solver runs in Python (`lib/kinematics.py`) and JavaScript (`js/sim/kinematics.js`) as a push table.
 4. **The pentagon disc sits behind the rear bracket**, at the machine's back edge, as on the original ("hinten aufgesetzte Fünfeckscheiben", Burkhardt 1897). Otherwise the frame hides the most important carry indicator.
 5. **three.js strips dots from glTF node names** (`pm.drum.0` becomes `pmdrum0`). Lookups go through `gltfName()`. This is recorded in `docs/conventions.md`.
 6. **Blender build-time parenting:** `matrix_world` is stale for objects just created, so parent-inverse matrices must not be used. Children get parent-relative locations, which also keeps the glTF transforms clean.

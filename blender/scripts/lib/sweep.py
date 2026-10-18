@@ -4,7 +4,7 @@ Every part (object with a "motion" property) is tested against every other part 
 can move relative to it: parts of one rigid body (static parts of the frame, or static
 parts of the carriage together with the carriage) are not tested against each other,
 and designed contacts (journals, keyed or meshing parts) are listed in DESIGNED. The
-same list is in web/src/accept/collisions.ts.
+same list is in js/accept/collisions.js.
 
 World-space BVH trees are rebuilt only for parts that moved; pairs whose bounding boxes
 are apart are skipped, and a result is reused when a pair comes back to a relative

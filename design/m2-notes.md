@@ -2,7 +2,7 @@
 
 - **Status:** done 2026-10-18. Mechanism 2026-10-17; casing, photo overlay and materials 2026-10-18. The acceptance spec passes: A2-1…A2-9 and A2-11…A2-13 in `pnpm test`, and A2-10 is the M0 and M1 specs, which run in the same `pnpm test`. Chromebook performance is not measured yet (see "Not done yet").
 - **Plan:** [modelling-and-animation-plan.md](modelling-and-animation-plan.md) §10, §10.1 (M2 design decisions)
-- **Page:** `web/experiments/03-full-machine/` (add `?selftest` to run A2 in the browser)
+- **Page:** `dev/03-full-machine/` (add `?selftest` to run A2 in the browser)
 
 ## What M2 adds
 
@@ -51,7 +51,7 @@ The four casing nodes (`frame.case`, `frame.base`, `frame.register_cover`, `pm.c
 
 ## How the sim generalised
 
-- **`Machine(registerDigits, carriageDigits)`** (`src/sim/machine.ts`) replaces the M1 slice logic. `CarrySlice` is now `Machine(3, 3)`, so M1 runs on the same code.
+- **`Machine(registerDigits, carriageDigits)`** (`js/sim/machine.js`) replaces the M1 slice logic. `CarrySlice` is now `Machine(3, 3)`, so M1 runs on the same code.
 - **Offsets.**
   - Ribs act only on register digits under the carriage.
   - Carry levers only pass stores under the carriage.
@@ -63,8 +63,8 @@ The four casing nodes (`frame.case`, `frame.base`, `frame.register_cover`, `pm.c
   - **Example:** adding 9 999 999 at offset 0 stores digit 8's carry at the 101st addition. The 201st addition is refused until the carriage is shifted over digit 8.
   - Before this rule the sim dropped the second carry silently (10⁹ too low).
   - A turn that *cancels* a waiting carry (a borrow at the same digit) is allowed: the store goes back to rest.
-  - Tests: `machine.test.ts` and A2-11.
-- **Operator procedures** are in `src/sim/operations.ts`: `multiply` (pin per digit, shift) and `divide` (subtract until overdrawn, add back once, read the ring). The page's worked examples and the tests use the same steps.
+  - Tests: `tests/sim/machine.test.js` and A2-11.
+- **Operator procedures** are in `js/sim/operations.js`: `multiply` (pin per digit, shift) and `divide` (subtract until overdrawn, add back once, read the ring). The page's worked examples and the tests use the same steps.
 
 ## Design findings
 
@@ -149,11 +149,11 @@ The material names stay the same (`brass_polished`, `brass_satin`, `steel`, `ste
   - **UVs:** box-projected at 250 mm per tile, with u along X, so the grain and the brushing run along the machine. Only meshes with a textured material get UVs.
   - The textures are exported as JPEG (`bl.EXPORT_IMAGES`), with metallic and roughness in one glTF texture (G = roughness, B = metallic). They add about 2 MB, including the UVs (4.9 → 6.9 MB).
 - **Colours** are linear reflectances. Brass is toned down for aged, lacquered metal (polished 0.86/0.64/0.28, roughness 0.20; satin 0.38). Steel is 0.55/0.56/0.58, roughness 0.28, and dark steel 0.10/0.11/0.13. Enamel is glossier (0.30).
-- **Viewer** (`web/src/scene/viewer.ts`, shared by pages 01–03):
+- **Viewer** (`js/scene/viewer.js`, shared by pages 01–03):
   - A studio environment replaces three.js's RoomEnvironment: a warm grey dome with softboxes above left, to the right, in front, below the front (so vertical brass faces catch a reflection) and behind. Metals take their look from what they reflect; in the grey room the brass looked olive and flat.
   - Neutral tone mapping replaces ACES, which pushed brass yellows towards olive.
   - The key light is a little weaker and warmer (1.2).
-- **Node acceptance tests** skip textures. Node has no image decoder, and the checks use geometry and material names only (`loadGlb.node.ts`).
+- **Node acceptance tests** skip textures. Node has no image decoder, and the checks use geometry and material names only (`tests/accept/loadGlb.js`).
 
 ## Digit labels enlarged for teaching (2026-10-18)
 

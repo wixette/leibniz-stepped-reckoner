@@ -16,6 +16,22 @@
   },
   "scripts": {
     "check:refs": "node tools/check-refs.mjs",
-    "test": "node --test \"tools/*.test.mjs\""
+    "test": "node --test \"tests/**/*.test.js\" \"tools/*.test.mjs\"",
+    "typecheck": "tsc -p tsconfig.json",
+    "vendor": "node tools/vendor.mjs",
+    "fixture": "python3 -I blender/scripts/export_kinematics_fixture.py",
+    "poses:m1": "node tools/export-m1-poses.mjs",
+    "poses:m2": "node tools/export-m2-poses.mjs",
+    "build:model": "\"/Applications/Blender.app/Contents/MacOS/Blender\" --background --factory-startup --python blender/scripts/build_m0_slice.py && \"/Applications/Blender.app/Contents/MacOS/Blender\" --background --factory-startup --python blender/scripts/build_m1_slice.py && \"/Applications/Blender.app/Contents/MacOS/Blender\" --background --factory-startup --python blender/scripts/build_m2.py",
+    "build:model:m1": "\"/Applications/Blender.app/Contents/MacOS/Blender\" --background --factory-startup --python blender/scripts/build_m1_slice.py",
+    "build:model:m2": "\"/Applications/Blender.app/Contents/MacOS/Blender\" --background --factory-startup --python blender/scripts/build_m2.py",
+    "check:model": "\"/Applications/Blender.app/Contents/MacOS/Blender\" --background --factory-startup --python blender/scripts/check_m0_clearance.py && pnpm poses:m1 && \"/Applications/Blender.app/Contents/MacOS/Blender\" --background --factory-startup --python blender/scripts/check_m1_clearance.py && pnpm poses:m2 && \"/Applications/Blender.app/Contents/MacOS/Blender\" --background --factory-startup --python blender/scripts/check_m2_clearance.py"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "@types/three": "0.186.0",
+    "three": "0.186.1",
+    "three-mesh-bvh": "0.9.15",
+    "typescript": "7.0.2"
   }
 }

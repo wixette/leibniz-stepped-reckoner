@@ -27,6 +27,19 @@ SPDX-License-Identifier = "CC-BY-SA-4.0"
 
 # ---- Third-party material ----------------------------------------------------
 
+# Vendored libraries, copied unchanged from npm (pnpm vendor); each keeps its LICENSE.
+[[annotations]]
+path = "vendor/three/**"
+precedence = "override"
+SPDX-FileCopyrightText = "2010-2026 three.js authors"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "vendor/three-mesh-bvh/**"
+precedence = "override"
+SPDX-FileCopyrightText = "2018 Garrett Johnson"
+SPDX-License-Identifier = "MIT"
+
 # Scans from Zeitschrift für Vermessungswesen 26 (1897), including Leupold's
 # 1727 engraving reproduced there, and their OCR text: public domain.
 [[annotations]]

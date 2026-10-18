@@ -2,7 +2,7 @@
 
 - **Status:** built 2026-10-18. The acceptance spec passes: A3-1…A3-6 and A3-9…A3-11 in `pnpm test`, A3-7 is the page's `?selftest` (9/9), and A3-8 is the M0–M2 specs, which run in the same `pnpm test`. **The exit criterion is still open:** "usable by a teacher without instructions" needs the open steps below.
 - **Plan:** [modelling-and-animation-plan.md](modelling-and-animation-plan.md) §10, §10.1 (M3 design decisions)
-- **Page:** `web/experiments/04-teaching/`
+- **Page:** `index.html` (the site's main page)
   - `?lang=de` starts in German;
   - `?selftest` runs A3;
   - `?perf` shows the frame rate and draw calls;
@@ -12,11 +12,11 @@
 
 | Piece | Where | What it does |
 |---|---|---|
-| Teaching page | `web/experiments/04-teaching/` | A learner page next to the developer page (03). Lesson list, lesson player (Back / Next, step text, "Your turn"), free play, result readout, views, case / front / take-apart / fade toggles, EN ⇄ DE switch (remembered per browser when storage is allowed). |
-| Lessons | `src/teach/lessons.ts` | Four lessons as data: 1 the stepped drum (9 steps), 2 9999 + 1 and the carry, with the historical carry as an aside (8), 3 1709 × 365 (8), 4 623785 ÷ 1709 (11). They contain 13 learner tasks. |
-| Lesson engine | `src/teach/player.ts` | Step types; presentation that carries over from step to step; actions, played animated on the page and applied at once in tests; Back replays the lesson from its start; `runLesson` is the headless learner used by A3-2 and A3-4. |
-| Text | `src/teach/i18n.ts` | All UI strings in English and German. Part names come from the model. |
-| Scene helpers | `src/scene/teachScene.ts` | Camera views (6, following the carriage); highlight with focus (cloned materials, glow, other parts faded); callouts (HTML labels pinned to parts); exploded view. |
+| Teaching page | `index.html` (the site's main page) | A learner page next to the developer page (03). Lesson list, lesson player (Back / Next, step text, "Your turn"), free play, result readout, views, case / front / take-apart / fade toggles, EN ⇄ DE switch (remembered per browser when storage is allowed). |
+| Lessons | `js/teach/lessons.js` | Four lessons as data: 1 the stepped drum (9 steps), 2 9999 + 1 and the carry, with the historical carry as an aside (8), 3 1709 × 365 (8), 4 623785 ÷ 1709 (11). They contain 13 learner tasks. |
+| Lesson engine | `js/teach/player.js` | Step types; presentation that carries over from step to step; actions, played animated on the page and applied at once in tests; Back replays the lesson from its start; `runLesson` is the headless learner used by A3-2 and A3-4. |
+| Text | `js/teach/i18n.js` | All UI strings in English and German. Part names come from the model. |
+| Scene helpers | `js/scene/teachScene.js` | Camera views (6, following the carriage); highlight with focus (cloned materials, glow, other parts faded); callouts (HTML labels pinned to parts); exploded view. |
 | Model extras | `blender/scripts/build_m2.py`, params `geometry.m2.explode` | `label_en` / `label_de` on the static parts too (frame, case, covers, plates, windows). `extras.explode` offsets for 43 parts in 14 groups. |
 
 **Learner tasks.**
@@ -33,7 +33,7 @@
   - A lesson action waits until the machine is back together, and the toggle is disabled while the machine moves.
   - A3-9 checks that no lesson step moves the machine or sets a task while it is apart.
 - **"Fade the other parts"** is enabled only on lesson steps that highlight parts. Elsewhere it is unticked and greyed out, with a tooltip saying why.
-- **Labels show live values, apart from the name** (`src/teach/partInfo.ts`).
+- **Labels show live values, apart from the name** (`js/teach/partInfo.js`).
   - A part's position is named by its decimal place in words ("Result wheel · tens", "Setting knob · units", "10⁴ place" from the ten-thousands on), never by an index.
   - The current value sits in its own coloured chip: a wheel's digit, a knob's or drum's setting, a carry store's state (no carry / carry stored / passing it on), the Magna Rota's turns (red when counting back), the pin's hole, the carriage's shift.
   - So "Setting dial 2: 4" now reads "Setting knob · hundreds" with a **4** chip.
@@ -41,7 +41,7 @@
 
 ## Operating the machine by clicking its parts (2026-10-18)
 
-The machine can be operated by clicking (or tapping) its parts, as well as with the panel (`src/teach/partActions.ts`):
+The machine can be operated by clicking (or tapping) its parts, as well as with the panel (`js/teach/partActions.js`):
 
 | Click on | Does |
 |---|---|
@@ -119,5 +119,5 @@ Measured on page 04, whole-machine view: 296 meshes (one per material per part).
 ## Still open (to finish M3)
 
 1. **Test with 1–2 teachers** (the exit criterion). Can they run lesson 1 and lesson 3 without instructions? Note where they hesitate.
-2. **Have the German text reviewed** by a native speaker (UI strings in `src/teach/i18n.ts`, lessons in `src/teach/lessons.ts`).
+2. **Have the German text reviewed** by a native speaker (UI strings in `js/teach/i18n.js`, lessons in `js/teach/lessons.js`).
 3. **Measure on a Chromebook-class device** with `?perf`, for the whole-machine view and the take-apart view.

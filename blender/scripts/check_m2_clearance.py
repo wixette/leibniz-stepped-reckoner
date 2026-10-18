@@ -1,6 +1,6 @@
 """Collision sweep for the M2 full machine, replaying poses exported by the web simulation.
 
-  (in web/)  pnpm poses:m2          -> ../blender/out/m2-poses.json
+  pnpm poses:m2          -> blender/out/m2-poses.json
   Blender --background --factory-startup --python check_m2_clearance.py -- [--poses PATH] [--every N]
 
 Every pair of parts that can move relative to each other is tested for mesh intersection

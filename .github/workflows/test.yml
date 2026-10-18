@@ -17,19 +17,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24.x'
+      # Development only: three.js for Node (tests) and TypeScript's checker. The pages
+      # use the copies in vendor/, and nothing is built.
+      - run: pnpm install --frozen-lockfile
       # Repository-wide: no private references, local paths or broken links
-      # (tools/check-refs.mjs), and the check's own tests.
+      # (tools/check-refs.mjs).
       - run: pnpm check:refs
-      - run: pnpm test
       # Every file's licence is declared (REUSE.toml, LICENSES/).
       - uses: fsfe/reuse-action@v5
-      # The simulator itself, once web/ is in the repository.
-      - name: Install the web app
-        if: hashFiles('web/package.json') != ''
-        run: pnpm install --frozen-lockfile
-      - name: Typecheck the web app
-        if: hashFiles('web/package.json') != ''
-        run: pnpm --dir web typecheck
-      - name: Test the web app (logic, kinematics, acceptance tests on the .glb)
-        if: hashFiles('web/package.json') != ''
-        run: pnpm --dir web test
+      # The JSDoc types, checked strictly against the code (tsconfig.json).
+      - run: pnpm typecheck
+      # Simulator logic, kinematics, acceptance tests on the .glb, vendor/ and the
+      # import maps, and the reference check's own tests.
+      - run: pnpm test

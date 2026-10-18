@@ -37,12 +37,12 @@ Do not set Blender's unit scale to 0.001. The glTF exporter ignores it, and mode
 
 ## Developer pages (one per milestone)
 
-- Every milestone ships a **permanent** developer page in `web/experiments/NN-name/`, registered in `web/vite.config.ts` and linked from `web/index.html`. It is how the milestone is verified by hand.
+- Every milestone ships a **permanent** developer page in `dev/NN-name/`, linked from `dev/index.html`. It is how the milestone is verified by hand. (The site's main page, `index.html`, is the lessons.)
 - Pages are never deleted when the next milestone arrives. They stay working and act as **live regression tests** in the browser for shared code.
 - Every page has a visible **Reset machine** control that returns to the initial state at any time.
 - **Step controls** ("Step ▸ (adding)" / "Step ▸ (subtracting)") turn the crank in that direction to the **next moment a visible change has just completed**: a digit has moved, a carry has been stored or finished, or the turn has been committed. They never stop at the *start* of a motion or in a stretch where nothing changes. After each step the panel says what just happened ("Step: …"). The sim exposes the stops (`stepStops(dir)`), and a unit test asserts that every step of scripted turns changes something visible.
 - Every page has a **`?selftest`** mode. It plays the milestone's acceptance scenarios (see *Testing*), shows a green or red tick for each check on screen, and publishes the results as `window.__selftest = { done, passed, failed: [...] }`.
-- They run with `pnpm dev` in `web/` (http://localhost:5173/).
+- They run from any static web server at the repository root, for example `python3 -m http.server` (http://localhost:8000/dev/). Nothing is built.
 
 ## Testing
 
@@ -50,25 +50,25 @@ Correctness has four layers. Each is tested where it is cheapest to test reliabl
 
 | Layer | Question | Where it is tested | Runs in |
 |---|---|---|---|
-| 1. Logic | Does the machine compute the right result? | `web/src/sim/*.test.ts` | `pnpm test` |
-| 2. Kinematics | Is each part at the right angle/offset for a given state? | `web/src/sim/*.test.ts`, plus a Python→TS **fixture** test proving the web kinematics equal the Blender ones | `pnpm test` |
-| 3. Geometry in motion | Do the real 3D parts sit, touch and clear each other correctly when posed the way the browser poses them? | `web/src/accept/*.accept.test.ts` (acceptance tests on the `.glb`) | `pnpm test` |
-| 4. Visual fidelity | Does it look like the machine and read clearly? | Manual testing on the experiment page; photo overlays; optional reference screenshots | by hand |
+| 1. Logic | Does the machine compute the right result? | `tests/sim/*.test.js` | `pnpm test` |
+| 2. Kinematics | Is each part at the right angle/offset for a given state? | `tests/sim/*.test.js`, plus a Python→JS **fixture** test proving the web kinematics equal the Blender ones | `pnpm test` |
+| 3. Geometry in motion | Do the real 3D parts sit, touch and clear each other correctly when posed the way the browser poses them? | `tests/accept/*.accept.test.js` (acceptance tests on the `.glb`; the checks themselves are in `js/accept/`, shared with the pages' `?selftest`) | `pnpm test` |
+| 4. Visual fidelity | Does it look like the machine and read clearly? | Manual testing on the developer pages; photo overlays; optional reference screenshots | by hand |
 
 **Design-time check (not in `pnpm test`):** the Blender collision sweep (`pnpm check:model`) tests dense pose grids. It must pass before a model change is committed. It is slow (minutes) and needs Blender, so it is not part of `pnpm test`.
 
-**One source of truth for motion.** Once a machine has more than trivial kinematics, the motion lives only in the TypeScript sim. The sweep does **not** re-implement it: the sim exports scripted scenarios as per-node motion values (JSON, e.g. `pnpm poses:m1`), and the Blender sweep replays them on the model. A Python twin of the kinematics is acceptable only for tiny slices, and then needs a Python→TS fixture test (as in M0).
+**One source of truth for motion.** Once a machine has more than trivial kinematics, the motion lives only in the JavaScript sim. The sweep does **not** re-implement it: the sim exports scripted scenarios as per-node motion values (JSON, e.g. `pnpm poses:m1`), and the Blender sweep replays them on the model. A Python twin of the kinematics is acceptable only for tiny slices, and then needs a Python→JS fixture test (as in M0).
 
 ### Rules
 
 - **`pnpm test` must run the minimal acceptance set** for every milestone: layers 1–3, without a browser, GPU or Blender. Acceptance tests load `assets/*.glb` in Node with three.js (`GLTFLoader.parse` on the file bytes) and use ray casts and distance queries. No rendering.
-- **Acceptance tests pose the model through the same code as the page** (`src/sim` + `src/scene/rig.ts`). Never re-implement the posing in a test, because the point is to catch rig, axis, rest-pose and node-name bugs.
+- **Acceptance tests pose the model through the same code as the page** (`js/sim/` + `js/scene/rig.js`). Never re-implement the posing in a test, because the point is to catch rig, axis, rest-pose and node-name bugs.
 - **Each milestone has an acceptance spec**: a short numbered list of checkable statements in the machine's design notes (e.g. `design/m1-notes.md`). Each statement maps to exactly one acceptance test, named after it (`it("A1-3: …")`), and to one `?selftest` check on the page.
 - **Three kinds of acceptance check**, used together:
   1. **Readout:** what the 3D model *shows* equals the simulation. Examples: the glyph under the reading window (ray cast), the digit the setting pointer aims at, the pentagon's tilt measured from world-space vertices.
   2. **Contact (positive):** parts that should be driving each other are actually touching (minimum distance below a contact tolerance) during the windows where they act.
   3. **Clearance (negative):** parts do not intersect at the runtime transforms (`three-mesh-bvh`), at sampled poses. This is a sparse subset of the Blender sweep.
-- **Clearance checks are all-pairs, never hand-picked pair lists.** Test every part against every part that can move relative to it, and list *designed contacts* (journals, keyed or meshing parts) explicitly, with the reason. A hand-picked list misses the pairs nobody thought of: M1's lists missed a drum shaft clipping the next digit's setting pinion, which M2's all-pairs sweep found (`web/src/accept/collisions.ts`, `blender/scripts/lib/sweep.py`; keep their designed-contact lists in step).
+- **Clearance checks are all-pairs, never hand-picked pair lists.** Test every part against every part that can move relative to it, and list *designed contacts* (journals, keyed or meshing parts) explicitly, with the reason. A hand-picked list misses the pairs nobody thought of: M1's lists missed a drum shaft clipping the next digit's setting pinion, which M2's all-pairs sweep found (`js/accept/collisions.js`, `blender/scripts/lib/sweep.py`; keep their designed-contact lists in step).
 - **Tolerances are explicit constants** in the test, in mm or degrees, with a comment saying why: for example contact ≤ 0.3 mm, clearance ≥ 0.05 mm, readout angle ± 1°.
 - **BVHs leave the index buffer alone** (`MeshBVH(g, { indirect: true })`). `GLTFLoader` shares index buffers between identical primitives, so a default BVH, which reorders the index in place, silently invalidates BVHs built earlier on other meshes (rays then pass through them).
 - **Budget:** the acceptance tests should finish within about 30 s. Sample poses at the events that matter (window starts and ends, the carry push, rest) rather than dense grids. Dense grids belong in the Blender sweep.
@@ -78,7 +78,10 @@ Correctness has four layers. Each is tested where it is cheapest to test reliabl
 
 ## Code
 
-- **Web:** TypeScript, Vite, three.js. Simulation logic (`web/src/sim/`) must not import three.js, and it is unit-tested with Vitest.
+- **Web:** plain JavaScript modules, run by the browser as they are: **no build step**. Copying the repository to a web server deploys it.
+  - **Types are JSDoc**, checked strictly by `pnpm typecheck` (TypeScript's checker with `checkJs` and `strict`; nothing is compiled). Type the code as you write it: `@param`, `@returns`, `@type` on declarations, `@typedef` for shapes, `@import` for types from other modules, and `/** @type {T} */ (expr)` casts where TypeScript would write `expr as T` or `expr!`.
+  - **three.js and three-mesh-bvh are vendored** in `vendor/` and reached through each page's import map (`"three"`, `"three/addons/"`, `"three-mesh-bvh"`). Node and the type check use the same versions from `node_modules`. To upgrade, change the versions in `package.json`, run `pnpm install` and `pnpm vendor`; `tests/vendor.test.js` fails while the two differ.
+  - Simulation logic (`js/sim/`) must not import three.js. Tests use Node's own runner (`node --test`) and `node:assert`.
 - **Blender scripts:** Python for Blender's bundled interpreter. They run headless:
   `"/Applications/Blender.app/Contents/MacOS/Blender" --background --factory-startup --python <script>`
 - Generated files are never edited by hand. Change the script or the params and rebuild.

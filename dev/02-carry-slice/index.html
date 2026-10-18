@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>M1 · Three digits and the carry of the Leibniz stepped reckoner</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "../../vendor/three/build/three.module.js",
+          "three/addons/": "../../vendor/three/examples/jsm/",
+          "three-mesh-bvh": "../../vendor/three-mesh-bvh/build/index.module.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <main id="stage">
+      <div id="hover" hidden></div>
+      <div id="status" role="status">Loading model…</div>
+    </main>
+    <aside id="panel">
+      <header>
+        <h1>How Leibniz's machine carries</h1>
+        <p class="sub">M1 prototype · three digits, stepped drums, carry stores and Zweihorn levers</p>
+      </header>
+
+      <section>
+        <h2>Result windows</h2>
+        <div class="windows" id="windows"></div>
+        <div class="meta">
+          <div><span class="big" id="carryOut">0</span><label>carried out of the slice</label></div>
+          <div><span class="big" id="turns">0</span><label>turns (counter)</label></div>
+        </div>
+        <p id="phase" class="phase">Set a number and turn the crank.</p>
+        <button id="reset" class="reset" title="Crank to rest, inputs 0, result 0, no carries, counter 0">↺ Reset machine</button>
+      </section>
+
+      <section>
+        <h2>1 · Set the input</h2>
+        <div class="inputrow">
+          <input id="input" type="number" min="0" max="999" value="0" aria-label="Input number (0-999)" />
+          <span class="hint">0–999, set on the three knobs</span>
+        </div>
+        <div class="row" style="margin-top: 8px">
+          <button data-preset="999,1">999 + 1</button>
+          <button data-preset="0,1,-1">000 − 1</button>
+          <button data-preset="456,278">456 + 278</button>
+        </div>
+      </section>
+
+      <section>
+        <h2>2 · Turn the crank</h2>
+        <div class="row">
+          <button id="add">＋ Add (one turn)</button>
+          <button id="sub">− Subtract</button>
+        </div>
+        <div class="row">
+          <button id="stepAdd" title="Turn the crank forward (adding) to the next moment something has visibly changed">Step ▸ (adding)</button>
+          <button id="stepSub" title="Turn the crank backward (subtracting) to the next moment something has visibly changed">Step ▸ (subtracting)</button>
+          <select id="speed" aria-label="Speed">
+            <option value="1">Real time</option>
+            <option value="0.25">¼ speed</option>
+            <option value="0.1" selected>1/10 speed</option>
+          </select>
+        </div>
+        <label class="slider">Crank angle <output id="thetaOut">0°</output>
+          <input id="theta" type="range" min="-360" max="360" step="0.25" value="0" />
+        </label>
+      </section>
+
+      <section>
+        <h2>Carry mode</h2>
+        <div class="seg" role="radiogroup" aria-label="Carry mode">
+          <button id="modeRipple" class="on" role="radio" aria-checked="true">Ripple (Lehmann)</button>
+          <button id="modeHistorical" role="radio" aria-checked="false">Historical (GWLB)</button>
+        </div>
+        <p class="hint" id="modeHint"></p>
+      </section>
+
+      <section>
+        <h2>View</h2>
+        <div class="row">
+          <button data-view="overview">Overview</button>
+          <button data-view="front">Front</button>
+          <button data-view="carry">Carry chain</button>
+        </div>
+        <label class="check"><input id="didactic" type="checkbox" /> Colour parts by function</label>
+        <ul class="legend" id="legend" hidden>
+          <li><i style="background:#3d6fd6"></i>setting (knobs, pinions, racks)</li>
+          <li><i style="background:#8a4fd1"></i>stepped drums and drive gears</li>
+          <li><i style="background:#2f9e5b"></i>result wheels (Einzahn, star)</li>
+          <li><i style="background:#e0782c"></i>carry stores (Fünfhorn, Muldenrad, pentagon)</li>
+          <li><i style="background:#c2412d"></i>carry levers (Zweihorn)</li>
+        </ul>
+      </section>
+
+      <footer>
+        <p>Reconstruction: two-phase carry after Lehmann (ripple) and the GWLB/Badur reading (historical); part sizes are scaled estimates. See <code>design/m1-notes.md</code>.</p>
+      </footer>
+    </aside>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

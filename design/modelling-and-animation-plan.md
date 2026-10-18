@@ -19,13 +19,13 @@ The model is done when:
 ```
  params/machine.json ──► Blender build scripts ──► assets/leibniz.glb  (rest pose, named nodes)
                                                           │
- web/src/sim/  (pure TS state machine) ──state──► web/src/scene/  (sets one scalar per node)
+ js/sim/       (pure JS state machine) ──state──► js/scene/       (sets one scalar per node)
         ▲                                                  │
         └──────────── user input (dials, pin, cranks) ◄────┘
 ```
 
 - **The simulation logic is the truth.** The digit wheels, stored carries, pentagon flags, carriage offset, counter and crank angle θ all live in `sim/`. It is unit-tested without graphics.
-- **The scene only reflects state.** Every moving node gets one scalar per frame (an angle or an offset), computed from the sim state and θ by pure functions in `scene/kinematics.ts`.
+- **The scene only reflects state.** Every moving node gets one scalar per frame (an angle or an offset), computed from the sim state and θ by pure functions in `sim/kinematics.js`.
 - **The `.glb` contains no baked animation.** It holds the geometry, the hierarchy and the pivots only.
 
 ## 3. Assembly hierarchy and node contract
@@ -55,7 +55,7 @@ Node names follow `docs/conventions.md`. Indices: `d` = drum/input digit 0–7, 
 | `pm.pin` | `pm.magna_rota` | visibility + hole index | 1 |
 | `pm.counter_wheel` | `pm.carriage` | rotation, 36° per turn | 1 |
 
-**Contract test:** the web app loads the `.glb` and asserts that every name listed in `scene/nodes.ts` exists, so a renamed node fails the build.
+**Contract test:** the web app loads the `.glb` and asserts that every name listed in the rig's node tables (`scene/rig.js`) exists, so a renamed node fails the build.
 
 ## 4. Part-by-part modelling approach
 
@@ -124,7 +124,7 @@ params/machine.json
   └─ gltf-validator + checks    triangle budget, node-name contract, no NaN transforms
 ```
 
-- **One command** (`pnpm --filter leibniz build:model`) runs everything. The build is deterministic, so the same params give the same `.glb`.
+- **One command** (`pnpm build:model`) runs everything. The build is deterministic, so the same params give the same `.glb`.
 - **Preview renders:** `render_previews.py` writes Workbench renders of fixed views to `blender/out/` (git-ignored), used for the photo-overlay check.
 
 ## 8. Fidelity checks
@@ -162,7 +162,7 @@ These must be planned now, because they change how the meshes are cut.
 
 M0 and M1 also prove the pipeline (params → Blender → glTF → three.js), which the later milestones reuse.
 
-**Each milestone has a permanent experiment page** in `web/experiments/NN-name/`, linked from `web/index.html`:
+**Each milestone has a permanent experiment page** in `dev/NN-name/`, linked from `dev/index.html`:
 
 | Milestone | Page |
 |---|---|
@@ -171,11 +171,11 @@ M0 and M1 also prove the pipeline (params → Blender → glTF → three.js), wh
 | M2 | `03-full-machine` |
 | M3 | `04-teaching` |
 
-A milestone is accepted when **`pnpm test` passes its acceptance spec** (§10.1) and you have tested its page by hand. Earlier pages must keep working as shared code (`src/sim`, `src/scene`, params) evolves, so they double as live regression tests. Every page has a **Reset machine** control and a `?selftest` mode that plays the same acceptance scenarios on screen.
+A milestone is accepted when **`pnpm test` passes its acceptance spec** (§10.1) and you have tested its page by hand. Earlier pages must keep working as shared code (`js/sim/`, `js/scene/`, params) evolves, so they double as live regression tests. Every page has a **Reset machine** control and a `?selftest` mode that plays the same acceptance scenarios on screen.
 
 ### 10.1 Acceptance specs
 
-Each statement becomes one test in `web/src/accept/` (named by its ID) and one `?selftest` check on the milestone's page. Tolerances: contact ≤ 0.3 mm, clearance ≥ 0.05 mm, readout angles ± 1°.
+Each statement becomes one test in `tests/accept/` (named by its ID) and one `?selftest` check on the milestone's page. Tolerances: contact ≤ 0.3 mm, clearance ≥ 0.05 mm, readout angles ± 1°.
 
 #### M0: one-digit slice (retrofitted at the start of M1)
 
@@ -244,10 +244,10 @@ M2 design decisions:
 #### M3: teaching layer
 
 M3 design decisions:
-- **A learner page, separate from the developer page.** `web/experiments/04-teaching/` is built for pupils, teachers and visitors. It reuses the sim, the scene code and the M2 model. Page 03 stays the developer page (crank-angle slider, carry modes, self-test hooks).
+- **A learner page, separate from the developer page.** `index.html` (the site's main page) is built for pupils, teachers and visitors. It reuses the sim, the scene code and the M2 model. Page 03 stays the developer page (crank-angle slider, carry modes, self-test hooks).
 - **Audience:** pupils from about 12, their teachers, and museum visitors. Short sentences, one idea per step, the mechanism named in both languages.
 - **EN/DE everywhere.**
-  - All UI and lesson text lives in string tables with an English and a German entry (`src/teach/i18n.ts`, `src/teach/lessons.ts`).
+  - All UI and lesson text lives in string tables with an English and a German entry (`js/teach/i18n.js`, `js/teach/lessons.js`).
   - Part names come from the model (`extras.label_en` / `label_de`), static parts included.
   - The German text should be reviewed by a native speaker (still open).
 - **Guided lessons are data, not code paths.**
