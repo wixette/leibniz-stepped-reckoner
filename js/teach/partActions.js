@@ -6,7 +6,7 @@ import * as THREE from "three";
 import { anchors } from "../accept/harness.js";
 import { gltfName } from "../scene/rig.js";
 /** @import { Machine } from "../sim/machine.js" */
-/** @import { Lang } from "./i18n.js" */
+import { t } from "../l10n/l10n.js";
 /** @import { Task } from "./player.js" */
 
 /** @typedef {Task["controls"][number]} Control */
@@ -118,24 +118,22 @@ export function possible(i, m) {
 /**
  * One line telling the learner what a click does, for the hover label.
  * @param {Intent} i
- * @param {Lang} lang
  * @returns {string}
  */
-export function intentHint(i, lang) {
-  const de = lang === "de";
+export function intentHint(i) {
   switch (i.kind) {
     case "setDigit":
-      return de ? `Klick: ${i.digit} einstellen` : `Click: set ${i.digit}`;
+      return t("hint.setDigit", { n: i.digit });
     case "nextDigit":
-      return de ? "Klick: nächste Ziffer" : "Click: next digit";
+      return t("hint.nextDigit");
     case "turn":
-      return de ? "Klick: einmal vorwärts drehen" : "Click: turn forward once";
+      return t("hint.turn");
     case "pin":
-      return i.hole === null ? (de ? "Klick: Stift herausnehmen" : "Click: take the pin out") : de ? `Klick: Stift in Loch ${i.hole}` : `Click: pin in hole ${i.hole}`;
+      return i.hole === null ? t("hint.pinOut") : t("hint.pin", { n: i.hole });
     case "shiftTo":
-      return de ? "Klick: Schlitten hierher schieben" : "Click: move the carriage here";
+      return t("hint.shiftTo");
     case "shiftLeft":
-      return de ? "Klick: Schlitten eine Stelle nach links" : "Click: carriage one place left";
+      return t("hint.shiftLeft");
   }
 }
 

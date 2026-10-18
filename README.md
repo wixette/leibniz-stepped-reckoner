@@ -4,7 +4,7 @@
 
 The first calculating machine for all four operations of arithmetic, in your browser. Gottfried Wilhelm Leibniz's stepped reckoner (c. 1693–1716) introduced the **stepped drum**, used in calculators for 300 years. Set a number on its knobs, turn the crank, and watch it add, carry, multiply and divide, from the inside.
 
-**[Try it online](https://wixette.github.io/leibniz-stepped-reckoner/)**: four guided lessons in English and German (the stepped drum, 9999 + 1, 1709 × 365, 623785 ÷ 1709), free play and a take-apart view. Nothing to install; it runs in any current browser.
+**[Try it online](https://wixette.github.io/leibniz-stepped-reckoner/)**: calculate freely on the machine, take it apart, follow a five-minute tutorial, then six lessons from adding to dividing (the stepped drum, the carry, subtracting, the carriage, 1709 × 365, 623785 ÷ 1709). In ten languages: English, Español, Français, Deutsch, Italiano, Português (Brasil), 简体中文, 繁體中文, 日本語 and 한국어. Nothing to install; it runs in any current browser, on a laptop, a Chromebook or a phone.
 
 The simulator is **kinematically faithful**: every part that matters for the calculation moves as in the surviving machine (8 input, 16 result and 1 counter digits), with dimensions from the published sources and photos of the original and of the TU Dresden replica. Where the sources disagree or are silent, the choice is recorded with its reason ([design/decisions/](design/decisions/), [params/machine.json](params/machine.json)).
 
@@ -70,11 +70,12 @@ The version is kept in one place, `package.json`. Set it with `pnpm version <x.y
 | `params/` | Single source of truth for geometry and timing |
 | `blender/scripts/` | Headless Blender scripts that build the model from `params/` and check it |
 | `assets/` | Generated `.glb` models (Git LFS) |
-| `index.html`, `css/`, `js/` | The simulator's main page (the lessons) and its code: `js/sim/` (the machine), `js/scene/` (three.js), `js/teach/` (lessons, text), `js/accept/` (acceptance checks) |
+| `index.html`, `css/`, `js/` | The simulator's main page and its code: `js/app/` (the page: stage, machine strip, dock, course player), `js/ui/` (components), `js/l10n/` (one file per language), `js/sim/` (the machine), `js/scene/` (three.js), `js/teach/` (tutorial, lessons, part names), `js/accept/` (acceptance checks) |
+| `images/` | The logo, the icons (`pnpm icons`) and the tutorial's pictures |
 | `dev/` | Developer pages, one per milestone |
-| `vendor/` | three.js and three-mesh-bvh, copied from npm (`pnpm vendor`) |
+| `vendor/` | three.js, three-mesh-bvh, the Roboto Flex font and the Material Symbols icons, copied from npm (`pnpm vendor`) |
 | `tests/` | `node --test` tests |
-| `tools/` | Reference check, vendoring, version stamps and pose export scripts |
+| `tools/` | Reference check, vendoring, version stamps, icons and pose export scripts |
 
 ## Credits
 

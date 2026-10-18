@@ -121,10 +121,14 @@ export class Viewer {
    */
   host;
 
-  /** @param {HTMLElement} host */
-  constructor(host) {
+  /**
+   * @param {HTMLElement} host
+   * @param {{ transparent?: boolean }} [options] transparent: no background of its own, so the
+   *   page's shows through (the main page's dark stage); the developer pages keep the light grey.
+   */
+  constructor(host, options = {}) {
     this.host = host;
-    this.renderer = new THREE.WebGLRenderer({ antialias: true });
+    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: !!options.transparent });
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     // Neutral keeps the hue of brass (ACES pushes yellows towards olive)
     this.renderer.toneMapping = THREE.NeutralToneMapping;
@@ -133,7 +137,7 @@ export class Viewer {
 
     const pmrem = new THREE.PMREMGenerator(this.renderer);
     this.scene.environment = pmrem.fromScene(studioEnvironment(), 0.02).texture;
-    this.scene.background = new THREE.Color(0xe9e7e2);
+    this.scene.background = options.transparent ? null : new THREE.Color(0xe9e7e2);
 
     const key = new THREE.DirectionalLight(0xfff4e6, 1.2);
     key.position.set(0.25, 0.45, 0.3);
@@ -176,10 +180,11 @@ export class Viewer {
 
   /**
    * @param {string} url
+   * @param {(fraction: number) => void} [onProgress] the share of the file loaded so far
    * @returns {Promise<THREE.Group>}
    */
-  async load(url) {
-    const gltf = await new GLTFLoader().loadAsync(url);
+  async load(url, onProgress) {
+    const gltf = await new GLTFLoader().loadAsync(url, (e) => onProgress?.(e.total ? e.loaded / e.total : 0));
     gltf.scene.traverse((o) => {
       const m = /** @type {THREE.Mesh} */ (o);
       if (!m.isMesh) return;

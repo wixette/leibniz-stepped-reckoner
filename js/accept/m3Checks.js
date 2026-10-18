@@ -7,10 +7,11 @@ import { applyM2Pose, m2NodeNames } from "../scene/m2Pose.js";
 import { Rig } from "../scene/rig.js";
 import { Exploder, findNodes, isShown, makeViews } from "../scene/teachScene.js";
 import { Machine } from "../sim/machine.js";
-import { UI } from "../teach/i18n.js";
-/** @import { Text } from "../teach/i18n.js" */
+import { MESSAGES } from "../l10n/all.js";
+import { LOCALES } from "../l10n/l10n.js";
 import { LESSONS } from "../teach/lessons.js";
-import { partInfo } from "../teach/partInfo.js";
+import { PART_KEYS, partInfo, partName } from "../teach/partInfo.js";
+import { TUTORIAL } from "../teach/tutorial.js";
 import { applyIntentNow, intentAt } from "../teach/partActions.js";
 import { anchors, rayHits } from "./harness.js";
 import { gltfName } from "../scene/rig.js";
@@ -35,8 +36,8 @@ const VIEWS = ["overview", "register", "knobs", "front", "drum", "carry"];
 /** Part groups the exploded view must move. */
 const EXPLODED_GROUPS = ["frame.case", "frame.register_cover", "pm.carriage", "pm.magna_rota", "pi.carry_store.*", "pm.setting_dial.*"];
 
-/** @param {Text} x */
-const filled = (x) => x.en.trim() !== "" && x.de.trim() !== "";
+/** The tutorial and the lessons: everything the step player runs. */
+const COURSES = [TUTORIAL, ...LESSONS];
 
 /**
  * @param {THREE.Object3D} root
@@ -59,43 +60,41 @@ export function runM3Checks(root) {
       out.push(result(id, title, false, `error: ${e instanceof Error ? e.message : String(e)}`));
     }
   };
-  const runs = LESSONS.map((l) => ({ l, r: runLesson(l) }));
+  const runs = COURSES.map((l) => ({ l, r: runLesson(l) }));
 
-  run("A3-1", "Every UI and lesson text, and every part name, exists in English and German", () => {
+  run("A3-1", "Every text of the tutorial and the lessons, and every part's name, exists in every language", () => {
     /** @type {string[]} */
     const bad = [];
-    let n = 0;
-    for (const [k, v] of Object.entries(UI)) {
-      n++;
-      if (!filled(v)) bad.push(`UI.${k}`);
-    }
-    for (const l of LESSONS) {
-      for (const [what, x] of /** @type {const} */ ([["title", l.title], ["summary", l.summary]])) {
-        n++;
-        if (!filled(x)) bad.push(`${l.id} ${what}`);
+    /** @type {Set<string>} */
+    const keys = new Set([...PART_KEYS, "place.0", "place.1", "place.2", "place.3", "place.pow"]);
+    for (const l of COURSES) {
+      keys.add(l.title);
+      keys.add(l.summary);
+      for (const s of l.steps) {
+        keys.add(s.text);
+        if (s.chapter) keys.add(s.chapter);
+        if (s.image) keys.add(s.image.credit);
+        for (const c of s.callouts ?? []) keys.add(c.text);
       }
-      l.steps.forEach((s, i) => {
-        n++;
-        if (!filled(s.text)) bad.push(`${l.id} step ${i + 1}`);
-        for (const c of s.callouts ?? []) {
-          n++;
-          if (!filled(c.text)) bad.push(`${l.id} step ${i + 1} callout ${c.node}`);
-        }
-      });
     }
+    for (const k of keys) {
+      for (const loc of LOCALES) if (!MESSAGES[loc]?.[k]?.trim()) bad.push(`${loc}: ${k}`);
+    }
+    // Every part the model names, by its live description or its name.
+    const m = new Machine();
     let parts = 0;
     root.traverse((o) => {
-      const ud = /** @type {{ motion?: string; label_en?: string; label_de?: string }} */ (o.userData);
-      if (ud.motion === undefined) return;
+      const ud = /** @type {{ motion?: string; label_en?: string }} */ (o.userData);
+      if (ud.motion === undefined && ud.label_en === undefined) return;
       parts++;
-      if (!ud.label_en?.trim() || !ud.label_de?.trim()) bad.push(`part ${o.name} label`);
+      if (!partInfo(o.name, m) && !partName(o.name)) bad.push(`part ${o.name} has no name`);
     });
-    return { passed: bad.length === 0, detail: bad.join("; ") || `${n} texts and ${parts} part names in EN and DE` };
+    return { passed: bad.length === 0, detail: bad.join("; ") || `${keys.size} texts in ${LOCALES.length} languages; ${parts} parts named` };
   });
 
   run("A3-2", "Every lesson runs start to finish with a scripted learner and ends in its stated state", () => {
     const bad = runs.flatMap(({ l, r }) => r.problems.filter((p) => !p.includes("task")).map((p) => `${l.id}: ${p}`));
-    return { passed: bad.length === 0, detail: bad.join("; ") || `${LESSONS.length} lessons, ${LESSONS.reduce((a, l) => a + l.steps.length, 0)} steps` };
+    return { passed: bad.length === 0, detail: bad.join("; ") || `${COURSES.length} courses (tutorial and lessons), ${COURSES.reduce((a, l) => a + l.steps.length, 0)} steps` };
   });
 
   run("A3-3", "Every highlighted or labelled part and every camera view a lesson names exists", () => {
@@ -108,7 +107,7 @@ export function runM3Checks(root) {
       if (![p.x, p.y, p.z, t.x, t.y, t.z].every(Number.isFinite)) bad.push(`view ${v}`);
     }
     let refs = 0;
-    for (const l of LESSONS) {
+    for (const l of COURSES) {
       l.steps.forEach((s, i) => {
         if (s.view && !VIEWS.includes(s.view)) bad.push(`${l.id} step ${i + 1}: view ${s.view}`);
         for (const n of [...(s.highlight ?? []), ...(s.callouts ?? []).map((c) => c.node)]) {
@@ -121,7 +120,7 @@ export function runM3Checks(root) {
   });
 
   run("A3-4", "A learner task unlocks Next only when its check passes (a mistake keeps it locked)", () => {
-    const tasks = LESSONS.reduce((a, l) => a + l.steps.filter((s) => s.task).length, 0);
+    const tasks = COURSES.reduce((a, l) => a + l.steps.filter((s) => s.task).length, 0);
     const bad = runs.flatMap(({ l, r }) => r.problems.filter((p) => p.includes("task")).map((p) => `${l.id}: ${p}`));
     return { passed: bad.length === 0 && tasks > 0, detail: bad.join("; ") || `${tasks} tasks reject their mistake and accept their solution` };
   });
@@ -188,7 +187,7 @@ export function runM3Checks(root) {
     /** @type {Rig<string>} */
     const rig = new Rig(root, m2NodeNames(16, 8));
     const m = new Machine();
-    for (const l of LESSONS) {
+    for (const l of COURSES) {
       l.steps.forEach((_, i) => {
         replayTo(l, i + 1, m);
         applyM2Pose(rig, root, m);
@@ -216,7 +215,7 @@ export function runM3Checks(root) {
     const bad = [];
     /** @param {object} a */
     const moves = (a) => ["theta", "turn", "shift", "toStop", "divideDigit"].some((k) => k in a);
-    for (const l of LESSONS) {
+    for (const l of COURSES) {
       l.steps.forEach((s, i) => {
         if (presentation(l, i).explode === 0) return;
         if ((s.do ?? []).some(moves)) bad.push(`${l.id} step ${i + 1}: moves the machine while taken apart`);
@@ -314,7 +313,7 @@ export function runM3Checks(root) {
      * @param {string | null} value
      */
     const expectPart = (node, value) => {
-      for (const lang of /** @type {const} */ (["en", "de"])) {
+      for (const lang of LOCALES) {
         const info = partInfo(gltfName(node), m, lang);
         n++;
         if (!info) bad.push(`${node}: no label`);
@@ -334,9 +333,11 @@ export function runM3Checks(root) {
     for (let k = 0; k < 16; k++) expectPart(`pi.carry_store.${k}`, null);
     expectPart("pm.magna_rota", null);
     expectPart("pm.carriage", null);
-    if (!partInfo(gltfName("pm.magna_rota"), m, "en")?.value?.startsWith("4")) bad.push("Magna Rota value is not its 4 turns");
-    if (!partInfo(gltfName("pm.carriage"), m, "en")?.value?.startsWith("2")) bad.push("carriage value is not its shift of 2");
-    if (!partInfo(gltfName("pm.magna_pin"), m, "en")?.value?.includes("4")) bad.push("pin value is not hole 4");
+    for (const lang of LOCALES) {
+      if (!partInfo(gltfName("pm.magna_rota"), m, lang)?.value?.includes("4")) bad.push(`${lang}: Magna Rota value is not its 4 turns`);
+      if (!partInfo(gltfName("pm.carriage"), m, lang)?.value?.includes("2")) bad.push(`${lang}: carriage value is not its shift of 2`);
+      if (!partInfo(gltfName("pm.magna_pin"), m, lang)?.value?.includes("4")) bad.push(`${lang}: pin value is not hole 4`);
+    }
     return { passed: bad.length === 0, detail: bad.join("; ") || `${n} labels: names in words, values match the machine` };
   });
 

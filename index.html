@@ -2,9 +2,15 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Leibniz's calculating machine</title>
-    <meta name="description" content="Leibniz's stepped reckoner, the first calculating machine for all four operations of arithmetic, as an interactive 3D simulator with guided lessons in English and German." />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Leibniz's Stepped Reckoner: a 3D simulator with lessons</title>
+    <meta name="description" content="Leibniz's stepped reckoner, the first calculating machine for all four operations of arithmetic, as an interactive 3D simulator with a tutorial and lessons." />
+    <meta name="theme-color" content="#16130f" />
+    <link rel="icon" href="images/favicon.ico?v=0.0.1" sizes="32x32" />
+    <link rel="icon" href="images/favicon.svg?v=0.0.1" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=0.0.1" />
+    <link rel="manifest" href="manifest.webmanifest?v=0.0.1" />
+    <link rel="stylesheet" href="css/fonts.css?v=0.0.1" />
     <link rel="stylesheet" href="css/style.css?v=0.0.1" />
     <!-- Every file name here carries the version (?v=), and so does each module the
          scripts import, through this map: bare names ("three") lead to the copies in
@@ -27,6 +33,24 @@
         "./js/accept/m2Checks.js": "./js/accept/m2Checks.js?v=0.0.1",
         "./js/accept/m3Checks.js": "./js/accept/m3Checks.js?v=0.0.1",
         "./js/accept/selftestPanel.js": "./js/accept/selftestPanel.js?v=0.0.1",
+        "./js/app/about.js": "./js/app/about.js?v=0.0.1",
+        "./js/app/animator.js": "./js/app/animator.js?v=0.0.1",
+        "./js/app/app.js": "./js/app/app.js?v=0.0.1",
+        "./js/app/course.js": "./js/app/course.js?v=0.0.1",
+        "./js/app/references.js": "./js/app/references.js?v=0.0.1",
+        "./js/app/stage.js": "./js/app/stage.js?v=0.0.1",
+        "./js/l10n/all.js": "./js/l10n/all.js?v=0.0.1",
+        "./js/l10n/de.js": "./js/l10n/de.js?v=0.0.1",
+        "./js/l10n/en.js": "./js/l10n/en.js?v=0.0.1",
+        "./js/l10n/es.js": "./js/l10n/es.js?v=0.0.1",
+        "./js/l10n/fr.js": "./js/l10n/fr.js?v=0.0.1",
+        "./js/l10n/it.js": "./js/l10n/it.js?v=0.0.1",
+        "./js/l10n/ja.js": "./js/l10n/ja.js?v=0.0.1",
+        "./js/l10n/ko.js": "./js/l10n/ko.js?v=0.0.1",
+        "./js/l10n/l10n.js": "./js/l10n/l10n.js?v=0.0.1",
+        "./js/l10n/pt-BR.js": "./js/l10n/pt-BR.js?v=0.0.1",
+        "./js/l10n/zh-TW.js": "./js/l10n/zh-TW.js?v=0.0.1",
+        "./js/l10n/zh.js": "./js/l10n/zh.js?v=0.0.1",
         "./js/main.js": "./js/main.js?v=0.0.1",
         "./js/scene/m0Pose.js": "./js/scene/m0Pose.js?v=0.0.1",
         "./js/scene/m1Pose.js": "./js/scene/m1Pose.js?v=0.0.1",
@@ -41,14 +65,17 @@
         "./js/sim/machine.js": "./js/sim/machine.js?v=0.0.1",
         "./js/sim/narrate.js": "./js/sim/narrate.js?v=0.0.1",
         "./js/sim/operations.js": "./js/sim/operations.js?v=0.0.1",
-        "./js/teach/i18n.js": "./js/teach/i18n.js?v=0.0.1",
         "./js/teach/lessons.js": "./js/teach/lessons.js?v=0.0.1",
         "./js/teach/partActions.js": "./js/teach/partActions.js?v=0.0.1",
         "./js/teach/partInfo.js": "./js/teach/partInfo.js?v=0.0.1",
         "./js/teach/player.js": "./js/teach/player.js?v=0.0.1",
+        "./js/teach/tutorial.js": "./js/teach/tutorial.js?v=0.0.1",
         "./js/tools/m1Scenarios.js": "./js/tools/m1Scenarios.js?v=0.0.1",
         "./js/tools/m2Scenarios.js": "./js/tools/m2Scenarios.js?v=0.0.1",
+        "./js/ui/components.js": "./js/ui/components.js?v=0.0.1",
+        "./package.json": "./package.json?v=0.0.1",
         "./params/machine.json": "./params/machine.json?v=0.0.1",
+        "./vendor/material-symbols/icons.js": "./vendor/material-symbols/icons.js?v=0.0.1",
         "./vendor/three-mesh-bvh/build/index.module.js": "./vendor/three-mesh-bvh/build/index.module.js?v=0.0.1",
         "./vendor/three/build/three.core.js": "./vendor/three/build/three.core.js?v=0.0.1",
         "./vendor/three/build/three.module.js": "./vendor/three/build/three.module.js?v=0.0.1",
@@ -61,92 +88,101 @@
     </script>
   </head>
   <body>
-    <main id="stage">
-      <div id="hover" hidden></div>
-      <div id="status" role="status">Loading model…</div>
-      <div id="perf" hidden></div>
+    <!-- The layout is docs/ui-design.md, Part 2: top bar, stage and machine strip, dock,
+         status bar. Texts come from js/l10n (data-l10n: text, data-l10n-tip: tooltip and
+         screen-reader name); data-icon is replaced by the inline SVG icon. -->
+    <header class="topbar">
+      <a class="brand" href="./">
+        <img src="images/logo.svg?v=0.0.1" alt="" width="64" height="36" />
+        <span data-l10n="app.name">Leibniz's Stepped Reckoner</span>
+      </a>
+      <div class="spacer"></div>
+      <button class="btn icon-only" id="dockBtn" data-l10n-tip="bar.dockHide"><i data-icon="right_panel_close"></i></button>
+      <button class="btn lang-btn" id="langBtn" aria-haspopup="menu" data-l10n-tip="bar.language">
+        <i data-icon="translate"></i><span id="langShort">EN</span><i data-icon="keyboard_arrow_down"></i>
+      </button>
+      <button class="btn icon-only" id="aboutBtn" aria-haspopup="dialog" data-l10n-tip="bar.about"><i data-icon="info"></i></button>
+    </header>
+
+    <main class="workspace" id="workspace">
+      <section class="machine-area">
+        <div class="stage" id="stage">
+          <div class="stage-top">
+            <div class="readouts" aria-live="off">
+              <div class="readout result"><label data-l10n="read.result">Result</label><output id="resultOut">0</output></div>
+              <div class="readout"><label data-l10n="read.turns">Turns</label><output id="turnsOut">0</output></div>
+              <div class="readout"><label data-l10n="read.place">Carriage</label><output id="placeOut">0</output></div>
+            </div>
+          </div>
+          <div class="stage-bottom">
+            <div class="tools" role="group">
+              <button class="chip" id="caseChip" aria-pressed="true" data-l10n-tip="tool.case.tip"><i data-icon="inventory_2"></i><span class="txt" data-l10n="tool.case">Case</span></button>
+              <button class="chip" id="frontChip" aria-pressed="false" data-l10n-tip="tool.front.tip"><i data-icon="door_open"></i><span class="txt" data-l10n="tool.front">Open front</span></button>
+              <button class="chip" id="apartChip" aria-pressed="false" data-l10n-tip="tool.apart.tip"><i data-icon="deployed_code"></i><span class="txt" data-l10n="tool.apart">Take apart</span></button>
+              <button class="chip" id="focusChip" aria-pressed="false" data-l10n-tip="tool.focus.tip"><i data-icon="blur_on"></i><span class="txt" data-l10n="tool.focus">Focus</span></button>
+            </div>
+            <div class="grow"></div>
+            <div class="tools">
+              <button class="chip" id="viewsBtn" aria-haspopup="menu" data-l10n-tip="tool.views"><i data-icon="videocam"></i><span class="txt" data-l10n="tool.views">Views</span></button>
+              <button class="chip" id="resetViewBtn" data-l10n-tip="tool.resetView"><i data-icon="3d_rotation"></i></button>
+            </div>
+          </div>
+          <div class="loader" id="loader">
+            <div class="bar"><i id="loaderBar"></i></div>
+            <div id="loaderText">…</div>
+          </div>
+          <div class="hover-label" id="hover" hidden></div>
+        </div>
+
+        <div class="strip" id="strip" role="toolbar">
+          <div class="number-field" id="numberField">
+            <label for="numInput" data-l10n="strip.number">Number on the knobs</label>
+            <input id="numInput" inputmode="numeric" autocomplete="off" maxlength="8" value="0" data-l10n-tip="strip.number.tip" />
+          </div>
+          <span class="sep"></span>
+          <div class="group">
+            <button class="btn filled has-icon" id="addBtn" data-control="add" data-l10n-tip="strip.add.tip"><i data-icon="rotate_right"></i><span class="txt" data-l10n="strip.add">Add</span></button>
+            <button class="btn tonal has-icon" id="subBtn" data-control="sub" data-l10n-tip="strip.sub.tip"><i data-icon="rotate_left"></i><span class="txt" data-l10n="strip.sub">Subtract</span></button>
+          </div>
+          <span class="sep"></span>
+          <div class="group" id="carriageGroup">
+            <span class="label" data-l10n="strip.carriage">Carriage</span>
+            <button class="btn icon-only" id="leftBtn" data-control="shift" data-l10n-tip="strip.left.tip"><i data-icon="keyboard_double_arrow_left"></i></button>
+            <output class="carriage-place" id="placeStrip">0</output>
+            <button class="btn icon-only" id="rightBtn" data-control="shift" data-l10n-tip="strip.right.tip"><i data-icon="keyboard_double_arrow_right"></i></button>
+          </div>
+          <span class="sep"></span>
+          <div class="group">
+            <button class="btn outlined has-icon pin-btn" id="pinBtn" data-control="pin" aria-haspopup="menu" data-l10n-tip="strip.pin.tip"><i data-icon="radio_button_checked"></i><span class="txt" data-l10n="strip.pin">Pin</span>&nbsp;<b id="pinValue">–</b></button>
+            <button class="btn tonal has-icon" id="toStopBtn" data-control="toStop" data-l10n-tip="strip.toStop.tip"><i data-icon="fast_forward"></i><span class="txt" data-l10n="strip.toStop">Run to stop</span></button>
+          </div>
+          <span class="grow"></span>
+          <button class="btn has-icon" id="resetBtn" data-control="reset" data-l10n-tip="strip.reset.tip"><i data-icon="restart_alt"></i><span class="txt" data-l10n="strip.reset">Reset</span></button>
+        </div>
+      </section>
+
+      <aside class="dock" id="dock">
+        <div class="tabs" role="tablist" id="tabs">
+          <button class="tab" role="tab" id="tab-start" aria-controls="panel-start" aria-selected="true"><i data-icon="explore"></i><span data-l10n="tab.start">Get started</span><i class="dot" hidden></i></button>
+          <button class="tab" role="tab" id="tab-lessons" aria-controls="panel-lessons" aria-selected="false" tabindex="-1"><i data-icon="school"></i><span data-l10n="tab.lessons">Lessons</span><i class="dot" hidden></i></button>
+          <button class="tab" role="tab" id="tab-refs" aria-controls="panel-refs" aria-selected="false" tabindex="-1"><i data-icon="menu_book"></i><span data-l10n="tab.refs">References</span></button>
+        </div>
+        <section class="panel" role="tabpanel" id="panel-start" aria-labelledby="tab-start"></section>
+        <section class="panel" role="tabpanel" id="panel-lessons" aria-labelledby="tab-lessons" hidden></section>
+        <section class="panel" role="tabpanel" id="panel-refs" aria-labelledby="tab-refs" hidden></section>
+      </aside>
     </main>
-    <aside id="panel">
-      <header>
-        <div class="top">
-          <h1 data-ui="title"></h1>
-          <button id="lang" title="Language / Sprache"></button>
-        </div>
-        <p class="sub" data-ui="subtitle"></p>
-      </header>
 
-      <section>
-        <div class="readline">
-          <div><label data-ui="result"></label><span class="big" id="result">0</span></div>
-          <div><label data-ui="turns"></label><span class="big" id="counter">0</span></div>
-          <div><label data-ui="shift"></label><span class="big" id="offset">0</span></div>
-        </div>
-      </section>
+    <footer class="statusbar">
+      <span id="status" role="status" aria-live="polite"></span>
+      <span class="mode-chip" id="modeChip"></span>
+    </footer>
 
-      <section id="menu">
-        <h2 data-ui="lessons"></h2>
-        <div class="lessonlist" id="lessonlist"></div>
-        <div class="lessonlist" style="margin-top: 8px">
-          <button id="freeplay"><b data-ui="freePlay"></b><span data-ui="freePlayHint"></span></button>
-        </div>
-      </section>
+    <dialog id="aboutDialog" aria-labelledby="aboutTitle">
+      <div class="dialog-body" id="aboutBody"></div>
+      <div class="dialog-actions"><button class="btn" id="aboutClose" data-l10n="about.close">Close</button></div>
+    </dialog>
 
-      <section id="player" hidden>
-        <h2 id="lessonTitle"></h2>
-        <div id="progress"></div>
-        <p id="stepText"></p>
-        <div id="taskline" hidden></div>
-        <div class="navrow">
-          <button id="back"></button>
-          <button id="next" class="primary"></button>
-        </div>
-        <p style="margin: 8px 0 0"><a href="#" id="toMenu" data-ui="allLessons"></a></p>
-      </section>
-
-      <section id="controls" class="controls">
-        <div id="lockednote" class="lockednote" hidden></div>
-        <div class="inputrow" data-control="input">
-          <label data-ui="input" style="font-size: 12px; color: var(--muted); display: block"></label>
-          <input id="input" type="number" min="0" max="99999999" value="0" style="width: 160px" />
-        </div>
-        <div class="row" style="margin-top: 8px">
-          <button id="add" data-control="add"></button>
-          <button id="sub" data-control="sub"></button>
-        </div>
-        <div class="row" data-control="shift">
-          <button id="shiftLeft"></button>
-          <button id="shiftRight"></button>
-        </div>
-        <div data-control="pin">
-          <label data-ui="pin" style="font-size: 12px; color: var(--muted); display: block; margin-bottom: 4px"></label>
-          <div class="pins" id="pins"></div>
-        </div>
-        <div class="row" style="margin-top: 6px">
-          <button id="toStop" data-control="toStop"></button>
-          <button id="reset" data-control="reset"></button>
-        </div>
-      </section>
-
-      <section>
-        <h2 data-ui="views"></h2>
-        <div class="row">
-          <button data-view="overview" data-ui="viewOverview"></button>
-          <button data-view="register" data-ui="viewRegister"></button>
-          <button data-view="front" data-ui="viewFront"></button>
-          <button data-view="drum" data-ui="viewDrum"></button>
-          <button data-view="carry" data-ui="viewCarry"></button>
-        </div>
-        <label class="check"><input id="casing" type="checkbox" checked /> <span data-ui="showCase"></span></label>
-        <label class="check"><input id="cutaway" type="checkbox" /> <span data-ui="cutaway"></span></label>
-        <label class="check"><input id="explode" type="checkbox" /> <span data-ui="explode"></span></label>
-        <label class="check"><input id="focus" type="checkbox" /> <span data-ui="focus"></span></label>
-      </section>
-
-      <footer>
-        <p data-ui="reconstruction"></p>
-        <p><a href="dev/" data-ui="morePages"></a></p>
-      </footer>
-    </aside>
     <script type="module" src="js/main.js?v=0.0.1"></script>
   </body>
 </html>

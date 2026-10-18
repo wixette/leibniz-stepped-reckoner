@@ -9,7 +9,6 @@
 import { Machine } from "../sim/machine.js";
 /** @import { CarryMode } from "../sim/machine.js" */
 import { registerValue } from "../sim/operations.js";
-/** @import { Text } from "./i18n.js" */
 
 /** @typedef {"overview" | "register" | "knobs" | "front" | "drum" | "carry"} ViewName */
 
@@ -46,12 +45,22 @@ import { registerValue } from "../sim/operations.js";
 /**
  * @typedef {object} Callout
  * @property {string} node
- * @property {Text} text
+ * @property {string} text message key (js/l10n)
+ * @property {false} [value] no live value: the callout names an area, not the part it is pinned to
+ */
+
+/**
+ * A picture shown with a step (the tutorial's first chapter), with its credit line.
+ * @typedef {object} Picture
+ * @property {string} file path from the site's root
+ * @property {string} credit message key: what it shows, who made it, its licence
  */
 
 /**
  * @typedef {object} Step
- * @property {Text} text
+ * @property {string} text message key (js/l10n)
+ * @property {string} [chapter] message key: a chapter starts here (the tutorial)
+ * @property {Picture} [image]
  * @property {ViewName} [view]
  * @property {boolean} [casing] show the case and cover plates
  * @property {boolean} [cutaway] hide the carriage front panel
@@ -67,8 +76,8 @@ import { registerValue } from "../sim/operations.js";
 /**
  * @typedef {object} Lesson
  * @property {string} id
- * @property {Text} title
- * @property {Text} summary
+ * @property {string} title message key
+ * @property {string} summary message key
  * @property {Step[]} steps
  * @property {(m: Machine) => boolean} finalCheck
  */
