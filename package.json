@@ -1,6 +1,6 @@
 {
   "name": "leibniz-stepped-reckoner",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "type": "module",
   "description": "Leibniz's stepped reckoner, the first calculating machine for all four operations of arithmetic, as an interactive 3D simulator in the browser.",
