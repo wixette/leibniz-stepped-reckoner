@@ -99,6 +99,8 @@ The lessons are about **how the machine calculates**. That part is well document
 
 5. **Ask mbe Marc Brandt engineering (Burgdorf), with the GWLB, about their CAD model** (see §7). It is based on Badur & Rottstedt's complete reconstruction, made for the GWLB c. 2011. In 2020 mbe also helped the Leibniz Universität Hannover measure all parts of the original, for a glass model. mbe made both, so it is the most direct contact; the GWLB owns the original, and LUH commissioned the measurements. If they licence it, or just geometry or dimensions from it, under CC BY or CC BY-SA, target C would be in reach at once. It would also make the project a partnership rather than a duplicate.
 
+   **Outcome (2026-10-19):** mbe declined. Having consulted Klaus Badur, it may not provide any data or dimensions, because the machine and all rights to it belong to the GWLB; requests have to go to the GWLB officially. Next: an official request to the GWLB (plan §12, item 3).
+
 Once any one of items 1–3 or item 5 is in hand, target C becomes realistic.
 
 ## 7. Value check: does an equivalent already exist? (2026-10-17)

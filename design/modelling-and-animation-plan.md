@@ -158,7 +158,7 @@ These must be planned now, because they change how the meshes are cut.
 | **M1: 3-digit carry slice** ✅ done 2026-10-17 ([notes](m1-notes.md)) | 3 digits plus Zweihörner, the drive gears and the sim logic (both carry modes). Step mode. **Acceptance-test harness** (glTF-in-Node, readout/contact/clearance checks, `?selftest`), retrofitted to M0 first. | 999 + 1 ripples in one turn (`ripple`) and needs extra idle turns (`historical`, 900 → 000 + carry → 1000). `pnpm test` runs the M0 and M1 acceptance specs (§10.1) and passes. |
 | **M2: full machine** ✅ done 2026-10-18 ([notes](m2-notes.md)): mechanism 2026-10-17; casing, photo overlay (carriage, Magna Rota, frame and case within 5 % of the photos) and materials 2026-10-18. Chromebook performance not measured yet. | 16-digit register, 8-digit carriage, Magna Rota with pin and stop, counter, lead screw and carriage shift, casing, materials | Every worked example animates correctly. Within the performance budget. Photo overlay within about 5 %. |
 | **M3: teaching layer** 🟡 built 2026-10-18 ([notes](m3-notes.md)); teacher test, German review and Chromebook measurement open | UI (EN/DE), camera presets, cut-away, exploded view, labels, guided lessons (9999 + 1, 1709 × 365, a division) | Usable by a teacher without instructions (to be tested with 1–2 teachers) |
-| **M4: fidelity upgrade (target C)** | Replace `est`/`design` params with documented values from NL 183 or GWLB/mbe | Params mostly `doc`. Decision 0001 revisited. |
+| **M4: fidelity upgrade (target C)** | Replace `est`/`design` params with documented values from NL 183 or the GWLB (§12) | Params mostly `doc`. Decision 0001 revisited. |
 
 M0 and M1 also prove the pipeline (params → Blender → glTF → three.js), which the later milestones reuse.
 
@@ -296,9 +296,12 @@ Still open for M3:
 
 ## 12. Data requested
 
-Documented dimensions for M4 depend on primary material held by others. The following has been asked for, or is to be asked for, together with licence terms that allow use in this open simulator (CC BY or CC BY-SA, or at least dimension tables), with credit to the holders:
+Documented dimensions for M4 depend on primary material held by others. Each request asks for licence terms that allow use in this open simulator (CC BY or CC BY-SA, or at least dimension tables), with credit to the holders:
 
-1. **Deutsches Museum archive:** copies of **NL 183/460, /465, /466 PLAN, /467 and /746** (N. J. Lehmann's documents, drawings, calculations and photos of his reconstructions).
-2. **mbe Marc Brandt engineering (Burgdorf), with the GWLB:** the c. 2011 CAD model (made for the GWLB, based on the Badur/Rottstedt design) and the 2020 measurements of all parts of the original (taken with mbe's support for a Leibniz Universität Hannover glass model). Sources: research/sources/bibliography.md (LEIBNIZCENTRAL, HANNOVER2020).
+1. **Deutsches Museum archive:** copies of **NL 183/460, /465, /466 PLAN, /467 and /746** (N. J. Lehmann's documents, drawings, calculations and photos of his reconstructions). Requested 2026-10-18; no answer yet.
+2. **mbe Marc Brandt engineering (Burgdorf):** the c. 2011 CAD model (made for the GWLB, based on the Badur/Rottstedt design) and the 2020 measurements of all parts of the original (taken with mbe's support for a Leibniz Universität Hannover glass model). Sources: research/sources/bibliography.md (LEIBNIZCENTRAL, HANNOVER2020). Requested 2026-10-18. **Declined 2026-10-19:** having consulted Klaus Badur, mbe may not provide any data or dimensions. The machine, and with it all rights, belongs to the GWLB, so a request has to go to the GWLB officially.
+3. **Gottfried Wilhelm Leibniz Bibliothek (GWLB), Hannover:** the owner of the original and of the rights to the CAD model. To be asked officially for, in order of preference, the CAD model, a table of dimensions, or permission to use dimensions with credit. Not asked yet. Its published terms require a reproduction permission for photographs of the machine (digitisation and reproductions department), and name no open licence; the request should expect conditions rather than CC BY-SA.
+
+Independent of any permission: *Das letzte Original* (GWLB 2014; WALSDORF2014 in the bibliography), co-written by Klaus Badur, may give dimensions, which can be used as facts with a citation.
 
 Settled: Stein 2007 has been read (research/sources/bibliography.md, STEIN2007), and decision 0001 was confirmed on 2026-10-17 (`ripple` default, `historical` second mode).
