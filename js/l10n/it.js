@@ -77,6 +77,7 @@ export default {
   "status.blockedPin": "Il perno è contro l’arresto. Toglilo o spostalo per girare di nuovo.",
   "status.blockedPinSub": "Con il perno inserito la manovella gira solo in avanti. Togli il perno per sottrarre.",
   "status.blockedStore": "Un riporto aspetta ancora alla ruota ({place}), dove non arriva nessuna leva di riporto. Prima sposta il carrello a sinistra.",
+  "status.inside": "Vista interna: la cassa è nascosta, il fronte aperto e gli altri pezzi attenuati. La macchina funziona come sempre.",
   "status.stepDone": "Fatto! Premi Avanti.",
   "status.lessonDone": "Lezione completata: {title}.",
   "status.tutorialDone": "Tutorial completato. Le lezioni vanno oltre.",

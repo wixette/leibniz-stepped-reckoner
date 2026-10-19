@@ -77,6 +77,7 @@ export default {
   "status.blockedPin": "La clavija está en el tope. Sácala o cámbiala de agujero para volver a girar.",
   "status.blockedPinSub": "Con la clavija puesta, la manivela solo gira hacia adelante. Saca la clavija para restar.",
   "status.blockedStore": "Todavía espera un acarreo en la rueda ({place}), adonde no llega ninguna palanca de acarreo. Primero mueve el carro a la izquierda.",
+  "status.inside": "Vista interior: la caja está oculta, el frente abierto y las demás piezas atenuadas. La máquina funciona como siempre.",
   "status.stepDone": "¡Hecho! Pulsa Siguiente.",
   "status.lessonDone": "Lección completada: {title}.",
   "status.tutorialDone": "Tutorial completado. Las lecciones van más allá.",

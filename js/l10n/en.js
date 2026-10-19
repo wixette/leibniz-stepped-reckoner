@@ -79,6 +79,7 @@ export default {
   "status.blockedPin": "The pin is on the stop. Take the pin out or move it to turn again.",
   "status.blockedPinSub": "With the pin in, the crank only turns forward. Take the pin out to subtract.",
   "status.blockedStore": "A carry is still waiting at the {place} wheel, where no carry lever reaches. Slide the carriage left first.",
+  "status.inside": "Inside view: the case is hidden, the front is open and the other parts are faded. The machine works as usual.",
   "status.stepDone": "Done! Press Next.",
   "status.lessonDone": "Lesson complete: {title}.",
   "status.tutorialDone": "Tutorial complete. The lessons go further.",

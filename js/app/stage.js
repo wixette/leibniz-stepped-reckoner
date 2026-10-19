@@ -279,7 +279,9 @@ export class Stage {
     const b = this.viewer.renderer.domElement.getBoundingClientRect();
     this.ndc.set(((clientX - b.left) / b.width) * 2 - 1, -((clientY - b.top) / b.height) * 2 + 1);
     this.raycaster.setFromCamera(this.ndc, this.viewer.camera);
+    const faded = this.highlighter?.faded;
     return this.raycaster.intersectObject(this.root, true).find((h) => {
+      if (faded?.has(h.object)) return false; // faded parts are context: look and click through them
       for (let p = /** @type {THREE.Object3D | null} */ (h.object); p; p = p.parent) if (!p.visible) return false;
       return true;
     });

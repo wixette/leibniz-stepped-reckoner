@@ -76,6 +76,13 @@ export class App {
    */
   lastView = null;
   focus = false;
+  /**
+   * An inside view under way (U11): the drum or carry view in free play, which hid the case,
+   * opened the front and faded what is not its parts. casing and cutaway hold what to put
+   * back when it ends; null once the reader set that tool themselves (it is theirs then).
+   * @type {{ view: ViewName; parts: string[]; casing: boolean | null; cutaway: boolean | null } | null}
+   */
+  inside = null;
   /** Called after the page's texts were put in a new language (panels the app does not own). */
   /** @type {() => void} */
   onRetranslate = () => {};
@@ -274,6 +281,7 @@ export class App {
    */
   startCourse(lesson, tab) {
     this.settle();
+    this.endInside();
     this.course = { lesson, i: 0, playing: false, finished: false, tab };
     this.lastView = null;
     this.enterStep(0, true);
@@ -298,6 +306,51 @@ export class App {
       c.playing = false;
       this.render();
     });
+  }
+
+  /**
+   * Show a camera view. In free play the drum and carry views are inside views (U11): they hide
+   * the case, open the front and fade what is not their parts, and the machine works as usual.
+   * In a lesson step a view only moves the camera: the step's presentation stays.
+   * @param {ViewName} view
+   */
+  chooseView(view) {
+    const inCourse = !!this.course && !this.course.finished;
+    if (!inCourse) this.endInside();
+    const parts = inCourse ? undefined : this.stage.views?.[view].inside;
+    if (parts) {
+      this.inside = { view, parts, casing: this.stage.casing, cutaway: this.stage.cutaway };
+      this.stage.casing = false;
+      this.stage.cutaway = true;
+      this.stage.applyToggles();
+      this.focus = true;
+      this.stage.highlight(parts, true);
+      this.say(() => t("status.inside"));
+    }
+    this.stage.fly(view);
+    this.render();
+  }
+
+  /** End an inside view: put back the tools it changed (unless the reader took them over). */
+  endInside() {
+    const v = this.inside;
+    if (!v) return;
+    this.inside = null;
+    if (v.casing !== null) this.stage.casing = v.casing;
+    if (v.cutaway !== null) this.stage.cutaway = v.cutaway;
+    this.stage.applyToggles();
+    this.focus = false;
+    this.stage.highlight([], false);
+  }
+
+  /**
+   * The parts shown highlighted now: the lesson step's, or the inside view's.
+   * @returns {string[]}
+   */
+  highlightParts() {
+    const c = this.course;
+    if (c && !c.finished) return presentation(c.lesson, c.i).highlight;
+    return this.inside?.parts ?? [];
   }
 
   /** Show the step's presentation: case, open front, taken apart, highlights, view. */
@@ -420,11 +473,13 @@ export class App {
     /** @param {"caseChip" | "frontChip" | "apartChip" | "focusChip"} id */
     const chip = (id) => /** @type {HTMLButtonElement} */ ($(id));
     chip("caseChip").addEventListener("click", () => {
+      if (this.inside) this.inside.casing = null; // the reader's now
       this.stage.casing = !this.stage.casing;
       this.stage.applyToggles();
       this.render();
     });
     chip("frontChip").addEventListener("click", () => {
+      if (this.inside) this.inside.cutaway = null; // the reader's now
       this.stage.cutaway = !this.stage.cutaway;
       this.stage.applyToggles();
       this.render();
@@ -436,17 +491,17 @@ export class App {
       this.render();
     });
     chip("focusChip").addEventListener("click", () => {
-      const p = this.course && !this.course.finished ? presentation(this.course.lesson, this.course.i) : null;
-      if (!p || p.highlight.length === 0) return this.say(() => t("tool.focus.off"), true);
+      const parts = this.highlightParts();
+      if (parts.length === 0) return this.say(() => t("tool.focus.off"), true);
       this.focus = !this.focus;
-      this.stage.highlight(p.highlight, this.focus);
+      this.stage.highlight(parts, this.focus);
       this.render();
     });
     const viewsBtn = $("viewsBtn");
     /** @type {ViewName[]} */
     const views = ["overview", "register", "knobs", "front", "drum", "carry"];
-    viewsBtn.addEventListener("click", () => showMenu(viewsBtn, views.map((v) => ({ label: t(`view.${v}`), run: () => this.stage.fly(v) }))));
-    $("resetViewBtn").addEventListener("click", () => this.stage.fly("overview"));
+    viewsBtn.addEventListener("click", () => showMenu(viewsBtn, views.map((v) => ({ label: t(`view.${v}`), run: () => this.chooseView(v) }))));
+    $("resetViewBtn").addEventListener("click", () => this.chooseView("overview"));
   }
 
   /** @private */
@@ -567,11 +622,10 @@ export class App {
       $(id).setAttribute("aria-pressed", String(on));
       $(id).setAttribute("aria-disabled", String(!enabled));
     };
-    const p = this.course && !this.course.finished ? presentation(this.course.lesson, this.course.i) : null;
     chip("caseChip", this.stage.casing);
     chip("frontChip", this.stage.cutaway);
     chip("apartChip", this.stage.explodeTarget > 0, !this.busy);
-    chip("focusChip", this.focus, !!p && p.highlight.length > 0);
+    chip("focusChip", this.focus, this.highlightParts().length > 0);
     // the course and the mode
     this.courseUI.update();
     const c = this.course;

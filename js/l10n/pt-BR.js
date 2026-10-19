@@ -77,6 +77,7 @@ export default {
   "status.blockedPin": "O pino está no batente. Tire-o ou mude-o de furo para girar de novo.",
   "status.blockedPinSub": "Com o pino colocado, a manivela só gira para a frente. Tire o pino para subtrair.",
   "status.blockedStore": "Um transporte ainda espera na roda ({place}), aonde nenhuma alavanca de transporte chega. Primeiro mova o carro para a esquerda.",
+  "status.inside": "Vista interna: a caixa está oculta, a frente aberta e as outras peças esmaecidas. A máquina funciona normalmente.",
   "status.stepDone": "Pronto! Clique em Próximo.",
   "status.lessonDone": "Lição concluída: {title}.",
   "status.tutorialDone": "Tutorial concluído. As lições vão além.",

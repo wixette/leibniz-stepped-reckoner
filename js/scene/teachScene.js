@@ -42,6 +42,8 @@ export { shown as isShown };
  * @property {THREE.Vector3Like} dir
  * @property {() => THREE.Vector3[]} points the corners of the parts' bounding box, now
  *   (views of carriage parts follow the carriage)
+ * @property {string[]} [inside] for a view of parts inside the machine (U11): the parts it
+ *   highlights while the case is hidden, the front open and the other parts faded
  */
 
 /**
@@ -80,8 +82,14 @@ export function viewSubjects(root) {
     register: view({ x: 0, y: 1, z: 0.12 }, ["pi.window"]),
     knobs: view({ x: 0, y: 1.1, z: 0.8 }, ["pm.setting_dial.*", "pm.setting_plate.*"]),
     front: view({ x: 0.12, y: 0.15, z: 1 }, ["pm.magna_rota", "pm.main_crank", "pm.magna_plate"]),
-    drum: view({ x: 0.7, y: 0.55, z: 0.75 }, ["pm.drum.0", "pi.sum_wheel.0", "pm.setting_rack.0"]),
-    carry: view({ x: -0.15, y: 0.9, z: -0.75 }, ["pi.carry_store.0", "pi.carry_store.1", "pi.carry_store.2", "pi.carry_store.3", "pi.sum_wheel.0", "pi.sum_wheel.1", "pi.sum_wheel.2", "pi.sum_wheel.3"]),
+    drum: {
+      ...view({ x: 0.7, y: 0.55, z: 0.75 }, ["pm.drum.0", "pi.sum_wheel.0", "pm.setting_rack.0"]),
+      inside: ["pm.drum.0", "pm.setting_rack.0", "pi.sum_wheel.0"],
+    },
+    carry: {
+      ...view({ x: -0.15, y: 0.9, z: -0.75 }, ["pi.carry_store.0", "pi.carry_store.1", "pi.carry_store.2", "pi.carry_store.3", "pi.sum_wheel.0", "pi.sum_wheel.1", "pi.sum_wheel.2", "pi.sum_wheel.3"]),
+      inside: [0, 1, 2, 3].flatMap((k) => [`pi.carry_store.${k}`, `pi.sum_wheel.${k}`, `pm.zweihorn_add.${k}`, `pm.zweihorn_sub.${k}`]),
+    },
   };
 }
 
@@ -112,11 +120,18 @@ export class Highlighter {
   }
 
   /**
+   * The meshes faded by focus: clicks and hover labels pass through them (U11).
+   * @type {Set<THREE.Object3D>}
+   */
+  faded = new Set();
+
+  /**
    * @param {string[]} patterns
    * @param {boolean} focus
    * @returns {void}
    */
   set(patterns, focus) {
+    this.faded.clear();
     /** @type {Set<THREE.Mesh>} */
     const lit = new Set();
     for (const p of patterns) for (const n of findNodes(this.root, p)) n.traverse((o) => (/** @type {THREE.Mesh} */ (o)).isMesh && lit.add(/** @type {THREE.Mesh} */ (o)));
@@ -127,6 +142,7 @@ export class Highlighter {
         mesh.material = orig;
         continue;
       }
+      if (fade) this.faded.add(mesh);
       /**
        * @param {THREE.Material} m
        * @returns {THREE.Material}

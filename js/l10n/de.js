@@ -77,6 +77,7 @@ export default {
   "status.blockedPin": "Der Stift liegt am Anschlag. Nimm ihn heraus oder versetze ihn, um weiterzudrehen.",
   "status.blockedPinSub": "Mit Stift dreht die Kurbel nur vorwärts. Nimm den Stift heraus, um zu subtrahieren.",
   "status.blockedStore": "Am Rad der {place} wartet noch ein Übertrag, den kein Übertragshebel erreicht. Schiebe zuerst den Schlitten nach links.",
+  "status.inside": "Innenansicht: Das Gehäuse ist ausgeblendet, die Vorderseite offen und die übrigen Teile sind blass. Die Maschine arbeitet wie gewohnt.",
   "status.stepDone": "Geschafft! Weiter mit „Weiter“.",
   "status.lessonDone": "Lektion abgeschlossen: {title}.",
   "status.tutorialDone": "Einführung abgeschlossen. Die Lektionen gehen weiter.",

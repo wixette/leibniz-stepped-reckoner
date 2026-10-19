@@ -77,6 +77,7 @@ export default {
   "status.blockedPin": "ピンがストッパーに当たっています。もう一度回すには、ピンを抜くか別の穴に差してください。",
   "status.blockedPinSub": "ピンを差していると、クランクは前にしか回りません。引き算をするにはピンを抜いてください。",
   "status.blockedStore": "{place}の車にまだ繰り上がりが待っていますが、そこには繰り上がりレバーが届きません。先にキャリッジを左へ動かしてください。",
+  "status.inside": "内部の表示：ケースを隠し、前面を開き、ほかの部品を薄くしています。機械はいつもどおり動きます。",
   "status.stepDone": "できました！「次へ」を押してください。",
   "status.lessonDone": "レッスン完了：{title}。",
   "status.tutorialDone": "チュートリアル完了。レッスンでさらに詳しく学べます。",

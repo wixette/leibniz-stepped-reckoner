@@ -77,6 +77,7 @@ export default {
   "status.blockedPin": "핀이 멈춤쇠에 닿아 있습니다. 다시 돌리려면 핀을 빼거나 다른 구멍에 꽂으세요.",
   "status.blockedPinSub": "핀이 꽂혀 있으면 크랭크는 앞으로만 돕니다. 빼기를 하려면 핀을 빼세요.",
   "status.blockedStore": "{place} 바퀴에 아직 받아올림이 기다리고 있는데, 그곳에는 받아올림 레버가 닿지 않습니다. 먼저 캐리지를 왼쪽으로 옮기세요.",
+  "status.inside": "내부 보기: 케이스를 숨기고 앞면을 열었으며 다른 부품은 흐리게 했습니다. 기계는 평소처럼 작동합니다.",
   "status.stepDone": "잘했어요! ‘다음’을 누르세요.",
   "status.lessonDone": "레슨 완료: {title}.",
   "status.tutorialDone": "튜토리얼 완료. 레슨에서 더 깊이 배울 수 있습니다.",

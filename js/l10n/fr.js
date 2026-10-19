@@ -77,6 +77,7 @@ export default {
   "status.blockedPin": "La cheville est contre la butée. Retirez-la ou déplacez-la pour tourner à nouveau.",
   "status.blockedPinSub": "Avec la cheville en place, la manivelle ne tourne qu’en avant. Retirez la cheville pour soustraire.",
   "status.blockedStore": "Une retenue attend encore à la roue ({place}), qu’aucun levier de retenue n’atteint. Décalez d’abord le chariot vers la gauche.",
+  "status.inside": "Vue intérieure : le boîtier est masqué, la façade ouverte et les autres pièces estompées. La machine fonctionne normalement.",
   "status.stepDone": "Réussi ! Appuyez sur Suivant.",
   "status.lessonDone": "Leçon terminée : {title}.",
   "status.tutorialDone": "Tutoriel terminé. Les leçons vont plus loin.",

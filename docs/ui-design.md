@@ -101,7 +101,7 @@ Free play has no tab: its controls are the machine strip, under the machine (P2)
 
 - **Machine strip** (under the stage): the number on the setting knobs, turn forward (add) and back (subtract), carriage left and right with its place, the Magna Rota's pin, turn to the stop, reset. Icon plus short label on wide screens, icons with tooltips on narrow ones.
 - **Readouts** sit on the stage's top edge: the result as on the machine, grouped in threes; the Magna Rota's turn count (red when subtracting); the carriage's place.
-- **Stage tools** float on the stage's bottom edge: show the case, open the carriage front, take apart, fade the other parts; a views menu (the six camera views) and a reset-view button. They change how the machine is *shown*, not its state, so they stay enabled in a lesson, except where a step depends on them.
+- **Stage tools** float on the stage's bottom edge: show the case, open the carriage front, take apart, fade the other parts; a views menu (the six camera views, two of them inside views, U11) and a reset-view button. They change how the machine is *shown*, not its state, so they stay enabled in a lesson, except where a step depends on them.
 
 ### U5 — A dark Material 3 theme in brass and oak
 
@@ -142,6 +142,17 @@ The camera keeps each view's direction; the fit moves it only nearer or farther 
 **Resizing refits; the reader's camera is the reader's.** While the camera is in a view the page chose (on load, from the Views menu, Reset view or a lesson step), a change of the stage's size (the window, the dock opened or closed, a phone turned) or taking the machine apart refits it at once. Once the reader turns, moves or zooms the camera, it stays where they put it until they choose a view or Reset view. Code: `js/scene/framing.js`, tested in `tests/scene/framing.test.js`.
 
 *Supersedes* the fixed views of M3 (a bounding sphere fitted once to the camera's narrower angle, which ignored the bands and let the machine run off a narrow stage and look small in a flat one). *Rejected:* fitting the shorter side of the stage at 90% (on a 1.9 : 1 laptop stage the 2.3 : 1 machine would then overflow the width); filling 90% of the whole canvas (the readouts and tools would cover the machine's ends).
+
+### U11 — The drum and carry views are inside views; the machine keeps working
+
+The stepped drum and the carry sit inside the case and behind the carriage's front, so a camera view alone would show the case. In free play these two views are **inside views**: besides flying the camera they hide the case, open the carriage front, highlight their parts (the units drum, its rack and its result wheel; the first four carry stores, result wheels and carry levers) and fade everything else, as a lesson step does. The stage tools show what changed (Case off, Open front and Focus on), and each can be switched back.
+
+- **The machine works as usual.** An inside view changes how parts are drawn, not where they are, so every control stays enabled: watching the drum turn and the carry pass on is what the views are for. This is the difference from *Take apart*, which moves parts out of their working places and therefore locks the crank and the knobs.
+- **Faded parts are context, not obstacles:** clicks and hover labels pass through them, so a drum or a wheel can be pointed at and clicked through a faded frame.
+- **It ends when the reader chooses another view or Reset view:** the tools it changed go back to how they were. A tool the reader switched themselves meanwhile (say, Case back on) is theirs and is left as they set it. Turning or zooming the camera does not end it; starting the tutorial or a lesson does, and the step's presentation takes over. In a lesson step, choosing a view only moves the camera.
+- **Focus** works wherever there are parts to focus on: a lesson step's highlighted parts, or an inside view's.
+
+*Rejected:* locking the controls in an inside view (it would hide the very motion it exists to show); a clipping plane through the case and carriage (clearer, but it belongs to the 3D quality work; it would follow the same rules).
 
 ## Part 4 — Open questions
 
