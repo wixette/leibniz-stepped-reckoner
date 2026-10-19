@@ -67,7 +67,7 @@ Also:
 │                                                     ┃ │ ●●●○○○○○  step 3 of 8  │ │
 │                                                     ┃ │ Behind each result...  │ │
 │                                                     ┃ │ ▸ Your turn  [Number]  │ │  task line (U18)
-│ ╭[00000001] [↻ +][↺ −] [◀ 0 ▶] [pin –] [⇥] [reset]╮ ┃ └────────────────────────┘ │  toolbar (U18)
+│ ╭[00000001] [↻ + │ ↺ −] [‹‹ 0 ››] [Pin – ▾│→|]  ⟳ ╮ ┃ └────────────────────────┘ │  toolbar (U18)
 ├─────────────────────────────────────────────────────┴────────────────────────────┤
 │ The ribs added 1 to the units: 9 → 0, and the carry is stored.   Lesson 2 · 3/8  │  status bar
 └──────────────────────────────────────────────────────────────────────────────────┘
@@ -100,7 +100,7 @@ Free play has no tab: its controls are the machine toolbar, under the machine (P
 
 ### U4 — The machine's toolbar and the stage's own tools
 
-- **Machine toolbar** (floating at the stage's bottom, centred under the machine, U18): the number on the setting knobs, turn forward (+) and back (−) as one pair, carriage left and right with its place as another, boxed and named like the number box (U21), the Magna Rota's pin (a dropdown box, U22), turn to the stop, reset (U20). Icon plus short label where there is room, icons with tooltips where there is not (U18).
+- **Machine toolbar** (floating at the stage's bottom, centred under the machine, U18): the number on the setting knobs, turn forward (+) and back (−) as one pair, carriage left and right with its place as another, boxed and named like the number box (U21), the Magna Rota's pin (a dropdown box, U22) with turn to the stop joined to it (U23), reset (U20). Icon plus short label where there is room, icons with tooltips where there is not (U18).
 - **Readouts** sit on the stage's top edge: the result as on the machine, grouped in threes; the Magna Rota's turn count (red when subtracting); the carriage's place.
 - **View controls** float at the stage's top right (U15): a Reset view button (⌂) and the Views menu, whose button names the view on show. The menu holds the seven views (two of them inside views, U11, and Taken apart) and a Show case switch. Opening the front, fading and taking apart follow the view (U14, U15). They change how the machine is *shown*, not its state, so they stay enabled in a lesson, except where a step depends on them.
 
@@ -290,6 +290,15 @@ The pin control was a tonal button with a circled-dot icon (meant as "a pin in a
 - **It is an outlined dropdown, boxed and named like the number box and the carriage (U21):** "Pin" on its border, the hole inside ("–" when the pin is out), and a ▾. The dot icon is gone. Its border lights while its menu is open.
 - **One rule for the toolbar:** what the reader *sets* is a box with its name on the border (the number on the knobs, the carriage's place, the pin's hole); what they *do* is a button (+ and −, run to stop, reset). The pin box and Run to stop stay side by side: one sets the stop, the other runs to it.
 - **Its menu** lists "Out", then the holes 1 to 9 under a "Hole" heading, with the current one ticked. Its accessible name says the setting ("Pin: hole 5", "Pin: out"), and its tooltip what the pin does (the crank stops after that many turns).
+
+### U23 — Run to stop is an icon, joined to the pin's box
+
+Run to stop showed ⏩ and its words. The icon read as a video's fast-forward, and the words took room for a control that does something only once a pin is in.
+
+- **It is icon only, with →| (an arrow running into a bar): turn until the stop.**
+- **It is joined to the pin's box, like a split button:** the box sets the stop, the button runs the crank to it. On its own an icon is a guess; attached to "Pin" its meaning comes from the box. It is greyed exactly when the box shows "–", and says why when pressed (P6).
+- **Its name stays** in the tooltip and the accessible name ("Turn the crank forward until the pin reaches the stop"), and the lesson task line still shows it with its words (U18).
+- **Reset keeps its word where there is room** (it drops to its icon on a narrow stage). Its ⟳ is easily taken for the view's Reset (⌂), and it clears the machine, so the word guards against a slip.
 
 ## Part 4 — Open questions
 

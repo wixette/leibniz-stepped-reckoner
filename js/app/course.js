@@ -32,7 +32,7 @@ const TASK_CONTROLS = {
     { id: "rightBtn", icon: "keyboard_double_arrow_right", tip: "strip.right.tip" },
   ],
   pin: [{ id: "pinBtn", icon: "keyboard_arrow_down", label: "strip.pin" }],
-  toStop: [{ id: "toStopBtn", icon: "fast_forward", label: "strip.toStop" }],
+  toStop: [{ id: "toStopBtn", icon: "last_page", label: "strip.toStop" }],
   reset: [{ id: "resetBtn", icon: "restart_alt", label: "strip.reset" }],
 };
 

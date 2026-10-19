@@ -306,9 +306,9 @@ a { color: var(--md-primary); }
 .btn .sym { font-size: 22px; font-weight: 600; line-height: 1; min-width: 0.6em; text-align: center; }
 .strip .sep { width: 1px; height: 28px; background: var(--md-outline-variant); margin: 0 4px; }
 /* the toolbar fits the stage's own width (U18): labels go as room runs out, short ones last */
-@container stage (max-width: 900px) {
-  .strip #toStopBtn .txt, .strip #resetBtn .txt { display: none; }
-  .strip #toStopBtn, .strip #resetBtn { padding: 0 10px; }
+@container stage (max-width: 700px) {
+  .strip #resetBtn .txt { display: none; }
+  .strip #resetBtn { padding: 0 10px; }
 }
 @container stage (max-width: 760px) {
   .strip { gap: 8px 4px; }
@@ -372,6 +372,11 @@ a { color: var(--md-primary); }
 .select-field[aria-expanded="true"] { border-color: var(--md-primary); box-shadow: inset 0 0 0 1px var(--md-primary); }
 .select-field[aria-expanded="true"] .field-label { color: var(--md-primary); }
 .select-field[aria-disabled="true"] { opacity: 0.45; cursor: default; }
+/* Run to stop, joined to the pin's box like a split button (U23): the box sets the stop, the
+   button turns the crank until it gets there. Icon only (→|); its name is in the tooltip. */
+.split { display: inline-flex; align-items: stretch; }
+.split .select-field { border-top-right-radius: 0; border-bottom-right-radius: 0; }
+.split .btn { width: 38px; height: 40px; border-radius: 0 var(--radius-s) var(--radius-s) 0; color: var(--md-on-secondary-container); }
 .field-group.wanted:not([aria-disabled="true"]) { border-color: var(--md-primary); box-shadow: 0 0 0 2px var(--md-primary), 0 0 14px color-mix(in srgb, var(--md-primary) 45%, transparent); }
 
 /* ---- dock ---------------------------------------------------------------------------------------- */
