@@ -343,6 +343,15 @@ The dock's three tabs stack each icon above its label. That suits a narrow dock 
 - **It goes by the dock's own width,** not by where the dock is: a dock dragged wide beside the machine (U17) gets the row too, and a phone's dock below the machine (about 375 px) keeps the stacked tabs. In practice the row appears below the machine from tablets up, and beside it once the dock is widened.
 - **All ten languages fit at the narrowest row width.** The longest labels (Portuguese) leave 8 px to spare; the "lesson under way" dot sits after the label. The selected tab keeps its bar, and the keys are unchanged.
 
+### U26 — A step is a card that adapts to the dock's width
+
+In a wide dock (below the machine on a large screen), a step looked unfinished. Its picture sat letterboxed in a dark band across the full width, the text ran to about 150 characters a line, and Next ended up far from the content.
+
+- **A step is one card:** its picture, its text and its task line together. Back and Next sit under the card.
+- **The picture keeps its own shape,** never letterboxed, with rounded corners and its credit underneath.
+- **The card adapts to the dock's own width:** below about 640 px the picture sits above the text, the full width of the card; wider, it sits beside the text (two fifths and three fifths), up to 320 px tall. A tall picture, such as the 1727 engraving, stays upright beside the text.
+- **Text keeps a reading measure:** a step's text is at most about 68 characters a line, and every panel's content (Get started, the lessons, the references, a step) is centred at no more than 960 px in a wide dock.
+
 ## Part 4 — Open questions
 
 - The link format (P8): which fields the first release promises (language, lesson and step, numbers on the machine).

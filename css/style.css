@@ -468,6 +468,8 @@ body.resizing-rows, body.resizing-rows * { cursor: row-resize !important; }
   .tab .dot { position: static; flex: none; }
 }
 .panel { overflow-y: auto; min-height: 0; padding: 16px; scrollbar-gutter: stable; }
+/* a wide dock centres its content at a reading width (U26) */
+.panel > * { max-width: 960px; margin-inline: auto; }
 .panel h2 { font-size: 20px; font-weight: 600; margin: 0 0 6px; line-height: 1.25; }
 .panel h3 { font-size: 13px; font-weight: 650; letter-spacing: 0.06em; text-transform: uppercase; color: var(--md-on-surface-variant); margin: 20px 0 8px; }
 .panel p { margin: 0 0 12px; }
@@ -541,10 +543,19 @@ body.resizing-rows, body.resizing-rows * { cursor: row-resize !important; }
 .progress i.done { background: color-mix(in srgb, var(--md-primary) 45%, var(--md-surface-highest)); }
 .progress i.now { background: var(--md-primary); }
 .step-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--md-on-surface-variant); }
-.figure { margin: 0; border-radius: var(--radius-m); overflow: hidden; background: #0a0d11; }
-.figure img { display: block; width: 100%; max-height: 220px; object-fit: contain; background: #0a0d11; }
-.figure figcaption { padding: 6px 10px; font-size: 12px; color: var(--md-on-surface-variant); background: var(--md-surface-high); }
-.step-text { font-size: 15.5px; line-height: 1.55; margin: 0; }
+/* A step is one card (U26): its picture, then its text and task line. The picture keeps its own
+   shape, never letterboxed, with its credit under it. A wide dock sets the picture beside the
+   text; a narrow one above it. */
+.step-card { display: grid; gap: 14px; margin: 0; }
+.step-body { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.figure { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 0; }
+.figure img { display: block; max-width: 100%; max-height: 240px; width: auto; height: auto; border-radius: var(--radius-m); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35); }
+.figure figcaption { font-size: 12px; line-height: 1.4; color: var(--md-on-surface-variant); text-align: center; }
+.step-text { font-size: 15.5px; line-height: 1.55; margin: 0; max-width: 68ch; }
+@container dock (min-width: 640px) {
+  .step-card.has-figure { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); align-items: start; gap: 20px; }
+  .step-card.has-figure .figure img { max-height: 320px; }
+}
 .taskline {
   display: flex;
   align-items: center;

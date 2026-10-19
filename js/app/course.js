@@ -177,9 +177,11 @@ export class CourseUI {
       el("div", { class: "player-head" }, [el("div", { class: "titles" }, [el("div", { class: "kicker", text: kicker }), el("h2", { text: t(lesson.title) })]), close]),
       progress,
       el("div", { class: "step-meta" }, [el("span", { text: t("course.stepOf", { i: c.i + 1, n }) })]),
-      figure,
-      el("p", { class: "step-text", text: t(step.text) }),
-      taskline,
+      // the step as one card: its picture beside or above its text and task line (U26)
+      el("div", { class: `card step-card${figure ? " has-figure" : ""}` }, [
+        figure,
+        el("div", { class: "step-body" }, [el("p", { class: "step-text", text: t(step.text) }), taskline]),
+      ]),
       el("div", { class: "navrow" }, [back, next]),
     ]);
   }
