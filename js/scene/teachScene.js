@@ -93,12 +93,12 @@ export function viewSubjects(root) {
   };
 }
 
-// ---- highlight and focus ------------------------------------------------------------------------
+// ---- highlight and fade --------------------------------------------------------------------------
 const GLOW = new THREE.Color(0xffa31a);
 
 /**
  * The parts that show a part's value, though the model makes them separate parts: Focus keeps
- * them with it (U12), or focusing on the windows would fade the digits behind them.
+ * them with it (U12), or fading around the windows would fade the digits behind them.
  * @type {[RegExp, (m: RegExpMatchArray) => string[]][]}
  */
 const READOUTS = [
@@ -119,7 +119,7 @@ export function readouts(patterns) {
   }));
 }
 
-/** Makes some parts glow and (with focus) fades the rest. Materials are cloned, never edited. */
+/** Makes some parts glow and (with fade) fades the rest. Materials are cloned, never edited. */
 export class Highlighter {
   /**
    * @private
@@ -143,30 +143,30 @@ export class Highlighter {
   }
 
   /**
-   * The meshes faded by focus: clicks and hover labels pass through them (U11).
+   * The meshes faded: clicks and hover labels pass through them (U11).
    * @type {Set<THREE.Object3D>}
    */
   faded = new Set();
 
   /**
-   * Make the parts glow; with focus, fade every part except them, their readouts and the context.
+   * Make the parts glow; with fade, fade every part except them, their readouts and the context.
    * @param {string[]} patterns the parts to highlight
-   * @param {boolean} focus
-   * @param {string[]} [context] parts focus keeps as they are (not highlighted)
+   * @param {boolean} fade
+   * @param {string[]} [context] parts fading keeps as they are (not highlighted)
    * @returns {void}
    */
-  set(patterns, focus, context = []) {
+  set(patterns, fade, context = []) {
     this.faded.clear();
     const lit = this.meshes(patterns);
     const kept = this.meshes([...patterns, ...readouts(patterns), ...context]);
     for (const [mesh, orig] of this.originals) {
       const on = lit.has(mesh);
-      const fade = focus && lit.size > 0 && !kept.has(mesh);
-      if (!on && !fade) {
+      const dim = fade && lit.size > 0 && !kept.has(mesh);
+      if (!on && !dim) {
         mesh.material = orig;
         continue;
       }
-      if (fade) this.faded.add(mesh);
+      if (dim) this.faded.add(mesh);
       /**
        * @param {THREE.Material} m
        * @returns {THREE.Material}
@@ -177,7 +177,7 @@ export class Highlighter {
           c.emissive = GLOW.clone();
           c.emissiveIntensity = 0.45;
         }
-        if (fade) {
+        if (dim) {
           c.transparent = true;
           c.opacity = 0.15;
           c.depthWrite = false;

@@ -26,9 +26,9 @@ export default {
   "tool.front.tip": "キャリッジの前面を開けて、中の段付き歯車を見る",
   "tool.apart": "分解",
   "tool.apart.tip": "機械を分解して部品を見る",
-  "tool.focus": "フォーカス",
-  "tool.focus.tip": "このステップで扱わない部品を薄く表示",
-  "tool.focus.off": "フォーカスは、部品を示すレッスンのステップで使えます。",
+  "tool.fade": "ほかを薄く",
+  "tool.fade.tip": "このステップやビューで扱わない部品を薄く表示",
+  "tool.fade.off": "「ほかを薄く」は、部品を示すレッスンのステップと内部の表示で使えます。",
   "tool.views": "視点",
   "tool.resetView": "視点をリセット",
 

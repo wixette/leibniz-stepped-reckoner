@@ -26,9 +26,9 @@ export default {
   "tool.front.tip": "캐리지 앞면을 열어 안의 계단 바퀴를 보기",
   "tool.apart": "분해",
   "tool.apart.tip": "기계를 분해해서 부품 보기",
-  "tool.focus": "강조",
-  "tool.focus.tip": "이 단계에서 다루지 않는 부품을 흐리게 표시",
-  "tool.focus.off": "강조는 부품을 가리키는 레슨 단계에서 쓸 수 있습니다.",
+  "tool.fade": "나머지 흐리게",
+  "tool.fade.tip": "이 단계나 보기에서 다루지 않는 부품을 흐리게 표시",
+  "tool.fade.off": "‘나머지 흐리게’는 부품을 가리키는 레슨 단계와 내부 보기에서 쓸 수 있습니다.",
   "tool.views": "시점",
   "tool.resetView": "시점 초기화",
 

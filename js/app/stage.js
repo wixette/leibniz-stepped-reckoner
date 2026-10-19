@@ -210,13 +210,13 @@ export class Stage {
   }
 
   /**
-   * Highlight parts, fading the rest if focus is on (except their readouts and the context).
+   * Highlight parts, fading the rest if fade is on (except their readouts and the context).
    * @param {string[]} names
-   * @param {boolean} focus
+   * @param {boolean} fade
    * @param {string[]} [context]
    */
-  highlight(names, focus, context) {
-    this.highlighter?.set(names, focus, context);
+  highlight(names, fade, context) {
+    this.highlighter?.set(names, fade, context);
     this.viewer.invalidate();
   }
 

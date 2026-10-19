@@ -26,9 +26,9 @@ export default {
   "tool.front.tip": "Die Vorderwand des Schlittens öffnen, um die Walzen zu sehen",
   "tool.apart": "Zerlegen",
   "tool.apart.tip": "Die Maschine zerlegen, um ihre Teile zu sehen",
-  "tool.focus": "Fokus",
-  "tool.focus.tip": "Die Teile blasser zeigen, um die es im Schritt nicht geht",
-  "tool.focus.off": "Fokus gibt es in Lektionsschritten, die Teile hervorheben.",
+  "tool.fade": "Rest abblenden",
+  "tool.fade.tip": "Die Teile blasser zeigen, um die es im Schritt oder in der Ansicht nicht geht",
+  "tool.fade.off": "„Rest abblenden“ gibt es in Lektionsschritten und Innenansichten, die Teile hervorheben.",
   "tool.views": "Ansichten",
   "tool.resetView": "Ansicht zurücksetzen",
 

@@ -13,6 +13,14 @@ import { registerValue } from "../sim/operations.js";
 /** @typedef {"overview" | "register" | "knobs" | "front" | "drum" | "carry"} ViewName */
 
 /**
+ * The inside views (docs/ui-design.md, U11, U13): their subject sits inside the machine, so they
+ * clear the way to it (case hidden, front open, other parts faded). Every other view shows the
+ * machine closed. In free play and in lessons alike, the view decides this, not the step.
+ * @type {ReadonlySet<ViewName>}
+ */
+export const INSIDE_VIEWS = new Set(["drum", "carry"]);
+
+/**
  * A scripted machine action:
  * - reset: a fresh machine
  * - input: setting knobs
@@ -62,12 +70,9 @@ import { registerValue } from "../sim/operations.js";
  * @property {string} [chapter] message key: a chapter starts here (the tutorial)
  * @property {Picture} [image]
  * @property {ViewName} [view]
- * @property {boolean} [casing] show the case and cover plates
- * @property {boolean} [cutaway] hide the carriage front panel
  * @property {number} [explode] exploded-view factor 0..1
- * @property {boolean} [focus] fade the parts that are not highlighted
- * @property {string[]} [highlight] node names; "prefix.*" matches a group
- * @property {string[]} [context] parts Focus keeps without highlighting them: what the text needs
+ * @property {string[]} [highlight] the step's subject: node names; "prefix.*" matches a group
+ * @property {string[]} [context] parts fading keeps without highlighting them: what the text needs
  *   to be seen besides the parts it names (the readouts of highlighted parts are kept anyway, U12)
  * @property {Callout[]} [callouts]
  * @property {Action[]} [do]
@@ -85,13 +90,14 @@ import { registerValue } from "../sim/operations.js";
  */
 
 /**
- * What the page shows for a step: presentation settings carry over from earlier steps.
+ * What the page shows for a step. The view and the exploded view carry over from earlier
+ * steps; the case, the front and fading follow from the view (U13).
  * @typedef {object} Presentation
  * @property {ViewName} view
- * @property {boolean} casing
- * @property {boolean} cutaway
+ * @property {boolean} casing show the case and cover plates
+ * @property {boolean} cutaway hide the carriage front panel
  * @property {number} explode
- * @property {boolean} focus
+ * @property {boolean} fade fade the parts that are not the step's subject
  * @property {string[]} highlight
  * @property {string[]} context
  * @property {Callout[]} callouts
@@ -104,14 +110,15 @@ import { registerValue } from "../sim/operations.js";
  */
 export function presentation(lesson, i) {
   /** @type {Presentation} */
-  const p = { view: "overview", casing: true, cutaway: false, explode: 0, focus: false, highlight: [], context: [], callouts: [] };
+  const p = { view: "overview", casing: true, cutaway: false, explode: 0, fade: false, highlight: [], context: [], callouts: [] };
   lesson.steps.slice(0, i + 1).forEach((s) => {
     if (s.view) p.view = s.view;
-    if (s.casing !== undefined) p.casing = s.casing;
-    if (s.cutaway !== undefined) p.cutaway = s.cutaway;
     if (s.explode !== undefined) p.explode = s.explode;
-    if (s.focus !== undefined) p.focus = s.focus;
   });
+  const inside = INSIDE_VIEWS.has(p.view);
+  p.casing = !inside;
+  p.cutaway = inside;
+  p.fade = inside;
   const s = lesson.steps[i];
   p.highlight = s.highlight ?? [];
   p.context = s.context ?? [];

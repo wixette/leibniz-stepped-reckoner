@@ -8,7 +8,7 @@ import { load, locale, LOCALE_NAMES, LOCALE_SHORT, LOCALES, setLocale, t, tn } f
 /** @import { Locale } from "../l10n/l10n.js" */
 import { applyIntentNow, controlOf, possible } from "../teach/partActions.js";
 /** @import { Control, Intent } from "../teach/partActions.js" */
-import { presentation, replayTo } from "../teach/player.js";
+import { INSIDE_VIEWS, presentation, replayTo } from "../teach/player.js";
 /** @import { Lesson, ViewName } from "../teach/player.js" */
 import { placeWord } from "../teach/partInfo.js";
 import { Animator } from "./animator.js";
@@ -75,7 +75,8 @@ export class App {
    * @type {ViewName | null}
    */
   lastView = null;
-  focus = false;
+  /** Fade the parts that are not the subject (the "Fade others" chip). */
+  fade = false;
   /**
    * An inside view under way (U11): the drum or carry view in free play, which hid the case,
    * opened the front and faded what is not its parts. casing and cutaway hold what to put
@@ -309,21 +310,21 @@ export class App {
   }
 
   /**
-   * Show a camera view. In free play the drum and carry views are inside views (U11): they hide
-   * the case, open the front and fade what is not their parts, and the machine works as usual.
-   * In a lesson step a view only moves the camera: the step's presentation stays.
+   * Show a camera view. In free play the drum and carry views are inside views (U11, U13): they
+   * hide the case, open the front and fade what is not their parts, and the machine works as
+   * usual. In a lesson step a view only moves the camera: the step's presentation stays.
    * @param {ViewName} view
    */
   chooseView(view) {
     const inCourse = !!this.course && !this.course.finished;
     if (!inCourse) this.endInside();
-    const parts = inCourse ? undefined : this.stage.views?.[view].inside;
+    const parts = inCourse || !INSIDE_VIEWS.has(view) ? undefined : this.stage.views?.[view].inside;
     if (parts) {
       this.inside = { view, parts, casing: this.stage.casing, cutaway: this.stage.cutaway };
       this.stage.casing = false;
       this.stage.cutaway = true;
       this.stage.applyToggles();
-      this.focus = true;
+      this.fade = true;
       this.stage.highlight(parts, true);
       this.say(() => t("status.inside"));
     }
@@ -339,7 +340,7 @@ export class App {
     if (v.casing !== null) this.stage.casing = v.casing;
     if (v.cutaway !== null) this.stage.cutaway = v.cutaway;
     this.stage.applyToggles();
-    this.focus = false;
+    this.fade = false;
     this.stage.highlight([], false);
   }
 
@@ -354,15 +355,15 @@ export class App {
   }
 
   /**
-   * The parts Focus keeps besides the highlighted ones: the lesson step's context.
+   * The parts fading keeps besides the highlighted ones: the lesson step's context.
    * @returns {string[]}
    */
-  focusContext() {
+  fadeContext() {
     const c = this.course;
     return c && !c.finished ? presentation(c.lesson, c.i).context : [];
   }
 
-  /** Show the step's presentation: case, open front, taken apart, highlights, view. */
+  /** Show the step's presentation: the view, and the case, front and fading it brings (U13). */
   showPresentation() {
     const c = this.course;
     if (!c) return;
@@ -371,8 +372,8 @@ export class App {
     this.stage.cutaway = p.cutaway;
     this.stage.setExplode(p.explode);
     this.stage.applyToggles();
-    this.focus = p.focus && p.highlight.length > 0;
-    this.stage.highlight(p.highlight, this.focus, p.context);
+    this.fade = p.fade && p.highlight.length > 0;
+    this.stage.highlight(p.highlight, this.fade, p.context);
     this.stage.setCallouts(p.callouts.map((x) => ({ node: x.node, text: () => t(x.text), value: x.value })));
     if (p.view !== this.lastView) this.stage.fly(p.view);
     this.lastView = p.view;
@@ -438,7 +439,7 @@ export class App {
     this.stage.casing = true;
     this.stage.cutaway = false;
     this.stage.applyToggles();
-    this.focus = false;
+    this.fade = false;
   }
 
   /** @returns {string[]} ids of the courses completed in this browser */
@@ -479,7 +480,7 @@ export class App {
 
   /** @private */
   wireStage() {
-    /** @param {"caseChip" | "frontChip" | "apartChip" | "focusChip"} id */
+    /** @param {"caseChip" | "frontChip" | "apartChip" | "fadeChip"} id */
     const chip = (id) => /** @type {HTMLButtonElement} */ ($(id));
     chip("caseChip").addEventListener("click", () => {
       if (this.inside) this.inside.casing = null; // the reader's now
@@ -499,11 +500,11 @@ export class App {
       if (this.stage.explodeTarget > 0) this.say(() => t("status.apart"));
       this.render();
     });
-    chip("focusChip").addEventListener("click", () => {
+    chip("fadeChip").addEventListener("click", () => {
       const parts = this.highlightParts();
-      if (parts.length === 0) return this.say(() => t("tool.focus.off"), true);
-      this.focus = !this.focus;
-      this.stage.highlight(parts, this.focus, this.focusContext());
+      if (parts.length === 0) return this.say(() => t("tool.fade.off"), true);
+      this.fade = !this.fade;
+      this.stage.highlight(parts, this.fade, this.fadeContext());
       this.render();
     });
     const viewsBtn = $("viewsBtn");
@@ -634,7 +635,7 @@ export class App {
     chip("caseChip", this.stage.casing);
     chip("frontChip", this.stage.cutaway);
     chip("apartChip", this.stage.explodeTarget > 0, !this.busy);
-    chip("focusChip", this.focus, this.highlightParts().length > 0);
+    chip("fadeChip", this.fade, this.highlightParts().length > 0);
     // the course and the mode
     this.courseUI.update();
     const c = this.course;

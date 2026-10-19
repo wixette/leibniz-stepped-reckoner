@@ -56,13 +56,10 @@ const add = {
   title: "l.add.title",
   summary: "l.add.summary",
   steps: [
-    { do: [{ reset: {} }], view: "knobs", casing: true, highlight: ["pm.setting_dial.*"], text: "l.add.intro" },
+    { do: [{ reset: {} }], view: "knobs", highlight: ["pm.setting_dial.*"], text: "l.add.intro" },
     { highlight: ["pm.setting_dial.0"], text: "l.add.set3", task: setInput(3, 30) },
     {
-      casing: false,
-      cutaway: true,
       view: "drum",
-      focus: true,
       highlight: ["pm.drum.0", "pi.sum_wheel.0", "pm.setting_rack.0"],
       callouts: [
         { node: "pm.drum.0", text: "part.drum" },
@@ -73,7 +70,6 @@ const add = {
     { do: [{ theta: 200 }], highlight: ["pm.drum.0", "pi.sum_wheel.0"], text: "l.add.turning", expect: (m) => m.theta === 200 },
     { do: [{ theta: 360 }], highlight: ["pi.sum_wheel.0"], text: "l.add.fullTurn", expect: (m) => m.shownDigits()[0] === 3 && m.turns === 1 },
     {
-      focus: false,
       highlight: ["pm.drum.0", "pi.sum_wheel.0"],
       text: "l.add.yourTurn",
       task: {
@@ -89,7 +85,7 @@ const add = {
         controls: ["input", "add"],
       },
     },
-    { view: "register", casing: true, cutaway: false, highlight: ["pi.window"], text: "l.add.eight" },
+    { view: "register", highlight: ["pi.window"], text: "l.add.eight" },
     {
       do: [{ reset: {} }],
       view: "overview",
@@ -120,10 +116,9 @@ const carry = {
   title: "l.carry.title",
   summary: "l.carry.summary",
   steps: [
-    { do: [{ reset: { result: 9999 } }], view: "register", casing: true, highlight: ["pi.window"], text: "l.carry.intro" },
+    { do: [{ reset: { result: 9999 } }], view: "register", highlight: ["pi.window"], text: "l.carry.intro" },
     { view: "knobs", highlight: ["pm.setting_dial.0"], text: "l.carry.set1", task: setInput(1, 10) },
     {
-      casing: false,
       view: "carry",
       highlight: ["pi.carry_store.0", "pi.carry_store.1", "pi.carry_store.2", "pi.carry_store.3"],
       context: ["pi.sum_wheel.0", "pi.sum_wheel.1", "pi.sum_wheel.2", "pi.sum_wheel.3"],
@@ -144,7 +139,7 @@ const carry = {
       text: "l.carry.passedOn",
       expect: (m) => m.shownNumber() === 10000 && allLevel(m),
     },
-    { view: "register", casing: true, highlight: ["pi.window"], text: "l.carry.idea" },
+    { view: "register", highlight: ["pi.window"], text: "l.carry.idea" },
     {
       do: [{ reset: { result: 99 } }],
       view: "knobs",
@@ -165,7 +160,6 @@ const carry = {
     },
     {
       do: [{ reset: { mode: "historical", result: 9999, input: 1 } }, { turn: 1 }],
-      casing: false,
       view: "carry",
       highlight: ["pi.carry_store.1"],
       text: "l.carry.historical",
@@ -174,7 +168,6 @@ const carry = {
     {
       do: [{ input: 0 }, { turn: 1 }],
       view: "register",
-      casing: true,
       highlight: ["pi.window"],
       text: "l.carry.historicalDone",
       expect: (m) => m.shownNumber() === 10000 && allLevel(m),
@@ -190,10 +183,9 @@ const subtract = {
   title: "l.sub.title",
   summary: "l.sub.summary",
   steps: [
-    { do: [{ reset: { result: 1000 } }], view: "register", casing: true, highlight: ["pi.window"], text: "l.sub.intro" },
+    { do: [{ reset: { result: 1000 } }], view: "register", highlight: ["pi.window"], text: "l.sub.intro" },
     { view: "knobs", highlight: ["pm.setting_dial.0"], text: "l.sub.set1", task: setInput(1, 10) },
     {
-      casing: false,
       view: "carry",
       highlight: ["pi.sum_wheel.0", "pi.sum_wheel.1", "pi.sum_wheel.2", "pi.sum_wheel.3", "pi.carry_store.0", "pi.carry_store.1", "pi.carry_store.2"],
       text: "l.sub.turnBack",
@@ -204,7 +196,7 @@ const subtract = {
         controls: ["sub"],
       },
     },
-    { view: "register", casing: true, highlight: ["pi.window"], text: "l.sub.borrow" },
+    { view: "register", highlight: ["pi.window"], text: "l.sub.borrow" },
     {
       view: "front",
       highlight: ["pm.magna_rota"],
@@ -241,7 +233,7 @@ const carriage = {
   title: "l.shift.title",
   summary: "l.shift.summary",
   steps: [
-    { do: [{ reset: {} }], view: "knobs", casing: true, highlight: ["pm.setting_dial.*"], text: "l.shift.intro", task: setInput(12, 21) },
+    { do: [{ reset: {} }], view: "knobs", highlight: ["pm.setting_dial.*"], text: "l.shift.intro", task: setInput(12, 21) },
     { view: "overview", highlight: ["pm.main_crank"], text: "l.shift.turnOnce", task: turnTo(12, 1) },
     { highlight: ["pm.carriage", "frame.lead_screw"], text: "l.shift.slide", task: shiftTo(1, 2) },
     {
@@ -267,7 +259,7 @@ const multiply = {
   title: "l.mul.title",
   summary: "l.mul.summary",
   steps: [
-    { do: [{ reset: {} }], view: "knobs", casing: true, highlight: ["pm.setting_dial.*"], text: "l.mul.intro", task: setInput(1709, 1790) },
+    { do: [{ reset: {} }], view: "knobs", highlight: ["pm.setting_dial.*"], text: "l.mul.intro", task: setInput(1709, 1790) },
     {
       view: "front",
       highlight: ["pm.magna_rota", "pm.magna_pin", "pm.magna_plate"],
@@ -333,7 +325,7 @@ const divide = {
   title: "l.div.title",
   summary: "l.div.summary",
   steps: [
-    { do: [{ reset: { result: 623785 } }], view: "register", casing: true, highlight: ["pi.window"], text: "l.div.intro" },
+    { do: [{ reset: { result: 623785 } }], view: "register", highlight: ["pi.window"], text: "l.div.intro" },
     { view: "knobs", highlight: ["pm.setting_dial.*"], text: "l.div.setDivisor", task: setInput(1709, 1790) },
     { view: "overview", highlight: ["pm.carriage"], text: "l.div.shift2", task: shiftTo(2, 1) },
     {

@@ -26,9 +26,9 @@ export default {
   "tool.front.tip": "Apri il fronte del carrello per vedere i tamburi",
   "tool.apart": "Smonta",
   "tool.apart.tip": "Smonta la macchina per vederne i pezzi",
-  "tool.focus": "Messa a fuoco",
-  "tool.focus.tip": "Attenua i pezzi di cui il passo non parla",
-  "tool.focus.off": "La messa a fuoco funziona nei passi delle lezioni che indicano dei pezzi.",
+  "tool.fade": "Attenua il resto",
+  "tool.fade.tip": "Attenua i pezzi di cui il passo o la vista non parlano",
+  "tool.fade.off": "«Attenua il resto» funziona nei passi delle lezioni e nelle viste interne che indicano dei pezzi.",
   "tool.views": "Viste",
   "tool.resetView": "Ripristina la vista",
 

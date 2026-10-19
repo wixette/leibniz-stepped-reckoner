@@ -16,7 +16,7 @@ import { TUTORIAL } from "../teach/tutorial.js";
 import { applyIntentNow, intentAt } from "../teach/partActions.js";
 import { anchors, rayHits } from "./harness.js";
 import { gltfName } from "../scene/rig.js";
-import { matches, presentation, replayTo, runLesson } from "../teach/player.js";
+import { INSIDE_VIEWS, matches, presentation, replayTo, runLesson } from "../teach/player.js";
 /** @import { ViewName } from "../teach/player.js" */
 import { result } from "./harness.js";
 /** @import { CheckResult } from "./harness.js" */
@@ -298,12 +298,12 @@ export function runM3Checks(root) {
     return { passed: bad.length === 0, detail: bad.join("; ") || "dial digit, knob, Magna Rota hole, pin, main crank, result wheel and end crank all act like their controls" };
   });
 
-  run("A3-12", "Focus keeps what a step or an inside view asks you to see: its parts, their digits and its context", () => {
+  run("A3-12", "Fading keeps what a step or an inside view asks you to see: its parts, their digits and its context", () => {
     /** @type {string[]} */
     const bad = [];
     const hl = new Highlighter(root);
     /**
-     * Whether focus fades any mesh of the part.
+     * Whether fading fades any mesh of the part.
      * @param {string} n
      */
     const fadedPart = (n) => findNodes(root, n).some((o) => {
@@ -343,7 +343,27 @@ export function runM3Checks(root) {
     const views = viewSubjects(root);
     for (const v of VIEWS) check(`view ${v}`, views[v].inside ?? [], []);
     hl.set([], false);
-    return { passed: bad.length === 0, detail: bad.join("; ") || `${checked} focused steps and inside views keep their parts and digits` };
+    return { passed: bad.length === 0, detail: bad.join("; ") || `${checked} steps and inside views keep their parts and digits when the rest fades` };
+  });
+
+  run("A3-13", "The view clears the way: a step that shows a part inside the case uses an inside view, and inside views have a subject", () => {
+    /** @type {string[]} */
+    const bad = [];
+    const views = viewSubjects(root);
+    for (const v of VIEWS) if (!!views[v].inside !== INSIDE_VIEWS.has(v)) bad.push(`view ${v}: inside parts and INSIDE_VIEWS disagree`);
+    let interior = 0;
+    for (const l of COURSES) {
+      l.steps.forEach((_, i) => {
+        const p = presentation(l, i);
+        const inside = INSIDE_VIEWS.has(p.view);
+        if (p.casing === inside || p.cutaway !== inside || p.fade !== inside) bad.push(`${l.id} step ${i + 1}: case, front or fading does not follow the ${p.view} view`);
+        if (inside && p.highlight.length === 0) bad.push(`${l.id} step ${i + 1}: the ${p.view} view with nothing to show`);
+        const hidden = p.highlight.filter((n) => !EXTERIOR.some((e) => matches(e, n) || (e.endsWith(".*") && n === e)));
+        if (hidden.length > 0) interior++;
+        if (hidden.length > 0 && !inside && p.explode < 0.5) bad.push(`${l.id} step ${i + 1}: ${hidden.join(", ")} inside the case, seen from the ${p.view} view`);
+      });
+    }
+    return { passed: bad.length === 0, detail: bad.join("; ") || `${interior} steps show parts inside the case, all from an inside view` };
   });
 
   run("A3-10", "Labels name a part's place in words and show its current value apart from the name", () => {

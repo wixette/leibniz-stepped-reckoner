@@ -26,9 +26,9 @@ export default {
   "tool.front.tip": "打開滑架前板，看見裡面的步進輪",
   "tool.apart": "拆開",
   "tool.apart.tip": "把機器拆開，看看它的零件",
-  "tool.focus": "聚焦",
-  "tool.focus.tip": "淡化這一步沒有提到的零件",
-  "tool.focus.off": "聚焦只在指出零件的課程步驟中可用。",
+  "tool.fade": "淡化其他",
+  "tool.fade.tip": "淡化這一步或視圖沒有提到的零件",
+  "tool.fade.off": "「淡化其他」只在指出零件的課程步驟和內部視圖中可用。",
   "tool.views": "視角",
   "tool.resetView": "重設視角",
 
