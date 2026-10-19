@@ -13,7 +13,7 @@ SPDX-FileCopyrightText = "2026 leibniz-stepped-reckoner contributors"
 SPDX-License-Identifier = "CC-BY-SA-4.0"
 
 [[annotations]]
-path = ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.mjs", "**/*.py", "**/*.sh", "**/*.json", "**/*.toml", "**/*.yaml", "**/*.yml", "**/*.html", "**/*.css", ".gitattributes", ".gitignore", ".editorconfig", ".github/**"]
+path = ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.mjs", "**/*.py", "**/*.sh", "**/*.json", "**/*.toml", "**/*.yaml", "**/*.yml", "**/*.html", "**/*.css", ".gitattributes", ".gitignore", ".editorconfig", ".npmrc", "**/*.webmanifest", ".github/**"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2026 leibniz-stepped-reckoner contributors"
 SPDX-License-Identifier = "Apache-2.0"

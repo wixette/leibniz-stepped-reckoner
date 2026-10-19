@@ -1,6 +1,6 @@
 """Workbench preview renders of the M0 slice at characteristic poses.
 
-  Blender --background --factory-startup --python render_m0_previews.py -- [--outdir DIR]
+  Blender --background --factory-startup --python render_m0_previews.py
 Writes PNGs to blender/out/previews/ (git-ignored).
 """
 

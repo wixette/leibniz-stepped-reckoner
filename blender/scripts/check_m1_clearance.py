@@ -29,8 +29,8 @@ def main():
         poses = json.load(f)["poses"][::every]
 
     build_m1_slice.build(params.load())
-    sweep.run(poses, "M1")
+    return sweep.run(poses, "M1")
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(0 if main() else 1)

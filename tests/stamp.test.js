@@ -40,6 +40,16 @@ function bareImports() {
 }
 
 describe("version stamps", () => {
+  it("every page with an import map is one tools/stamp.mjs stamps", () => {
+    /** @param {string} dir @returns {string[]} */
+    const pages = (dir) =>
+      readdirSync(join(ROOT, dir), { withFileTypes: true }).flatMap((e) =>
+        e.isDirectory() ? pages(`${dir}/${e.name}`) : e.name.endsWith(".html") ? [`${dir}/${e.name}`] : [],
+      );
+    const found = ["index.html", ...pages("dev")].filter((f) => readFileSync(join(ROOT, f), "utf8").includes('<script type="importmap">'));
+    assert.deepEqual([...found].sort(), [...PAGES].sort());
+  });
+
   for (const page of PAGES) {
     it(`${page} carries version ${VERSION} (run pnpm stamp if not)`, () => {
       const html = readFileSync(join(ROOT, page), "utf8");

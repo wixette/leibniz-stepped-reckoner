@@ -51,4 +51,5 @@ test("a relative link must stay inside the repository and lead somewhere", () =>
   assert.deepEqual(check("docs/a.md", "[up](../README.md)"), []);
   assert.match(check("docs/a.md", "[out](../../elsewhere/conventions.md)")[0], /leaves the repository/);
   assert.match(check("README.md", "[gone](docs/missing.md)")[0], /broken link/);
+  assert.match(check("README.md", "[odd](docs/100%.md)")[0], /malformed link/);
 });

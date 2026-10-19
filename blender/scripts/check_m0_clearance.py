@@ -96,7 +96,8 @@ def main():
     sweep("wheel/store <-> window", [("wheel", "window"), ("store", "window")],
           [dict(setting=9, digit_start=9, theta=t) for t in thetas[::4]])
     print("M0_CLEARANCE_OK" if not failures else f"M0_CLEARANCE_FAIL {failures}")
+    return not failures
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(0 if main() else 1)

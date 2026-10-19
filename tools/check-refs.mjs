@@ -71,7 +71,13 @@ export function checkLinks(root, file, text) {
   const problems = [];
   for (const { target, line } of linkTargets(file, text)) {
     if (external(target)) continue;
-    const clean = decodeURIComponent(target.split("#")[0].split("?")[0]);
+    let clean;
+    try {
+      clean = decodeURIComponent(target.split("#")[0].split("?")[0]);
+    } catch {
+      problems.push(`${file}:${line}: malformed link (${target})`); // a stray % that is no escape
+      continue;
+    }
     if (clean === "") continue;
     const resolved = clean.startsWith("/") ? path.join(root, clean) : path.resolve(root, path.dirname(file), clean);
     const rel = path.relative(root, resolved);

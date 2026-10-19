@@ -4,9 +4,14 @@ name: Deploy to GitHub Pages
 # not serve files kept in Git LFS (the .glb models), so the site is checked out
 # here, with LFS, and published as an artifact. Repository settings: Pages >
 # Source: GitHub Actions.
+#
+# It runs once the Tests workflow has passed on a push to main (or by hand), so a
+# commit that fails the checks is never published.
 
 on:
-  push:
+  workflow_run:
+    workflows: [Tests]
+    types: [completed]
     branches: [main]
   workflow_dispatch:
 
@@ -21,6 +26,7 @@ concurrency:
 
 jobs:
   deploy:
+    if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -28,6 +34,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          # the commit the tests passed on, not whatever main is by now
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
           lfs: true
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

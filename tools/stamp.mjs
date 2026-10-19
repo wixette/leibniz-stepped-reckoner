@@ -1,6 +1,6 @@
 // Writes the version into every file name the pages give, so that a cache (the
 // browser's, or a CDN's) can keep each file as long as it likes: a new release asks for
-// new names. As in the 8800 simulator.
+// new names. As in the 8800 simulator (https://github.com/wixette/8800-simulator).
 //
 //     pnpm version 1.2.0    (sets the version, then runs this)
 //     pnpm stamp            (after a version set any other way)
