@@ -8,6 +8,7 @@ export default {
   "app.description": "莱布尼茨的步进计算器——第一台能做全部四则运算的计算机器——的交互式 3D 模拟器，附入门教程和课程。",
 
   "bar.dockShow": "显示侧边栏",
+  "bar.dockShowLesson": "显示侧边栏：课程在里面",
   "dock.resize": "调整面板大小：拖动或用方向键；双击恢复默认",
   "bar.dockHide": "隐藏侧边栏",
   "bar.language": "语言",
@@ -78,6 +79,7 @@ export default {
   "status.blockedStore": "{place}的轮子上还有一个进位在等待，那里没有进位杆能够到。请先把滑架向左移。",
   "status.inside": "内部视图：外壳已隐藏，前板已打开，其他零件已淡化。机器照常运转。",
   "status.stepDone": "完成！请按“下一步”。",
+  "status.stepDoneClosed": "完成！请打开课程（顶栏）进入下一步。",
   "status.lessonDone": "课程完成：{title}。",
   "status.tutorialDone": "入门教程完成。课程会讲得更深入。",
 

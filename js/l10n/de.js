@@ -8,6 +8,7 @@ export default {
   "app.description": "Die Rechenmaschine von Leibniz, die erste Maschine für alle vier Grundrechenarten, als interaktiver 3D-Simulator mit Einführung und Lektionen.",
 
   "bar.dockShow": "Seitenleiste zeigen",
+  "bar.dockShowLesson": "Seitenleiste zeigen: Dort ist die Lektion",
   "dock.resize": "Bereichsgröße ändern: ziehen oder Pfeiltasten; Doppelklick stellt sie zurück",
   "bar.dockHide": "Seitenleiste ausblenden",
   "bar.language": "Sprache",
@@ -78,6 +79,7 @@ export default {
   "status.blockedStore": "Am Rad der {place} wartet noch ein Übertrag, den kein Übertragshebel erreicht. Schiebe zuerst den Schlitten nach links.",
   "status.inside": "Innenansicht: Das Gehäuse ist ausgeblendet, die Vorderseite offen und die übrigen Teile sind blass. Die Maschine arbeitet wie gewohnt.",
   "status.stepDone": "Geschafft! Weiter mit „Weiter“.",
+  "status.stepDoneClosed": "Geschafft! Öffne die Lektion (oben in der Leiste) für den nächsten Schritt.",
   "status.lessonDone": "Lektion abgeschlossen: {title}.",
   "status.tutorialDone": "Einführung abgeschlossen. Die Lektionen gehen weiter.",
 

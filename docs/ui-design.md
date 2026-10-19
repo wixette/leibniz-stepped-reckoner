@@ -361,6 +361,13 @@ Free play or a lesson was shown only by a small tag at the right end of the stat
 - **In free play, a quiet chip "Free play ▾".** Its menu offers "Resume: *lesson*, step *i* of *n*" when a lesson was left unfinished, "Start the tutorial" (or "again"), and "Choose a lesson…". Each of these brings the dock forward, opening it if it was closed.
 - **In a lesson, a blue chip with the lesson and the step** ("The carry: 9999 + 1 · 3/9"), which brings the lesson's tab forward, **joined to "✕ Free play"**, which leaves it. The ✕ in the lesson's header stays as a second way.
 - **Leaving keeps the place:** a lesson left unfinished is remembered at its step, so the reader can step out to try something and come back. Resuming sets the machine as that step starts. One lesson is remembered at a time; finishing it, or starting it afresh, forgets it.
+- **The dock stays closable during a lesson.** Many steps say "watch", and on a phone the dock takes nearly half the height, so a reader may want the machine full-size for a while; a close button that refused would read as broken. Instead the lesson survives a closed dock:
+  - the top bar's lesson chip (with its step) stays in view, and brings the dock back;
+  - the dock button carries a dot, like the tabs' "lesson under way" dot, and its tooltip says the lesson is in the panel;
+  - a finished task says "Done! Open the lesson (top bar) for the next step" rather than "Press Next", which is out of sight;
+  - the machine's own cues (the amber glow on the asked-for control and on the parts the step points at) work without the dock.
+
+  *Rejected:* blocking the dock's close during a lesson.
 - **The refusal says where the way out is:** a control a step does not use answers "…To use it freely, leave the lesson for free play (top bar)."
 - **On a phone** the bar cannot grow a second row (height is what a phone lacks), so it frees room instead: the title text goes (the logo stays; the full title is the page's title and is in About), the language button shows only its 文A (the current language is ticked in its menu), and a lesson shows only its step ("3/9", its name is in the dock's header) beside the ✕. Under 360 px the free-play chip also drops its icon, keeping its words and ▾. The mode's text is the one part of the bar that may shorten (with "…"); the ✕ never does. Checked in all ten languages at 320 and 375 px.
 - **The status bar's mode tag is gone;** the status line keeps its messages.

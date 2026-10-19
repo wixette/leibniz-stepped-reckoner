@@ -254,7 +254,8 @@ export class App {
     this.changed();
     const c = this.course;
     const task = c && !c.finished ? c.lesson.steps[c.i].task : undefined;
-    if (task && task.check(this.machine)) this.say(() => t("status.stepDone"));
+    // with the dock closed, Next is out of sight: say where the lesson is (U27)
+    if (task && task.check(this.machine)) this.say(() => t(this.dockClosed ? "status.stepDoneClosed" : "status.stepDone"));
   }
 
   /**
@@ -522,6 +523,24 @@ export class App {
     this.courseUI.selectTab(c.tab);
   }
 
+  /** Whether the dock is closed. */
+  get dockClosed() {
+    return $("workspace").classList.contains("dock-closed");
+  }
+
+  /**
+   * The dock button's dot (U27): a lesson is under way in the closed dock, its guidance hidden.
+   * The way back is the dock button, or the lesson's chip in the top bar.
+   */
+  markDock() {
+    const btn = $("dockBtn");
+    const dot = btn.querySelector(".dot");
+    const c = this.course;
+    const hidden = this.dockClosed && !!c && !c.finished;
+    if (dot instanceof HTMLElement) dot.hidden = !hidden;
+    setTip(btn, t(hidden ? "bar.dockShowLesson" : this.dockClosed ? "bar.dockShow" : "bar.dockHide"));
+  }
+
   /** Opens the dock if it is closed (set by the top bar's wiring). */
   openDock = () => {};
 
@@ -562,11 +581,13 @@ export class App {
     const setDock = (/** @type {boolean} */ open) => {
       ws.classList.toggle("dock-closed", !open);
       dockBtn.dataset.l10nTip = open ? "bar.dockHide" : "bar.dockShow";
-      dockBtn.innerHTML = `<i data-icon="${open ? "right_panel_close" : "right_panel_open"}"></i>`;
+      dockBtn.innerHTML = `<i data-icon="${open ? "right_panel_close" : "right_panel_open"}"></i><i class="dot" hidden></i>`;
       applyIcons(dockBtn);
       applyL10n(/** @type {ParentNode} */ (dockBtn.parentElement));
       dockBtn.setAttribute("aria-expanded", String(open));
       store.set("lsr-dock", open ? "open" : "closed");
+      this.markDock();
+      this.renderStatus(); // a done step's message says where Next is
     };
     setDock(store.get("lsr-dock") !== "closed");
     this.openDock = () => setDock(true);
@@ -844,6 +865,7 @@ export class App {
     this.courseUI.update();
     const c = this.course;
     const inCourse = !!c && !c.finished;
+    this.markDock();
     $("modeFree").hidden = inCourse;
     $("modeLesson").hidden = !inCourse;
     if (c && inCourse) {

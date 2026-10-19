@@ -175,6 +175,8 @@ a { color: var(--md-primary); }
 .brand span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .topbar .spacer { flex: 1; }
 .lang-btn { gap: 6px; padding: 0 8px 0 10px; color: var(--md-on-surface-variant); font-weight: 600; }
+/* the dock button's dot: a lesson is under way in the closed dock (U27) */
+#dockBtn .dot { position: absolute; top: 7px; right: 7px; width: 8px; height: 8px; border-radius: 50%; background: var(--md-primary); box-shadow: 0 0 0 2px var(--md-surface-low); }
 /* The mode, always in view (U27): free play (a menu to start or resume learning), or the lesson
    under way (its name and step, and a button back to free play). It is the one part of the bar
    that gives way: its text shortens before anything else. */

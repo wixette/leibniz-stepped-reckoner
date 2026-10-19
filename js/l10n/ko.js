@@ -8,6 +8,7 @@ export default {
   "app.description": "사칙연산을 모두 할 수 있었던 최초의 계산 기계, 라이프니츠의 계단식 계산기를 튜토리얼과 레슨이 있는 인터랙티브 3D 시뮬레이터로.",
 
   "bar.dockShow": "사이드 패널 보이기",
+  "bar.dockShowLesson": "사이드 패널 보이기: 레슨이 여기 있습니다",
   "dock.resize": "패널 크기 조절: 끌거나 화살표 키 사용, 두 번 클릭하면 기본 크기로",
   "bar.dockHide": "사이드 패널 숨기기",
   "bar.language": "언어",
@@ -78,6 +79,7 @@ export default {
   "status.blockedStore": "{place} 바퀴에 아직 받아올림이 기다리고 있는데, 그곳에는 받아올림 레버가 닿지 않습니다. 먼저 캐리지를 왼쪽으로 옮기세요.",
   "status.inside": "내부 보기: 케이스를 숨기고 앞면을 열었으며 다른 부품은 흐리게 했습니다. 기계는 평소처럼 작동합니다.",
   "status.stepDone": "잘했어요! ‘다음’을 누르세요.",
+  "status.stepDoneClosed": "잘했어요! 다음 단계는 레슨을 여세요(상단 바).",
   "status.lessonDone": "레슨 완료: {title}.",
   "status.tutorialDone": "튜토리얼 완료. 레슨에서 더 깊이 배울 수 있습니다.",
 

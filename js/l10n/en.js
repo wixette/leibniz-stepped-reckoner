@@ -10,6 +10,7 @@ export default {
   "app.description": "Leibniz's stepped reckoner, the first calculating machine for all four operations of arithmetic, as an interactive 3D simulator with a tutorial and lessons.",
 
   "bar.dockShow": "Show the side panel",
+  "bar.dockShowLesson": "Show the side panel: the lesson is in it",
   "dock.resize": "Resize the panel: drag, or use the arrow keys; double-click to reset",
   "bar.dockHide": "Hide the side panel",
   "bar.language": "Language",
@@ -80,6 +81,7 @@ export default {
   "status.blockedStore": "A carry is still waiting at the {place} wheel, where no carry lever reaches. Slide the carriage left first.",
   "status.inside": "Inside view: the case is hidden, the front is open and the other parts are faded. The machine works as usual.",
   "status.stepDone": "Done! Press Next.",
+  "status.stepDoneClosed": "Done! Open the lesson (top bar) for the next step.",
   "status.lessonDone": "Lesson complete: {title}.",
   "status.tutorialDone": "Tutorial complete. The lessons go further.",
 

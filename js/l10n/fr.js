@@ -8,6 +8,7 @@ export default {
   "app.description": "La machine à calculer de Leibniz, la première machine pour les quatre opérations de l’arithmétique, en simulateur 3D interactif avec un tutoriel et des leçons.",
 
   "bar.dockShow": "Afficher le panneau latéral",
+  "bar.dockShowLesson": "Afficher le panneau latéral : la leçon y est",
   "dock.resize": "Redimensionner le panneau : faites glisser ou utilisez les flèches ; double-clic pour rétablir",
   "bar.dockHide": "Masquer le panneau latéral",
   "bar.language": "Langue",
@@ -78,6 +79,7 @@ export default {
   "status.blockedStore": "Une retenue attend encore à la roue ({place}), qu’aucun levier de retenue n’atteint. Décalez d’abord le chariot vers la gauche.",
   "status.inside": "Vue intérieure : le boîtier est masqué, la façade ouverte et les autres pièces estompées. La machine fonctionne normalement.",
   "status.stepDone": "Réussi ! Appuyez sur Suivant.",
+  "status.stepDoneClosed": "Réussi ! Ouvrez la leçon (barre du haut) pour l’étape suivante.",
   "status.lessonDone": "Leçon terminée : {title}.",
   "status.tutorialDone": "Tutoriel terminé. Les leçons vont plus loin.",
 

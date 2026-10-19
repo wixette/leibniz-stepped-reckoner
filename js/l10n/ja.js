@@ -8,6 +8,7 @@ export default {
   "app.description": "四則演算すべてができた最初の計算機、ライプニッツの段付き歯車式計算機を、チュートリアルとレッスン付きのインタラクティブな 3D シミュレーターで。",
 
   "bar.dockShow": "サイドパネルを表示",
+  "bar.dockShowLesson": "サイドパネルを表示：レッスンはここにあります",
   "dock.resize": "パネルの大きさを変える：ドラッグまたは矢印キー。ダブルクリックで元に戻す",
   "bar.dockHide": "サイドパネルを隠す",
   "bar.language": "言語",
@@ -78,6 +79,7 @@ export default {
   "status.blockedStore": "{place}の車にまだ繰り上がりが待っていますが、そこには繰り上がりレバーが届きません。先にキャリッジを左へ動かしてください。",
   "status.inside": "内部の表示：ケースを隠し、前面を開き、ほかの部品を薄くしています。機械はいつもどおり動きます。",
   "status.stepDone": "できました！「次へ」を押してください。",
+  "status.stepDoneClosed": "できました！次のステップはレッスンを開いてください（上部のバー）。",
   "status.lessonDone": "レッスン完了：{title}。",
   "status.tutorialDone": "チュートリアル完了。レッスンでさらに詳しく学べます。",
 

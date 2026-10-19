@@ -8,6 +8,7 @@ export default {
   "app.description": "萊布尼茲的步進計算機——第一部能做全部四則運算的計算機器——的互動式 3D 模擬器，附入門教學與課程。",
 
   "bar.dockShow": "顯示側邊欄",
+  "bar.dockShowLesson": "顯示側邊欄：課程在裡面",
   "dock.resize": "調整面板大小：拖曳或用方向鍵；按兩下恢復預設",
   "bar.dockHide": "隱藏側邊欄",
   "bar.language": "語言",
@@ -78,6 +79,7 @@ export default {
   "status.blockedStore": "{place}的輪子上還有一個進位在等待，那裡沒有進位桿能碰到。請先把滑架向左移。",
   "status.inside": "內部視圖：外殼已隱藏，前板已打開，其他零件已淡化。機器照常運轉。",
   "status.stepDone": "完成！請按「下一步」。",
+  "status.stepDoneClosed": "完成！請打開課程（頂列）進入下一步。",
   "status.lessonDone": "課程完成：{title}。",
   "status.tutorialDone": "入門教學完成。課程會講得更深入。",
 
