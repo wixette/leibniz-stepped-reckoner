@@ -330,19 +330,20 @@ a { color: var(--md-primary); }
   border-radius: var(--radius-s);
   background: var(--md-surface);
 }
-/* the carriage's arrows and place, boxed and named like the number box (U21) */
-.field-group { padding: 0 3px; }
-.field-group .pair .btn.icon-only { width: 32px; height: 32px; }
-.field-group .pair .carriage-place { height: 32px; }
+/* the carriage's arrows and place, boxed and named like the number box (U21); they sit low in
+   the box, 3 px clear of the label on its border (which reaches about 5 px in) */
+.field-group { align-items: flex-end; padding: 0 3px 3px; }
+.field-group .pair .btn.icon-only { width: 32px; height: 27px; }
+.field-group .pair .carriage-place { height: 27px; }
 .number-field:focus-within { border-color: var(--md-primary); box-shadow: inset 0 0 0 1px var(--md-primary); }
 .number-field label, .field-group .field-label {
   /* Material's outlined field: the label sits on the border */
   position: absolute;
   left: 8px;
-  top: -8px;
+  top: -7px;
   padding: 0 4px;
   font-size: 11px;
-  line-height: 14px;
+  line-height: 12px;
   color: var(--md-on-surface-variant);
   background: var(--md-surface-low);
   white-space: nowrap;
