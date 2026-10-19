@@ -253,6 +253,18 @@ With the dock on the right, the toolbar ran the full width under the stage, left
 
 *Rejected:* the controls in the top band beside the readouts (it would crowd the band that holds the numbers and the camera: top is state and camera, bottom is acting); the controls inside the dock (in free play the dock may be closed).
 
+### U19 — The number box sets the knobs as you type
+
+The number typed into the box under the machine reached the knobs only on Enter, Tab or leaving the box: a hidden step, and on a phone, where there is no Tab and Enter is a keyboard key labelled "Return", not an obvious one.
+
+- **The knobs follow every keystroke.** Typing 3 turns the units knob to 3, typing 30 brings the tens knob in. It is direct manipulation, like the machine itself, and the same as the other way round: clicking a knob updates the box at once.
+- **The status line waits** about 0.6 s after the last keystroke before it says "Knobs set to 30" (and, in a lesson, whether the step is done), so it does not change with each digit, and a screen reader does not read each one out. Enter, Tab or leaving the box says it at once.
+- **Lesson tasks** check the machine as it is, so the digits on the way to the number asked for are not mistakes: a "set 20" task is done when the box reads 20.
+- **On a phone** the keyboard is numeric, and its Enter key reads "Done" (`enterkeyhint`) and puts the keyboard away. On a computer Enter selects the number for the next one.
+- **Unchanged:** non-digits are dropped, at most 8 digits (one per knob), an empty box sets 0, and while the machine turns, or when a step does not use the knobs, typing is refused with the reason (P6).
+
+*Rejected:* a Set button beside the box (one more step, and a button next to Add and Subtract suggests that setting the knobs calculates something).
+
 ## Part 4 — Open questions
 
 - The link format (P8): which fields the first release promises (language, lesson and step, numbers on the machine).

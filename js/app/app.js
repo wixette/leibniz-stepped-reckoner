@@ -564,11 +564,32 @@ export class App {
   /** @private */
   wireStrip() {
     const input = /** @type {HTMLInputElement} */ ($("numInput"));
-    const commit = () => {
-      const digits = input.value.replace(/\D/g, "").slice(-8);
+    // U19: the dials follow every keystroke; the status line waits until the typing pauses, so
+    // it (and a screen reader) does not report each digit on the way.
+    /** @type {ReturnType<typeof setTimeout> | undefined} */
+    let pending;
+    /** @param {number} x */
+    const report = (x) => {
+      clearTimeout(pending);
+      pending = undefined;
+      this.say(() => t("status.set", { n: group3(x) }));
+      this.afterLearner();
+    };
+    input.addEventListener("input", () => {
+      const digits = input.value.replace(/\D/g, "").slice(0, 8);
+      if (digits !== input.value) input.value = digits;
       const x = Number(digits || "0");
-      if (x === this.inputNumber()) return this.render();
-      this.use("input", () => this.setNumber(x));
+      if (x === this.inputNumber() || !this.controlState("input").enabled) return;
+      this.machine.setNumber(x);
+      this.changed();
+      clearTimeout(pending);
+      pending = setTimeout(() => report(x), 600);
+    });
+    // Enter, Tab or leaving the box: say it now
+    const commit = () => {
+      const x = Number(input.value.replace(/\D/g, "").slice(0, 8) || "0");
+      if (x !== this.inputNumber()) this.use("input", () => this.setNumber(x));
+      else if (pending !== undefined) report(x);
       this.render();
     };
     input.addEventListener("change", commit);
@@ -576,7 +597,9 @@ export class App {
       if (e.key === "Enter") {
         e.preventDefault();
         commit();
-        input.select();
+        // on a touch screen Enter is the keyboard's Done key: put the keyboard away
+        if (window.matchMedia("(pointer: coarse)").matches) input.blur();
+        else input.select();
       }
     });
     input.addEventListener("beforeinput", (e) => {
