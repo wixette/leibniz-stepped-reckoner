@@ -10,7 +10,7 @@ import { centreOnFreeArea, frame } from "../scene/framing.js";
 import { Callouts, Exploder, fillLabel, findNodes, Highlighter, viewSubjects } from "../scene/teachScene.js";
 import { Viewer } from "../scene/viewer.js";
 /** @import { Machine } from "../sim/machine.js" */
-import { intentAt, intentHint } from "../teach/partActions.js";
+import { CRANK_COMMIT, CrankDrag, crankAt, intentAt, intentHint } from "../teach/partActions.js";
 /** @import { Intent } from "../teach/partActions.js" */
 import { partInfo, partName } from "../teach/partInfo.js";
 /** @import { ViewName } from "../teach/player.js" */
@@ -63,6 +63,13 @@ export class Stage {
   allow = () => null;
   /** @type {(i: Intent) => void} */
   onIntent = () => {};
+  /** A crank dragged a way it may not turn now: the app says why. @type {(i: Intent) => void} */
+  onRefused = () => {};
+  /**
+   * Whether Shift is held: a click then turns a crank backward (U16).
+   * @private
+   */
+  shift = false;
 
   /**
    * @param {HTMLElement} host
@@ -276,9 +283,7 @@ export class Stage {
    */
   pick(clientX, clientY) {
     if (!this.root) return undefined;
-    const b = this.viewer.renderer.domElement.getBoundingClientRect();
-    this.ndc.set(((clientX - b.left) / b.width) * 2 - 1, -((clientY - b.top) / b.height) * 2 + 1);
-    this.raycaster.setFromCamera(this.ndc, this.viewer.camera);
+    this.rayAt(clientX, clientY);
     const faded = this.highlighter?.faded;
     return this.raycaster.intersectObject(this.root, true).find((h) => {
       if (faded?.has(h.object)) return false; // faded parts are context: look and click through them
@@ -304,14 +309,29 @@ export class Stage {
   }
 
   /**
+   * The pointer's ray into the scene (also aims the raycaster).
+   * @private
+   * @param {number} clientX
+   * @param {number} clientY
+   * @returns {THREE.Ray}
+   */
+  rayAt(clientX, clientY) {
+    const b = this.viewer.renderer.domElement.getBoundingClientRect();
+    this.ndc.set(((clientX - b.left) / b.width) * 2 - 1, -((clientY - b.top) / b.height) * 2 + 1);
+    this.raycaster.setFromCamera(this.ndc, this.viewer.camera);
+    return this.raycaster.ray.clone();
+  }
+
+  /**
    * The operation a click there would do, if allowed now.
    * @private
    * @param {THREE.Intersection | undefined} hit
+   * @param {1 | -1} [dir] a crank's way: forward, or backward (Shift-click)
    * @returns {Intent | null}
    */
-  intentAtHit(hit) {
+  intentAtHit(hit, dir = 1) {
     if (!hit) return null;
-    return this.allow(intentAt(hit.object, hit.point, this.machine));
+    return this.allow(intentAt(hit.object, hit.point, this.machine, dir));
   }
 
   /**
@@ -323,8 +343,8 @@ export class Stage {
     const canvas = this.viewer.renderer.domElement;
     const hit = this.pick(x, y);
     const label = hit ? this.labelFor(hit.object) : null;
-    const intent = this.intentAtHit(hit);
-    canvas.style.cursor = intent ? "pointer" : "";
+    const intent = this.intentAtHit(hit, this.shift ? -1 : 1);
+    canvas.style.cursor = !intent ? "" : intent.kind === "turn" || intent.kind === "shiftStep" ? "grab" : "pointer";
     this.hoverBox.hidden = !label;
     if (!label) return;
     fillLabel(this.hoverBox, label.name, label.value, label.red);
@@ -353,31 +373,88 @@ export class Stage {
   /** @private */
   setupPointer() {
     const canvas = this.viewer.renderer.domElement;
-    // A click or tap is a press and release without a drag (dragging orbits the camera).
+    // A click or tap is a press and release without a drag (dragging orbits the camera), except
+    // on a crank: pressing a crank grabs it, and dragging it round turns it (U16).
     /** @type {{ x: number; y: number; t: number } | null} */
     let down = null;
-    canvas.addEventListener("pointerdown", (e) => {
-      down = { x: e.clientX, y: e.clientY, t: performance.now() };
-      this.hoverBox.hidden = true;
+    /** @type {{ drag: CrankDrag; kind: "turn" | "shiftStep"; x: number; y: number; done: boolean } | null} */
+    let grab = null;
+    const release = () => {
+      grab = null;
+      this.viewer.controls.enabled = true;
+    };
+    // In the capture phase, so a grab turns the camera controls off before they see the press.
+    canvas.addEventListener(
+      "pointerdown",
+      (e) => {
+        down = { x: e.clientX, y: e.clientY, t: performance.now() };
+        this.hoverBox.hidden = true;
+        if (e.button !== 0) return;
+        const hit = this.pick(e.clientX, e.clientY);
+        const crank = hit ? crankAt(hit.object) : null;
+        // Grab only a crank that can turn one way or the other now; otherwise drag the camera.
+        if (!hit || !crank || !(this.intentAtHit(hit, 1) || this.intentAtHit(hit, -1))) return;
+        grab = { drag: new CrankDrag(crank.node, hit.point, this.rayAt(e.clientX, e.clientY)), kind: crank.kind, x: e.clientX, y: e.clientY, done: false };
+        this.viewer.controls.enabled = false;
+        try {
+          canvas.setPointerCapture(e.pointerId); // keep the drag when the pointer leaves the canvas
+        } catch {
+          // not an active pointer (a synthetic event): the drag works without capture
+        }
+        canvas.style.cursor = "grabbing";
+      },
+      { capture: true },
+    );
+    canvas.addEventListener("pointermove", (e) => {
+      if (grab && !grab.done) {
+        const angle = grab.drag.move(this.rayAt(e.clientX, e.clientY));
+        const far = Math.hypot(e.clientX - grab.x, e.clientY - grab.y) >= 10;
+        if (far && Math.abs(angle) >= CRANK_COMMIT) {
+          // about 30° commits one full turn (or one place) that way; the next needs a new drag
+          grab.done = true;
+          /** @type {Intent} */
+          const want = { kind: grab.kind, dir: angle > 0 ? 1 : -1 };
+          const ok = this.allow(want);
+          if (ok) this.onIntent(ok);
+          else this.onRefused(want);
+        }
+        return;
+      }
+      if (e.buttons || e.pointerType !== "mouse") return; // dragging, or a touch (no hover)
+      this.shift = e.shiftKey;
+      this.lastPointer = { x: e.clientX, y: e.clientY };
+      this.showHover(e.clientX, e.clientY);
     });
     canvas.addEventListener("pointerup", (e) => {
+      const dragged = grab?.done ?? false;
+      if (grab) release();
       if (!down) return;
       const moved = Math.hypot(e.clientX - down.x, e.clientY - down.y);
       const quick = performance.now() - down.t < 600;
       down = null;
-      if (moved > 6 || !quick) return;
-      const i = this.intentAtHit(this.pick(e.clientX, e.clientY));
+      if (dragged || moved > 6 || !quick) return;
+      // a click: a crank turns forward, or backward with Shift
+      const i = this.intentAtHit(this.pick(e.clientX, e.clientY), e.shiftKey ? -1 : 1);
       if (i) this.onIntent(i);
       if (e.pointerType === "mouse") {
+        this.shift = e.shiftKey;
         this.lastPointer = { x: e.clientX, y: e.clientY };
         this.showHover(e.clientX, e.clientY);
       }
     });
-    canvas.addEventListener("pointermove", (e) => {
-      if (e.buttons || e.pointerType !== "mouse") return; // dragging, or a touch (no hover)
-      this.lastPointer = { x: e.clientX, y: e.clientY };
-      this.showHover(e.clientX, e.clientY);
+    canvas.addEventListener("pointercancel", () => {
+      if (grab) release();
+      down = null;
     });
     canvas.addEventListener("pointerleave", () => (this.hoverBox.hidden = true));
+    // Holding or letting go of Shift changes what a click on a crank does: say so at once.
+    /** @param {KeyboardEvent} e */
+    const onShift = (e) => {
+      if (e.key !== "Shift" || this.shift === e.shiftKey) return;
+      this.shift = e.shiftKey;
+      this.refreshHover();
+    };
+    window.addEventListener("keydown", onShift);
+    window.addEventListener("keyup", onShift);
   }
 }

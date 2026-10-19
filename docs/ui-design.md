@@ -220,6 +220,18 @@ Taking apart is a way of looking at the machine, like the close-ups: it has its 
 
 *Rejected:* keeping Case and Take apart as chips (two controls for what the menu already says); folding Reset into Whole machine (in a lesson they differ).
 
+### U16 — The cranks turn either way: drag them round, or Shift-click
+
+A click on the main crank turned it forward, and a click on the end crank shifted the carriage left. The other ways were only in the strip, and the one-way crank taught the wrong thing: on the real machine, the way you turn the crank is what decides between adding and subtracting.
+
+- **Drag a crank round its axle.** Pressing on a crank grabs it, rather than turning the camera, and dragging it about 30° round one way (and at least 10 pixels) commits one full turn that way. Forward adds and backward subtracts. For the end crank, the two ways shift the carriage left and right. One drag makes one turn; the next turn needs a new drag. The turn then plays as from the strip, so a crank is never left half-turned in the middle of a carry.
+- **How the angle is read:** the grabbed point moves on a circle round the axle. The pointer's ray meets that circle's plane, and the angle it sweeps there, signed by the crank's axis, is how far the crank has been turned. That works from any view in which the plane is not seen exactly edge-on. Forward is the way the rig turns the crank as the machine adds, or as the carriage goes left.
+- **A click keeps its quick action** (forward, or left), and **Shift-click** goes the other way. The hover hint says all three, and changes as Shift is pressed. The cursor shows a hand over a crank, and a closed hand while it is held. The Get started panel names the drag too, since a touch screen has no hover.
+- **The same rules as the strip:** a drag or Shift-click resolves to the same operation as Add, Subtract or the carriage arrows, so locks and lesson rules apply. A crank that cannot turn either way now is not grabbed, and the drag turns the camera instead. A drag the way a lesson step does not allow, or against a carriage end or a full carry store, is refused, and the status line says why.
+- **Acceptance checks:** A3-11 clicks and Shift-clicks both cranks on the model. A3-15 turns each crank 40° each way with the rig, from two views, and checks that the drag reads the same angle and sign.
+
+*Rejected:* ↻ and ↺ buttons beside the crank (controls floating in the scene, against U14 and U15); following the pointer turn by turn (a part-turn would stop in the middle of a carry); Shift-click alone (invisible, and impossible on a touch screen).
+
 ## Part 4 — Open questions
 
 - The link format (P8): which fields the first release promises (language, lesson and step, numbers on the machine).

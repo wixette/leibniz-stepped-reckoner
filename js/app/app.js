@@ -6,7 +6,7 @@ import { Machine } from "../sim/machine.js";
 import { applyIcons, applyL10n, setTip, showMenu } from "../ui/components.js";
 import { load, locale, LOCALE_NAMES, LOCALE_SHORT, LOCALES, setLocale, t, tn } from "../l10n/l10n.js";
 /** @import { Locale } from "../l10n/l10n.js" */
-import { applyIntentNow, controlOf, possible } from "../teach/partActions.js";
+import { applyIntentNow, controlOf, possible, shiftDir } from "../teach/partActions.js";
 /** @import { Control, Intent } from "../teach/partActions.js" */
 import { APART_VIEW, INSIDE_VIEWS, presentation, replayTo, VIEWS } from "../teach/player.js";
 /** @import { Lesson, ViewName } from "../teach/player.js" */
@@ -94,7 +94,8 @@ export class App {
       () => this.stage.apart,
       () => this.changed(),
     );
-    this.stage.allow = (i) => (i && possible(i, this.machine) && this.controlState(controlOf(i)).enabled ? i : null);
+    this.stage.allow = (i) => (i && possible(i, this.machine) && this.controlState(controlOf(i), shiftDir(i)).enabled ? i : null);
+    this.stage.onRefused = (i) => this.refuse(i);
     this.stage.onIntent = (i) => this.doIntent(i);
     this.stage.viewer.addFrameCallback((dt) => {
       this.animator.tick(dt);
@@ -246,11 +247,22 @@ export class App {
     if (task && task.check(this.machine)) this.say(() => t("status.stepDone"));
   }
 
+  /**
+   * Say why a crank cannot turn the way the reader dragged it (U16).
+   * @param {Intent} i
+   */
+  refuse(i) {
+    const s = this.controlState(controlOf(i), shiftDir(i));
+    if (!s.enabled) return s.reason && this.say(s.reason, true);
+    if (i.kind === "turn") return this.say(this.blockText(i.dir), true);
+    this.say(() => t("status.carriageEnd"), true);
+  }
+
   /** @param {Intent} i */
   doIntent(i) {
-    if (i.kind === "turn") return this.turn(1);
-    if (i.kind === "shiftTo" || i.kind === "shiftLeft") {
-      const to = i.kind === "shiftTo" ? i.offset : this.machine.offset + 1;
+    if (i.kind === "turn") return this.turn(i.dir);
+    if (i.kind === "shiftTo" || i.kind === "shiftStep") {
+      const to = i.kind === "shiftTo" ? i.offset : this.machine.offset + i.dir;
       this.animator.playPrims([{ shift: to }], () => {
         this.say(() => t("status.shifted", { where: this.carriageWhere() }));
         this.afterLearner();

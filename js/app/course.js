@@ -66,6 +66,7 @@ export class CourseUI {
       ["videocam", "start.look.zoom"],
       ["info", "start.look.point"],
       ["radio_button_checked", "start.look.click"],
+      ["rotate_right", "start.look.crank"],
     ];
     return el("div", {}, [
       el("div", { class: "card hero" }, [

@@ -111,6 +111,7 @@ export default {
   "start.look.zoom": "Scroll or pinch to zoom.",
   "start.look.point": "Point at a part to see its name and value.",
   "start.look.click": "Click the knobs, the crank or the Magna Rota to operate them.",
+  "start.look.crank": "Drag a crank round to turn it either way: forward adds, backward subtracts.",
   "start.then": "Then go on with the lessons.",
 
   "lessons.lead": "Six short lessons, from adding to dividing, each building on the one before.",
@@ -223,11 +224,13 @@ export default {
 
   "hint.setDigit": "Click: set {n}",
   "hint.nextDigit": "Click: next digit",
-  "hint.turn": "Click: turn forward once",
+  "hint.turn": "Click: one turn forward · Shift-click: backward · or drag it round",
+  "hint.turnBack": "Shift-click: one turn backward",
   "hint.pin": "Click: pin in hole {n}",
   "hint.pinOut": "Click: take the pin out",
   "hint.shiftTo": "Click: slide the carriage here",
-  "hint.shiftLeft": "Click: carriage one place left",
+  "hint.shiftLeft": "Click: carriage one place left · Shift-click: right · or drag it round",
+  "hint.shiftRight": "Shift-click: carriage one place right",
 
   // ---- the tutorial ------------------------------------------------------------------------
   "tut.title": "Getting started",

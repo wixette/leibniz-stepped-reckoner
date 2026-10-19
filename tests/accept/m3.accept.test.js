@@ -16,7 +16,7 @@ before(async () => {
 });
 
 describe("M3 acceptance (teaching layer)", () => {
-  for (const id of ["A3-1", "A3-2", "A3-3", "A3-4", "A3-5", "A3-6", "A3-9", "A3-10", "A3-11", "A3-12", "A3-13", "A3-14"]) it(id, () => {
+  for (const id of ["A3-1", "A3-2", "A3-3", "A3-4", "A3-5", "A3-6", "A3-9", "A3-10", "A3-11", "A3-12", "A3-13", "A3-14", "A3-15"]) it(id, () => {
     const r = results.find((x) => x.id === id);
     assert.ok(r !== undefined, `check ${id} did not run`);
     assert.equal(r.passed, true, `${id} ${r.title}: ${r.detail}`);

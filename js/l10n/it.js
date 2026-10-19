@@ -109,6 +109,7 @@ export default {
   "start.look.zoom": "Usa la rotellina o pizzica per lo zoom.",
   "start.look.point": "Punta un pezzo per vederne il nome e il valore.",
   "start.look.click": "Fai clic sulle manopole, sulla manovella o sulla Magna Rota per azionarle.",
+  "start.look.crank": "Trascina in tondo una manovella per girarla in un verso o nell’altro: in avanti somma, all’indietro sottrae.",
   "start.then": "Poi continua con le lezioni.",
 
   "lessons.lead": "Sei brevi lezioni, dalla somma alla divisione, ognuna basata sulla precedente.",
@@ -221,11 +222,13 @@ export default {
 
   "hint.setDigit": "Clic: imposta {n}",
   "hint.nextDigit": "Clic: cifra successiva",
-  "hint.turn": "Clic: un giro in avanti",
+  "hint.turn": "Clic: un giro in avanti · Maiusc+clic: all’indietro · o trascinala in tondo",
+  "hint.turnBack": "Maiusc+clic: un giro all’indietro",
   "hint.pin": "Clic: perno nel foro {n}",
   "hint.pinOut": "Clic: togli il perno",
   "hint.shiftTo": "Clic: porta qui il carrello",
-  "hint.shiftLeft": "Clic: carrello di una posizione a sinistra",
+  "hint.shiftLeft": "Clic: carrello di una posizione a sinistra · Maiusc+clic: a destra · o trascinala in tondo",
+  "hint.shiftRight": "Maiusc+clic: carrello di una posizione a destra",
 
   // ---- il tutorial ----------------------------------------------------------------------------------
   "tut.title": "Per iniziare",

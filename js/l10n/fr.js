@@ -109,6 +109,7 @@ export default {
   "start.look.zoom": "Molette ou pincement pour zoomer.",
   "start.look.point": "Pointez une pièce pour voir son nom et sa valeur.",
   "start.look.click": "Cliquez sur les boutons, la manivelle ou la Magna Rota pour les actionner.",
+  "start.look.crank": "Faites tourner une manivelle en la faisant glisser, dans un sens ou dans l’autre : en avant elle additionne, en arrière elle soustrait.",
   "start.then": "Continuez ensuite avec les leçons.",
 
   "lessons.lead": "Six leçons courtes, de l’addition à la division, chacune s’appuyant sur la précédente.",
@@ -221,11 +222,13 @@ export default {
 
   "hint.setDigit": "Clic : régler {n}",
   "hint.nextDigit": "Clic : chiffre suivant",
-  "hint.turn": "Clic : un tour en avant",
+  "hint.turn": "Clic : un tour en avant · Maj+clic : en arrière · ou faites-la tourner",
+  "hint.turnBack": "Maj+clic : un tour en arrière",
   "hint.pin": "Clic : cheville dans le trou {n}",
   "hint.pinOut": "Clic : retirer la cheville",
   "hint.shiftTo": "Clic : amener le chariot ici",
-  "hint.shiftLeft": "Clic : chariot d’un rang à gauche",
+  "hint.shiftLeft": "Clic : chariot d’un rang à gauche · Maj+clic : à droite · ou faites-la tourner",
+  "hint.shiftRight": "Maj+clic : chariot d’un rang à droite",
 
   // ---- le tutoriel ---------------------------------------------------------------------------------
   "tut.title": "Premiers pas",

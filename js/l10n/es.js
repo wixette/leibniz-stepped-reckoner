@@ -109,6 +109,7 @@ export default {
   "start.look.zoom": "Usa la rueda o pellizca para hacer zoom.",
   "start.look.point": "Señala una pieza para ver su nombre y su valor.",
   "start.look.click": "Haz clic en las perillas, la manivela o la Magna Rota para accionarlas.",
+  "start.look.crank": "Arrastra una manivela en círculo para girarla en cualquier sentido: hacia adelante suma, hacia atrás resta.",
   "start.then": "Después sigue con las lecciones.",
 
   "lessons.lead": "Seis lecciones cortas, de la suma a la división, cada una basada en la anterior.",
@@ -221,11 +222,13 @@ export default {
 
   "hint.setDigit": "Clic: ajustar {n}",
   "hint.nextDigit": "Clic: cifra siguiente",
-  "hint.turn": "Clic: una vuelta hacia adelante",
+  "hint.turn": "Clic: una vuelta hacia adelante · Mayús+clic: hacia atrás · o arrástrala en círculo",
+  "hint.turnBack": "Mayús+clic: una vuelta hacia atrás",
   "hint.pin": "Clic: clavija en el agujero {n}",
   "hint.pinOut": "Clic: sacar la clavija",
   "hint.shiftTo": "Clic: llevar el carro aquí",
-  "hint.shiftLeft": "Clic: carro una posición a la izquierda",
+  "hint.shiftLeft": "Clic: carro una posición a la izquierda · Mayús+clic: a la derecha · o arrástrala en círculo",
+  "hint.shiftRight": "Mayús+clic: carro una posición a la derecha",
 
   // ---- el tutorial ----------------------------------------------------------------------------------
   "tut.title": "Primeros pasos",

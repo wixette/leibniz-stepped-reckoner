@@ -109,6 +109,7 @@ export default {
   "start.look.zoom": "滾動滾輪或雙指縮放。",
   "start.look.point": "把游標移到零件上，可以看到它的名稱和數值。",
   "start.look.click": "點選旋鈕、曲柄或大輪就能操作它們。",
+  "start.look.crank": "拖著曲柄轉圈，兩個方向都能轉：向前是加，向後是減。",
   "start.then": "接著繼續學習課程。",
 
   "lessons.lead": "六堂短課，從加法到除法，每一堂都以前一堂為基礎。",
@@ -221,11 +222,13 @@ export default {
 
   "hint.setDigit": "點選：設為 {n}",
   "hint.nextDigit": "點選：下一個數字",
-  "hint.turn": "點選：向前轉一圈",
+  "hint.turn": "點選：向前轉一圈 · Shift+點選：向後 · 或拖著它轉",
+  "hint.turnBack": "Shift+點選：向後轉一圈",
   "hint.pin": "點選：插銷插入 {n} 號孔",
   "hint.pinOut": "點選：拔出插銷",
   "hint.shiftTo": "點選：把滑架移到這裡",
-  "hint.shiftLeft": "點選：滑架左移一位",
+  "hint.shiftLeft": "點選：滑架左移一位 · Shift+點選：右移 · 或拖著它轉",
+  "hint.shiftRight": "Shift+點選：滑架右移一位",
 
   // ---- 入門教學 -------------------------------------------------------------------------------------
   "tut.title": "入門",

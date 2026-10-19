@@ -109,6 +109,7 @@ export default {
   "start.look.zoom": "Use a rodinha ou faça pinça para dar zoom.",
   "start.look.point": "Aponte para uma peça para ver o nome e o valor.",
   "start.look.click": "Clique nos botões, na manivela ou na Magna Rota para acioná-los.",
+  "start.look.crank": "Arraste uma manivela em círculo para girá-la em qualquer sentido: para a frente soma, para trás subtrai.",
   "start.then": "Depois continue com as lições.",
 
   "lessons.lead": "Seis lições curtas, da soma à divisão, cada uma baseada na anterior.",
@@ -221,11 +222,13 @@ export default {
 
   "hint.setDigit": "Clique: ajustar {n}",
   "hint.nextDigit": "Clique: próximo algarismo",
-  "hint.turn": "Clique: uma volta para a frente",
+  "hint.turn": "Clique: uma volta para a frente · Shift+clique: para trás · ou arraste-a em círculo",
+  "hint.turnBack": "Shift+clique: uma volta para trás",
   "hint.pin": "Clique: pino no furo {n}",
   "hint.pinOut": "Clique: tirar o pino",
   "hint.shiftTo": "Clique: trazer o carro para cá",
-  "hint.shiftLeft": "Clique: carro uma posição à esquerda",
+  "hint.shiftLeft": "Clique: carro uma posição à esquerda · Shift+clique: à direita · ou arraste-a em círculo",
+  "hint.shiftRight": "Shift+clique: carro uma posição à direita",
 
   // ---- o tutorial -------------------------------------------------------------------------------------
   "tut.title": "Primeiros passos",

@@ -109,6 +109,7 @@ export default {
   "start.look.zoom": "스크롤하거나 두 손가락으로 확대·축소합니다.",
   "start.look.point": "부품을 가리키면 이름과 값이 보입니다.",
   "start.look.click": "손잡이, 크랭크, 마그나 로타를 클릭해서 조작할 수 있습니다.",
+  "start.look.crank": "크랭크를 끌어서 돌리면 어느 쪽으로든 돌릴 수 있습니다. 앞으로 돌리면 더하고, 뒤로 돌리면 뺍니다.",
   "start.then": "그다음에는 레슨으로 넘어가세요.",
 
   "lessons.lead": "덧셈부터 나눗셈까지, 앞 레슨을 바탕으로 이어지는 짧은 레슨 여섯 개.",
@@ -221,11 +222,13 @@ export default {
 
   "hint.setDigit": "클릭: {n}(으)로 설정",
   "hint.nextDigit": "클릭: 다음 숫자",
-  "hint.turn": "클릭: 앞으로 한 바퀴",
+  "hint.turn": "클릭: 앞으로 한 바퀴 · Shift+클릭: 뒤로 · 끌어서 돌려도 됨",
+  "hint.turnBack": "Shift+클릭: 뒤로 한 바퀴",
   "hint.pin": "클릭: 핀을 {n}번 구멍에",
   "hint.pinOut": "클릭: 핀 빼기",
   "hint.shiftTo": "클릭: 캐리지를 여기로",
-  "hint.shiftLeft": "클릭: 캐리지를 왼쪽으로 한 자리",
+  "hint.shiftLeft": "클릭: 캐리지를 왼쪽으로 한 자리 · Shift+클릭: 오른쪽으로 · 끌어서 돌려도 됨",
+  "hint.shiftRight": "Shift+클릭: 캐리지를 오른쪽으로 한 자리",
 
   // ---- 튜토리얼 -------------------------------------------------------------------------------------
   "tut.title": "시작하기",

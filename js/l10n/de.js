@@ -109,6 +109,7 @@ export default {
   "start.look.zoom": "Scrollen oder mit zwei Fingern zoomen.",
   "start.look.point": "Zeig auf ein Teil, um seinen Namen und Wert zu sehen.",
   "start.look.click": "Klick die Knöpfe, die Kurbel oder die Magna Rota an, um sie zu bedienen.",
+  "start.look.crank": "Zieh eine Kurbel herum, um sie in beide Richtungen zu drehen: vorwärts addiert, rückwärts subtrahiert.",
   "start.then": "Danach geht es mit den Lektionen weiter.",
 
   "lessons.lead": "Sechs kurze Lektionen, vom Addieren bis zum Dividieren, jede baut auf der vorigen auf.",
@@ -221,11 +222,13 @@ export default {
 
   "hint.setDigit": "Klick: {n} einstellen",
   "hint.nextDigit": "Klick: nächste Ziffer",
-  "hint.turn": "Klick: einmal vorwärts drehen",
+  "hint.turn": "Klick: einmal vorwärts drehen · Umschalt-Klick: rückwärts · oder herumziehen",
+  "hint.turnBack": "Umschalt-Klick: einmal rückwärts drehen",
   "hint.pin": "Klick: Stift in Loch {n}",
   "hint.pinOut": "Klick: Stift herausnehmen",
   "hint.shiftTo": "Klick: Schlitten hierher schieben",
-  "hint.shiftLeft": "Klick: Schlitten eine Stelle nach links",
+  "hint.shiftLeft": "Klick: Schlitten eine Stelle nach links · Umschalt-Klick: nach rechts · oder herumziehen",
+  "hint.shiftRight": "Umschalt-Klick: Schlitten eine Stelle nach rechts",
 
   // ---- die Einführung ----------------------------------------------------------------------------
   "tut.title": "Einführung",

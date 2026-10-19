@@ -13,7 +13,7 @@ import { LOCALES } from "../l10n/l10n.js";
 import { LESSONS } from "../teach/lessons.js";
 import { PART_KEYS, partInfo, partName } from "../teach/partInfo.js";
 import { TUTORIAL } from "../teach/tutorial.js";
-import { applyIntentNow, intentAt } from "../teach/partActions.js";
+import { applyIntentNow, CrankDrag, intentAt } from "../teach/partActions.js";
 import { anchors, rayHits } from "./harness.js";
 import { gltfName } from "../scene/rig.js";
 import { INSIDE_VIEWS, matches, presentation, replayTo, runLesson, VIEWS } from "../teach/player.js";
@@ -237,16 +237,23 @@ export function runM3Checks(root) {
     /**
      * @param {THREE.Vector3} from
      * @param {THREE.Vector3} to
+     * @param {1 | -1} [dir] -1: a Shift-click
      */
-    const click = (from, to) => {
+    const click = (from, to, dir = 1) => {
       pose();
       const hit = rayHits(all, from, to.clone().sub(from)).find((h) => isShown(h.mesh));
-      return hit ? intentAt(hit.mesh, hit.point, m) : null;
+      return hit ? intentAt(hit.mesh, hit.point, m, dir) : null;
     };
-    /** @param {THREE.Vector3} p */
-    const down = (p) => click(p.clone().add(new THREE.Vector3(0, 0.3, 0)), p);
-    /** @param {THREE.Vector3} p */
-    const front = (p) => click(p.clone().add(new THREE.Vector3(0, 0, 0.4)), p);
+    /**
+     * @param {THREE.Vector3} p
+     * @param {1 | -1} [dir]
+     */
+    const down = (p, dir = 1) => click(p.clone().add(new THREE.Vector3(0, 0.3, 0)), p, dir);
+    /**
+     * @param {THREE.Vector3} p
+     * @param {1 | -1} [dir]
+     */
+    const front = (p, dir = 1) => click(p.clone().add(new THREE.Vector3(0, 0, 0.4)), p, dir);
     /**
      * @param {string} what
      * @param {ReturnType<typeof click>} intent
@@ -276,6 +283,7 @@ export function runM3Checks(root) {
     const arm = new THREE.Vector3().setFromMatrixPosition(crank.matrixWorld).add(new THREE.Vector3(0, -0.03, 0));
     const turns = m.turns;
     expectThat("main crank", front(arm), () => m.turns === turns + 1);
+    expectThat("main crank, Shift-click", front(arm, -1), () => m.turns === turns);
     // a result wheel, seen through its window, brings the carriage
     pose();
     const read5 = anchors(findNodes(root, "pi.window")[0], "read_points")[5];
@@ -290,9 +298,10 @@ export function runM3Checks(root) {
       if (mats.some((mt) => mt.name === "wood_dark")) knobBox.expandByObject(mesh);
     });
     expectThat("end crank", down(knobBox.getCenter(new THREE.Vector3())), () => m.offset === 6);
+    expectThat("end crank, Shift-click", down(knobBox.getCenter(new THREE.Vector3()), -1), () => m.offset === 5);
     m.reset();
     pose();
-    return { passed: bad.length === 0, detail: bad.join("; ") || "dial digit, knob, Magna Rota hole, pin, main crank, result wheel and end crank all act like their controls" };
+    return { passed: bad.length === 0, detail: bad.join("; ") || "dial digit, knob, Magna Rota hole, pin, main crank (and Shift-click), result wheel and end crank (and Shift-click) all act like their controls" };
   });
 
   run("A3-12", "Fading keeps what a step or an inside view asks you to see: its parts, their digits and its context", () => {
@@ -411,6 +420,64 @@ export function runM3Checks(root) {
     }
     ex.apply(0);
     return { passed: bad.length === 0, detail: bad.join("; ") || `${VIEWS.length} views at two canvas shapes; the least filled fills ${worst.toFixed(2)}` };
+  });
+
+  run("A3-15", "Dragging a crank round reads as the way the machine turns it: forward adds (or shifts left), backward the other way", () => {
+    /** @type {string[]} */
+    const bad = [];
+    /** @type {Rig<string>} */
+    const rig = new Rig(root, m2NodeNames(16, 8));
+    const m = new Machine();
+    m.reset();
+    applyM2Pose(rig, root, m);
+    const centre = new THREE.Box3().setFromObject(root).getCenter(new THREE.Vector3());
+    let n = 0;
+    for (const key of /** @type {const} */ (["pm.main_crank", "frame.lead_screw"])) {
+      const node = findNodes(root, key)[0];
+      // grab the crank by its handle: the mesh centre farthest from the axle (not from its
+      // origin: the end crank's long screw lies along the axle)
+      node.updateWorldMatrix(true, true);
+      const origin = node.getWorldPosition(new THREE.Vector3());
+      const ex = /** @type {{ axis?: number[] }} */ (node.userData);
+      const axis = new THREE.Vector3().fromArray(ex.axis ?? [0, 0, 1]).applyQuaternion(node.getWorldQuaternion(new THREE.Quaternion())).normalize();
+      /** @type {THREE.Mesh | null} */
+      let handle = null;
+      let far = -1;
+      node.traverse((o) => {
+        const mesh = /** @type {THREE.Mesh} */ (o);
+        if (!mesh.isMesh) return;
+        const off = new THREE.Box3().setFromObject(mesh).getCenter(new THREE.Vector3()).sub(origin);
+        const d = off.addScaledVector(axis, -off.dot(axis)).length();
+        if (d > far) [far, handle] = [d, mesh];
+      });
+      const h = /** @type {THREE.Mesh} */ (/** @type {unknown} */ (handle));
+      if (!h.geometry.boundingBox) h.geometry.computeBoundingBox();
+      const local = /** @type {THREE.Box3} */ (h.geometry.boundingBox).getCenter(new THREE.Vector3());
+      const at = () => {
+        root.updateWorldMatrix(true, true);
+        return local.clone().applyMatrix4(h.matrixWorld);
+      };
+      for (const dir of [{ x: 0.35, y: 0.42, z: 0.62 }, { x: 0.12, y: 0.15, z: 1 }]) {
+        const eye = centre.clone().addScaledVector(new THREE.Vector3(dir.x, dir.y, dir.z).normalize(), 1);
+        /** @param {THREE.Vector3} p */
+        const ray = (p) => new THREE.Ray(eye, p.clone().sub(eye).normalize());
+        for (const deg of [40, -40]) {
+          rig.set(key, 0);
+          const start = at();
+          const drag = new CrankDrag(node, start, ray(start));
+          // the rig turns the crank by +deg as the machine does when it adds (or shifts left)
+          rig.set(key, deg / 2);
+          drag.move(ray(at()));
+          rig.set(key, deg);
+          const got = THREE.MathUtils.radToDeg(drag.move(ray(at())));
+          n++;
+          if (Math.abs(got - deg) > 2) bad.push(`${key} turned ${deg}° from (${dir.x}, ${dir.y}, ${dir.z}) reads as ${got.toFixed(1)}°`);
+        }
+      }
+      rig.set(key, 0);
+    }
+    applyM2Pose(rig, root, m);
+    return { passed: bad.length === 0, detail: bad.join("; ") || `${n} drags of the two cranks, both ways, from two views, read as turned` };
   });
 
   run("A3-10", "Labels name a part's place in words and show its current value apart from the name", () => {
