@@ -331,7 +331,7 @@ The wheel, a trackpad's pinch and a touch screen's pinch zoom the 3D view, withi
   - Home resets the view, as ⌂ does.
 
   Each press is a short animated step. Keys act only while the 3D view has the focus, so typing a number is never affected, and the browser's own Ctrl/⌘ shortcuts pass through. Its accessible name lists the keys, and the Get started panel names them too.
-- **A joined − / + pair** sits in the view controls at the top right, between ⌂ and the Views menu. Each press zooms by a factor of 1.25 towards the orbit's centre, in a short flight. A button greys at its limit; the limits are checked as the camera moves, whatever moved it.
+- **A joined zoom-out / zoom-in pair** (magnifying glasses with − and +, the usual zoom icons, not bare signs that could be read as the crank's + and −, U20) sits in the view controls at the top right, between ⌂ and the Views menu. Each press zooms by a factor of 1.25 towards the orbit's centre, in a short flight. A button greys at its limit; the limits are checked as the camera moves, whatever moved it.
 - **A step by key or button is the reader's camera,** like a drag (U10): a resize no longer refits the view, and Reset view brings it back.
 
 *Rejected:* double-click or double-tap to zoom (a click on the machine already works its knobs and crank, so a double-click would turn a knob twice).

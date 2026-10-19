@@ -2,6 +2,7 @@
 // {placeholder}, and has no key English lacks; the language is chosen sensibly.
 
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { describe, it } from "node:test";
 import { MESSAGES } from "../js/l10n/all.js";
 import { bestLocale, LOCALES, t, tn } from "../js/l10n/l10n.js";
@@ -29,6 +30,17 @@ describe("every locale has every message", () => {
       assert.deepEqual(wrong, [], `${loc}: placeholders differ from English`);
     });
   }
+});
+
+describe("texts named by a key built at run time", () => {
+  it("every reference has its title and description", () => {
+    // read from the source: the module also wires up the page, so Node cannot import it
+    const src = readFileSync(new URL("../js/app/references.js", import.meta.url), "utf8");
+    const ids = [...src.matchAll(/\{ id: "(\w+)"/g)].map((m) => m[1]);
+    assert.ok(ids.length > 10, "references not found");
+    const missing = ids.flatMap((id) => [`ref.${id}.title`, `ref.${id}.desc`]).filter((k) => !en[k]);
+    assert.deepEqual(missing, [], "references without their texts");
+  });
 });
 
 describe("choosing and using a locale", () => {

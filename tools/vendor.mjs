@@ -43,7 +43,6 @@ const DIR = /** @type {Record<string, string>} */ ({
  */
 export const ICONS = [
   "3d_rotation",
-  "add",
   "arrow_back",
   "arrow_forward",
   "celebration",
@@ -73,7 +72,6 @@ export const ICONS = [
   "play_arrow",
   "radio_button_checked",
   "radio_button_unchecked",
-  "remove",
   "replay",
   "restart_alt",
   "right_panel_close",
@@ -85,6 +83,8 @@ export const ICONS = [
   "touch_app",
   "translate",
   "videocam",
+  "zoom_in",
+  "zoom_out",
 ];
 
 /**
