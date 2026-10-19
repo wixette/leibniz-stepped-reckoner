@@ -111,6 +111,7 @@ export function viewSubjects(root) {
 }
 
 // ---- highlight and fade --------------------------------------------------------------------------
+/** The parts a step points at glow amber: the page's one colour for "your turn" (U5). */
 const GLOW = new THREE.Color(0xffa31a);
 
 /**

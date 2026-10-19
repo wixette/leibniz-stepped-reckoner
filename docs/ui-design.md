@@ -104,9 +104,28 @@ Free play has no tab: its controls are the machine toolbar, under the machine (P
 - **Readouts** sit on the stage's top edge: the result as on the machine, grouped in threes; the Magna Rota's turn count (red when subtracting); the carriage's place.
 - **View controls** float at the stage's top right (U15): a Reset view button (⌂) and the Views menu, whose button names the view on show. The menu holds the seven views (two of them inside views, U11, and Taken apart) and a Show case switch. Opening the front, fading and taking apart follow the view (U14, U15). They change how the machine is *shown*, not its state, so they stay enabled in a lesson, except where a step depends on them.
 
-### U5 — A dark Material 3 theme in brass and oak
+### U5 — A dark Material 3 theme for a classroom: blue, with one colour per meaning
 
-A dark scheme (the 8800's family) with a brass-gold primary and a warm neutral surface, so the oak and brass of the model are the brightest things on screen. Type is Roboto Flex (Latin, Latin Extended, Greek, Cyrillic; CJK falls back to the system's Noto/PingFang/Hiragino/Malgun), with tabular figures for every number. *Rejected:* a light theme for now (the 3D stage reads better on dark; open question).
+A dark scheme (the 8800's family): the 3D stage reads better on dark, and the brass and oak of the machine are the brightest, warmest things on screen. The interface around them is cool blue on blue-grey neutrals. Blue is the complement of the machine's gold, so the machine stands out from its frame instead of being echoed by it, and blue with amber highlights is the palette of science and school, not of luxury.
+
+The first version used a brass-gold primary on warm neutrals to match the machine. It looked cohesive, but it read as luxury rather than as a classroom tool. The machine also blended into its own frame, and "your turn" was the same gold as everything else, so it did not stand out. A side-by-side trial of the two palettes settled it.
+
+**Each colour has one meaning**, everywhere it appears:
+
+| Colour | Means | Where |
+|---|---|---|
+| Blue (primary) | The instrument: navigation, selection, where you are | The selected tab and its bar, links, the focus ring, filled buttons (Start, Next), the lesson's progress and current step, a lesson under way in another tab (dot), the course chip, ticks in menus, the result readout |
+| Blue-grey (secondary) | The machine's controls | The tonal buttons: + and −, the carriage's arrows, Run to stop |
+| Amber (attention) | Your turn | The glow on the control a step asks for, the task line's "Your turn", and in 3D the glow on the parts a step points at (the same hue) |
+| Green (success) | Done | The task line's "Done", a finished lesson's badge, the lesson-done icon |
+| Red (error) | Something was refused | A refused control's reason in the status line, a blocked step |
+| The machine's red | Counting backward | The turns readout when the Magna Rota turns back, as its red digits do |
+
+- **Hover and press are visible:** a control lightens by 14% under the pointer and 22% when pressed (Material's 8% and 12% barely showed on the blue-grey buttons). A dropdown box also lightens its fill on hover.
+- **Contrast:** every text colour on its background reaches at least 7:1 (WCAG AAA). The outlines of the setting boxes reach 5.4:1 against the toolbar.
+- Type is Roboto Flex (Latin, Latin Extended, Greek, Cyrillic; CJK falls back to the system's Noto/PingFang/Hiragino/Malgun), with tabular figures for every number.
+
+*Rejected:* a light theme for now (the 3D stage reads better on dark; open question); several themes to choose from (one well-made theme is enough for the first release).
 
 ### U6 — The learning path
 

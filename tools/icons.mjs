@@ -23,7 +23,7 @@ import { fileURLToPath } from "node:url";
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const IMAGES = join(ROOT, "images");
 // The page's background (css/style.css, --md-surface), behind the home screen icons.
-const BACKGROUND = "#16130f";
+const BACKGROUND = "#0f1317";
 
 const found =
   process.env.CHROME ??
