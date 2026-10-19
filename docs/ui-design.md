@@ -100,7 +100,7 @@ Free play has no tab: its controls are the machine toolbar, under the machine (P
 
 ### U4 — The machine's toolbar and the stage's own tools
 
-- **Machine toolbar** (floating at the stage's bottom, centred under the machine, U18): the number on the setting knobs, turn forward (+) and back (−) as one pair, carriage left and right with its place as another, the Magna Rota's pin, turn to the stop, reset (U20). Icon plus short label where there is room, icons with tooltips where there is not (U18).
+- **Machine toolbar** (floating at the stage's bottom, centred under the machine, U18): the number on the setting knobs, turn forward (+) and back (−) as one pair, carriage left and right with its place as another, boxed and named like the number box (U21), the Magna Rota's pin, turn to the stop, reset (U20). Icon plus short label where there is room, icons with tooltips where there is not (U18).
 - **Readouts** sit on the stage's top edge: the result as on the machine, grouped in threes; the Magna Rota's turn count (red when subtracting); the carriage's place.
 - **View controls** float at the stage's top right (U15): a Reset view button (⌂) and the Views menu, whose button names the view on show. The menu holds the seven views (two of them inside views, U11, and Taken apart) and a Show case switch. Opening the front, fading and taking apart follow the view (U14, U15). They change how the machine is *shown*, not its state, so they stay enabled in a lesson, except where a step depends on them.
 
@@ -275,6 +275,13 @@ The buttons were labelled Add and Subtract, and Add was filled (the main action,
 - **The texts that named the buttons say "press +" or "press −"** (in the tutorial and the subtraction lesson, and in Get started), and the task line shows the same ↻ + and ↺ −.
 
 *Rejected:* "Add" and "Sub" (only shortens English; "Sub" means nothing, or something else, in most of our languages); signs without the crank icons (a bare − reads as "smaller" or "remove").
+
+### U21 — The carriage control is boxed and named like the number box, and counts whole places
+
+Its name, "Carriage", was loose text in a third size, smaller than the toolbar's other labels, and it disappeared on a narrower stage, leaving its arrows unnamed. While the carriage moved, its place read 1.2, 1.3, 1.4…, which means nothing to the reader: the carriage works only at a whole place.
+
+- **It is a bordered group, like the number box,** with "Carriage" on its border in the same caption style. Inside are the left and right arrows with the place between them (U20). A border label takes no width, so it stays at every size. The two boxes read as a set: what is set on the knobs, and where the carriage stands.
+- **Only whole places are shown,** in the toolbar and in the Carriage readout. The number is the last place the carriage has reached: a one-place shift changes it when the carriage arrives, and a longer move (clicking a result wheel) counts up or down place by place as the carriage passes them, like an odometer. The moving carriage in the 3D view shows the motion itself.
 
 ## Part 4 — Open questions
 

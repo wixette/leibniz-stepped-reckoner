@@ -306,7 +306,6 @@ a { color: var(--md-primary); }
 .btn .sym { font-size: 22px; font-weight: 600; line-height: 1; min-width: 0.6em; text-align: center; }
 .strip .sep { width: 1px; height: 28px; background: var(--md-outline-variant); margin: 0 4px; }
 /* the toolbar fits the stage's own width (U18): labels go as room runs out, short ones last */
-@container stage (max-width: 1040px) { .strip .label { display: none; } }
 @container stage (max-width: 900px) {
   .strip #toStopBtn .txt, .strip #resetBtn .txt { display: none; }
   .strip #toStopBtn, .strip #resetBtn { padding: 0 10px; }
@@ -321,7 +320,7 @@ a { color: var(--md-primary); }
   .strip .sep { display: none; }
 }
 .strip .grow { flex: 1; }
-.number-field {
+.number-field, .field-group {
   position: relative;
   display: flex;
   align-items: center;
@@ -331,8 +330,12 @@ a { color: var(--md-primary); }
   border-radius: var(--radius-s);
   background: var(--md-surface);
 }
+/* the carriage's arrows and place, boxed and named like the number box (U21) */
+.field-group { padding: 0 3px; }
+.field-group .pair .btn.icon-only { width: 32px; height: 32px; }
+.field-group .pair .carriage-place { height: 32px; }
 .number-field:focus-within { border-color: var(--md-primary); box-shadow: inset 0 0 0 1px var(--md-primary); }
-.number-field label {
+.number-field label, .field-group .field-label {
   /* Material's outlined field: the label sits on the border */
   position: absolute;
   left: 8px;
@@ -359,7 +362,6 @@ a { color: var(--md-primary); }
 .number-field.wanted { border-color: var(--md-primary); box-shadow: 0 0 0 2px var(--md-primary), 0 0 14px color-mix(in srgb, var(--md-primary) 45%, transparent); }
 .number-field input:disabled { color: color-mix(in srgb, var(--md-on-surface) 38%, transparent); }
 .carriage-place { min-width: 2ch; text-align: center; font-size: 16px; font-weight: 600; }
-.strip .label { font-size: 12px; color: var(--md-on-surface-variant); margin: 0 2px 0 4px; }
 .pin-btn { min-width: 76px; }
 
 /* ---- dock ---------------------------------------------------------------------------------------- */

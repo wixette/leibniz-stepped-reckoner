@@ -663,7 +663,11 @@ export class App {
     const turns = $("turnsOut");
     turns.textContent = String(Math.abs(ring));
     turns.classList.toggle("red", ring < 0);
-    const place = m.carriagePos === m.offset ? String(m.offset) : m.carriagePos.toFixed(1);
+    // Whole places only (U21): the carriage works only at a place. While it moves (the offset is
+    // still where it set out from), show the last place it has reached, so a long shift counts
+    // place by place as it passes them.
+    const reached = m.carriagePos >= m.offset ? Math.floor(m.carriagePos + 1e-6) : Math.ceil(m.carriagePos - 1e-6);
+    const place = String(reached);
     $("placeOut").textContent = place;
     $("placeStrip").textContent = place;
     // the strip
