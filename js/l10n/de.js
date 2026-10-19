@@ -173,8 +173,6 @@ export default {
   "ref.report.desc": "Was über die Maschine bekannt ist und wie sicher wir sind (englisch).",
   "ref.plan.title": "Wie das Modell gebaut ist",
   "ref.plan.desc": "Der Plan, die Meilensteine und ihre Tests (englisch).",
-  "ref.dev.title": "Weitere Seiten",
-  "ref.dev.desc": "Der Mechanismus Schritt für Schritt, eine Seite je Ausbaustufe des Modells (englisch).",
 
   "about.title": "Über",
   "about.lead": "Ein interaktiver 3D-Simulator der Rechenmaschine von Leibniz (um 1700), der ersten Maschine für alle vier Grundrechenarten. Für den Unterricht gemacht: kostenlos, offen und ohne Installation.",

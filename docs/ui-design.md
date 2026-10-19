@@ -143,9 +143,9 @@ Every lesson opens with what you will learn, has a task the reader does at least
 
 The locales of the 8800 simulator: English, Español, Français, Deutsch, Italiano, Português (Brasil), 简体中文, 繁體中文, 日本語, 한국어. Each is one module (`js/l10n/<locale>.js`) holding every string of the page, the tutorial, the lessons and the part names, keyed alike; English is the reference and the fallback. A test checks that every locale has every key and keeps every `{placeholder}`. The language comes from `?lang=`, then the reader's last choice, then the browser's languages; the menu lists each language in its own name.
 
-### U8 — The top bar: logo, title, and three icons
+### U8 — The top bar: logo, title, the mode, and three icons
 
-Logo and title on the left; on the right the dock toggle, the language menu and About. About is a dialog: logo, version, what the simulator is, credits (sources, photographers, libraries), licences one per line, and links to the source and the developer pages.
+Logo and title on the left; on the right the dock toggle, the language menu and About. About is a dialog with a title band (its name, and an ✕ to close it, as a dialog's title bar has; Escape and a click on the dimmed backdrop close it too): logo, version, what the simulator is, credits (sources, photographers, libraries), licences one per line, and the link to the source. The developer pages are for developers and are not linked from the app (the README names them). It is the app's only dialog; another would take the same band.
 
 ### U9 — The 3D stage behaves like a 3D viewer
 

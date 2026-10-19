@@ -184,8 +184,11 @@
     </footer>
 
     <dialog id="aboutDialog" aria-labelledby="aboutTitle">
+      <div class="dialog-head">
+        <h2 class="dialog-title" id="aboutTitle" data-l10n="about.title">About</h2>
+        <button class="btn icon-only dialog-close" id="aboutClose" data-l10n-tip="about.close"><i data-icon="close"></i></button>
+      </div>
       <div class="dialog-body" id="aboutBody"></div>
-      <div class="dialog-actions"><button class="btn" id="aboutClose" data-l10n="about.close">Close</button></div>
     </dialog>
 
     <script type="module" src="js/main.js?v=0.0.1"></script>

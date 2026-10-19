@@ -173,8 +173,6 @@ export default {
   "ref.report.desc": "O que se sabe sobre a máquina e com que certeza (em inglês).",
   "ref.plan.title": "Como o modelo é construído",
   "ref.plan.desc": "O plano, as etapas e seus testes (em inglês).",
-  "ref.dev.title": "Mais páginas",
-  "ref.dev.desc": "O mecanismo passo a passo, uma página por etapa do modelo (em inglês).",
 
   "about.title": "Sobre",
   "about.lead": "Um simulador 3D interativo da calculadora de Leibniz (por volta de 1700), a primeira máquina para as quatro operações da aritmética. Feito para o ensino: gratuito, aberto e sem nada para instalar.",

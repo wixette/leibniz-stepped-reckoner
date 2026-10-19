@@ -175,8 +175,6 @@ export default {
   "ref.report.desc": "What is known about the machine, and how sure we are.",
   "ref.plan.title": "How the model is built",
   "ref.plan.desc": "The plan, the milestones and their tests.",
-  "ref.dev.title": "More pages",
-  "ref.dev.desc": "The mechanism step by step, one page per stage of the model (in English).",
 
   "about.title": "About",
   "about.lead": "An interactive 3D simulator of Leibniz's stepped reckoner (about 1700), the first calculating machine for all four operations of arithmetic. Made for teaching: free, open, and nothing to install.",
