@@ -5,7 +5,7 @@
 import * as THREE from "three";
 import { applyM2Pose, m2NodeNames } from "../scene/m2Pose.js";
 import { Rig } from "../scene/rig.js";
-import { frame } from "../scene/framing.js";
+import { centreOnFreeArea, frame } from "../scene/framing.js";
 import { Exploder, Highlighter, findNodes, isShown, viewSubjects } from "../scene/teachScene.js";
 import { Machine } from "../sim/machine.js";
 import { MESSAGES } from "../l10n/all.js";
@@ -361,6 +361,56 @@ export function runM3Checks(root) {
       });
     }
     return { passed: bad.length === 0, detail: bad.join("; ") || `${interior} steps show parts inside the case, all from an inside view` };
+  });
+
+  run("A3-14", "Every view fits its parts into the free area: about 90% of the limiting side, centred, measured on the parts themselves", () => {
+    /** @type {string[]} */
+    const bad = [];
+    const views = viewSubjects(root);
+    const ex = new Exploder(root);
+    const insets = { top: 80, right: 8, bottom: 8, left: 8 };
+    const v = new THREE.Vector3();
+    let worst = 1;
+    for (const [w, h] of [[900, 600], [700, 900]]) {
+      for (const name of VIEWS) {
+        ex.apply(name === "apart" ? 1 : 0);
+        const cam = new THREE.PerspectiveCamera(35, w / h, 0.002, 10);
+        centreOnFreeArea(cam, w, h, insets);
+        const f = frame(cam, views[name].points(), views[name].dir, w, h, insets, 0.9);
+        cam.position.copy(f.position);
+        cam.lookAt(f.target);
+        cam.updateMatrixWorld(true);
+        cam.updateProjectionMatrix();
+        let l = Infinity;
+        let r = -Infinity;
+        let t = Infinity;
+        let b = -Infinity;
+        for (const o of views[name].objects()) {
+          o.updateWorldMatrix(true, true);
+          o.traverse((x) => {
+            const m = /** @type {THREE.Mesh} */ (x);
+            if (!m.isMesh) return;
+            const pos = m.geometry.attributes.position;
+            for (let i = 0; i < pos.count; i++) {
+              v.fromBufferAttribute(pos, i).applyMatrix4(m.matrixWorld).project(cam);
+              l = Math.min(l, ((v.x + 1) / 2) * w);
+              r = Math.max(r, ((v.x + 1) / 2) * w);
+              t = Math.min(t, ((1 - v.y) / 2) * h);
+              b = Math.max(b, ((1 - v.y) / 2) * h);
+            }
+          });
+        }
+        const fw = w - insets.left - insets.right;
+        const fh = h - insets.top - insets.bottom;
+        const fill = Math.max((r - l) / fw, (b - t) / fh);
+        const off = Math.max(Math.abs((l + r) / 2 - (insets.left + fw / 2)) / fw, Math.abs((t + b) / 2 - (insets.top + fh / 2)) / fh);
+        worst = Math.min(worst, fill);
+        if (fill < 0.8 || fill > 0.905) bad.push(`${name} at ${w}×${h}: fills ${fill.toFixed(2)}`);
+        if (off > 0.03) bad.push(`${name} at ${w}×${h}: ${(off * 100).toFixed(1)}% off-centre`);
+      }
+    }
+    ex.apply(0);
+    return { passed: bad.length === 0, detail: bad.join("; ") || `${VIEWS.length} views at two canvas shapes; the least filled fills ${worst.toFixed(2)}` };
   });
 
   run("A3-10", "Labels name a part's place in words and show its current value apart from the name", () => {

@@ -36,12 +36,37 @@ export { shown as isShown };
 // ---- camera views -------------------------------------------------------------------------------
 
 /**
+ * The corners of every mesh's own bounding box under the objects, in world space. Framing on
+ * these rather than on one box around everything keeps the fit tight when the parts do not fill
+ * a box: taken apart, they spread into an L, and the one box's far corners, seen at an angle,
+ * would shrink the parts and push them off-centre (U10).
+ * @param {THREE.Object3D[]} objects
+ * @returns {THREE.Vector3[]}
+ */
+export function partCorners(objects) {
+  /** @type {THREE.Vector3[]} */
+  const out = [];
+  for (const o of objects) {
+    o.updateWorldMatrix(true, true);
+    o.traverse((x) => {
+      const m = /** @type {THREE.Mesh} */ (x);
+      if (!m.isMesh) return;
+      if (!m.geometry.boundingBox) m.geometry.computeBoundingBox();
+      const box = /** @type {THREE.Box3} */ (m.geometry.boundingBox);
+      for (const c of corners(box)) out.push(c.applyMatrix4(m.matrixWorld));
+    });
+  }
+  return out;
+}
+
+/**
  * A camera view: the parts it frames, and the direction it looks at them from (from the parts
  * towards the camera). js/scene/framing.js fits the parts into the free part of the canvas.
  * @typedef {object} ViewSubject
  * @property {THREE.Vector3Like} dir
- * @property {() => THREE.Vector3[]} points the corners of the parts' bounding box, now
- *   (views of carriage parts follow the carriage)
+ * @property {() => THREE.Object3D[]} objects the parts it frames
+ * @property {() => THREE.Vector3[]} points the corners of each part's own bounding box, where
+ *   the parts are now (views of carriage parts follow the carriage)
  * @property {string[]} [inside] for a view of parts inside the machine (U11): the parts it
  *   highlights while the case is hidden, the front open and the other parts faded
  */
@@ -53,40 +78,24 @@ export { shown as isShown };
  */
 export function viewSubjects(root) {
   /**
-   * The corners of the bounding box of the nodes matching the patterns.
-   * @param {string[]} patterns
-   * @returns {THREE.Vector3[]}
+   * A view of the given objects.
+   * @param {THREE.Vector3Like} dir
+   * @param {() => THREE.Object3D[]} objects
+   * @returns {ViewSubject}
    */
-  const boxOf = (patterns) => {
-    root.updateWorldMatrix(true, true);
-    const box = new THREE.Box3();
-    for (const p of patterns) for (const n of findNodes(root, p)) box.expandByObject(n);
-    return corners(box);
-  };
+  const of = (dir, objects) => ({ dir, objects, points: () => partCorners(objects()) });
   /**
    * @param {THREE.Vector3Like} dir
    * @param {string[]} patterns
    * @returns {ViewSubject}
    */
-  const view = (dir, patterns) => ({ dir, points: () => boxOf(patterns) });
+  const view = (dir, patterns) => of(dir, () => patterns.flatMap((p) => findNodes(root, p)));
   return {
-    overview: {
-      dir: { x: 0.35, y: 0.42, z: 0.62 },
-      points: () => {
-        // The whole machine, case included whether shown or not: hiding the case does not move
-        // the camera.
-        root.updateWorldMatrix(true, true);
-        return corners(new THREE.Box3().setFromObject(root));
-      },
-    },
-    apart: {
-      // The whole machine as it is, taken apart (the stage frames it with the parts moved out).
-      dir: { x: 0.35, y: 0.5, z: 0.62 },
-      points: () => {
-        root.updateWorldMatrix(true, true);
-        return corners(new THREE.Box3().setFromObject(root));
-      },
-    },
+    // The whole machine, case included whether shown or not: hiding the case does not move
+    // the camera.
+    overview: of({ x: 0.35, y: 0.42, z: 0.62 }, () => [root]),
+    // The whole machine as it is, taken apart (the stage frames it with the parts moved out).
+    apart: of({ x: 0.35, y: 0.5, z: 0.62 }, () => [root]),
     register: view({ x: 0, y: 1, z: 0.12 }, ["pi.window"]),
     knobs: view({ x: 0, y: 1.1, z: 0.8 }, ["pm.setting_dial.*", "pm.setting_plate.*"]),
     front: view({ x: 0.12, y: 0.15, z: 1 }, ["pm.magna_rota", "pm.main_crank", "pm.magna_plate"]),
