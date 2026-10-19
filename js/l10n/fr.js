@@ -55,6 +55,8 @@ export default {
   "strip.toStop.tip": "Tourner la manivelle en avant jusqu’à ce que la cheville atteigne la butée",
   "strip.reset": "Remise à zéro",
   "strip.reset.tip": "Effacer la machine : roues et boutons à 0, chariot au départ, cheville retirée",
+  "strip.mute": "Couper les sons de la machine",
+  "strip.unmute": "Remettre les sons de la machine",
 
   "status.loading": "Chargement de la machine… {pct} %",
   "status.loadFailed": "Impossible de charger la machine : {error}",
@@ -187,6 +189,7 @@ export default {
   "about.licence.font": "Roboto Flex : SIL Open Font License 1.1",
   "about.licence.icons": "Material Symbols : licence Apache 2.0",
   "about.licence.pictures": "Images : comme indiqué sous chacune",
+  "about.licence.sounds": "Sons : adaptés d’effets sonores de Pixabay, Pixabay Content License",
   "about.source": "Code source",
   "about.close": "Fermer",
 

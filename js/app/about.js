@@ -24,7 +24,7 @@ export function showAbout() {
     el(
       "ul",
       {},
-      ["about.licence.code", "about.licence.content", "about.licence.three", "about.licence.font", "about.licence.icons", "about.licence.pictures"].map((k) => el("li", { text: t(k) })),
+      ["about.licence.code", "about.licence.content", "about.licence.three", "about.licence.font", "about.licence.icons", "about.licence.pictures", "about.licence.sounds"].map((k) => el("li", { text: t(k) })),
     ),
     el("p", { style: "margin-top:14px;display:flex;gap:10px;align-items:center" }, [icon("code"), source]),
   );

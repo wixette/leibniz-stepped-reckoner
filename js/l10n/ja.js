@@ -55,6 +55,8 @@ export default {
   "strip.toStop.tip": "ピンがストッパーに当たるまでクランクを前に回す",
   "strip.reset": "リセット",
   "strip.reset.tip": "機械をクリア：すべての車とつまみを 0、キャリッジを元の位置、ピンを抜く",
+  "strip.mute": "機械の音を消す",
+  "strip.unmute": "機械の音を出す",
 
   "status.loading": "機械を読み込み中… {pct}%",
   "status.loadFailed": "機械を読み込めませんでした：{error}",
@@ -187,6 +189,7 @@ export default {
   "about.licence.font": "Roboto Flex：SIL Open Font License 1.1",
   "about.licence.icons": "Material Symbols：Apache License 2.0",
   "about.licence.pictures": "画像：それぞれの下に記載",
+  "about.licence.sounds": "効果音：Pixabay の効果音を加工、Pixabay Content License",
   "about.source": "ソースコード",
   "about.close": "閉じる",
 

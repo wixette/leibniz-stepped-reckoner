@@ -52,6 +52,14 @@ precedence = "override"
 SPDX-FileCopyrightText = "Google LLC"
 SPDX-License-Identifier = "Apache-2.0"
 
+# The machine's sounds (docs/ui-design.md, U29): adapted from Pixabay sound effects.
+# No attribution is required by the licence; credit is given anyway.
+[[annotations]]
+path = "audio/*.mp3"
+precedence = "override"
+SPDX-FileCopyrightText = ["Pixabay contributors (original sound effects)", "2026 leibniz-stepped-reckoner contributors (adaptations)"]
+SPDX-License-Identifier = "LicenseRef-Pixabay"
+
 # The tutorial's pictures: resized copies of research/images/commons files (same licences).
 [[annotations]]
 path = "images/tutorial/original.jpg"

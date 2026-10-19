@@ -55,6 +55,8 @@ export default {
   "strip.toStop.tip": "Die Kurbel vorwärts drehen, bis der Stift den Anschlag erreicht",
   "strip.reset": "Zurücksetzen",
   "strip.reset.tip": "Die Maschine löschen: alle Räder und Knöpfe auf 0, Schlitten in Grundstellung, Stift heraus",
+  "strip.mute": "Geräusche der Maschine aus",
+  "strip.unmute": "Geräusche der Maschine an",
 
   "status.loading": "Die Maschine wird geladen … {pct} %",
   "status.loadFailed": "Die Maschine konnte nicht geladen werden: {error}",
@@ -187,6 +189,7 @@ export default {
   "about.licence.font": "Roboto Flex: SIL Open Font License 1.1",
   "about.licence.icons": "Material Symbols: Apache License 2.0",
   "about.licence.pictures": "Bilder: wie jeweils darunter angegeben",
+  "about.licence.sounds": "Geräusche: nach Soundeffekten von Pixabay, Pixabay Content License",
   "about.source": "Quellcode",
   "about.close": "Schließen",
 

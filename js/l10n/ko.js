@@ -55,6 +55,8 @@ export default {
   "strip.toStop.tip": "핀이 멈춤쇠에 닿을 때까지 크랭크를 앞으로 돌리기",
   "strip.reset": "초기화",
   "strip.reset.tip": "기계 지우기: 모든 바퀴와 손잡이를 0으로, 캐리지는 처음 위치로, 핀은 빼기",
+  "strip.mute": "기계 소리 끄기",
+  "strip.unmute": "기계 소리 켜기",
 
   "status.loading": "기계를 불러오는 중… {pct}%",
   "status.loadFailed": "기계를 불러올 수 없습니다: {error}",
@@ -187,6 +189,7 @@ export default {
   "about.licence.font": "Roboto Flex: SIL Open Font License 1.1",
   "about.licence.icons": "Material Symbols: Apache License 2.0",
   "about.licence.pictures": "그림: 각 그림 아래에 적은 대로",
+  "about.licence.sounds": "효과음: Pixabay 효과음을 다듬어 사용, Pixabay Content License",
   "about.source": "소스 코드",
   "about.close": "닫기",
 

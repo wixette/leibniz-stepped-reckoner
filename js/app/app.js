@@ -3,7 +3,7 @@
 // (docs/ui-design.md, U2). This module holds the state and keeps the page in step with it.
 
 import { Machine } from "../sim/machine.js";
-import { applyIcons, applyL10n, setTip, showMenu } from "../ui/components.js";
+import { applyIcons, applyL10n, icon, setTip, showMenu } from "../ui/components.js";
 import { load, locale, LOCALE_NAMES, LOCALE_SHORT, LOCALES, setLocale, t, tn } from "../l10n/l10n.js";
 /** @import { Locale } from "../l10n/l10n.js" */
 import { applyIntentNow, controlOf, possible, shiftDir } from "../teach/partActions.js";
@@ -16,6 +16,7 @@ import { Stage } from "./stage.js";
 import { CourseUI } from "./course.js";
 import { showAbout } from "./about.js";
 import { wireDockHandle } from "./dockHandle.js";
+import { Sound } from "./sound.js";
 import { LESSONS } from "../teach/lessons.js";
 import { TUTORIAL } from "../teach/tutorial.js";
 
@@ -109,6 +110,7 @@ export class App {
     this.stage.onIntent = (i) => this.doIntent(i);
     this.stage.viewer.addFrameCallback((dt) => {
       this.animator.tick(dt);
+      this.sound.watch(this.machine);
       if (this.stage.tickExplode(dt)) this.render();
       this.stage.updateCallouts();
     });
@@ -204,7 +206,10 @@ export class App {
   turn(dir) {
     const n = group3(this.inputNumber());
     this.animator.playPrims([{ theta: dir * 360 }], (blocked) => {
-      if (blocked) this.say(this.blockText(blocked), true);
+      if (blocked) {
+        this.sound.play("refuse");
+        this.say(this.blockText(blocked), true);
+      }
       else this.say(() => t(dir > 0 ? "status.added" : "status.subtracted", { n }));
       this.afterLearner();
     });
@@ -223,6 +228,7 @@ export class App {
     const before = this.machine.turns;
     this.animator.play(this.animator.expand([{ toStop: true }]), () => {
       const n = this.machine.turns - before;
+      if (n !== 0) this.sound.play("stop"); // the crank meets the pin
       this.say(() => tn("status.ranToStop", n));
       this.afterLearner();
     });
@@ -245,6 +251,9 @@ export class App {
   reset() {
     this.animator.stop();
     this.machine.reset();
+    // the wheels and knobs going back to zero: a quick ratchet, not a tick per knob
+    this.sound.resync(this.machine);
+    for (let k = 0; k < 3; k++) this.sound.play("step", { delay: k * 0.07 });
     this.say(() => t("status.reset"));
     this.afterLearner();
   }
@@ -265,7 +274,10 @@ export class App {
   refuse(i) {
     const s = this.controlState(controlOf(i), shiftDir(i));
     if (!s.enabled) return s.reason && this.say(s.reason, true);
-    if (i.kind === "turn") return this.say(this.blockText(i.dir), true);
+    if (i.kind === "turn") {
+      this.sound.play("refuse"); // the machine itself refuses: the crank is blocked
+      return this.say(this.blockText(i.dir), true);
+    }
     this.say(() => t("status.carriageEnd"), true);
   }
 
@@ -319,7 +331,10 @@ export class App {
     const c = this.course;
     if (!c) return;
     this.animator.stop();
-    if (replay) replayTo(c.lesson, i, this.machine);
+    if (replay) {
+      replayTo(c.lesson, i, this.machine);
+      this.sound.resync(this.machine); // set up for the step, not operated: silent
+    }
     c.i = i;
     c.playing = true;
     this.showPresentation();
@@ -540,6 +555,12 @@ export class App {
     if (dot instanceof HTMLElement) dot.hidden = !hidden;
     setTip(btn, t(hidden ? "bar.dockShowLesson" : this.dockClosed ? "bar.dockShow" : "bar.dockHide"));
   }
+
+  /** The machine's sounds (U29). */
+  sound = new Sound();
+
+  /** Sets the machine's sound off or on (set by the toolbar's wiring). @type {(muted: boolean) => void} */
+  setMuted = () => {};
 
   /** Opens the dock if it is closed (set by the top bar's wiring). */
   openDock = () => {};
@@ -773,6 +794,18 @@ export class App {
     $("rightBtn").addEventListener("click", () => this.use("shift", () => this.shift(-1), -1));
     $("toStopBtn").addEventListener("click", () => this.use("toStop", () => this.toStop()));
     $("resetBtn").addEventListener("click", () => this.use("reset", () => this.reset()));
+    // the machine's sound, on or off, remembered (U29)
+    const soundBtn = $("soundBtn");
+    const setMuted = (/** @type {boolean} */ muted) => {
+      this.sound.muted = muted;
+      store.set("lsr-sound", muted ? "off" : "on");
+      soundBtn.setAttribute("aria-pressed", String(muted));
+      soundBtn.replaceChildren(icon(muted ? "volume_off" : "volume_up"));
+      setTip(soundBtn, t(muted ? "strip.unmute" : "strip.mute"));
+    };
+    this.setMuted = setMuted;
+    setMuted(store.get("lsr-sound") === "off");
+    soundBtn.addEventListener("click", () => setMuted(!this.sound.muted));
     const pinBtn = $("pinBtn");
     pinBtn.addEventListener("click", () =>
       this.use("pin", () =>
@@ -866,6 +899,7 @@ export class App {
     const c = this.course;
     const inCourse = !!c && !c.finished;
     this.markDock();
+    setTip($("soundBtn"), t(this.sound.muted ? "strip.unmute" : "strip.mute"));
     $("stage").classList.toggle("in-lesson", inCourse);
     $("modeFree").hidden = inCourse;
     $("modeLesson").hidden = !inCourse;

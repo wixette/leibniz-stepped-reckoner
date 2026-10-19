@@ -383,6 +383,8 @@ a { color: var(--md-primary); }
   .strip .sep { display: none; }
 }
 @container stage (max-width: 640px) {
+  /* two rows on a phone: the number, the crank and the sound; then the carriage, the pin, reset */
+  .strip #carriageGroup, .strip .split, .strip #resetBtn { order: 1; }
   .strip .btn .txt { display: none; }
   .strip .btn.has-icon { padding: 0 10px; }
   .strip .sep { display: none; }
@@ -754,3 +756,7 @@ dialog::backdrop { background: var(--md-scrim); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; }
 }
+
+/* the machine's sound, on or off (U29): quiet, at the toolbar's end */
+.strip .sound-btn { width: 36px; color: var(--md-on-surface-variant); }
+.strip .sound-btn[aria-pressed="true"] { color: var(--md-outline); }

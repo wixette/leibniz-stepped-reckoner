@@ -100,7 +100,7 @@ Free play has no tab: its controls are the machine toolbar, under the machine (P
 
 ### U4 — The machine's toolbar and the stage's own tools
 
-- **Machine toolbar** (floating at the stage's bottom, centred under the machine, U18): the number on the setting knobs, turn forward (+) and back (−) as one pair, carriage left and right with its place as another, boxed and named like the number box (U21), the Magna Rota's pin (a dropdown box, U22) with turn to the stop joined to it (U23), reset (U20). Icon plus short label where there is room, icons with tooltips where there is not (U18).
+- **Machine toolbar** (floating at the stage's bottom, centred under the machine, U18): the number on the setting knobs, turn forward (+) and back (−) as one pair, carriage left and right with its place as another, boxed and named like the number box (U21), the Magna Rota's pin (a dropdown box, U22) with turn to the stop joined to it (U23), reset (U20), and the machine's sound on or off (U29). Icon plus short label where there is room, icons with tooltips where there is not (U18).
 - **Readouts** sit on the stage's top edge: the result as on the machine, grouped in threes; the Magna Rota's turn count (red when subtracting); the carriage's place.
 - **View controls** float at the stage's top right (U15): a Reset view button (⌂), a − / + zoom pair (U24) and the Views menu, whose button names the view on show. The menu holds the seven views (two of them inside views, U11, and Taken apart) and a Show case switch. Opening the front, fading and taking apart follow the view (U14, U15). They change how the machine is *shown*, not its state, so they stay enabled in a lesson, except where a step depends on them.
 
@@ -380,6 +380,27 @@ Only buttons were protected: the logo could be dragged, and labels, chips, tabs,
 - **Chrome is neither selectable nor draggable:** the top bar (logo, title, mode, buttons), the stage's readout labels, view controls and 3D view, the toolbar, the dock's tabs and handle, menus, tooltips and labels, the dialog's title band, and the controls inside reading areas (Back and Next, the task line, the progress, the lesson list's buttons, links). The logo and its link are marked not draggable (Firefox ignores the CSS for that). A long press shows no image or link callout, and a tap shows no grey flash.
 - **What is read stays selectable,** so a teacher can copy it into a worksheet: the dock's text (steps, captions, Get started, the lesson summaries, references), About's text, the status line's message, the readouts' values (the result), and whatever is typed in the number box.
 - **The lessons' pictures** can still be dragged or long-pressed, as content (each carries its credit and licence).
+
+### U29 — The machine sounds; the interface does not
+
+The machine is a mechanism of gears, racks and levers, and hearing it work tells the reader what it is doing: how many knobs moved, that the crank went round, that a carry ran along. Five short sounds, adapted from Pixabay sound effects (`audio/`, under the Pixabay Content License, credited in About), cover it:
+
+| What moves | Sound |
+|---|---|
+| A setting knob (clicked, or set by typing) | a short tick, one per knob that moved, a few hundredths of a second apart (typing 1234 is four ticks, not ten) |
+| The main crank, one turn (by +, −, a drag, a click, or a lesson's demonstration) | the full revolution, slowed to the turn's 1.2 s (lower in pitch: the heavier mechanism) |
+| The carriage, one place (each turn of the end crank) | the full revolution, slowed to the place's 0.83 s; a longer move sounds once a place |
+| A carry stored (a wheel passing 9) | a short tick |
+| A carry passed on by its lever | a step: in 9999 + 1 the carries are heard rippling along |
+| The pin into a hole, or out | a step |
+| Run to stop reaching the pin | a turn for each turn, then the stop |
+| The crank blocked (the pin on the stop, a full carry store) | the refusal |
+| Reset | a quick ratchet of three steps |
+
+- **One observer watches the machine every frame** and sounds whatever moved, so the reader's operations and a lesson's demonstrations sound alike. A lesson step setting the machine up (replaying the steps before it) is silent: it is not an operation.
+- **Each play varies a little** (±4% pitch, ±12% loudness), so repeated clicks do not sound recorded. The files are levelled to full scale and play at half.
+- **The interface is silent:** menus, tabs, dialogs and a control refused by a lesson's rules make no sound. Only the machine itself refusing (the blocked crank) does.
+- **A mute button sits at the end of the toolbar,** as a media player keeps its volume with its controls; it is remembered. On a phone it joins the toolbar's first row. Sound starts after the reader's first press or key, as browsers require; without Web Audio the machine is silent and works the same.
 
 ## Part 4 — Open questions
 

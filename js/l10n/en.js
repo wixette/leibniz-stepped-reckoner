@@ -57,6 +57,8 @@ export default {
   "strip.toStop.tip": "Turn the crank forward until the pin reaches the stop",
   "strip.reset": "Reset",
   "strip.reset.tip": "Clear the machine: all wheels and knobs to 0, carriage home, pin out",
+  "strip.mute": "Mute the machine's sounds",
+  "strip.unmute": "Turn the machine's sounds on",
 
   "status.loading": "Loading the machine… {pct}%",
   "status.loadFailed": "Could not load the machine: {error}",
@@ -189,6 +191,7 @@ export default {
   "about.licence.font": "Roboto Flex: SIL Open Font License 1.1",
   "about.licence.icons": "Material Symbols: Apache License 2.0",
   "about.licence.pictures": "Pictures: as credited under each one",
+  "about.licence.sounds": "Sounds: adapted from Pixabay sound effects, Pixabay Content License",
   "about.source": "Source code",
   "about.close": "Close",
 

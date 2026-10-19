@@ -83,6 +83,8 @@ export const ICONS = [
   "touch_app",
   "translate",
   "videocam",
+  "volume_off",
+  "volume_up",
   "zoom_in",
   "zoom_out",
 ];

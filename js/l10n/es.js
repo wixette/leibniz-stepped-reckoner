@@ -55,6 +55,8 @@ export default {
   "strip.toStop.tip": "Girar la manivela hacia adelante hasta que la clavija llegue al tope",
   "strip.reset": "Reiniciar",
   "strip.reset.tip": "Borrar la máquina: ruedas y perillas a 0, carro al inicio, clavija fuera",
+  "strip.mute": "Silenciar los sonidos de la máquina",
+  "strip.unmute": "Activar los sonidos de la máquina",
 
   "status.loading": "Cargando la máquina… {pct} %",
   "status.loadFailed": "No se pudo cargar la máquina: {error}",
@@ -187,6 +189,7 @@ export default {
   "about.licence.font": "Roboto Flex: SIL Open Font License 1.1",
   "about.licence.icons": "Material Symbols: licencia Apache 2.0",
   "about.licence.pictures": "Imágenes: según se indica bajo cada una",
+  "about.licence.sounds": "Sonidos: adaptados de efectos de sonido de Pixabay, Pixabay Content License",
   "about.source": "Código fuente",
   "about.close": "Cerrar",
 

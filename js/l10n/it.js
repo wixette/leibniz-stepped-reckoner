@@ -55,6 +55,8 @@ export default {
   "strip.toStop.tip": "Gira la manovella in avanti finché il perno raggiunge l’arresto",
   "strip.reset": "Azzera",
   "strip.reset.tip": "Azzera la macchina: ruote e manopole a 0, carrello all’inizio, perno fuori",
+  "strip.mute": "Disattiva i suoni della macchina",
+  "strip.unmute": "Attiva i suoni della macchina",
 
   "status.loading": "Caricamento della macchina… {pct}%",
   "status.loadFailed": "Impossibile caricare la macchina: {error}",
@@ -187,6 +189,7 @@ export default {
   "about.licence.font": "Roboto Flex: SIL Open Font License 1.1",
   "about.licence.icons": "Material Symbols: licenza Apache 2.0",
   "about.licence.pictures": "Immagini: come indicato sotto ciascuna",
+  "about.licence.sounds": "Suoni: adattati da effetti sonori di Pixabay, Pixabay Content License",
   "about.source": "Codice sorgente",
   "about.close": "Chiudi",
 

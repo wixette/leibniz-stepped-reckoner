@@ -55,6 +55,8 @@ export default {
   "strip.toStop.tip": "向前转动曲柄，直到插销碰到挡块",
   "strip.reset": "清零",
   "strip.reset.tip": "清零机器：所有轮子和旋钮归 0，滑架复位，插销拔出",
+  "strip.mute": "关闭机器的声音",
+  "strip.unmute": "打开机器的声音",
 
   "status.loading": "正在加载机器…… {pct}%",
   "status.loadFailed": "无法加载机器：{error}",
@@ -187,6 +189,7 @@ export default {
   "about.licence.font": "Roboto Flex：SIL Open Font License 1.1",
   "about.licence.icons": "Material Symbols：Apache License 2.0",
   "about.licence.pictures": "图片：见各图下方的说明",
+  "about.licence.sounds": "音效：改编自 Pixabay 音效，Pixabay Content License",
   "about.source": "源代码",
   "about.close": "关闭",
 

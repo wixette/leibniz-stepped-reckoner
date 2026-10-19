@@ -1,0 +1,35 @@
+Pixabay Content License
+
+The sound effects in audio/ are adapted from sound effects published on
+Pixabay (https://pixabay.com) under the Pixabay Content License. The original
+sound effects remain the work of their Pixabay contributors; the adaptations
+(cut, timed and levelled for this simulator) are by the
+leibniz-stepped-reckoner contributors and are offered on the same terms.
+
+Summary of the licence (https://pixabay.com/service/license-summary/):
+
+What is allowed:
+- Use Content for free.
+- Use Content without having to attribute the author (although giving credit
+  is always appreciated by our community!).
+- Modify or adapt Content into new works.
+
+What is not allowed:
+- You cannot sell or distribute Content (either in digital or physical form)
+  on a Standalone basis.
+- If Content contains any recognisable trademarks, logos or brands, you cannot
+  use that Content for commercial purposes in relation to goods and services.
+- You cannot use Content in any immoral or illegal way, especially Content
+  which features recognisable people.
+- You cannot use Content in a misleading or deceptive way.
+- You cannot use any of the Content as part of a trade-mark, design-mark,
+  trade-name, business name or service mark.
+
+"Standalone basis" means the Content is offered on its own, with no creative
+effort applied and in substantially the same form. Here the sounds are adapted
+and built into the simulator: if you reuse them, keep them part of a larger
+work, not as a separate sound pack.
+
+The full and binding terms are the Pixabay Content License at
+https://pixabay.com/service/license-summary/ and Pixabay's Terms of Service at
+https://pixabay.com/service/terms/.

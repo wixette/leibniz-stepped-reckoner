@@ -55,6 +55,8 @@ export default {
   "strip.toStop.tip": "向前轉動曲柄，直到插銷碰到擋塊",
   "strip.reset": "歸零",
   "strip.reset.tip": "機器歸零：所有輪子和旋鈕歸 0，滑架復位，插銷拔出",
+  "strip.mute": "關閉機器的聲音",
+  "strip.unmute": "開啟機器的聲音",
 
   "status.loading": "正在載入機器…… {pct}%",
   "status.loadFailed": "無法載入機器：{error}",
@@ -187,6 +189,7 @@ export default {
   "about.licence.font": "Roboto Flex：SIL Open Font License 1.1",
   "about.licence.icons": "Material Symbols：Apache License 2.0",
   "about.licence.pictures": "圖片：見各圖下方的說明",
+  "about.licence.sounds": "音效：改編自 Pixabay 音效，Pixabay Content License",
   "about.source": "原始碼",
   "about.close": "關閉",
 

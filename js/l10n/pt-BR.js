@@ -55,6 +55,8 @@ export default {
   "strip.toStop.tip": "Girar a manivela para a frente até o pino chegar ao batente",
   "strip.reset": "Zerar",
   "strip.reset.tip": "Zerar a máquina: rodas e botões em 0, carro no início, pino fora",
+  "strip.mute": "Silenciar os sons da máquina",
+  "strip.unmute": "Ativar os sons da máquina",
 
   "status.loading": "Carregando a máquina… {pct}%",
   "status.loadFailed": "Não foi possível carregar a máquina: {error}",
@@ -187,6 +189,7 @@ export default {
   "about.licence.font": "Roboto Flex: SIL Open Font License 1.1",
   "about.licence.icons": "Material Symbols: licença Apache 2.0",
   "about.licence.pictures": "Imagens: conforme indicado abaixo de cada uma",
+  "about.licence.sounds": "Sons: adaptados de efeitos sonoros do Pixabay, Pixabay Content License",
   "about.source": "Código-fonte",
   "about.close": "Fechar",
 
