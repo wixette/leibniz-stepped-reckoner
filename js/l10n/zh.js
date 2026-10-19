@@ -49,7 +49,7 @@ export default {
   "strip.pin.tip": "把大轮的插销插入一个孔：曲柄转过相应圈数后就会停下",
   "strip.pin.out": "拔出",
   "strip.pin.hole": "孔",
-  "strip.pin.name": "插销：第 {n} 孔",
+  "strip.pin.name": "插销：{n} 号孔",
   "strip.pin.nameOut": "插销：拔出",
   "strip.toStop": "转到挡块",
   "strip.toStop.tip": "向前转动曲柄，直到插销碰到挡块",
@@ -87,7 +87,7 @@ export default {
 
   "mode.free": "自由操作",
   "mode.step": "{title} · {i}/{n}",
-  "mode.lessons": "选择课程…",
+  "mode.lessons": "选择课程……",
   "mode.resume": "继续：{title}，第 {i}/{n} 步",
   "mode.tutorialAgain": "重新学习入门教程",
   "mode.leave": "自由操作",
@@ -107,10 +107,10 @@ export default {
   "course.nextLesson": "下一课",
   "course.allLessons": "全部课程",
   "course.again": "重新开始",
-  "course.start": "开始",
   "course.completed": "已完成",
+  "course.tutorialCompleted": "已完成",
   "course.wellDone": "做得好！",
-  "course.toLessons": "去上课程",
+  "course.toLessons": "前往课程",
   "course.lessonNo": "第 {n} 课",
   "course.chapter": "第 {i} 章，共 {n} 章",
 
@@ -300,7 +300,7 @@ export default {
   "l.carry.idea": "莱布尼茨的思路：先把所有数位同时相加，再一个接一个地传递进位。今天的电子加法器也面临同样的问题：一个进位可能要穿过所有数位。",
   "l.carry.yourTurn": "轮到你了：结果寄存器显示 99。加上 1，注意观察这两次进位。",
   "l.carry.historical": "历史学家对原机有两种解读。按其中一种，在传递进位的过程中新产生的进位要等到下一圈：9999 + 1 先显示 9900，十位的五边形保持倾斜。",
-  "l.carry.historicalDone": "旋钮设为 0 再转一圈就完成了：10000。课程采用第一种解读。",
+  "l.carry.historicalDone": "旋钮设为 0 再转一圈就完成了：10000。课程采用前面看到的另一种解读：进位在同一圈内接着传下去。",
 
   // ---- 第 3 课：减法 ---------------------------------------------------------------------------------------
   "l.sub.title": "减法：反着转",
@@ -308,7 +308,7 @@ export default {
   "l.sub.intro": "本课内容：减法。结果寄存器显示 1000，我们要减去 1。",
   "l.sub.set1": "在旋钮上设置 1。",
   "l.sub.turnBack": "把曲柄向后转一圈：按机器下方的“−”。注意观察轮子和五边形。",
-  "l.sub.borrow": "1000 − 1 = 999。个位轮从 0 退回到 9，存下一个借位，进位杆把它传给了十位和百位：这就是反过来的进位。",
+  "l.sub.borrow": "1000 − 1 = 999。个位轮从 0 退回到 9，存下一个借位，进位杆把它传给了十位、百位和千位：这就是反过来的进位。",
   "l.sub.red": "大轮也记录向后转的圈数，用它的红色数字：现在显示倒转一圈。",
   "l.sub.tooMuch": "如果减去的比原有的还多呢？设置 2000，然后向后转一圈。",
   "l.sub.belowZero": "结果小于零，所以轮子前面显示一串 9：这台机器没有负号。做除法时，就是靠这一点知道多减了一次。",

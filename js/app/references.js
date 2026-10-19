@@ -3,7 +3,7 @@
 // readers can read come first (Wikipedia leads), the German ones last. Public URLs only; the
 // sources behind the model are in research/sources/bibliography.md.
 
-import { t } from "../l10n/l10n.js";
+import { locale, t } from "../l10n/l10n.js";
 import { el, icon } from "../ui/components.js";
 
 /**
@@ -70,7 +70,7 @@ export function referencesPanel() {
           return el("li", {}, [
             el("a", { href: r.url, target: external ? "_blank" : undefined, rel: external ? "noopener" : undefined }, [
               el("b", { text: t(`ref.${r.id}.title`) }),
-              el("span", {}, [t(`ref.${r.id}.desc`), r.german ? el("em", { text: ` (${t("refs.inGerman")})` }) : null]),
+              el("span", {}, [t(`ref.${r.id}.desc`), r.german && locale() !== "de" ? el("em", { text: ` (${t("refs.inGerman")})` }) : null]),
               icon(external ? "open_in_new" : "arrow_forward"),
             ]),
           ]);

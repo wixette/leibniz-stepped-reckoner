@@ -127,10 +127,3 @@ export function tn(key, n, params = {}, loc = current) {
   const k = `${key}.${rule}` in table || `${key}.${rule}` in (tables.en ?? {}) ? `${key}.${rule}` : `${key}.other`;
   return t(k, { n, ...params }, loc);
 }
-
-/**
- * Whether a key exists in English (the reference).
- * @param {string} key
- * @returns {boolean}
- */
-export const has = (key) => key in (tables.en ?? {});
