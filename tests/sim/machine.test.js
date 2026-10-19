@@ -148,6 +148,67 @@ describe("Machine (16-digit register, 8-digit carriage)", () => {
     assert.equal(m.pending.every((p) => p === 0), true);
   });
 
+  it("refuses a turn in which a wheel would pass 9 twice while its first carry still waits", () => {
+    // Digit 9 receives store 8's waiting carry early in the turn (9 -> 0, store 9 stored), then
+    // the ribs and store 8's new carry take it past 9 again before lever 7 passes store 9.
+    const m = new Machine();
+    m.setResult(9_909_999_999);
+    m.setNumber(99_999_999);
+    m.turn(1);
+    assert.equal(m.pending[8], 1);
+    m.setOffset(2);
+    assert.deepEqual(m.startBlock(1), { storeFull: 9 });
+    assert.equal(m.turn(1), false);
+    assert.equal(registerValue(m), 10_009_999_998); // nothing moved, nothing lost
+  });
+
+  it("random additions and subtractions at any carriage place stay exact, in both modes", () => {
+    // The register's exact value: its digits, the carries waiting in the stores and what left the top.
+    /** @param {Machine} m */
+    const exact = (m) => {
+      let x = BigInt(m.carryOut);
+      for (let k = m.registerDigits - 1; k >= 0; k--) x = x * 10n + BigInt(m.digits[k]);
+      m.pending.forEach((p, k) => (x += BigInt(p) * 10n ** BigInt(k + 1)));
+      return x;
+    };
+    let seed = 7;
+    /** @param {number} n */
+    const rnd = (n) => ((seed = (seed * 1103515245 + 12345) % 2 ** 31), Math.floor((seed / 2 ** 31) * n));
+    for (const mode of /** @type {const} */ (["ripple", "historical"])) {
+      for (let trial = 0; trial < 20; trial++) {
+        const m = new Machine();
+        m.setMode(mode);
+        let want = 0n;
+        for (let step = 0; step < 20; step++) {
+          const o = rnd(9);
+          const x = rnd(3) === 0 ? 99_999_999 : rnd(10 ** (1 + rnd(8)));
+          /** @type {1 | -1} */
+          const dir = rnd(2) ? 1 : -1;
+          m.setOffset(o);
+          m.setNumber(x);
+          if (!m.canStart(dir)) continue; // a store would have to hold two carries: refused
+          assert.equal(m.turn(dir), true);
+          want += BigInt(dir * x) * 10n ** BigInt(o);
+          assert.equal(exact(m), want, `${mode}, trial ${trial}, step ${step}`);
+        }
+      }
+    }
+  });
+
+  it("reads all 16 digits exactly, and knows when the register is below zero", () => {
+    const m = new Machine();
+    assert.equal(m.shownText(), "0");
+    m.setNumber(99_999_999);
+    multiply(m, 99_999_999); // the largest product, beyond 2^53
+    assert.equal(m.shownText(), (99_999_999n * 99_999_999n).toString());
+    m.reset();
+    m.setOffset(8);
+    m.setNumber(1);
+    m.turn(-1); // 0 - 10^8: the borrow leaves the top digit
+    assert.equal(m.shownText(), "9999999900000000");
+    assert.equal(registerValue(m), -100_000_000);
+  });
+
   it("shifts only at rest and within range", () => {
     const m = new Machine();
     m.setTheta(100);

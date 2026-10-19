@@ -179,21 +179,30 @@ export function push(v) {
 }
 
 /**
- * Store rotation from the Einzahn alone. A turn starts with v in [0, 9].
+ * Store rotation from the Einzahn alone. A turn starts with v in [0, 9]. Every 9 -> 0 (or
+ * 0 -> 9) the wheel passes pushes the store once more: a wheel that also receives a waiting
+ * carry can pass twice in one turn (v beyond 19), and the store then reaches 36 deg, which
+ * Machine refuses (a store holds one carry). Up to v = 19 this is the M0 push (lib/kinematics.py).
  * @param {number} pendingStart
  * @param {number} v
  * @returns {number}
  */
 export function storeAngle(pendingStart, v) {
   const base = STORE_STEP * pendingStart;
-  if (v > 9) return base + push(Math.min(v, 10));
-  if (v < 0) return base - push(Math.min(9 - v, 10));
+  /** @param {number} w how far past 9 the wheel has turned, either way */
+  const pushes = (w) => {
+    const q = Math.floor((w - 9) / 10); // the passes completed before this one
+    return STORE_STEP * q + push(w - 10 * q);
+  };
+  if (v > 9) return base + pushes(v);
+  if (v < 0) return base - pushes(9 - v);
   return base;
 }
 
 /**
- * Fraction (0..1) of the carry execution for digit j in this turn's carry window.
+ * Fraction (0..1) of the carry execution for a digit in this turn's carry window.
  * @param {number} theta
+ * @param {number} [digitIndex] the digit (0 = units), whose lever comes PER_CARRY later per digit
  * @returns {number}
  */
 export function completion(theta, digitIndex = 0) {

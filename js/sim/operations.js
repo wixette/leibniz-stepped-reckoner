@@ -9,9 +9,11 @@
  * @returns {number}
  */
 export function registerValue(m) {
-  let v = m.shownNumber();
-  m.pending.forEach((p, k) => (v += p * 10 ** (k + 1)));
-  return v + m.carryOut * 10 ** m.registerDigits;
+  // in BigInt, so that the sign is right however large the value (a borrow out of the top
+  // digit with every wheel at 9 is -1), and rounded only at the end
+  let v = BigInt(m.shownText());
+  m.pending.forEach((p, k) => (v += BigInt(p) * 10n ** BigInt(k + 1)));
+  return Number(v + BigInt(m.carryOut) * 10n ** BigInt(m.registerDigits));
 }
 
 /**

@@ -18,8 +18,9 @@
 // part-way, so it is refused. (The sources describe no one-way catch; the model measures
 // where the pin meets the finger.) Division uses the ring as a counter with the pin out.
 // A carry store holds one carry. A turn that would store a second carry in a store whose
-// first carry is still waiting (above the carriage, no lever over it) is refused: the
-// operator must shift the carriage over that digit first.
+// first carry is still waiting is refused: one waiting above the carriage, with no lever over
+// it (the operator must shift the carriage over that digit first), or one whose wheel would
+// pass 9 again before its lever arrives (after a shift brings a waiting carry under it).
 
 import * as K from "./kinematics.js";
 import * as M from "./kinematicsM1.js";
@@ -451,9 +452,21 @@ export class Machine {
     return this.machinePose().register.map((p) => ((Math.round(p.v) % 10) + 10) % 10);
   }
 
-  /** @returns {number} */
+  /**
+   * The number in the windows. Exact up to 2^53 (about 9 × 10^15); shownText() is exact for
+   * all 16 digits.
+   * @returns {number}
+   */
   shownNumber() {
     return this.shownDigits().reduce((a, d, i) => a + d * 10 ** i, 0);
+  }
+
+  /**
+   * The number in the windows as its digits, without leading zeros: exact for all 16 digits.
+   * @returns {string}
+   */
+  shownText() {
+    return this.shownDigits().reverse().join("").replace(/^0+(?=\d)/, "");
   }
 
   /**
