@@ -67,6 +67,23 @@ body {
   height: 100dvh;
 }
 [hidden] { display: none !important; }
+/* Selecting and dragging (U28). The page is an instrument: its chrome (bars, buttons, chips,
+   tabs, menus, labels, the 3D view, the toolbar) is not selectable, its images and links are not
+   dragged, a long press shows no callout and a tap no grey flash. What is read stays selectable,
+   so a teacher can copy it: the dock's text, About, the status line, the readouts' values, and
+   whatever is typed. Controls inside the reading areas stay chrome. */
+body { user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; }
+img, svg { -webkit-user-drag: none; }
+.panel, .dialog-body, #status, .readout output, input, textarea {
+  user-select: text;
+  -webkit-user-select: text;
+  -webkit-touch-callout: default;
+}
+.panel button, .panel a, .panel .taskline, .panel .progress, .panel .step-meta, .panel .kicker, .dialog-head, .dialog-body a {
+  user-select: none;
+  -webkit-user-select: none;
+}
+.figure img { -webkit-user-drag: auto; }
 button, input, select { font: inherit; color: inherit; }
 a { color: var(--md-primary); }
 :focus-visible { outline: 2px solid var(--md-primary); outline-offset: 2px; }

@@ -373,6 +373,14 @@ Free play or a lesson was shown only by a small tag at the right end of the stat
 - **On a phone** the bar cannot grow a second row (height is what a phone lacks), so it frees room instead: the title text goes (the logo stays; the full title is the page's title and is in About), the language button shows only its 文A (the current language is ticked in its menu), and a lesson shows only its step ("3/9", its name is in the dock's header) beside the ✕. Under 360 px the free-play chip also drops its icon, keeping its words and ▾. The mode's text is the one part of the bar that may shorten (with "…"); the ✕ never does. Checked in all ten languages at 320 and 375 px.
 - **The status bar's mode tag is gone;** the status line keeps its messages.
 
+### U28 — What can be selected and dragged
+
+Only buttons were protected: the logo could be dragged, and labels, chips, tabs, the title and the status bar could be dragged across and selected, as on a document. The page is an instrument, so it follows the platform's rules for apps.
+
+- **Chrome is neither selectable nor draggable:** the top bar (logo, title, mode, buttons), the stage's readout labels, view controls and 3D view, the toolbar, the dock's tabs and handle, menus, tooltips and labels, the dialog's title band, and the controls inside reading areas (Back and Next, the task line, the progress, the lesson list's buttons, links). The logo and its link are marked not draggable (Firefox ignores the CSS for that). A long press shows no image or link callout, and a tap shows no grey flash.
+- **What is read stays selectable,** so a teacher can copy it into a worksheet: the dock's text (steps, captions, Get started, the lesson summaries, references), About's text, the status line's message, the readouts' values (the result), and whatever is typed in the number box.
+- **The lessons' pictures** can still be dragged or long-pressed, as content (each carries its credit and licence).
+
 ## Part 4 — Open questions
 
 - The link format (P8): which fields the first release promises (language, lesson and step, numbers on the machine).
