@@ -624,6 +624,7 @@ export class App {
           [null, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((h) => ({
             label: h === null ? t("strip.pin.out") : String(h),
             checked: this.machine.pin === h,
+            divider: h === 1 ? t("strip.pin.hole") : undefined,
             run: () => this.use("pin", () => this.setPin(h)),
           })),
         ),
@@ -696,6 +697,8 @@ export class App {
     $("numberField").classList.toggle("wanted", inputState.wanted && inputState.enabled);
     if (document.activeElement !== input) input.value = String(this.inputNumber());
     $("pinValue").textContent = m.pin === null ? "–" : String(m.pin);
+    // its name says the hole (U22); the tooltip keeps what the pin does
+    $("pinBtn").setAttribute("aria-label", m.pin === null ? t("strip.pin.nameOut") : t("strip.pin.name", { n: m.pin }));
     // the view on show, on the Views menu's button
     const viewName = t(`view.${this.view}`);
     $("viewName").textContent = viewName;

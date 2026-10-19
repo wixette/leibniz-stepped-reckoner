@@ -363,7 +363,16 @@ a { color: var(--md-primary); }
 .number-field.wanted { border-color: var(--md-primary); box-shadow: 0 0 0 2px var(--md-primary), 0 0 14px color-mix(in srgb, var(--md-primary) 45%, transparent); }
 .number-field input:disabled { color: color-mix(in srgb, var(--md-on-surface) 38%, transparent); }
 .carriage-place { min-width: 2ch; text-align: center; font-size: 16px; font-weight: 600; }
-.pin-btn { min-width: 76px; }
+/* The pin's hole: a dropdown, boxed and named like the other settings (U22). What is set is a
+   box with its name on the border; what is done is a button. */
+.select-field { align-items: center; justify-content: space-between; gap: 6px; min-width: 78px; padding: 0 6px 0 14px; color: var(--md-on-surface); font: inherit; cursor: pointer; }
+.select-field .select-value { font-size: 18px; font-weight: 560; min-width: 1ch; text-align: center; }
+.select-field .icon { color: var(--md-on-surface-variant); }
+.select-field:hover { border-color: var(--md-on-surface); }
+.select-field[aria-expanded="true"] { border-color: var(--md-primary); box-shadow: inset 0 0 0 1px var(--md-primary); }
+.select-field[aria-expanded="true"] .field-label { color: var(--md-primary); }
+.select-field[aria-disabled="true"] { opacity: 0.45; cursor: default; }
+.field-group.wanted:not([aria-disabled="true"]) { border-color: var(--md-primary); box-shadow: 0 0 0 2px var(--md-primary), 0 0 14px color-mix(in srgb, var(--md-primary) 45%, transparent); }
 
 /* ---- dock ---------------------------------------------------------------------------------------- */
 .dock {

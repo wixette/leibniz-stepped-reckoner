@@ -31,7 +31,7 @@ const TASK_CONTROLS = {
     { id: "leftBtn", icon: "keyboard_double_arrow_left", tip: "strip.left.tip" },
     { id: "rightBtn", icon: "keyboard_double_arrow_right", tip: "strip.right.tip" },
   ],
-  pin: [{ id: "pinBtn", icon: "radio_button_checked", label: "strip.pin" }],
+  pin: [{ id: "pinBtn", icon: "keyboard_arrow_down", label: "strip.pin" }],
   toStop: [{ id: "toStopBtn", icon: "fast_forward", label: "strip.toStop" }],
   reset: [{ id: "resetBtn", icon: "restart_alt", label: "strip.reset" }],
 };
