@@ -291,16 +291,14 @@ a { color: var(--md-primary); }
   box-shadow: 0 6px 22px rgba(0, 0, 0, 0.4);
 }
 .strip .group { display: flex; align-items: center; gap: 4px; }
-/* One control's two ways, joined and alike (U20): the crank forward and back, the carriage left
-   and right. Every machine operation is a tonal button: none looks like the default or the
+/* One control's two ways, joined and alike (U20): the crank forward and back (the carriage's
+   left and right are joined to its place's box, below). Every machine operation is a tonal button: none looks like the default or the
    active one; a lesson marks the one it asks for (the glow, and its task line, U18). Reset, which
    clears the machine, is the one quiet text button, at the end. */
 .pair { display: inline-flex; align-items: stretch; gap: 2px; }
 .pair > * { border-radius: 6px; }
 .pair > :first-child { border-radius: var(--radius-full) 6px 6px var(--radius-full); }
 .pair > :last-child { border-radius: 6px var(--radius-full) var(--radius-full) 6px; }
-.pair .btn.icon-only { width: 36px; color: var(--md-on-secondary-container); }
-.pair .carriage-place { display: grid; place-items: center; height: 40px; min-width: 32px; padding: 0 6px; background: var(--md-secondary-container); color: var(--md-on-secondary-container); }
 /* the crank's buttons: its turning icon and the sign of what the turn does, the same in every
    language (the words are in the tooltip and the accessible name) */
 .btn .sym { font-size: 22px; font-weight: 600; line-height: 1; min-width: 0.6em; text-align: center; }
@@ -330,11 +328,6 @@ a { color: var(--md-primary); }
   border-radius: var(--radius-s);
   background: var(--md-surface);
 }
-/* the carriage's arrows and place, boxed and named like the number box (U21); they sit low in
-   the box, 3 px clear of the label on its border (which reaches about 5 px in) */
-.field-group { align-items: flex-end; padding: 0 3px 3px; }
-.field-group .pair .btn.icon-only { width: 32px; height: 27px; }
-.field-group .pair .carriage-place { height: 27px; }
 .number-field:focus-within { border-color: var(--md-primary); box-shadow: inset 0 0 0 1px var(--md-primary); }
 .number-field label, .field-group .field-label {
   /* Material's outlined field: the label sits on the border */
@@ -362,7 +355,9 @@ a { color: var(--md-primary); }
 }
 .number-field.wanted { border-color: var(--md-primary); box-shadow: 0 0 0 2px var(--md-primary), 0 0 14px color-mix(in srgb, var(--md-primary) 45%, transparent); }
 .number-field input:disabled { color: color-mix(in srgb, var(--md-on-surface) 38%, transparent); }
-.carriage-place { min-width: 2ch; text-align: center; font-size: 16px; font-weight: 600; }
+/* the carriage's place: a value in its box, like the pin's hole (U21) */
+.value-field { justify-content: center; min-width: 76px; padding: 0 12px; }
+.carriage-place { min-width: 2ch; text-align: center; font-size: 18px; font-weight: 560; }
 /* The pin's hole: a dropdown, boxed and named like the other settings (U22). What is set is a
    box with its name on the border; what is done is a button. */
 .select-field { align-items: center; justify-content: space-between; gap: 6px; min-width: 78px; padding: 0 6px 0 14px; color: var(--md-on-surface); font: inherit; cursor: pointer; }
@@ -372,11 +367,14 @@ a { color: var(--md-primary); }
 .select-field[aria-expanded="true"] { border-color: var(--md-primary); box-shadow: inset 0 0 0 1px var(--md-primary); }
 .select-field[aria-expanded="true"] .field-label { color: var(--md-primary); }
 .select-field[aria-disabled="true"] { opacity: 0.45; cursor: default; }
-/* Run to stop, joined to the pin's box like a split button (U23): the box sets the stop, the
-   button turns the crank until it gets there. Icon only (→|); its name is in the tooltip. */
+/* A value's box with the buttons that act on it joined to its edges, full height, one outer
+   corner shape (U21, U23): the pin's box and Run to stop (→|), the carriage's place between
+   its arrows. Icon-only buttons; their names are in their tooltips. */
 .split { display: inline-flex; align-items: stretch; }
-.split .select-field { border-top-right-radius: 0; border-bottom-right-radius: 0; }
-.split .btn { width: 38px; height: 40px; border-radius: 0 var(--radius-s) var(--radius-s) 0; color: var(--md-on-secondary-container); }
+.split > * { border-radius: 0; }
+.split > :first-child { border-radius: var(--radius-s) 0 0 var(--radius-s); }
+.split > :last-child { border-radius: 0 var(--radius-s) var(--radius-s) 0; }
+.split .btn { width: 38px; height: 40px; color: var(--md-on-secondary-container); }
 .field-group.wanted:not([aria-disabled="true"]) { border-color: var(--md-primary); box-shadow: 0 0 0 2px var(--md-primary), 0 0 14px color-mix(in srgb, var(--md-primary) 45%, transparent); }
 
 /* ---- dock ---------------------------------------------------------------------------------------- */

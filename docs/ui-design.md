@@ -280,7 +280,7 @@ The buttons were labelled Add and Subtract, and Add was filled (the main action,
 
 Its name, "Carriage", was loose text in a third size, smaller than the toolbar's other labels, and it disappeared on a narrower stage, leaving its arrows unnamed. While the carriage moved, its place read 1.2, 1.3, 1.4…, which means nothing to the reader: the carriage works only at a whole place.
 
-- **It is a bordered group, like the number box,** with "Carriage" on its border in the same caption style. Inside are the left and right arrows with the place between them (U20). A border label takes no width, so it stays at every size. The two boxes read as a set: what is set on the knobs, and where the carriage stands.
+- **The place is a value in an outlined box, like the number box and the pin's hole,** with "Carriage" on its border in the same caption style. The left and right arrows are joined to the box's two edges, at the box's full height and with one outer corner shape, as Run to stop is joined to the pin's box (U23). (A first version put smaller buttons inside the box; their corners clashed with the box's, and they stood lower than every other control.) A border label takes no width, so it stays at every size. The boxes read as a set: what is set on the knobs, where the carriage stands, and the pin's hole.
 - **Only whole places are shown,** in the toolbar and in the Carriage readout. The number is the last place the carriage has reached: a one-place shift changes it when the carriage arrives, and a longer move (clicking a result wheel) counts up or down place by place as the carriage passes them, like an odometer. The moving carriage in the 3D view shows the motion itself.
 
 ### U22 — The pin is a dropdown box: what is set is a box, what is done is a button
