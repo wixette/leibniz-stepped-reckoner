@@ -175,6 +175,17 @@ a { color: var(--md-primary); }
 .brand span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .topbar .spacer { flex: 1; }
 .lang-btn { gap: 6px; padding: 0 8px 0 10px; color: var(--md-on-surface-variant); font-weight: 600; }
+/* The mode, always in view (U27): free play (a menu to start or resume learning), or the lesson
+   under way (its name and step, and a button back to free play). It is the one part of the bar
+   that gives way: its text shortens before anything else. */
+.mode { display: flex; min-width: 0; margin-left: 12px; }
+.mode .chip { min-width: 0; height: 34px; }
+.mode .mode-label, .mode .mode-long { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mode .mode-long { max-width: 34ch; }
+.mode .mode-short { display: none; white-space: nowrap; }
+.mode-free { color: var(--md-on-surface); }
+.mode .chip.course { flex: 0 1 auto; background: var(--md-primary-container); color: var(--md-on-primary-container); border-color: transparent; }
+.mode #modeLeave { flex: none; color: var(--md-on-surface); }
 
 /* ---- workspace: the machine area and the dock ------------------------------------------------------ */
 .workspace {
@@ -599,8 +610,6 @@ body.resizing-rows, body.resizing-rows * { cursor: row-resize !important; }
 }
 .statusbar #status { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .statusbar #status.warn { color: var(--md-error); }
-.mode-chip { white-space: nowrap; padding: 2px 10px; border-radius: var(--radius-full); background: var(--md-surface-high); }
-.mode-chip.course { background: var(--md-primary-container); color: var(--md-on-primary-container); }
 
 /* ---- menus, tooltips and dialogs -------------------------------------------------------------------- */
 .menu {
@@ -685,11 +694,23 @@ dialog::backdrop { background: var(--md-scrim); }
 @media (max-width: 599px) {
   .chip .txt { display: none; }
   .chip { padding: 0 8px; }
+  /* the top bar on a phone (U27): the logo without the title, the language by its 文A alone,
+     the lesson by its step alone (its name is in the dock's header) */
+  .brand span { display: none; }
+  .lang-btn > .icon:last-child, .lang-btn #langShort { display: none; }
+  .lang-btn { width: 40px; padding: 0; }
+  .mode { margin-left: 8px; }
+  .mode .mode-long { display: none; }
+  .mode .mode-short { display: inline; }
   .readout { padding: 4px 8px 5px; min-width: 0; }
   .readout output { font-size: 17px; }
   .readout.result output { font-size: 18px; }
   .brand span { font-size: 14px; }
   .panel { padding: 12px; }
+}
+/* the narrowest phones: the free-play chip keeps its words and its ▾, not its icon (U27) */
+@media (max-width: 359px) {
+  .mode-free > .icon:first-child { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; }

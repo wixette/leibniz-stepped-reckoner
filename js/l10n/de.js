@@ -69,7 +69,7 @@ export default {
   "status.ranToStop.other": "Die Kurbel drehte sich {n}-mal und hielt am Stift an.",
   "status.apart": "Die Maschine ist zerlegt. Wähle eine andere Ansicht, um sie zusammenzusetzen und zu rechnen.",
   "status.busy": "Warte, bis die Maschine stillsteht.",
-  "status.notNow": "Nicht in diesem Schritt: Nimm das Bedienelement, nach dem der Schritt fragt.",
+  "status.notNow": "Nicht in diesem Schritt: Nimm das Bedienelement, nach dem der Schritt fragt. Um es frei zu benutzen, verlass die Lektion (oben in der Leiste).",
   "status.carriageEnd": "Der Schlitten ist am Ende seines Wegs.",
   "status.noPin": "Setze zuerst den Stift in ein Loch der Magna Rota.",
   "status.notReady": "Die Maschine wird noch geladen.",
@@ -83,6 +83,13 @@ export default {
 
   "mode.free": "Freies Rechnen",
   "mode.step": "{title} · {i}/{n}",
+  "mode.lessons": "Lektion wählen…",
+  "mode.resume": "Fortsetzen: {title}, Schritt {i} von {n}",
+  "mode.tutorialAgain": "Einführung noch einmal",
+  "mode.leave": "Freies Rechnen",
+  "mode.tip.free": "Freies Rechnen: Die Maschine gehört dir. Starte hier die Einführung oder eine Lektion.",
+  "mode.tip.show": "Lektion zeigen",
+  "mode.tip.leave": "Lektion verlassen und frei rechnen (du kannst sie hier später fortsetzen)",
 
   "course.back": "Zurück",
   "course.next": "Weiter",

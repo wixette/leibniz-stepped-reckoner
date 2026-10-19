@@ -69,7 +69,7 @@ export default {
   "status.ranToStop.other": "クランクが {n} 回転してピンで止まりました。",
   "status.apart": "機械は分解されています。ほかの視点を選ぶと組み立て直され、計算できます。",
   "status.busy": "機械が止まるまで待ってください。",
-  "status.notNow": "このステップでは使いません。ステップで指示された操作を使ってください。",
+  "status.notNow": "このステップでは使いません。ステップで指示された操作を使ってください。自由に使うには、レッスンを離れてください（上部のバー）。",
   "status.carriageEnd": "キャリッジは端まで来ています。",
   "status.noPin": "先にマグナ・ロータの穴にピンを差してください。",
   "status.notReady": "機械はまだ読み込み中です。",
@@ -83,6 +83,13 @@ export default {
 
   "mode.free": "自由操作",
   "mode.step": "{title} · {i}/{n}",
+  "mode.lessons": "レッスンを選ぶ…",
+  "mode.resume": "再開：{title}、ステップ {i}/{n}",
+  "mode.tutorialAgain": "チュートリアルをもう一度",
+  "mode.leave": "自由操作",
+  "mode.tip.free": "自由操作：機械を自由に動かせます。ここからチュートリアルやレッスンを始められます。",
+  "mode.tip.show": "レッスンを表示",
+  "mode.tip.leave": "レッスンを離れて自由操作へ（あとでここから再開できます）",
 
   "course.back": "戻る",
   "course.next": "次へ",

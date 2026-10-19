@@ -98,6 +98,13 @@
         <img src="images/logo-wide.svg?v=0.0.1" alt="" width="64" height="34" />
         <span data-l10n="app.name">Leibniz's Stepped Reckoner</span>
       </a>
+      <div class="mode" id="modeBox">
+        <button class="chip mode-free" id="modeFree" aria-haspopup="menu" aria-expanded="false" data-l10n-tip="mode.tip.free"><i data-icon="touch_app"></i><span class="mode-label" data-l10n="mode.free">Free play</span><i data-icon="keyboard_arrow_down"></i></button>
+        <span class="chip-pair mode-lesson" id="modeLesson" role="group" hidden>
+          <button class="chip course" id="modeShow" data-l10n-tip="mode.tip.show"><i data-icon="school"></i><span class="mode-long" id="modeLong"></span><span class="mode-short" id="modeShort"></span></button>
+          <button class="chip" id="modeLeave" data-l10n-tip="mode.tip.leave"><i data-icon="close"></i><span class="txt" data-l10n="mode.leave">Free play</span></button>
+        </span>
+      </div>
       <div class="spacer"></div>
       <button class="btn icon-only" id="dockBtn" data-l10n-tip="bar.dockHide"><i data-icon="right_panel_close"></i></button>
       <button class="btn lang-btn" id="langBtn" aria-haspopup="menu" data-l10n-tip="bar.language">
@@ -174,7 +181,6 @@
 
     <footer class="statusbar">
       <span id="status" role="status" aria-live="polite"></span>
-      <span class="mode-chip" id="modeChip"></span>
     </footer>
 
     <dialog id="aboutDialog" aria-labelledby="aboutTitle">

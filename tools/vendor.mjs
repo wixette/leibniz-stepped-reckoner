@@ -82,6 +82,7 @@ export const ICONS = [
   "rotate_right",
   "school",
   "task_alt",
+  "touch_app",
   "translate",
   "videocam",
 ];

@@ -69,7 +69,7 @@ export default {
   "status.ranToStop.other": "曲柄轉了 {n} 圈，在插銷處停下。",
   "status.apart": "機器已拆開。選擇其他視圖即可裝回去計算。",
   "status.busy": "請等機器停下。",
-  "status.notNow": "這一步不用它：請使用這一步要求的控制項。",
+  "status.notNow": "這一步不用它：請使用這一步要求的控制項。若想自由使用，請離開課程（頂列）。",
   "status.carriageEnd": "滑架已經移到盡頭。",
   "status.noPin": "請先把插銷插進大輪的一個孔裡。",
   "status.notReady": "機器仍在載入中。",
@@ -83,6 +83,13 @@ export default {
 
   "mode.free": "自由操作",
   "mode.step": "{title} · {i}/{n}",
+  "mode.lessons": "選擇課程…",
+  "mode.resume": "繼續：{title}，第 {i}/{n} 步",
+  "mode.tutorialAgain": "重新學習入門教學",
+  "mode.leave": "自由操作",
+  "mode.tip.free": "自由操作：機器由你操作。可以在這裡開始入門教學或課程。",
+  "mode.tip.show": "顯示課程",
+  "mode.tip.leave": "離開課程，回到自由操作（之後可以在這裡繼續）",
 
   "course.back": "上一步",
   "course.next": "下一步",

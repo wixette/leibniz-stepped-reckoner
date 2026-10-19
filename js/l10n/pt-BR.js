@@ -69,7 +69,7 @@ export default {
   "status.ranToStop.other": "A manivela deu {n} voltas e parou no pino.",
   "status.apart": "A máquina está desmontada. Escolha outra vista para montá-la de novo e calcular.",
   "status.busy": "Espere a máquina parar.",
-  "status.notNow": "Não neste passo: use o controle que o passo pede.",
+  "status.notNow": "Não neste passo: use o controle que o passo pede. Para usá-lo livremente, saia da lição (barra superior).",
   "status.carriageEnd": "O carro está no fim do seu curso.",
   "status.noPin": "Primeiro coloque o pino em um furo da Magna Rota.",
   "status.notReady": "A máquina ainda está carregando.",
@@ -83,6 +83,13 @@ export default {
 
   "mode.free": "Uso livre",
   "mode.step": "{title} · {i}/{n}",
+  "mode.lessons": "Escolher uma lição…",
+  "mode.resume": "Retomar: {title}, passo {i} de {n}",
+  "mode.tutorialAgain": "Refazer o tutorial",
+  "mode.leave": "Uso livre",
+  "mode.tip.free": "Uso livre: a máquina é sua. Comece aqui o tutorial ou uma lição.",
+  "mode.tip.show": "Mostrar a lição",
+  "mode.tip.leave": "Sair da lição para o uso livre (você pode retomá-la aqui depois)",
 
   "course.back": "Voltar",
   "course.next": "Próximo",

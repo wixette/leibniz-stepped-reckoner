@@ -69,7 +69,7 @@ export default {
   "status.ranToStop.other": "La manivela dio {n} vueltas y se detuvo en la clavija.",
   "status.apart": "La máquina está desmontada. Elige otra vista para volver a montarla y calcular.",
   "status.busy": "Espera a que la máquina se detenga.",
-  "status.notNow": "No en este paso: usa el control que pide el paso.",
+  "status.notNow": "No en este paso: usa el control que pide el paso. Para usarlo libremente, sal de la lección (barra superior).",
   "status.carriageEnd": "El carro está al final de su recorrido.",
   "status.noPin": "Primero pon la clavija en un agujero de la Magna Rota.",
   "status.notReady": "La máquina todavía se está cargando.",
@@ -83,6 +83,13 @@ export default {
 
   "mode.free": "Juego libre",
   "mode.step": "{title} · {i}/{n}",
+  "mode.lessons": "Elegir una lección…",
+  "mode.resume": "Continuar: {title}, paso {i} de {n}",
+  "mode.tutorialAgain": "Repetir el tutorial",
+  "mode.leave": "Juego libre",
+  "mode.tip.free": "Juego libre: la máquina es tuya. Empieza aquí el tutorial o una lección.",
+  "mode.tip.show": "Mostrar la lección",
+  "mode.tip.leave": "Salir de la lección al juego libre (podrás continuarla aquí más tarde)",
 
   "course.back": "Atrás",
   "course.next": "Siguiente",

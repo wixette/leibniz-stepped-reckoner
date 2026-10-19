@@ -59,7 +59,7 @@ Also:
 ## Part 2 — The layout
 
 ```
-┌ [logo] Leibniz's Calculating Machine                      [dock] [文A EN ▾] [ⓘ] ┐  top bar
+┌ [logo] Stepped Reckoner [🎓 The carry · 3/8│✕ Free play]   [dock] [文A EN ▾] [ⓘ] ┐  top bar
 ├─────────────────────────────────────────────────────┬────────────────────────────┤
 │ RESULT 0 000 000 010 000  TURNS 1   [⌂][🎥 Carry ▾] ┃ Get started│Lessons│Refs   │  dock tabs
 │                                                     ┃ ┌────────────────────────┐ │
@@ -69,7 +69,7 @@ Also:
 │                                                     ┃ │ ▸ Your turn  [Number]  │ │  task line (U18)
 │ ╭[00000001] [↻ + │ ↺ −] [‹‹ 0 ››] [Pin – ▾│→|]  ⟳ ╮ ┃ └────────────────────────┘ │  toolbar (U18)
 ├─────────────────────────────────────────────────────┴────────────────────────────┤
-│ The ribs added 1 to the units: 9 → 0, and the carry is stored.   Lesson 2 · 3/8  │  status bar
+│ The ribs added 1 to the units: 9 → 0, and the carry is stored.                   │  status bar
 └──────────────────────────────────────────────────────────────────────────────────┘
   ┃ = the dock's edge, its resize handle (U17)
 ```
@@ -88,7 +88,7 @@ The page is a fixed frame: top bar, stage (with the machine's toolbar floating a
 
 Opening the page gives a working machine at once: every control enabled, nothing to choose first. The dock opens on *Get started* the first time (and on the reader's last tab after that), inviting the tutorial without blocking the machine.
 
-Starting the tutorial or a lesson enters **course mode**: the step player takes the dock, the machine toolbar greys the controls the current step does not use (P6, the status line says why), and the status bar shows where you are. Leaving (Close, Finish, or opening another lesson) returns to free play with the machine as it is.
+Starting the tutorial or a lesson enters **course mode**: the step player takes the dock, the machine toolbar greys the controls the current step does not use (P6, the status line says why), and the top bar shows where you are (U27). Leaving (the top bar's ✕ Free play, the lesson's ✕, Finish, or opening another lesson) returns to free play with the machine as it is; a lesson left unfinished can be resumed at its step.
 
 ### U3 — Three dock tabs: Get started, Lessons, References
 
@@ -352,6 +352,18 @@ In a wide dock (below the machine on a large screen), a step looked unfinished. 
 - **The picture keeps its own shape,** never letterboxed, with rounded corners and its credit underneath.
 - **The card adapts to the dock's own width:** below about 640 px the picture sits above the text, the full width of the card; wider, it sits beside the text (two fifths and three fifths), up to 320 px tall. A tall picture, such as the 1727 engraving, stays upright beside the text.
 - **Text keeps a reading measure:** a step's text is at most about 68 characters a line, and every panel's content (Get started, the lessons, the references, a step) is centred at no more than 960 px in a wide dock.
+
+### U27 — The mode is in the top bar: where you are, and the way back
+
+Free play or a lesson was shown only by a small tag at the right end of the status bar, which new readers did not notice. The only way back to free play was the small ✕ in the lesson's header. A reader who had started a lesson could not tell why controls were greyed, or how to get out.
+
+- **The top bar shows the mode, always, beside the title.** It is where an app shows its overall state, and the first place people look. The mode is the whole app's state (the dock, the camera, which controls work, the machine's starting state), not the toolbar's, and the toolbar has no room left.
+- **In free play, a quiet chip "Free play ▾".** Its menu offers "Resume: *lesson*, step *i* of *n*" when a lesson was left unfinished, "Start the tutorial" (or "again"), and "Choose a lesson…". Each of these brings the dock forward, opening it if it was closed.
+- **In a lesson, a blue chip with the lesson and the step** ("The carry: 9999 + 1 · 3/9"), which brings the lesson's tab forward, **joined to "✕ Free play"**, which leaves it. The ✕ in the lesson's header stays as a second way.
+- **Leaving keeps the place:** a lesson left unfinished is remembered at its step, so the reader can step out to try something and come back. Resuming sets the machine as that step starts. One lesson is remembered at a time; finishing it, or starting it afresh, forgets it.
+- **The refusal says where the way out is:** a control a step does not use answers "…To use it freely, leave the lesson for free play (top bar)."
+- **On a phone** the bar cannot grow a second row (height is what a phone lacks), so it frees room instead: the title text goes (the logo stays; the full title is the page's title and is in About), the language button shows only its 文A (the current language is ticked in its menu), and a lesson shows only its step ("3/9", its name is in the dock's header) beside the ✕. Under 360 px the free-play chip also drops its icon, keeping its words and ▾. The mode's text is the one part of the bar that may shorten (with "…"); the ✕ never does. Checked in all ten languages at 320 and 375 px.
+- **The status bar's mode tag is gone;** the status line keeps its messages.
 
 ## Part 4 — Open questions
 

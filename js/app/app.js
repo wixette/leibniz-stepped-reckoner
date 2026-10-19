@@ -16,6 +16,8 @@ import { Stage } from "./stage.js";
 import { CourseUI } from "./course.js";
 import { showAbout } from "./about.js";
 import { wireDockHandle } from "./dockHandle.js";
+import { LESSONS } from "../teach/lessons.js";
+import { TUTORIAL } from "../teach/tutorial.js";
 
 /**
  * @template {HTMLElement} [T=HTMLElement]
@@ -300,6 +302,7 @@ export class App {
    * @param {"tab-start" | "tab-lessons"} tab
    */
   startCourse(lesson, tab) {
+    if (this.resumable()?.lesson === lesson) store.set("lsr-resume", ""); // a fresh start replaces it
     this.settle();
     this.endInside();
     this.course = { lesson, i: 0, playing: false, finished: false, tab };
@@ -457,6 +460,7 @@ export class App {
     const done = new Set(this.doneCourses());
     done.add(c.lesson.id);
     store.set("lsr-done", JSON.stringify([...done]));
+    if (this.resumable()?.lesson === c.lesson) store.set("lsr-resume", "");
     this.clearPresentation();
     const title = t(c.lesson.title);
     this.say(() => (c.lesson.id === "tutorial" ? t("status.tutorialDone") : t("status.lessonDone", { title })));
@@ -464,15 +468,62 @@ export class App {
     this.render();
   }
 
-  /** Leave the course: free play again, with the machine as it is. */
+  /** Leave the course: free play again, with the machine as it is. Its step is kept to resume (U27). */
   closeCourse() {
     this.settle();
+    const c = this.course;
+    if (c && !c.finished) store.set("lsr-resume", JSON.stringify({ id: c.lesson.id, i: c.i, tab: c.tab }));
     this.course = null;
     this.clearPresentation();
     this.say(() => "");
     this.courseUI.rebuild();
     this.render();
   }
+
+  /**
+   * The course left unfinished, to resume where the reader left it (U27).
+   * @returns {{ lesson: Lesson; i: number; tab: "tab-start" | "tab-lessons" } | null}
+   */
+  resumable() {
+    try {
+      const v = JSON.parse(store.get("lsr-resume") || "null");
+      const lesson = [TUTORIAL, ...LESSONS].find((l) => l.id === v?.id);
+      if (!lesson || !Number.isInteger(v.i) || v.i < 0 || v.i >= lesson.steps.length) return null;
+      return { lesson, i: v.i, tab: v.tab === "tab-lessons" ? "tab-lessons" : "tab-start" };
+    } catch {
+      return null;
+    }
+  }
+
+  /** Go back to the course left unfinished, at its step, with the machine set as for that step. */
+  resume() {
+    const r = this.resumable();
+    if (!r) return;
+    this.startCourse(r.lesson, r.tab);
+    if (r.i > 0) this.enterStep(r.i, true);
+    this.showCourse();
+  }
+
+  /**
+   * Start a course from the top bar: its tab comes forward, and the dock opens if it was closed.
+   * @param {Lesson} lesson
+   * @param {"tab-start" | "tab-lessons"} tab
+   */
+  startFromBar(lesson, tab) {
+    this.startCourse(lesson, tab);
+    this.showCourse();
+  }
+
+  /** Bring the course under way into view: its dock tab, the dock opened if it was closed. */
+  showCourse() {
+    const c = this.course;
+    if (!c) return;
+    this.openDock();
+    this.courseUI.selectTab(c.tab);
+  }
+
+  /** Opens the dock if it is closed (set by the top bar's wiring). */
+  openDock = () => {};
 
   /** Bring a moving machine to rest at once (finish the turn or shift under way). */
   settle() {
@@ -518,6 +569,29 @@ export class App {
       store.set("lsr-dock", open ? "open" : "closed");
     };
     setDock(store.get("lsr-dock") !== "closed");
+    this.openDock = () => setDock(true);
+    // The mode, always in view (U27): free play with a menu to start or resume learning, or the
+    // lesson under way with a button back to free play.
+    const modeFree = $("modeFree");
+    modeFree.addEventListener("click", () => {
+      const r = this.resumable();
+      /** @type {import("../ui/components.js").MenuItem[]} */
+      const items = [];
+      if (r) items.push({ label: t("mode.resume", { title: t(r.lesson.title), i: r.i + 1, n: r.lesson.steps.length }), run: () => this.resume() });
+      items.push(
+        { label: t(this.doneCourses().includes("tutorial") ? "mode.tutorialAgain" : "start.cta"), divider: r ? true : undefined, run: () => this.startFromBar(TUTORIAL, "tab-start") },
+        {
+          label: t("mode.lessons"),
+          run: () => {
+            this.openDock();
+            this.courseUI.selectTab("tab-lessons");
+          },
+        },
+      );
+      showMenu(modeFree, items);
+    });
+    $("modeShow").addEventListener("click", () => this.showCourse());
+    $("modeLeave").addEventListener("click", () => this.closeCourse());
     dockBtn.addEventListener("click", () => setDock(ws.classList.contains("dock-closed")));
     wireDockHandle({ workspace: ws, dock: $("dock"), handle: $("dockHandle"), store, close: () => setDock(false) });
     const langBtn = $("langBtn");
@@ -769,9 +843,14 @@ export class App {
     // the course and the mode
     this.courseUI.update();
     const c = this.course;
-    const chipEl = $("modeChip");
-    chipEl.textContent = c && !c.finished ? t("mode.step", { title: t(c.lesson.title), i: c.i + 1, n: c.lesson.steps.length }) : t("mode.free");
-    chipEl.classList.toggle("course", !!c && !c.finished);
+    const inCourse = !!c && !c.finished;
+    $("modeFree").hidden = inCourse;
+    $("modeLesson").hidden = !inCourse;
+    if (c && inCourse) {
+      const n = c.lesson.steps.length;
+      $("modeLong").textContent = t("mode.step", { title: t(c.lesson.title), i: c.i + 1, n });
+      $("modeShort").textContent = `${c.i + 1}/${n}`;
+    }
   }
 
   renderStatus() {

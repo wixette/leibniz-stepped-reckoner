@@ -69,7 +69,7 @@ export default {
   "status.ranToStop.other": "La manovella ha fatto {n} giri e si è fermata al perno.",
   "status.apart": "La macchina è smontata. Scegli un’altra vista per rimontarla e calcolare.",
   "status.busy": "Aspetta che la macchina si fermi.",
-  "status.notNow": "Non in questo passo: usa il comando che il passo chiede.",
+  "status.notNow": "Non in questo passo: usa il comando che il passo chiede. Per usarlo liberamente, esci dalla lezione (barra in alto).",
   "status.carriageEnd": "Il carrello è a fine corsa.",
   "status.noPin": "Prima metti il perno in un foro della Magna Rota.",
   "status.notReady": "La macchina si sta ancora caricando.",
@@ -83,6 +83,13 @@ export default {
 
   "mode.free": "Gioco libero",
   "mode.step": "{title} · {i}/{n}",
+  "mode.lessons": "Scegli una lezione…",
+  "mode.resume": "Riprendi: {title}, passo {i} di {n}",
+  "mode.tutorialAgain": "Rifai il tutorial",
+  "mode.leave": "Gioco libero",
+  "mode.tip.free": "Gioco libero: la macchina è tua. Inizia qui il tutorial o una lezione.",
+  "mode.tip.show": "Mostra la lezione",
+  "mode.tip.leave": "Esci dalla lezione per il gioco libero (potrai riprenderla qui più tardi)",
 
   "course.back": "Indietro",
   "course.next": "Avanti",

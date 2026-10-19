@@ -69,7 +69,7 @@ export default {
   "status.ranToStop.other": "크랭크가 {n}바퀴 돌고 핀에서 멈췄습니다.",
   "status.apart": "기계가 분해되어 있습니다. 다른 보기를 고르면 다시 조립되어 계산할 수 있습니다.",
   "status.busy": "기계가 멈출 때까지 기다려 주세요.",
-  "status.notNow": "이 단계에서는 쓰지 않습니다. 단계에서 요청한 조작을 사용하세요.",
+  "status.notNow": "이 단계에서는 쓰지 않습니다. 단계에서 요청한 조작을 사용하세요. 자유롭게 쓰려면 레슨을 떠나세요(상단 바).",
   "status.carriageEnd": "캐리지가 끝까지 와 있습니다.",
   "status.noPin": "먼저 마그나 로타의 구멍에 핀을 꽂으세요.",
   "status.notReady": "기계를 아직 불러오는 중입니다.",
@@ -83,6 +83,13 @@ export default {
 
   "mode.free": "자유 조작",
   "mode.step": "{title} · {i}/{n}",
+  "mode.lessons": "레슨 선택…",
+  "mode.resume": "이어서 하기: {title}, {i}/{n}단계",
+  "mode.tutorialAgain": "튜토리얼 다시 하기",
+  "mode.leave": "자유 조작",
+  "mode.tip.free": "자유 조작: 기계를 마음대로 다룰 수 있습니다. 여기서 튜토리얼이나 레슨을 시작하세요.",
+  "mode.tip.show": "레슨 보기",
+  "mode.tip.leave": "레슨을 떠나 자유 조작으로 (나중에 여기서 이어서 할 수 있습니다)",
 
   "course.back": "이전",
   "course.next": "다음",

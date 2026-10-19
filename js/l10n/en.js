@@ -71,7 +71,7 @@ export default {
   "status.ranToStop.other": "The crank turned {n} times and stopped at the pin.",
   "status.apart": "The machine is taken apart. Choose another view to put it back together and calculate.",
   "status.busy": "Wait for the machine to stop.",
-  "status.notNow": "Not in this step: use the control the step asks for.",
+  "status.notNow": "Not in this step: use the control the step asks for. To use it freely, leave the lesson for free play (top bar).",
   "status.carriageEnd": "The carriage is at the end of its travel.",
   "status.noPin": "Put the pin in a hole of the Magna Rota first.",
   "status.notReady": "The machine is still loading.",
@@ -85,6 +85,13 @@ export default {
 
   "mode.free": "Free play",
   "mode.step": "{title} · {i}/{n}",
+  "mode.lessons": "Choose a lesson…",
+  "mode.resume": "Resume: {title}, step {i} of {n}",
+  "mode.tutorialAgain": "Start the tutorial again",
+  "mode.leave": "Free play",
+  "mode.tip.free": "Free play: the machine is yours. Start the tutorial or a lesson from here.",
+  "mode.tip.show": "Show the lesson",
+  "mode.tip.leave": "Leave the lesson for free play (you can resume it here later)",
 
   "course.back": "Back",
   "course.next": "Next",

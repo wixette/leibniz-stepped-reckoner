@@ -69,7 +69,7 @@ export default {
   "status.ranToStop.other": "La manivelle a fait {n} tours et s’est arrêtée à la cheville.",
   "status.apart": "La machine est démontée. Choisissez une autre vue pour la remonter et calculer.",
   "status.busy": "Attendez que la machine s’arrête.",
-  "status.notNow": "Pas dans cette étape : utilisez la commande que l’étape demande.",
+  "status.notNow": "Pas dans cette étape : utilisez la commande que l’étape demande. Pour l’utiliser librement, quittez la leçon (barre du haut).",
   "status.carriageEnd": "Le chariot est au bout de sa course.",
   "status.noPin": "Mettez d’abord la cheville dans un trou de la Magna Rota.",
   "status.notReady": "La machine est encore en cours de chargement.",
@@ -83,6 +83,13 @@ export default {
 
   "mode.free": "Jeu libre",
   "mode.step": "{title} · {i}/{n}",
+  "mode.lessons": "Choisir une leçon…",
+  "mode.resume": "Reprendre : {title}, étape {i} sur {n}",
+  "mode.tutorialAgain": "Refaire le tutoriel",
+  "mode.leave": "Jeu libre",
+  "mode.tip.free": "Jeu libre : la machine est à vous. Commencez ici le tutoriel ou une leçon.",
+  "mode.tip.show": "Afficher la leçon",
+  "mode.tip.leave": "Quitter la leçon pour le jeu libre (vous pourrez la reprendre ici plus tard)",
 
   "course.back": "Retour",
   "course.next": "Suivant",
