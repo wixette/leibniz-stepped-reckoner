@@ -78,10 +78,11 @@ export class App {
   /** Fade the parts that are not the subject (the "Fade others" chip). */
   fade = false;
   /**
-   * An inside view under way (U11): the drum or carry view in free play, which hid the case,
-   * opened the front and faded what is not its parts. casing and cutaway hold what to put
-   * back when it ends; null once the reader set that tool themselves (it is theirs then).
-   * @type {{ view: ViewName; parts: string[]; casing: boolean | null; cutaway: boolean | null } | null}
+   * An inside view under way (U11, U13): the drum or carry view, chosen from the Views menu or
+   * set by a lesson step. It hid the case, opened the front and faded what is not its parts
+   * (and context). casing and cutaway hold what to put back when it ends; null once the reader
+   * set that tool themselves (it is theirs then).
+   * @type {{ view: ViewName; parts: string[]; context: string[]; casing: boolean | null; cutaway: boolean | null } | null}
    */
   inside = null;
   /** Called after the page's texts were put in a new language (panels the app does not own). */
@@ -310,26 +311,42 @@ export class App {
   }
 
   /**
-   * Show a camera view. In free play the drum and carry views are inside views (U11, U13): they
-   * hide the case, open the front and fade what is not their parts, and the machine works as
-   * usual. In a lesson step a view only moves the camera: the step's presentation stays.
+   * Show a camera view from the Views menu. The drum and carry views are inside views (U11, U13):
+   * they hide the case, open the front and fade what is not their parts, and the machine works
+   * as usual; leaving one puts the tools back. The same in free play and in a lesson step.
    * @param {ViewName} view
    */
   chooseView(view) {
-    const inCourse = !!this.course && !this.course.finished;
-    if (!inCourse) this.endInside();
-    const parts = inCourse || !INSIDE_VIEWS.has(view) ? undefined : this.stage.views?.[view].inside;
-    if (parts) {
-      this.inside = { view, parts, casing: this.stage.casing, cutaway: this.stage.cutaway };
+    this.endInside();
+    const subject = INSIDE_VIEWS.has(view) ? this.insideSubject(view) : null;
+    if (subject) {
+      this.inside = { view, ...subject, casing: this.stage.casing, cutaway: this.stage.cutaway };
       this.stage.casing = false;
       this.stage.cutaway = true;
       this.stage.applyToggles();
       this.fade = true;
-      this.stage.highlight(parts, true);
+      this.stage.highlight(subject.parts, true, subject.context);
       this.say(() => t("status.inside"));
     }
     this.stage.fly(view);
+    this.lastView = view;
     this.render();
+  }
+
+  /**
+   * What an inside view shows: in a lesson step that uses this view, the step's subject;
+   * otherwise the view's own parts.
+   * @param {ViewName} view
+   * @returns {{ parts: string[]; context: string[] } | null}
+   */
+  insideSubject(view) {
+    const c = this.course;
+    if (c && !c.finished) {
+      const p = presentation(c.lesson, c.i);
+      if (p.view === view && p.highlight.length > 0) return { parts: p.highlight, context: p.context };
+    }
+    const parts = this.stage.views?.[view].inside;
+    return parts ? { parts, context: [] } : null;
   }
 
   /** End an inside view: put back the tools it changed (unless the reader took them over). */
@@ -341,33 +358,48 @@ export class App {
     if (v.cutaway !== null) this.stage.cutaway = v.cutaway;
     this.stage.applyToggles();
     this.fade = false;
-    this.stage.highlight([], false);
+    const b = this.subject();
+    this.stage.highlight(b.parts, false, b.context);
   }
 
   /**
-   * The parts shown highlighted now: the lesson step's, or the inside view's.
+   * The subject when no inside view is on: the lesson step's highlighted parts and context, or
+   * nothing in free play.
+   * @returns {{ parts: string[]; context: string[] }}
+   */
+  subject() {
+    const c = this.course;
+    if (!c || c.finished) return { parts: [], context: [] };
+    const p = presentation(c.lesson, c.i);
+    return { parts: p.highlight, context: p.context };
+  }
+
+  /**
+   * The parts shown highlighted now: the inside view's, or the lesson step's.
    * @returns {string[]}
    */
   highlightParts() {
-    const c = this.course;
-    if (c && !c.finished) return presentation(c.lesson, c.i).highlight;
-    return this.inside?.parts ?? [];
+    return this.inside?.parts ?? this.subject().parts;
   }
 
   /**
-   * The parts fading keeps besides the highlighted ones: the lesson step's context.
+   * The parts fading keeps besides the highlighted ones.
    * @returns {string[]}
    */
   fadeContext() {
-    const c = this.course;
-    return c && !c.finished ? presentation(c.lesson, c.i).context : [];
+    return this.inside?.context ?? this.subject().context;
   }
 
-  /** Show the step's presentation: the view, and the case, front and fading it brings (U13). */
-  showPresentation() {
+  /**
+   * Show the step's presentation: the view, and the case, front and fading it brings (U13).
+   * A step in an inside view counts as one: choosing another view closes the machine again.
+   * @param {boolean} [fly] fly to the step's view even if it is the last one shown (Reset view)
+   */
+  showPresentation(fly = false) {
     const c = this.course;
     if (!c) return;
     const p = presentation(c.lesson, c.i);
+    this.inside = INSIDE_VIEWS.has(p.view) && p.highlight.length > 0 ? { view: p.view, parts: p.highlight, context: p.context, casing: true, cutaway: false } : null;
     this.stage.casing = p.casing;
     this.stage.cutaway = p.cutaway;
     this.stage.setExplode(p.explode);
@@ -375,7 +407,7 @@ export class App {
     this.fade = p.fade && p.highlight.length > 0;
     this.stage.highlight(p.highlight, this.fade, p.context);
     this.stage.setCallouts(p.callouts.map((x) => ({ node: x.node, text: () => t(x.text), value: x.value })));
-    if (p.view !== this.lastView) this.stage.fly(p.view);
+    if (fly || p.view !== this.lastView) this.stage.fly(p.view);
     this.lastView = p.view;
   }
 
@@ -433,6 +465,7 @@ export class App {
 
   /** @private */
   clearPresentation() {
+    this.inside = null;
     this.stage.highlight([], false);
     this.stage.setCallouts([]);
     this.stage.setExplode(0);
@@ -511,7 +544,14 @@ export class App {
     /** @type {ViewName[]} */
     const views = ["overview", "register", "knobs", "front", "drum", "carry"];
     viewsBtn.addEventListener("click", () => showMenu(viewsBtn, views.map((v) => ({ label: t(`view.${v}`), run: () => this.chooseView(v) }))));
-    $("resetViewBtn").addEventListener("click", () => this.chooseView("overview"));
+    $("resetViewBtn").addEventListener("click", () => {
+      // in a lesson step: back to the step's own view and presentation; in free play: the overview
+      const c = this.course;
+      if (c && !c.finished) {
+        this.showPresentation(true);
+        this.render();
+      } else this.chooseView("overview");
+    });
   }
 
   /** @private */
