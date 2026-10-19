@@ -209,6 +209,20 @@ a { color: var(--md-primary); }
     radial-gradient(120% 90% at 50% 38%, #2a3747 0%, #18212c 55%, #0d1116 100%);
 }
 .stage canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+/* While a lesson is under way, a slim frame in the lesson chip's blue runs round the inside of
+   the 3D view (U27): a shape, not a change of colour, so the scene and its lighting stay as they
+   are, and colour-blind readers see it too. */
+.stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 2px solid color-mix(in srgb, var(--md-primary) 70%, transparent);
+  box-shadow: inset 0 0 18px color-mix(in srgb, var(--md-primary-container) 85%, transparent);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease);
+}
+.stage.in-lesson::after { opacity: 1; }
 /* the 3D view takes the keyboard's focus (U24): its ring sits just inside the stage */
 .stage canvas:focus-visible { outline: 2px solid var(--md-primary); outline-offset: -3px; }
 /* zoom out and in, one joined pair of chips (U24) */

@@ -866,6 +866,7 @@ export class App {
     const c = this.course;
     const inCourse = !!c && !c.finished;
     this.markDock();
+    $("stage").classList.toggle("in-lesson", inCourse);
     $("modeFree").hidden = inCourse;
     $("modeLesson").hidden = !inCourse;
     if (c && inCourse) {
