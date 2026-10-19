@@ -24,13 +24,8 @@ export default {
 
   "tool.case": "Case",
   "tool.case.tip": "Show or hide the case and the cover plates",
-  "tool.front": "Open front",
-  "tool.front.tip": "Open the front of the carriage to see the drums",
   "tool.apart": "Take apart",
   "tool.apart.tip": "Take the machine apart to see its parts",
-  "tool.fade": "Fade others",
-  "tool.fade.tip": "Fade the parts the step or the view is not about",
-  "tool.fade.off": "Fade others works in lesson steps and inside views that point out parts.",
   "tool.views": "Views",
   "tool.resetView": "Reset view",
 

@@ -22,13 +22,8 @@ export default {
 
   "tool.case": "Gehäuse",
   "tool.case.tip": "Gehäuse und Deckplatten zeigen oder ausblenden",
-  "tool.front": "Vorne offen",
-  "tool.front.tip": "Die Vorderwand des Schlittens öffnen, um die Walzen zu sehen",
   "tool.apart": "Zerlegen",
   "tool.apart.tip": "Die Maschine zerlegen, um ihre Teile zu sehen",
-  "tool.fade": "Rest abblenden",
-  "tool.fade.tip": "Die Teile blasser zeigen, um die es im Schritt oder in der Ansicht nicht geht",
-  "tool.fade.off": "„Rest abblenden“ gibt es in Lektionsschritten und Innenansichten, die Teile hervorheben.",
   "tool.views": "Ansichten",
   "tool.resetView": "Ansicht zurücksetzen",
 

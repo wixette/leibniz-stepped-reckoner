@@ -65,7 +65,7 @@ Also:
 │                                                      │ ┌───────────────────────┐ │
 │                 THE MACHINE (3D stage)               │ │ Lesson 2 · The carry  │ │
 │                                                      │ │ ●●●○○○○○  step 3 of 8 │ │
-│   [case] [open front] [take apart] [fade]    [⟲ view]│ │ Behind each result... │ │
+│   [case] [take apart]                        [⟲ view]│ │ Behind each result... │ │
 ├──────────────────────────────────────────────────────┤ │ ▸ Your turn: set 1    │ │
 │ [ 00000001 ]  [↻ +][↺ −]  [◀ carriage ▶]  pin [–▾] [⇥ to stop] [reset]          │  machine strip
 ├──────────────────────────────────────────────────────┴───────────────────────────┤
@@ -101,7 +101,7 @@ Free play has no tab: its controls are the machine strip, under the machine (P2)
 
 - **Machine strip** (under the stage): the number on the setting knobs, turn forward (add) and back (subtract), carriage left and right with its place, the Magna Rota's pin, turn to the stop, reset. Icon plus short label on wide screens, icons with tooltips on narrow ones.
 - **Readouts** sit on the stage's top edge: the result as on the machine, grouped in threes; the Magna Rota's turn count (red when subtracting); the carriage's place.
-- **Stage tools** float on the stage's bottom edge: show the case, open the carriage front, take apart, fade the other parts; a views menu (the six camera views, two of them inside views, U11) and a reset-view button. They change how the machine is *shown*, not its state, so they stay enabled in a lesson, except where a step depends on them.
+- **Stage tools** float on the stage's bottom edge: show the case and take apart; a views menu (the six camera views, two of them inside views, U11) and a reset-view button. Opening the front and fading follow the view (U14). They change how the machine is *shown*, not its state, so they stay enabled in a lesson, except where a step depends on them.
 
 ### U5 — A dark Material 3 theme in brass and oak
 
@@ -145,20 +145,19 @@ The camera keeps each view's direction; the fit moves it only nearer or farther 
 
 ### U11 — The drum and carry views are inside views; the machine keeps working
 
-The stepped drum and the carry sit inside the case and behind the carriage's front, so a camera view alone would show the case. These two views are **inside views**, in free play and in a lesson alike (U13): besides flying the camera they hide the case, open the carriage front, highlight their parts (the units drum, its rack and its result wheel; the first four carry stores, result wheels and carry levers) and fade everything else, as a lesson step does. The stage tools show what changed (Case off, Open front and Fade others on), and each can be switched back.
+The stepped drum and the carry sit inside the case and behind the carriage's front, so a camera view alone would show the case. These two views are **inside views**, in free play and in a lesson alike (U13): besides flying the camera they hide the case, open the carriage front, highlight their parts (the units drum, its rack and its result wheel; the first four carry stores, result wheels and carry levers) and fade everything else, as a lesson step does. The Case chip shows the case is off and can put it back; the status line says it is an inside view.
 
 - **The machine works as usual.** An inside view changes how parts are drawn, not where they are, so every control stays enabled: watching the drum turn and the carry pass on is what the views are for. This is the difference from *Take apart*, which moves parts out of their working places and therefore locks the crank and the knobs.
 - **Faded parts are context, not obstacles:** clicks and hover labels pass through them, so a drum or a wheel can be pointed at and clicked through a faded frame.
-- **It ends when the reader chooses another view or Reset view:** the tools it changed go back to how they were. A tool the reader switched themselves meanwhile (say, Case back on) is theirs and is left as they set it. Turning or zooming the camera does not end it; starting the tutorial or a lesson does, and the step's presentation takes over.
-- **Fade others** works wherever there is a subject to keep: a lesson step's highlighted parts, or an inside view's.
+- **It ends when the reader chooses another view or Reset view:** the front closes, fading stops and the case goes back to how it was. If the reader switched the case themselves meanwhile, it is theirs and is left as they set it. Turning or zooming the camera does not end it; starting the tutorial or a lesson does, and the step's presentation takes over.
 
 *Rejected:* locking the controls in an inside view (it would hide the very motion it exists to show); a clipping plane through the case and carriage (clearer, but it belongs to the 3D quality work; it would follow the same rules).
 
 ### U12 — Fading keeps what the step asks you to see, digits included
 
-Fading (*Fade others*, U13) fades everything except what the step is about. A step names the parts it highlights, but the model splits some parts from the digits you read on them, so fading "everything not highlighted" faded the digits too (the windows' plate stayed, the 16 result digits behind it faded). Fading therefore keeps three things:
+Fading (in an inside view, U13, U14) fades everything except what the step or view is about. A step names the parts it highlights, but the model splits some parts from the digits you read on them, so fading "everything not highlighted" faded the digits too (the windows' plate stayed, the 16 result digits behind it faded). Fading therefore keeps three things:
 
-- **The highlighted parts.** They glow, faded around or not.
+- **The highlighted parts.** They glow, in any view.
 - **Their readouts,** kept as they are, without the glow: the result wheels behind the windows, the dial around each knob, and the Magna Rota's plate with the stop where its red number is read. This is one table in the scene code, so every step, every inside view and every later lesson gets it.
 - **The step's context:** parts the text needs to be seen working but does not single out. The carry lever step keeps the stores and wheels it acts on, and the carry store step keeps the wheels they sit behind.
 
@@ -176,11 +175,22 @@ Clearing the way follows from the view, not from the step. The drum and carry vi
 
 - **Steps no longer set the case, the front or fading.** They name the subject and the view (and when the machine is taken apart, and the labels), and the rest follows. No step's case, front or fading carries over from an earlier one. Of the 64 steps, every one with the case hidden was already in the drum or carry view, so the case comes out as before. Fading now comes on in all of them, where some had it off: Add 6, Carry 3–5 and 8, and Subtract 3.
 - **The Views menu works the same in a lesson as in free play.** Choosing the drum or carry view during a step makes it an inside view: it fades around the step's subject if the step uses that view, or else around the view's own parts. Choosing another view ends it and puts the tools back, also when the step itself was in an inside view, so the machine closes again. *Reset view* in a lesson goes back to the step's own view and presentation; in free play it goes to the overview.
-- **The stage tools stay manual overrides.** Case, Open front and Fade others can be switched in any step or view. The next step, Reset view in a lesson, or the next view sets them again.
-- **The chip is called Fade others:** it fades, it does not move the camera. "Focus" read as a camera move.
+- **The Case chip stays a manual override,** in any step or view. The next step, Reset view in a lesson, or the next view sets it again. The front and fading have no chips any more (U14).
 - **Acceptance check A3-13** holds lessons to this. A step that highlights a part inside the case must use an inside view (unless the machine is taken apart), an inside view must have a subject, and every step's case, front and fading follow its view.
 
 *Rejected:* deciding by part ("every internal part fades the rest"). Parts like the result wheels are both outside and inside, and the camera is what decides whether something is in the way.
+
+### U14 — Only the case and taking apart are chips; the view does the rest
+
+Once the view decides the case, the front and fading (U13), the Open front and Fade others chips only undid or redid what the view had already got right. Each one could also leave the page out of step with its view. Both are gone, and the stage tools are **Case** and **Take apart**, beside the Views menu and Reset view.
+
+- **The front is open, and the other parts are faded, exactly while an inside view is on**, whether a step or the Views menu set it. Another view or Reset view ends it. Orbiting does not.
+- **Case stays.** It isn't tied to a subject: in free play it lets the reader look at the whole mechanism working, for example the overview with the case off. In an inside view it puts the case back as a faded shell, if the reader wants it.
+- **Take apart stays.** It moves parts rather than hiding them, and it locks the controls (U11).
+- **What is lost:** seeing an inside view's subject unfaded among solid parts, or fading around a subject in an outside view. Orbiting a faded view shows where the subject sits. Outside views' subjects are in plain sight, and their glow is enough.
+- **Nothing shows the inside view as a pressed chip any more,** so the status line still announces it, and the open machine shows it.
+
+*Rejected:* dropping the Case chip as well (it is the one way to see the whole mechanism at once, outside the inside views).
 
 ## Part 4 — Open questions
 

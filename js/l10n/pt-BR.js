@@ -22,13 +22,8 @@ export default {
 
   "tool.case": "Caixa",
   "tool.case.tip": "Mostrar ou ocultar a caixa e as placas de cobertura",
-  "tool.front": "Frente aberta",
-  "tool.front.tip": "Abrir a frente do carro para ver os tambores",
   "tool.apart": "Desmontar",
   "tool.apart.tip": "Desmontar a máquina para ver suas peças",
-  "tool.fade": "Esmaecer o resto",
-  "tool.fade.tip": "Esmaecer as peças de que o passo ou a vista não tratam",
-  "tool.fade.off": "“Esmaecer o resto” funciona nos passos das lições e nas vistas internas que apontam peças.",
   "tool.views": "Vistas",
   "tool.resetView": "Redefinir a vista",
 

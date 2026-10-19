@@ -22,13 +22,8 @@ export default {
 
   "tool.case": "Caja",
   "tool.case.tip": "Mostrar u ocultar la caja y las placas de cubierta",
-  "tool.front": "Frente abierto",
-  "tool.front.tip": "Abrir el frente del carro para ver los tambores",
   "tool.apart": "Desmontar",
   "tool.apart.tip": "Desmontar la máquina para ver sus piezas",
-  "tool.fade": "Atenuar el resto",
-  "tool.fade.tip": "Atenuar las piezas de las que no tratan el paso o la vista",
-  "tool.fade.off": "«Atenuar el resto» funciona en los pasos de lección y las vistas interiores que señalan piezas.",
   "tool.views": "Vistas",
   "tool.resetView": "Restablecer la vista",
 

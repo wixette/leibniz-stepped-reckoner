@@ -22,13 +22,8 @@ export default {
 
   "tool.case": "ケース",
   "tool.case.tip": "ケースとカバー板の表示・非表示",
-  "tool.front": "前面を開く",
-  "tool.front.tip": "キャリッジの前面を開けて、中の段付き歯車を見る",
   "tool.apart": "分解",
   "tool.apart.tip": "機械を分解して部品を見る",
-  "tool.fade": "ほかを薄く",
-  "tool.fade.tip": "このステップやビューで扱わない部品を薄く表示",
-  "tool.fade.off": "「ほかを薄く」は、部品を示すレッスンのステップと内部の表示で使えます。",
   "tool.views": "視点",
   "tool.resetView": "視点をリセット",
 

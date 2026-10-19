@@ -22,13 +22,8 @@ export default {
 
   "tool.case": "外壳",
   "tool.case.tip": "显示或隐藏外壳和盖板",
-  "tool.front": "打开前板",
-  "tool.front.tip": "打开滑架前板，看到里面的步进轮",
   "tool.apart": "拆开",
   "tool.apart.tip": "把机器拆开，看看它的零件",
-  "tool.fade": "淡化其他",
-  "tool.fade.tip": "淡化本步骤或视图没有讲到的零件",
-  "tool.fade.off": "“淡化其他”只在指出零件的课程步骤和内部视图中可用。",
   "tool.views": "视角",
   "tool.resetView": "重置视角",
 

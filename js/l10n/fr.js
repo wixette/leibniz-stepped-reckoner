@@ -22,13 +22,8 @@ export default {
 
   "tool.case": "Boîtier",
   "tool.case.tip": "Afficher ou masquer le boîtier et les plaques de couverture",
-  "tool.front": "Façade ouverte",
-  "tool.front.tip": "Ouvrir la façade du chariot pour voir les cylindres",
   "tool.apart": "Démonter",
   "tool.apart.tip": "Démonter la machine pour voir ses pièces",
-  "tool.fade": "Estomper le reste",
-  "tool.fade.tip": "Estomper les pièces dont l’étape ou la vue ne parle pas",
-  "tool.fade.off": "« Estomper le reste » fonctionne dans les étapes de leçon et les vues intérieures qui désignent des pièces.",
   "tool.views": "Vues",
   "tool.resetView": "Réinitialiser la vue",
 

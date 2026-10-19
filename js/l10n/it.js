@@ -22,13 +22,8 @@ export default {
 
   "tool.case": "Cassa",
   "tool.case.tip": "Mostra o nascondi la cassa e le piastre di copertura",
-  "tool.front": "Fronte aperto",
-  "tool.front.tip": "Apri il fronte del carrello per vedere i tamburi",
   "tool.apart": "Smonta",
   "tool.apart.tip": "Smonta la macchina per vederne i pezzi",
-  "tool.fade": "Attenua il resto",
-  "tool.fade.tip": "Attenua i pezzi di cui il passo o la vista non parlano",
-  "tool.fade.off": "«Attenua il resto» funziona nei passi delle lezioni e nelle viste interne che indicano dei pezzi.",
   "tool.views": "Viste",
   "tool.resetView": "Ripristina la vista",
 
