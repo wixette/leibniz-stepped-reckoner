@@ -14,7 +14,7 @@ export function showAbout() {
   const source = el("a", { href: "https://github.com/wixette/leibniz-stepped-reckoner", target: "_blank", rel: "noopener" }, [t("about.source")]);
   const dev = el("a", { href: "dev/" }, [t("ref.dev.title")]);
   body.replaceChildren(
-    el("img", { class: "dialog-logo", src: `images/logo.svg${V}`, alt: "", width: "220", height: "124" }),
+    el("img", { class: "dialog-logo", src: `images/logo-wide.svg${V}`, alt: "", width: "200", height: "106" }),
     el("h2", { id: "aboutTitle", text: t("app.name") }),
     el("p", { text: t("about.version", { v: pkg.version }) }),
     el("p", { text: t("about.lead") }),

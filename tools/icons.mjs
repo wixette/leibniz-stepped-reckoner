@@ -1,15 +1,18 @@
-// Draws the page's icons with headless Chrome, so the PNGs are the SVGs exactly:
+// Draws the page's icons from the logo with headless Chrome, so the PNGs are the SVGs exactly:
 //
 //     pnpm icons           (CHROME=/path/to/chrome if it is not in the usual place)
 //
-// - images/favicon.svg is drawn by hand: the Magna Rota and its crank, which still reads at
-//   16 px, where the whole machine (images/logo.svg) would be a thin stripe;
-// - images/favicon.ico: 16, 32 and 48 px, for browsers that take no SVG icon;
-// - images/apple-touch-icon.png (180) and images/icon-192.png, icon-512.png (the web app
-//   manifest): the same drawing on the page's background, since a home screen gives an
-//   icon no background of its own.
+// The logo, images/logo.svg, is a square with the machine in a wide band across its middle.
+// images/logo-wide.svg (the top bar, About) and images/favicon.svg are the same drawing with
+// the view cropped close: to the machine, and to a square as wide as the machine.
 //
-// Run it after changing favicon.svg, and commit what it writes.
+// - images/favicon.ico: 16, 32 and 48 px from favicon.svg, for browsers that take no SVG icon;
+// - images/apple-touch-icon.png (180) from favicon.svg on the page's background, since an
+//   iPhone's home screen gives an icon no background of its own;
+// - images/icon-192.png and icon-512.png (the web app manifest): the logo as it is, on
+//   transparent.
+//
+// Run it after changing the logo (and its two crops), and commit what it writes.
 
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
@@ -30,14 +33,15 @@ const CHROME = found;
 
 const tmp = mkdtempSync(join(tmpdir(), "icons-"));
 /**
- * The favicon drawn at a size, on a background (or transparent), as PNG bytes.
+ * An SVG of images/ drawn as a square of a size, on a background (or transparent), as PNG bytes.
+ * @param {string} file
  * @param {number} size
  * @param {string | null} background
  * @param {number} inset margin around the drawing, as a fraction of the size
  * @returns {Buffer}
  */
-function draw(size, background, inset) {
-  const svg = readFileSync(join(IMAGES, "favicon.svg"), "utf8");
+function draw(file, size, background, inset) {
+  const svg = readFileSync(join(IMAGES, file), "utf8");
   const pad = Math.round(size * inset);
   const html = `<!doctype html><html><body style="margin:0;background:${background ?? "transparent"}">
 <img src="data:image/svg+xml;base64,${Buffer.from(svg).toString("base64")}" style="display:block;margin:${pad}px;width:${size - 2 * pad}px;height:${size - 2 * pad}px"></body></html>`;
@@ -75,10 +79,10 @@ function ico(pngs, sizes) {
 
 try {
   const sizes = [16, 32, 48];
-  writeFileSync(join(IMAGES, "favicon.ico"), ico(sizes.map((s) => draw(s, null, 0)), sizes));
-  writeFileSync(join(IMAGES, "apple-touch-icon.png"), draw(180, BACKGROUND, 0.12));
-  writeFileSync(join(IMAGES, "icon-192.png"), draw(192, BACKGROUND, 0.12));
-  writeFileSync(join(IMAGES, "icon-512.png"), draw(512, BACKGROUND, 0.12));
+  writeFileSync(join(IMAGES, "favicon.ico"), ico(sizes.map((s) => draw("favicon.svg", s, null, 0)), sizes));
+  writeFileSync(join(IMAGES, "apple-touch-icon.png"), draw("favicon.svg", 180, BACKGROUND, 0.1));
+  writeFileSync(join(IMAGES, "icon-192.png"), draw("logo.svg", 192, null, 0));
+  writeFileSync(join(IMAGES, "icon-512.png"), draw("logo.svg", 512, null, 0));
   process.stdout.write("images/: favicon.ico, apple-touch-icon.png, icon-192.png, icon-512.png\n");
 } finally {
   rmSync(tmp, { recursive: true, force: true });

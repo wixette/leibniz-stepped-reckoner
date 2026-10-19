@@ -152,7 +152,7 @@ a { color: var(--md-primary); }
   font-weight: 600;
   letter-spacing: 0.005em;
 }
-.brand img { width: 64px; height: 36px; flex: none; }
+.brand img { width: 64px; height: 34px; flex: none; }
 .brand span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .topbar .spacer { flex: 1; }
 .lang-btn { gap: 6px; padding: 0 8px 0 10px; color: var(--md-on-surface-variant); font-weight: 600; }
@@ -512,7 +512,7 @@ dialog::backdrop { background: var(--md-scrim); }
 .dialog-body h3 { margin: 18px 0 6px; font-size: 13px; font-weight: 650; letter-spacing: 0.06em; text-transform: uppercase; color: var(--md-on-surface-variant); }
 .dialog-body ul { margin: 0; padding-left: 18px; color: var(--md-on-surface-variant); }
 .dialog-body p { color: var(--md-on-surface-variant); margin: 0 0 10px; }
-.dialog-logo { width: 220px; height: auto; display: block; margin: -4px 0 8px -8px; }
+.dialog-logo { width: 200px; height: auto; display: block; margin: 0 0 12px; }
 .dialog-actions { display: flex; justify-content: flex-end; gap: 8px; padding: 12px 16px 16px; }
 
 /* ---- self-test panel (?selftest) --------------------------------------------------------------------- */
@@ -526,7 +526,7 @@ dialog::backdrop { background: var(--md-scrim); }
   .workspace { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 55fr) minmax(0, 45fr); }
   .workspace.dock-closed { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) 0; }
   .dock { border-left: 0; border-top: 1px solid var(--md-outline-variant); }
-  .brand img { width: 48px; height: 27px; }
+  .brand img { width: 48px; height: 25px; }
   .brand { font-size: 15px; }
 }
 @media (max-width: 599px) {
