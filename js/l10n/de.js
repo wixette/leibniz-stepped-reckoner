@@ -77,7 +77,7 @@ export default {
   "status.noPin": "Setze zuerst den Stift in ein Loch der Magna Rota.",
   "status.notReady": "Die Maschine wird noch geladen.",
   "status.blockedPin": "Der Stift liegt am Anschlag. Nimm ihn heraus oder versetze ihn, um weiterzudrehen.",
-  "status.blockedPinSub": "Mit Stift dreht die Kurbel nur vorwärts. Nimm den Stift heraus, um zu subtrahieren.",
+  "status.blockedPinSub": "Rückwärts gedreht, ist der Stift von der anderen Seite an den Anschlag gekommen: Eine weitere Drehung rückwärts würde klemmen. Nimm den Stift heraus oder setz ihn um, um weiter rückwärts zu drehen.",
   "status.blockedStore": "Am Rad der {place} wartet noch ein Übertrag, den kein Übertragshebel erreicht. Schiebe zuerst den Schlitten nach links.",
   "status.inside": "Innenansicht: Das Gehäuse ist ausgeblendet, die Vorderseite offen und die übrigen Teile sind blass. Die Maschine arbeitet wie gewohnt.",
   "status.stepDone": "Geschafft! Weiter mit „Weiter“.",

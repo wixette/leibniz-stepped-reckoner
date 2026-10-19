@@ -222,7 +222,7 @@ export function runM2Checks(root, opts = {}) {
     return { passed: bad.length === 0, detail: bad.join("; ") || `aligned within ${fmt(worst, 4)} mm at offsets 0–${c.m.maxOffset}; no intersections at rest` };
   });
 
-  run("A2-4", "1709 × 365 with the Magna Rota reads 623785; the pin rests on the stop after each digit", () => {
+  run("A2-4", "1709 × 365 with the Magna Rota reads 623785; the pin rests on the stop after each digit, and turned back clears the finger for 9 - m turns", () => {
     /** @type {string[]} */
     const bad = [];
     state(c, { input: 1709 });
@@ -244,7 +244,31 @@ export function runM2Checks(root, opts = {}) {
     pose(c);
     const r = readAll(c);
     if (showNum(r) !== "0000000000623785") bad.push(`read ${showNum(r)}`);
-    return { passed: bad.length === 0, detail: bad.join("; ") || `reads ${showNum(r)}; pin on the stop after 5, 6 and 3 turns` };
+    // Turned back, the pin meets the finger's far face: 9 - m whole turns are clear, and the
+    // next would jam part-way, which is why the machine refuses it.
+    const back = new Machine();
+    back.setPin(3);
+    const cb = { ...c, m: back };
+    const pin = node(root, "pm.magna_pin");
+    const plate = node(root, "pm.magna_plate");
+    let turnsBack = 0;
+    while (back.turn(-1)) {
+      turnsBack++;
+      pose(cb);
+      if (intersects(pin, plate)) bad.push(`turned back ${turnsBack}: the pin is in the finger`);
+    }
+    let jam = false;
+    for (let deg = 10; deg < 360 && !jam; deg += 10) {
+      back.setTheta(0);
+      /** @type {{ _theta: number }} */ (/** @type {unknown} */ (back))._theta = -deg; // the refused turn, followed by hand
+      pose(cb);
+      jam = intersects(pin, plate);
+    }
+    /** @type {{ _theta: number }} */ (/** @type {unknown} */ (back))._theta = 0;
+    pose(c);
+    if (turnsBack !== 6) bad.push(`pin 3: ${turnsBack} turns back (want 6)`);
+    if (!jam) bad.push("pin 3: the refused turn back would not meet the finger");
+    return { passed: bad.length === 0, detail: bad.join("; ") || `reads ${showNum(r)}; pin on the stop after 5, 6 and 3 turns; turned back, 6 clear turns from hole 3, the 7th meets the finger` };
   });
 
   run("A2-5", "623785 ÷ 1709: quotient 3, 6, 5 read on the Magna Rota, remainder 0", () => {

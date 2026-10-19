@@ -79,7 +79,7 @@ export default {
   "status.noPin": "Put the pin in a hole of the Magna Rota first.",
   "status.notReady": "The machine is still loading.",
   "status.blockedPin": "The pin is on the stop. Take the pin out or move it to turn again.",
-  "status.blockedPinSub": "With the pin in, the crank only turns forward. Take the pin out to subtract.",
+  "status.blockedPinSub": "Turned back, the pin has come round to the stop's other side: another turn back would jam it. Take the pin out or move it to turn back again.",
   "status.blockedStore": "A carry is still waiting at the {place} wheel, where no carry lever reaches. Slide the carriage left first.",
   "status.inside": "Inside view: the case is hidden, the front is open and the other parts are faded. The machine works as usual.",
   "status.stepDone": "Done! Press Next.",

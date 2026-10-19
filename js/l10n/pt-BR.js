@@ -77,7 +77,7 @@ export default {
   "status.noPin": "Primeiro coloque o pino em um furo da Magna Rota.",
   "status.notReady": "A máquina ainda está carregando.",
   "status.blockedPin": "O pino está no batente. Tire-o ou mude-o de furo para girar de novo.",
-  "status.blockedPinSub": "Com o pino colocado, a manivela só gira para a frente. Tire o pino para subtrair.",
+  "status.blockedPinSub": "Girando para trás, o pino chegou ao outro lado do batente: mais uma volta para trás o travaria. Tire o pino ou mude-o de furo para girar mais para trás.",
   "status.blockedStore": "Um transporte ainda espera na roda ({place}), aonde nenhuma alavanca de transporte chega. Primeiro mova o carro para a esquerda.",
   "status.inside": "Vista interna: a caixa está oculta, a frente aberta e as outras peças esmaecidas. A máquina funciona normalmente.",
   "status.stepDone": "Pronto! Clique em Próximo.",

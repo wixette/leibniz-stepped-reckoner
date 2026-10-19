@@ -12,9 +12,11 @@
 // next lever arrives. Historical mode staggers them highest-first (decision 0001).
 // Magna Rota: geared 10:1 to the crank; its ring with 10 holes doubles as the
 // revolution counter (black numbers count additions, red ones subtractions). A pin in
-// hole m stops the crank after m forward turns (Leupold) - multiplication. The stop
-// finger sits on one side of the pin, so with a pin inserted the crank only turns
-// forward; division uses the ring as a counter with the pin out.
+// hole m stops the crank after m forward turns (Leupold) - multiplication. Turned back, the
+// pin goes round the other way and meets the stop finger's far face: the finger's width
+// (about 0.22 of a crank turn) leaves 9 - m whole backward turns, and the next would jam
+// part-way, so it is refused. (The sources describe no one-way catch; the model measures
+// where the pin meets the finger.) Division uses the ring as a counter with the pin out.
 // A carry store holds one carry. A turn that would store a second carry in a store whose
 // first carry is still waiting (above the carriage, no lever over it) is refused: the
 // operator must shift the carriage over that digit first.
@@ -234,11 +236,20 @@ export class Machine {
   }
 
   /**
-   * True when the pin has reached the stop: the crank cannot start another turn.
+   * True when the pin has reached the stop: the crank cannot start another forward turn.
    * @returns {boolean}
    */
   get blocked() {
     return this.pin !== null && this.ringTurns >= this.pin;
+  }
+
+  /**
+   * True when, turned back, the pin is within a turn of the stop finger's far face: another
+   * whole backward turn would jam part-way (after 9 - m backward turns from the pin's hole m).
+   * @returns {boolean}
+   */
+  get blockedBack() {
+    return this.pin !== null && this.ringTurns <= this.pin - 9;
   }
 
   /**
@@ -248,7 +259,7 @@ export class Machine {
    */
   startBlock(dir) {
     if (this.carriagePos !== this.offset) return "shifting";
-    if (this.pin !== null && (dir < 0 || this.blocked)) return "pin";
+    if (dir > 0 ? this.blocked : this.blockedBack) return "pin";
     const k = this.overfullStore(dir);
     return k >= 0 ? { storeFull: k } : null;
   }

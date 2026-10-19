@@ -77,7 +77,7 @@ export default {
   "status.noPin": "请先把插销插进大轮的一个孔里。",
   "status.notReady": "机器仍在加载中。",
   "status.blockedPin": "插销抵住了挡块。拔出插销或换一个孔才能继续转动。",
-  "status.blockedPinSub": "插着插销时，曲柄只能向前转。要做减法，请先拔出插销。",
+  "status.blockedPinSub": "向后转时，插销已转到挡块的另一侧：再向后转一圈就会卡住。请拔出插销或换个孔再向后转。",
   "status.blockedStore": "{place}的轮子上还有一个进位在等待，那里没有进位杆能够到。请先把滑架向左移。",
   "status.inside": "内部视图：外壳已隐藏，前板已打开，其他零件已淡化。机器照常运转。",
   "status.stepDone": "完成！请按“下一步”。",

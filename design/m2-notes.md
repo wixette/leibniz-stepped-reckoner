@@ -56,7 +56,7 @@ The four casing nodes (`frame.case`, `frame.base`, `frame.register_cover`, `pm.c
   - Ribs act only on register digits under the carriage.
   - Carry levers only pass stores under the carriage.
   - A carry stored above the top lever stays stored, pentagon tilted, until the carriage is shifted over it.
-- **The Magna Rota pin stops forward turns only.** The stop finger sits on one side of the pin. With a pin in, the crank turns forward until the pin reaches the stop (multiplication). Division uses the ring as a counter with the pin out, and the quotient digit is the red number at the stop.
+- **The Magna Rota pin, both ways (revised 2026-10-20).** Turned forward, the crank goes until the pin reaches the stop after m turns (multiplication). Turned back, the pin goes round the other way and meets the stop finger's far face. Measured on the model, the finger's width takes about 0.22 of a crank turn, so from hole m there are 9 − m whole backward turns, and the next would jam part-way: the machine refuses it (`Machine.blockedBack`, check A2-4). The first version refused every backward turn with a pin in, from the assumption that the finger sat on one side of the pin; no source describes such a one-way catch. Division uses the ring as a counter with the pin out, and the quotient digit is the red number at the stop.
 - **A store holds one carry (added 2026-10-18).** `Machine.startBlock(dir)` says why the crank may not start: the carriage is moving, the pin, or `{ storeFull: k }`.
   - `storeFull` means this turn would store a second carry in a store whose first is still waiting above the carriage.
   - That turn is refused. Page 03 says the operator must shift first, and a scripted run stops with the same message.

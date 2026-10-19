@@ -223,7 +223,7 @@ M2 design decisions:
   - Every early "other horn" pass falls in 6.9–52.4°, before the ribs.
   - Spreads run 120° → 29°, in the same spirit as Lehmann's 135 → 39.
   - The add and sub arms sit in separate planes.
-- **The Magna Rota is geared 10 : 1 to the crank** (one dial turn = ten operations). Its ring has 10 holes. A pin in hole m stops the crank after m turns at the fixed stop between 0 and 9 (Leupold). The ring also serves as the 1-digit revolution counter: the quotient digit is read off it, as in the sources. Because the finger is on one side of the pin, a pinned ring only turns forward: multiplication uses the pin, and division uses the ring as a counter with the pin out (black numbers count additions, red numbers subtractions). The operator's main crank sits in the middle of the ring.
+- **The Magna Rota is geared 10 : 1 to the crank** (one dial turn = ten operations). Its ring has 10 holes. A pin in hole m stops the crank after m turns at the fixed stop between 0 and 9 (Leupold). The ring also serves as the 1-digit revolution counter: the quotient digit is read off it, as in the sources. Turned back, the pin comes round to the finger's far face, leaving 9 − m whole backward turns (m2-notes). Multiplication uses the pin, and division uses the ring as a counter with the pin out (black numbers count additions, red numbers subtractions). The operator's main crank sits in the middle of the ring.
 
 | ID | Statement | Kind |
 |---|---|---|

@@ -12,7 +12,6 @@ describe("Machine (16-digit register, 8-digit carriage)", () => {
     assert.equal(m.runToStop(), 5);
     assert.equal(m.blocked, true);
     assert.equal(m.turn(1), false); // the pin is against the stop
-    assert.equal(m.turn(-1), false); // and the finger only lets the pinned ring turn forward
     assert.equal(m.shownNumber(), 8545);
     m.setOffset(1);
     m.setPin(6);
@@ -99,10 +98,26 @@ describe("Machine (16-digit register, 8-digit carriage)", () => {
     assert.equal(registerValue(m), 999_999_999);
   });
 
+  it("the pin lets the crank turn back 9 - m whole turns, then refuses", () => {
+    for (const hole of [0, 3, 8, 9]) {
+      const m = new Machine();
+      m.setPin(hole);
+      let back = 0;
+      while (m.turn(-1)) back++;
+      assert.equal(back, 9 - hole, `hole ${hole}`);
+      assert.equal(m.startBlock(-1), "pin", `hole ${hole}: the next turn back would jam on the finger`);
+      assert.equal(m.startBlock(1), null, `hole ${hole}: forward is free again`);
+    }
+    // forward still stops at the stop after m turns, and from there it may turn back
+    const m = new Machine();
+    m.setPin(3);
+    assert.equal(m.runToStop(), 3);
+    assert.equal(m.startBlock(-1), null);
+  });
+
   it("names the reason a turn cannot start", () => {
     const m = new Machine();
     m.setPin(2);
-    assert.equal(m.startBlock(-1), "pin");
     m.runToStop();
     assert.equal(m.startBlock(1), "pin");
     m.setPin(null);

@@ -77,7 +77,7 @@ export default {
   "status.noPin": "Primero pon la clavija en un agujero de la Magna Rota.",
   "status.notReady": "La máquina todavía se está cargando.",
   "status.blockedPin": "La clavija está en el tope. Sácala o cámbiala de agujero para volver a girar.",
-  "status.blockedPinSub": "Con la clavija puesta, la manivela solo gira hacia adelante. Saca la clavija para restar.",
+  "status.blockedPinSub": "Girando hacia atrás, la clavija ha llegado al otro lado del tope: otra vuelta atrás la atascaría. Saca la clavija o cámbiala de agujero para seguir girando hacia atrás.",
   "status.blockedStore": "Todavía espera un acarreo en la rueda ({place}), adonde no llega ninguna palanca de acarreo. Primero mueve el carro a la izquierda.",
   "status.inside": "Vista interior: la caja está oculta, el frente abierto y las demás piezas atenuadas. La máquina funciona como siempre.",
   "status.stepDone": "¡Hecho! Pulsa Siguiente.",

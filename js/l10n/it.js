@@ -77,7 +77,7 @@ export default {
   "status.noPin": "Prima metti il perno in un foro della Magna Rota.",
   "status.notReady": "La macchina si sta ancora caricando.",
   "status.blockedPin": "Il perno è contro l’arresto. Toglilo o spostalo per girare di nuovo.",
-  "status.blockedPinSub": "Con il perno inserito la manovella gira solo in avanti. Togli il perno per sottrarre.",
+  "status.blockedPinSub": "Girando all’indietro, il perno è arrivato dall’altra parte del fermo: un altro giro indietro lo bloccherebbe. Togli il perno o spostalo per girare ancora all’indietro.",
   "status.blockedStore": "Un riporto aspetta ancora alla ruota ({place}), dove non arriva nessuna leva di riporto. Prima sposta il carrello a sinistra.",
   "status.inside": "Vista interna: la cassa è nascosta, il fronte aperto e gli altri pezzi attenuati. La macchina funziona come sempre.",
   "status.stepDone": "Fatto! Premi Avanti.",
