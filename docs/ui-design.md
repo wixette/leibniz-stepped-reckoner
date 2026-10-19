@@ -82,7 +82,7 @@ On a narrow (under 900 px) or portrait window the same regions stack: top bar, s
 
 The page is a fixed frame: top bar, stage (with the machine's toolbar floating at its bottom, U18), dock, status bar; the page itself never scrolls. On a wide (landscape, 900 px or more) window the dock sits to the right of the stage, 340–440 px wide by default and resizable by its edge (U17), and can be closed from the top bar; the stage takes the rest. On a narrow or portrait window the dock goes below the stage. Either way the stage keeps a shape not far from square, which suits a 3D view that also flies to close-ups.
 
-*Why on the right, unlike the 8800 simulator (dock below):* the 8800's panel is a flat 2.24 : 1 picture, so the room it leaves is underneath. Our machine, seen whole, is about 2.3 : 1, so its size on a wide screen is limited by the stage's *height*. A dock below takes height: on a 1366 × 768 Chromebook it leaves the machine about 620 px wide, against about 900 px with the dock on the right (and about 1,070 against 1,400 px on a 1920 × 1080 screen). The close-up views (drum, carry, Magna Rota) are nearly square subjects, and lesson text reads better in a column than in a wide strip. *Rejected:* dock below on wide screens (letterboxes the 3D view); a floating lesson card over the stage (breaks P1).
+*Why on the right, unlike the [8800 simulator](https://github.com/wixette/8800-simulator) (dock below):* the 8800's panel is a flat 2.24 : 1 picture, so the room it leaves is underneath. Our machine, seen whole, is about 2.3 : 1, so its size on a wide screen is limited by the stage's *height*. A dock below takes height: on a 1366 × 768 Chromebook it leaves the machine about 620 px wide, against about 900 px with the dock on the right (and about 1,070 against 1,400 px on a 1920 × 1080 screen). The close-up views (drum, carry, Magna Rota) are nearly square subjects, and lesson text reads better in a column than in a wide strip. *Rejected:* dock below on wide screens (letterboxes the 3D view); a floating lesson card over the stage (breaks P1).
 
 ### U2 — Free play is the home; the tutorial and lessons are modes over it
 
@@ -118,7 +118,7 @@ The first version used a brass-gold primary on warm neutrals to match the machin
 | Blue-grey (secondary) | The machine's controls | The tonal buttons: + and −, the carriage's arrows, Run to stop |
 | Amber (attention) | Your turn | The glow on the control a step asks for, the task line's "Your turn", and in 3D the glow on the parts a step points at (the same hue) |
 | Green (success) | Done | The task line's "Done", a finished lesson's badge, the lesson-done icon |
-| Red (error) | Something was refused | A refused control's reason in the status line, a blocked step |
+| Red (error) | Something was refused | A refused control's reason in the status line |
 | The machine's red | Counting backward | The turns readout when the Magna Rota turns back, as its red digits do |
 
 - **The dock has three surface levels,** so its parts do not blur together in the dark: the tab bar is a raised band with a divider under it, the body is the darkest well the content sits in, and cards (a step, a lesson, Get started's welcome) are raised above it with a fine edge. Before, the tab bar, the body and the space around the content shared one colour, and only the cards differed, and only slightly.
@@ -133,9 +133,9 @@ The first version used a brass-gold primary on warm neutrals to match the machin
 1. **Adding: the stepped drum** — one digit, then whole numbers at once.
 2. **The carry: 9999 + 1** — stored, then passed on; the historical reading as an aside.
 3. **Subtracting: turn the other way** — 1000 − 1, borrowing as the mirror of carrying.
-4. **The carriage: places and ×10** — shifting multiplies the step by 10.
-5. **Multiplying: the Magna Rota** — 1709 × 365 in 14 turns.
-6. **Dividing** — 623785 ÷ 1709, subtracting until it goes below zero.
+4. **The carriage: places and × 10** — shifting multiplies the step by 10.
+5. **Multiplying: 1709 × 365** — with the Magna Rota's pin, in 14 turns.
+6. **Dividing: 623785 ÷ 1709** — subtracting until it goes below zero.
 
 Every lesson opens with what you will learn, has a task the reader does at least every few steps, and ends with a one-line recap and a *Next lesson* button. A task names the control to use, and that control is the only one not greyed.
 
@@ -291,7 +291,7 @@ The buttons were labelled Add and Subtract, and Add was filled (the main action,
 
 - **The labels are the crank's turning icon and the sign of what the turn does,** ↻ + and ↺ −. The signs are the same in every language, so the buttons are equally short in all ten. The icons keep them from reading as "make the number bigger or smaller": they say "turn forward: add", as the machine does (U16). The words stay in the tooltip and the accessible name ("Turn the crank forward once: adds the number on the knobs"). The minus is the true minus sign (−), larger than the body text.
 - **They are one joined pair, alike:** one crank, two ways. The carriage's left and right arrows are a joined pair too, with its place between them.
-- **The toolbar is consistent:** every machine operation is a tonal button. None looks like the default or the active one; in a lesson the step's own control is marked by the glow and its task-line button (U18). Reset, which clears the machine, is the one quiet text button, at the end.
+- **The toolbar is consistent:** every machine operation is a tonal button. None looks like the default or the active one; in a lesson the step's own control is marked by the glow and its task-line button (U18). Reset, which clears the machine, is the one quiet text button, at the end of the operations (only the sound switch follows it, U29).
 - **The texts that named the buttons say "press +" or "press −"** (in the tutorial and the subtraction lesson, and in Get started), and the task line shows the same ↻ + and ↺ −.
 
 *Rejected:* "Add" and "Sub" (only shortens English; "Sub" means nothing, or something else, in most of our languages); signs without the crank icons (a bare − reads as "smaller" or "remove").
@@ -316,7 +316,7 @@ The pin control was a tonal button with a circled-dot icon (meant as "a pin in a
 Run to stop showed ⏩ and its words. The icon read as a video's fast-forward, and the words took room for a control that does something only once a pin is in.
 
 - **It is icon only, with →| (an arrow running into a bar): turn until the stop.**
-- **It is joined to the pin's box, like a split button:** the box sets the stop, the button runs the crank to it. On its own an icon is a guess; attached to "Pin" its meaning comes from the box. It is greyed exactly when the box shows "–", and says why when pressed (P6).
+- **It is joined to the pin's box, like a split button:** the box sets the stop, the button runs the crank to it. On its own an icon is a guess; attached to "Pin" its meaning comes from the box. It is greyed when the box shows "–", or while the pin is on the stop, and says why when pressed (P6).
 - **Its name stays** in the tooltip and the accessible name ("Turn the crank forward until the pin reaches the stop"), and the lesson task line still shows it with its words (U18).
 - **Reset keeps its word where there is room** (it drops to its icon on a narrow stage). Its ⟳ is easily taken for the view's Reset (⌂), and it clears the machine, so the word guards against a slip.
 
@@ -330,7 +330,7 @@ The wheel, a trackpad's pinch and a touch screen's pinch zoom the 3D view, withi
   - + and − zoom (also = and the underscore, so no Shift is needed);
   - Home resets the view, as ⌂ does.
 
-  Each press is a short animated step. Keys act only while the 3D view has the focus, so typing a number is never affected, and the browser's own Ctrl/⌘ shortcuts pass through. Its accessible name lists the keys, and the Get started panel names them too.
+  Each press is a short animated step. Keys act only while the 3D view has the focus, so typing a number is never affected, and the browser's own Ctrl/⌘ shortcuts pass through. Its accessible name lists the keys, and the Get started panel names them too (Home aside: ⌂ is beside the zoom buttons).
 - **A joined zoom-out / zoom-in pair** (magnifying glasses with − and +, the usual zoom icons, not bare signs that could be read as the crank's + and −, U20) sits in the view controls at the top right, between ⌂ and the Views menu. Each press zooms by a factor of 1.25 towards the orbit's centre, in a short flight. A button greys at its limit; the limits are checked as the camera moves, whatever moved it.
 - **A step by key or button is the reader's camera,** like a drag (U10): a resize no longer refits the view, and Reset view brings it back.
 
@@ -387,7 +387,7 @@ The machine is a mechanism of gears, racks and levers, and hearing it work tells
 
 | What moves | Sound |
 |---|---|
-| A setting knob (clicked, or set by typing) | a short tick, one per knob that moved, a few hundredths of a second apart (typing 1234 is four ticks, not ten) |
+| A setting knob (clicked, or set by typing) | a short tick, one per knob that moved, a few hundredths of a second apart, not one per digit the knob passes (setting 1234 at once is four ticks, not ten; typed, each keystroke ticks the knobs it moves) |
 | The main crank, one turn (by +, −, a drag, a click, or a lesson's demonstration) | the full revolution, slowed to the turn's 1.2 s (lower in pitch: the heavier mechanism) |
 | The carriage, one place (each turn of the end crank) | the full revolution, slowed to the place's 0.83 s; a longer move sounds once a place |
 | A carry stored (a wheel passing 9) | a short tick |

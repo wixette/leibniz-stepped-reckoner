@@ -1,5 +1,7 @@
 # M3 notes: the teaching layer
 
+> **A record of M3 as first built (2026-10-18).** The page was redesigned for release 1.0.0, and parts of this note no longer describe it: there are ten languages, not two, with every text in `js/l10n/` (the `js/teach/i18n.js` named below is gone); a tutorial and six lessons, not four; free play is the home; the view, not toggles, decides the case, the front and fading; and "page 04" is the site's main page, `index.html`. The current design and its decisions are in [docs/ui-design.md](../docs/ui-design.md), and the acceptance checks added with it (A3-12…A3-15) in `js/accept/m3Checks.js`. The findings, measurements and open items below still stand.
+
 - **Status:** built 2026-10-18. The acceptance spec passes: A3-1…A3-6 and A3-9…A3-11 in `pnpm test`, A3-7 is the page's `?selftest` (9/9), and A3-8 is the M0–M2 specs, which run in the same `pnpm test`. **The exit criterion is still open:** "usable by a teacher without instructions" needs the open steps below.
 - **Plan:** [modelling-and-animation-plan.md](modelling-and-animation-plan.md) §10, §10.1 (M3 design decisions)
 - **Page:** `index.html` (the site's main page)

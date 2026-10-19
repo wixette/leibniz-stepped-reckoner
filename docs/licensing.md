@@ -12,7 +12,7 @@ The repository follows the [REUSE](https://reuse.software) specification. [`REUS
 ## Third-party material
 
 - **Photos from Wikimedia Commons** (mostly CC BY-SA 4.0). A per-file catalogue (licence, author, source URL) is kept next to the images. Anything derived directly from them (a texture, a decal, an image) credits the photographer and stays CC BY-SA. Using a photo only as a *visual reference* for modelling creates no obligation, but the sources are credited anyway.
-- **Vendored libraries** in `vendor/`: three.js and three-mesh-bvh (MIT), the Roboto Flex font (SIL Open Font License 1.1) and the Material Symbols icons (Apache-2.0), copied unchanged from their npm packages together with their own `LICENSE` files.
+- **Vendored libraries** in `vendor/`: three.js and three-mesh-bvh (MIT), the Roboto Flex font (SIL Open Font License 1.1) and the Material Symbols icons (Apache-2.0), copied unchanged from their npm packages together with their own `LICENSE` files. The icons are the one exception: `vendor/material-symbols/icons.js` gathers the SVGs the page uses into one module, as they are.
 - **The tutorial's pictures** (`images/tutorial/`) are resized copies of Commons files from `research/images/commons/`, under the same licences, credited under each picture on the page and annotated per file in `REUSE.toml`.
 - **The machine's sounds** (`audio/`) are adapted from Pixabay sound effects under the Pixabay Content License (`LicenseRef-Pixabay`): free to use and modify, no attribution required (given anyway, in About), but not to be redistributed on their own as a sound pack. The licence file quotes the terms and links the binding ones.
 - **Public-domain scans** (publications before 1900) can be used freely, and are still cited.
