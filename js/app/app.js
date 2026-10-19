@@ -3,12 +3,12 @@
 // (docs/ui-design.md, U2). This module holds the state and keeps the page in step with it.
 
 import { Machine } from "../sim/machine.js";
-import { applyIcons, applyL10n, showMenu } from "../ui/components.js";
+import { applyIcons, applyL10n, setTip, showMenu } from "../ui/components.js";
 import { load, locale, LOCALE_NAMES, LOCALE_SHORT, LOCALES, setLocale, t, tn } from "../l10n/l10n.js";
 /** @import { Locale } from "../l10n/l10n.js" */
 import { applyIntentNow, controlOf, possible } from "../teach/partActions.js";
 /** @import { Control, Intent } from "../teach/partActions.js" */
-import { INSIDE_VIEWS, presentation, replayTo } from "../teach/player.js";
+import { APART_VIEW, INSIDE_VIEWS, presentation, replayTo, VIEWS } from "../teach/player.js";
 /** @import { Lesson, ViewName } from "../teach/player.js" */
 import { placeWord } from "../teach/partInfo.js";
 import { Animator } from "./animator.js";
@@ -309,13 +309,28 @@ export class App {
   }
 
   /**
-   * Show a camera view from the Views menu. The drum and carry views are inside views (U11, U13):
-   * they hide the case, open the front and fade what is not their parts, and the machine works
-   * as usual; leaving one puts the tools back. The same in free play and in a lesson step.
+   * Show a camera view from the Views menu, the same in free play and in a lesson step (U13, U15).
+   * The drum and carry views are inside views (U11): they hide the case, open the front and fade
+   * what is not their parts, and the machine works as usual; leaving one puts the case back.
+   * The Taken apart view moves the parts out, which locks the controls until another view.
    * @param {ViewName} view
    */
   chooseView(view) {
+    if (view === APART_VIEW && this.busy) return this.say(() => t("status.busy"), true);
+    this.setView(view);
+    this.stage.fly(view);
+    this.render();
+  }
+
+  /**
+   * Give the page a view's presentation (taken apart, inside), without moving the camera.
+   * @private
+   * @param {ViewName} view
+   */
+  setView(view) {
     this.endInside();
+    this.lastView = view;
+    this.stage.setExplode(view === APART_VIEW ? 1 : 0);
     const subject = INSIDE_VIEWS.has(view) ? this.insideSubject(view) : null;
     if (subject) {
       this.inside = { view, ...subject, casing: this.stage.casing };
@@ -325,9 +340,12 @@ export class App {
       this.stage.highlight(subject.parts, true, subject.context);
       this.say(() => t("status.inside"));
     }
-    this.stage.fly(view);
-    this.lastView = view;
-    this.render();
+    if (view === APART_VIEW) this.say(() => t("status.apart"));
+  }
+
+  /** The view on show: the one last chosen or set by a step. */
+  get view() {
+    return this.lastView ?? "overview";
   }
 
   /**
@@ -372,7 +390,8 @@ export class App {
 
 
   /**
-   * Show the step's presentation: the view, and the case, front and fading it brings (U13).
+   * Show the step's presentation: the view, and what it brings: taken apart, or the case, the
+   * front and fading (U13, U15).
    * A step in an inside view counts as one: choosing another view closes the machine again.
    * @param {boolean} [fly] fly to the step's view even if it is the last one shown (Reset view)
    */
@@ -448,10 +467,10 @@ export class App {
     this.inside = null;
     this.stage.highlight([], false);
     this.stage.setCallouts([]);
-    this.stage.setExplode(0);
     this.stage.casing = true;
     this.stage.cutaway = false;
     this.stage.applyToggles();
+    this.setView(this.view); // the view on show stays, as free play shows it
   }
 
   /** @returns {string[]} ids of the courses completed in this browser */
@@ -490,33 +509,41 @@ export class App {
     $("aboutBtn").addEventListener("click", () => showAbout());
   }
 
+  /** Show or hide the case (the Views menu's switch). In an inside view the case is the reader's then. */
+  toggleCase() {
+    if (this.inside) this.inside.casing = null;
+    this.stage.casing = !this.stage.casing;
+    this.stage.applyToggles();
+    this.render();
+  }
+
   /** @private */
   wireStage() {
-    /** @param {"caseChip" | "apartChip"} id */
-    const chip = (id) => /** @type {HTMLButtonElement} */ ($(id));
-    chip("caseChip").addEventListener("click", () => {
-      if (this.inside) this.inside.casing = null; // the reader's now
-      this.stage.casing = !this.stage.casing;
-      this.stage.applyToggles();
-      this.render();
-    });
-    chip("apartChip").addEventListener("click", () => {
-      if (this.busy) return this.say(() => t("status.busy"), true);
-      this.stage.setExplode(this.stage.explodeTarget > 0 ? 0 : 1);
-      if (this.stage.explodeTarget > 0) this.say(() => t("status.apart"));
-      this.render();
-    });
     const viewsBtn = $("viewsBtn");
-    /** @type {ViewName[]} */
-    const views = ["overview", "register", "knobs", "front", "drum", "carry"];
-    viewsBtn.addEventListener("click", () => showMenu(viewsBtn, views.map((v) => ({ label: t(`view.${v}`), run: () => this.chooseView(v) }))));
+    viewsBtn.addEventListener("click", () => {
+      /** @type {import("../ui/components.js").MenuItem[]} */
+      const items = VIEWS.map((v) => ({
+        label: t(`view.${v}`),
+        checked: v === this.view,
+        divider: v === "register" ? true : v === "drum" ? t("view.inside") : undefined,
+        run: () => this.chooseView(v),
+      }));
+      items.push({ label: t("view.case"), toggle: true, checked: this.stage.casing, divider: true, run: () => this.toggleCase() });
+      showMenu(viewsBtn, items);
+    });
     $("resetViewBtn").addEventListener("click", () => {
-      // in a lesson step: back to the step's own view and presentation; in free play: the overview
+      // in a lesson step: back to the step's own view and presentation; in free play: the whole
+      // machine as it first shows, with the case on
       const c = this.course;
       if (c && !c.finished) {
         this.showPresentation(true);
         this.render();
-      } else this.chooseView("overview");
+      } else {
+        this.endInside();
+        this.stage.casing = true;
+        this.stage.applyToggles();
+        this.chooseView("overview");
+      }
     });
   }
 
@@ -628,18 +655,10 @@ export class App {
     $("numberField").classList.toggle("wanted", inputState.wanted && inputState.enabled);
     if (document.activeElement !== input) input.value = String(this.inputNumber());
     $("pinValue").textContent = m.pin === null ? "–" : String(m.pin);
-    // stage tools
-    /**
-     * @param {string} id
-     * @param {boolean} on
-     * @param {boolean} [enabled]
-     */
-    const chip = (id, on, enabled = true) => {
-      $(id).setAttribute("aria-pressed", String(on));
-      $(id).setAttribute("aria-disabled", String(!enabled));
-    };
-    chip("caseChip", this.stage.casing);
-    chip("apartChip", this.stage.explodeTarget > 0, !this.busy);
+    // the view on show, on the Views menu's button
+    const viewName = t(`view.${this.view}`);
+    $("viewName").textContent = viewName;
+    setTip($("viewsBtn"), `${t("tool.views")}: ${viewName}`);
     // the course and the mode
     this.courseUI.update();
     const c = this.course;

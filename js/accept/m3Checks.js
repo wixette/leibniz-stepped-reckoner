@@ -16,8 +16,7 @@ import { TUTORIAL } from "../teach/tutorial.js";
 import { applyIntentNow, intentAt } from "../teach/partActions.js";
 import { anchors, rayHits } from "./harness.js";
 import { gltfName } from "../scene/rig.js";
-import { INSIDE_VIEWS, matches, presentation, replayTo, runLesson } from "../teach/player.js";
-/** @import { ViewName } from "../teach/player.js" */
+import { INSIDE_VIEWS, matches, presentation, replayTo, runLesson, VIEWS } from "../teach/player.js";
 import { result } from "./harness.js";
 /** @import { CheckResult } from "./harness.js" */
 
@@ -32,8 +31,6 @@ const EXTERIOR = [
   "pi.window", "pi.sum_wheel.*", "pm.setting_dial.*", "pm.setting_plate.*", "pm.magna_rota", "pm.magna_pin",
   "pm.magna_plate", "pm.main_crank", "pm.carriage", "pm.carriage_panel", "frame.lead_screw", ...CASING,
 ];
-/** @type {ViewName[]} */
-const VIEWS = ["overview", "register", "knobs", "front", "drum", "carry"];
 /** Part groups the exploded view must move. */
 const EXPLODED_GROUPS = ["frame.case", "frame.register_cover", "pm.carriage", "pm.magna_rota", "pi.carry_store.*", "pm.setting_dial.*"];
 

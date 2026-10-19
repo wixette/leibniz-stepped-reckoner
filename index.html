@@ -114,16 +114,10 @@
               <div class="readout"><label data-l10n="read.turns">Turns</label><output id="turnsOut">0</output></div>
               <div class="readout"><label data-l10n="read.place">Carriage</label><output id="placeOut">0</output></div>
             </div>
-          </div>
-          <div class="stage-bottom">
-            <div class="tools" role="group">
-              <button class="chip" id="caseChip" aria-pressed="true" data-l10n-tip="tool.case.tip"><i data-icon="inventory_2"></i><span class="txt" data-l10n="tool.case">Case</span></button>
-              <button class="chip" id="apartChip" aria-pressed="false" data-l10n-tip="tool.apart.tip"><i data-icon="deployed_code"></i><span class="txt" data-l10n="tool.apart">Take apart</span></button>
-            </div>
             <div class="grow"></div>
-            <div class="tools">
-              <button class="chip" id="viewsBtn" aria-haspopup="menu" data-l10n-tip="tool.views"><i data-icon="videocam"></i><span class="txt" data-l10n="tool.views">Views</span></button>
-              <button class="chip" id="resetViewBtn" data-l10n-tip="tool.resetView"><i data-icon="3d_rotation"></i></button>
+            <div class="tools" role="group">
+              <button class="chip" id="resetViewBtn" data-l10n-tip="tool.resetView"><i data-icon="home"></i></button>
+              <button class="chip view-btn" id="viewsBtn" aria-haspopup="menu" aria-expanded="false"><i data-icon="videocam"></i><span class="txt" id="viewName">Whole machine</span><i data-icon="keyboard_arrow_down"></i></button>
             </div>
           </div>
           <div class="loader" id="loader">

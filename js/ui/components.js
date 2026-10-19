@@ -116,6 +116,8 @@ export function setTip(e, text) {
  * @property {string} label
  * @property {() => void} run
  * @property {boolean} [checked] shown with a check (a choice among several)
+ * @property {boolean} [toggle] an on/off switch (checked shows a ticked box), not a choice
+ * @property {string | true} [divider] a line before the item, headed by the text if one is given
  * @property {string} [lang] the item's own language (the language menu)
  */
 
@@ -143,10 +145,10 @@ export function showMenu(anchor, items) {
   if (again) return;
   const box = el("div", { class: "menu", role: "menu" });
   const buttons = items.map((it) => {
-    const b = el("button", { role: it.checked === undefined ? "menuitem" : "menuitemradio", tabindex: "-1", lang: it.lang }, [
-      it.checked === undefined ? null : it.checked ? icon("check") : el("span", { class: "check" }),
-      el("span", { text: it.label }),
-    ]);
+    if (it.divider) box.appendChild(el("div", { class: "menu-divider", role: "separator" }, [typeof it.divider === "string" ? el("span", { text: it.divider }) : null]));
+    const role = it.checked === undefined ? "menuitem" : it.toggle ? "menuitemcheckbox" : "menuitemradio";
+    const mark = it.checked === undefined ? null : it.toggle ? icon(it.checked ? "check_box" : "check_box_outline_blank") : it.checked ? icon("check") : el("span", { class: "check" });
+    const b = el("button", { role, tabindex: "-1", lang: it.lang }, [mark, el("span", { text: it.label })]);
     if (it.checked !== undefined) b.setAttribute("aria-checked", String(it.checked));
     b.addEventListener("click", () => {
       closeMenu();
@@ -163,8 +165,10 @@ export function showMenu(anchor, items) {
   const b = box.getBoundingClientRect();
   const below = r.bottom + 4 + b.height <= window.innerHeight - 8;
   box.style.top = `${below ? r.bottom + 4 : Math.max(8, r.top - 4 - b.height)}px`;
-  box.style.left = `${Math.max(8, Math.min(window.innerWidth - b.width - 8, r.left))}px`;
-  const start = Math.max(0, items.findIndex((it) => it.checked));
+  // open towards the middle of the window: from the anchor's left edge, or its right edge on the right
+  const left = r.left + r.width / 2 > window.innerWidth / 2 ? r.right - b.width : r.left;
+  box.style.left = `${Math.max(8, Math.min(window.innerWidth - b.width - 8, left))}px`;
+  const start = Math.max(0, items.findIndex((it) => it.checked && !it.toggle));
   buttons[start]?.focus();
   box.addEventListener("keydown", (e) => {
     const i = buttons.indexOf(/** @type {HTMLButtonElement} */ (document.activeElement));

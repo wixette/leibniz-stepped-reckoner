@@ -25,7 +25,7 @@ export const TUTORIAL = {
     // 2 · What's inside?
     {
       chapter: "tut.ch2",
-      explode: 1,
+      view: "apart",
       callouts: [
         { node: "pi.sum_wheel.10", text: "tut.register", value: false },
         { node: "pm.drum.5", text: "part.carriage", value: false },
@@ -33,7 +33,7 @@ export const TUTORIAL = {
       ],
       text: "tut.twoParts",
     },
-    { explode: 0, view: "register", highlight: ["pi.window"], text: "tut.windows" },
+    { view: "register", highlight: ["pi.window"], text: "tut.windows" },
     { view: "knobs", highlight: ["pm.setting_dial.*"], text: "tut.knobs" },
     {
       view: "drum",

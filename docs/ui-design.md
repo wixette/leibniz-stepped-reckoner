@@ -61,11 +61,11 @@ Also:
 ```
 ┌ [logo] Leibniz's Calculating Machine                      [dock] [文A EN ▾] [ⓘ] ┐  top bar
 ├──────────────────────────────────────────────────────┬───────────────────────────┤
-│ RESULT 0 000 000 010 000   TURNS 1   PLACE 0   [views▾]│ Get started│Lessons│Refs │  dock tabs
+│ RESULT 0 000 000 010 000   TURNS 1   [⌂][🎥 Carry ▾]│ Get started│Lessons│Refs │  dock tabs
 │                                                      │ ┌───────────────────────┐ │
 │                 THE MACHINE (3D stage)               │ │ Lesson 2 · The carry  │ │
 │                                                      │ │ ●●●○○○○○  step 3 of 8 │ │
-│   [case] [take apart]                        [⟲ view]│ │ Behind each result... │ │
+│                                                      │ │ Behind each result... │ │
 ├──────────────────────────────────────────────────────┤ │ ▸ Your turn: set 1    │ │
 │ [ 00000001 ]  [↻ +][↺ −]  [◀ carriage ▶]  pin [–▾] [⇥ to stop] [reset]          │  machine strip
 ├──────────────────────────────────────────────────────┴───────────────────────────┤
@@ -101,7 +101,7 @@ Free play has no tab: its controls are the machine strip, under the machine (P2)
 
 - **Machine strip** (under the stage): the number on the setting knobs, turn forward (add) and back (subtract), carriage left and right with its place, the Magna Rota's pin, turn to the stop, reset. Icon plus short label on wide screens, icons with tooltips on narrow ones.
 - **Readouts** sit on the stage's top edge: the result as on the machine, grouped in threes; the Magna Rota's turn count (red when subtracting); the carriage's place.
-- **Stage tools** float on the stage's bottom edge: show the case and take apart; a views menu (the six camera views, two of them inside views, U11) and a reset-view button. Opening the front and fading follow the view (U14). They change how the machine is *shown*, not its state, so they stay enabled in a lesson, except where a step depends on them.
+- **View controls** float at the stage's top right (U15): a Reset view button (⌂) and the Views menu, whose button names the view on show. The menu holds the seven views (two of them inside views, U11, and Taken apart) and a Show case switch. Opening the front, fading and taking apart follow the view (U14, U15). They change how the machine is *shown*, not its state, so they stay enabled in a lesson, except where a step depends on them.
 
 ### U5 — A dark Material 3 theme in brass and oak
 
@@ -132,7 +132,7 @@ Orbit by dragging, pan with the right button or two fingers, zoom with the wheel
 
 ### U10 — Each view fits its parts into the stage's free area
 
-The readouts on the stage's top edge and the tools on its bottom edge float over the canvas. Every camera view frames its parts (the whole machine, or the parts of a close-up) in the **free area** between those bands, by two rules:
+The readouts and the view controls on the stage's top edge float over the canvas. Every camera view frames its parts (the whole machine, or the parts of a close-up) in the **free area** below that band, by two rules:
 
 1. **Nothing covers the machine.** The fit uses the free area, not the whole canvas, so no readout, tool or the dock (which sits beside or under the canvas) ever hides part of it. The camera's centre is moved to the free area's centre (a view offset), so the machine sits in the middle of what is free, and orbiting pivots around it.
 2. **Contain at 90%.** The parts are as large as they can be while all of them show: they fill 90% of whichever side of the free area runs out first. In a wide, flat stage that is the height; in a laptop's stage beside the dock, in a portrait or a phone's stage, usually the width or the height, whichever the machine's 2.3 : 1 silhouette meets first.
@@ -175,14 +175,14 @@ Clearing the way follows from the view, not from the step. The drum and carry vi
 
 - **Steps no longer set the case, the front or fading.** They name the subject and the view (and when the machine is taken apart, and the labels), and the rest follows. No step's case, front or fading carries over from an earlier one. Of the 64 steps, every one with the case hidden was already in the drum or carry view, so the case comes out as before. Fading now comes on in all of them, where some had it off: Add 6, Carry 3–5 and 8, and Subtract 3.
 - **The Views menu works the same in a lesson as in free play.** Choosing the drum or carry view during a step makes it an inside view: it fades around the step's subject if the step uses that view, or else around the view's own parts. Choosing another view ends it and puts the tools back, also when the step itself was in an inside view, so the machine closes again. *Reset view* in a lesson goes back to the step's own view and presentation; in free play it goes to the overview.
-- **The Case chip stays a manual override,** in any step or view. The next step, Reset view in a lesson, or the next view sets it again. The front and fading have no chips any more (U14).
+- **Show case stays a manual override,** in any step or view. The next step, Reset view, or an inside view sets it again. The front and fading have no switches any more (U14).
 - **Acceptance check A3-13** holds lessons to this. A step that highlights a part inside the case must use an inside view (unless the machine is taken apart), an inside view must have a subject, and every step's case, front and fading follow its view.
 
 *Rejected:* deciding by part ("every internal part fades the rest"). Parts like the result wheels are both outside and inside, and the camera is what decides whether something is in the way.
 
 ### U14 — Only the case and taking apart are chips; the view does the rest
 
-Once the view decides the case, the front and fading (U13), the Open front and Fade others chips only undid or redid what the view had already got right. Each one could also leave the page out of step with its view. Both are gone, and the stage tools are **Case** and **Take apart**, beside the Views menu and Reset view.
+Once the view decides the case, the front and fading (U13), the Open front and Fade others chips only undid or redid what the view had already got right. Each one could also leave the page out of step with its view. Both are gone, and the stage tools are **Case** and **Take apart**, beside the Views menu and Reset view. (U15 then moves both into the Views menu.)
 
 - **The front is open, and the other parts are faded, exactly while an inside view is on**, whether a step or the Views menu set it. Another view or Reset view ends it. Orbiting does not.
 - **Case stays.** It isn't tied to a subject: in free play it lets the reader look at the whole mechanism working, for example the overview with the case off. In an inside view it puts the case back as a faded shell, if the reader wants it.
@@ -191,6 +191,34 @@ Once the view decides the case, the front and fading (U13), the Open front and F
 - **Nothing shows the inside view as a pressed chip any more,** so the status line still announces it, and the open machine shows it.
 
 *Rejected:* dropping the Case chip as well (it is the one way to see the whole mechanism at once, outside the inside views).
+
+### U15 — One view menu at the top right: seven views, a case switch, and Reset
+
+Taking apart is a way of looking at the machine, like the close-ups: it has its own best camera, and it never combines well with the other views (taken apart *and* faded would be a mess). So it is a view, **Taken apart**, and the view controls gather in one place at the stage's top right, where Blender and Unity put theirs:
+
+```
+[⌂] [🎥 Stepped drum ▾]       ⌂ = Reset view
+      Whole machine
+      Taken apart
+      ─────────────
+      Result
+      Setting knobs
+      Magna Rota
+      ── INSIDE ───
+      Stepped drum
+      Carry
+      ─────────────
+      ☑ Show case
+```
+
+- **The button names the view on show** (the current one is ticked in the menu), since no pressed chip shows the state any more. On a phone it shrinks to its icons.
+- **Taken apart flies to its own framing** (U10, fitted to the parts in their taken-apart places) while the parts move out, so it always shows from a good angle, whatever the reader did to the camera. It locks the crank and the knobs (P6); the status line says to choose another view to put the machine back together. Any other view puts it together. In a lesson the step names `view: "apart"`, so steps now name only a subject and a view; it is refused while the machine is moving.
+- **Show case is a switch, not a view:** a checkbox at the end of the menu. It is the reader's override (U13, U14).
+- **Reset view (⌂) is a separate button, because it means something else than Whole machine.** Whole machine is a place. Reset means "back to where I should be": in free play the whole machine with the case on, in a lesson the step's own view and presentation. It is one click, since undoing a bad orbit is the most common camera action.
+- **The bottom tool row is gone,** so only the top band limits the free area, and every view frames the machine a little larger (U10).
+- **The view stays when a course ends:** closing or finishing a lesson keeps the view on show, as free play shows it.
+
+*Rejected:* keeping Case and Take apart as chips (two controls for what the menu already says); folding Reset into Whole machine (in a lesson they differ).
 
 ## Part 4 — Open questions
 

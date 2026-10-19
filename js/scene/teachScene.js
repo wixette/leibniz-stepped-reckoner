@@ -79,6 +79,14 @@ export function viewSubjects(root) {
         return corners(new THREE.Box3().setFromObject(root));
       },
     },
+    apart: {
+      // The whole machine as it is, taken apart (the stage frames it with the parts moved out).
+      dir: { x: 0.35, y: 0.5, z: 0.62 },
+      points: () => {
+        root.updateWorldMatrix(true, true);
+        return corners(new THREE.Box3().setFromObject(root));
+      },
+    },
     register: view({ x: 0, y: 1, z: 0.12 }, ["pi.window"]),
     knobs: view({ x: 0, y: 1.1, z: 0.8 }, ["pm.setting_dial.*", "pm.setting_plate.*"]),
     front: view({ x: 0.12, y: 0.15, z: 1 }, ["pm.magna_rota", "pm.main_crank", "pm.magna_plate"]),

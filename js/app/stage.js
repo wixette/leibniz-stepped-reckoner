@@ -91,18 +91,17 @@ export class Stage {
   }
 
   /**
-   * The bands of the stage the machine must stay clear of: its readouts above, its tools
-   * below (U10), measured from the page.
+   * The band of the stage the machine must stay clear of: the readouts and the view controls
+   * along its top (U10, U15), measured from the page.
    * @returns {Insets}
    */
   insets() {
     const h = this.host.getBoundingClientRect();
     const top = this.host.querySelector(".stage-top")?.getBoundingClientRect();
-    const bottom = this.host.querySelector(".stage-bottom")?.getBoundingClientRect();
     const gap = 8;
     return {
       top: top ? Math.max(0, top.bottom - h.top) + gap : gap,
-      bottom: bottom ? Math.max(0, h.bottom - bottom.top) + gap : gap,
+      bottom: gap,
       left: gap,
       right: gap,
     };
