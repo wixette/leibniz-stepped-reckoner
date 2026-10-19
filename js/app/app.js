@@ -307,7 +307,7 @@ export class App {
     const p = presentation(c.lesson, c.i);
     this.stage.casing = p.casing;
     this.stage.cutaway = p.cutaway;
-    this.stage.explodeTarget = p.explode;
+    this.stage.setExplode(p.explode);
     this.stage.applyToggles();
     this.focus = p.focus && p.highlight.length > 0;
     this.stage.highlight(p.highlight, this.focus);
@@ -372,7 +372,7 @@ export class App {
   clearPresentation() {
     this.stage.highlight([], false);
     this.stage.setCallouts([]);
-    this.stage.explodeTarget = 0;
+    this.stage.setExplode(0);
     this.stage.casing = true;
     this.stage.cutaway = false;
     this.stage.applyToggles();
@@ -431,7 +431,7 @@ export class App {
     });
     chip("apartChip").addEventListener("click", () => {
       if (this.busy) return this.say(() => t("status.busy"), true);
-      this.stage.explodeTarget = this.stage.explodeTarget > 0 ? 0 : 1;
+      this.stage.setExplode(this.stage.explodeTarget > 0 ? 0 : 1);
       if (this.stage.explodeTarget > 0) this.say(() => t("status.apart"));
       this.render();
     });

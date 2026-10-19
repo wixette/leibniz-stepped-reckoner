@@ -5,7 +5,9 @@
 import * as THREE from "three";
 import { applyM2Pose, m2NodeNames } from "../scene/m2Pose.js";
 import { gltfName, Rig } from "../scene/rig.js";
-import { Callouts, Exploder, fillLabel, findNodes, Highlighter, makeViews } from "../scene/teachScene.js";
+import { centreOnFreeArea, frame } from "../scene/framing.js";
+/** @import { Insets } from "../scene/framing.js" */
+import { Callouts, Exploder, fillLabel, findNodes, Highlighter, viewSubjects } from "../scene/teachScene.js";
 import { Viewer } from "../scene/viewer.js";
 /** @import { Machine } from "../sim/machine.js" */
 import { intentAt, intentHint } from "../teach/partActions.js";
@@ -37,8 +39,14 @@ export class Stage {
    * @type {Callouts | null}
    */
   callouts = null;
-  /** @type {ReturnType<typeof makeViews> | null} */
+  /** @type {ReturnType<typeof viewSubjects> | null} */
   views = null;
+  /**
+   * The view the camera is fitted to, while the reader has not turned or zoomed it since
+   * (then a resize or taking apart reframes it); null once they have.
+   * @type {ViewName | null}
+   */
+  fitted = null;
   casing = true;
   cutaway = false;
   /** Taken-apart target, 0 or 1; the exploder's factor moves towards it. */
@@ -78,6 +86,69 @@ export class Stage {
     c.maxDistance = 2.2;
     c.maxPolarAngle = Math.PI * 0.62; // a little below the table, never from underneath
     c.screenSpacePanning = true;
+    c.addEventListener("start", () => (this.fitted = null)); // the reader took the camera
+    this.viewer.onResize.push(() => this.reframe());
+  }
+
+  /**
+   * The bands of the stage the machine must stay clear of: its readouts above, its tools
+   * below (U10), measured from the page.
+   * @returns {Insets}
+   */
+  insets() {
+    const h = this.host.getBoundingClientRect();
+    const top = this.host.querySelector(".stage-top")?.getBoundingClientRect();
+    const bottom = this.host.querySelector(".stage-bottom")?.getBoundingClientRect();
+    const gap = 8;
+    return {
+      top: top ? Math.max(0, top.bottom - h.top) + gap : gap,
+      bottom: bottom ? Math.max(0, h.bottom - bottom.top) + gap : gap,
+      left: gap,
+      right: gap,
+    };
+  }
+
+  /**
+   * Where the camera goes to show a view now (the parts as they are, taken apart or not).
+   * @private
+   * @param {ViewName} view
+   */
+  framing(view) {
+    const v = /** @type {NonNullable<Stage["views"]>} */ (this.views)[view];
+    const ex = this.exploder;
+    // Frame the parts where they are going: taken apart, or back together.
+    const factor = ex?.factor ?? 0;
+    if (ex && factor !== this.explodeTarget) ex.apply(this.explodeTarget);
+    const points = v.points();
+    if (ex && factor !== this.explodeTarget) ex.apply(factor);
+    const w = this.host.clientWidth;
+    const h = this.host.clientHeight;
+    return frame(this.viewer.camera, points, v.dir, w, h, this.insets(), 0.9);
+  }
+
+  /** The canvas changed size (or the bands did): centre on the free area, refit a fitted view. */
+  reframe() {
+    const w = this.host.clientWidth;
+    const h = this.host.clientHeight;
+    if (w === 0 || h === 0) return;
+    centreOnFreeArea(this.viewer.camera, w, h, this.insets());
+    if (this.fitted && this.views && !this.viewer.isFlying) {
+      const f = this.framing(this.fitted);
+      this.viewer.camera.position.copy(f.position);
+      this.viewer.controls.target.copy(f.target);
+      this.viewer.camera.lookAt(f.target); // now, not at the next frame's controls update
+    }
+    this.viewer.invalidate(false);
+  }
+
+  /**
+   * Take the machine apart (1) or put it together (0); a fitted view follows the parts.
+   * @param {number} target
+   */
+  setExplode(target) {
+    if (this.explodeTarget === target) return;
+    this.explodeTarget = target;
+    if (this.fitted) this.fly(this.fitted);
   }
 
   /** @returns {boolean} */
@@ -99,10 +170,9 @@ export class Stage {
     this.highlighter = new Highlighter(r);
     this.callouts = new Callouts(this.host, this.viewer.camera, r);
     this.callouts.valueOf = (node) => partInfo(node, this.machine);
-    this.views = makeViews(this.viewer.camera, r);
-    const [p, t] = this.views.overview();
-    this.viewer.camera.position.set(p.x, p.y, p.z);
-    this.viewer.controls.target.set(t.x, t.y, t.z);
+    this.views = viewSubjects(r);
+    this.fitted = "overview";
+    this.reframe();
     this.setupPointer();
     this.applyToggles();
     this.pose();
@@ -180,8 +250,10 @@ export class Stage {
   fly(view) {
     if (!this.views) return;
     this.hoverBox.hidden = true;
-    const [p, t] = this.views[view]();
-    this.viewer.flyTo(p, t, reducedMotion() ? 0.001 : 0.8);
+    centreOnFreeArea(this.viewer.camera, this.host.clientWidth, this.host.clientHeight, this.insets());
+    const f = this.framing(view);
+    this.fitted = view;
+    this.viewer.flyTo(f.position, f.target, reducedMotion() ? 0.001 : 0.8);
   }
 
   // ---- pointing and clicking -------------------------------------------------------------------

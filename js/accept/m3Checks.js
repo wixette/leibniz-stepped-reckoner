@@ -5,7 +5,8 @@
 import * as THREE from "three";
 import { applyM2Pose, m2NodeNames } from "../scene/m2Pose.js";
 import { Rig } from "../scene/rig.js";
-import { Exploder, findNodes, isShown, makeViews } from "../scene/teachScene.js";
+import { frame } from "../scene/framing.js";
+import { Exploder, findNodes, isShown, viewSubjects } from "../scene/teachScene.js";
 import { Machine } from "../sim/machine.js";
 import { MESSAGES } from "../l10n/all.js";
 import { LOCALES } from "../l10n/l10n.js";
@@ -101,10 +102,12 @@ export function runM3Checks(root) {
     /** @type {string[]} */
     const bad = [];
     const cam = new THREE.PerspectiveCamera(35, 1.5, 0.002, 10);
-    const views = makeViews(cam, root);
+    const views = viewSubjects(root);
+    const insets = { top: 80, right: 12, bottom: 56, left: 12 };
     for (const v of VIEWS) {
-      const [p, t] = views[v]();
-      if (![p.x, p.y, p.z, t.x, t.y, t.z].every(Number.isFinite)) bad.push(`view ${v}`);
+      const pts = views[v].points();
+      const { position: p, target: t } = frame(cam, pts, views[v].dir, 900, 600, insets);
+      if (pts.some((q) => !Number.isFinite(q.x)) || ![p.x, p.y, p.z, t.x, t.y, t.z].every(Number.isFinite)) bad.push(`view ${v}`);
     }
     let refs = 0;
     for (const l of COURSES) {

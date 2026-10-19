@@ -128,7 +128,20 @@ Logo and title on the left; on the right the dock toggle, the language menu and 
 
 ### U9 — The 3D stage behaves like a 3D viewer
 
-Orbit by dragging, pan with the right button or two fingers, zoom with the wheel or a pinch, damped and limited so the machine cannot be lost; *Reset view* always brings it back. Hovering a part shows its name and live value; a part that can be operated shows a pointer cursor and what a click will do. The model loads with a progress indicator on the stage; until then the strip is greyed with the reason in the status line.
+Orbit by dragging, pan with the right button or two fingers, zoom with the wheel or a pinch, damped and limited so the machine cannot be lost; *Reset view* always brings it back, framed by U10. Hovering a part shows its name and live value; a part that can be operated shows a pointer cursor and what a click will do. The model loads with a progress indicator on the stage; until then the strip is greyed with the reason in the status line.
+
+### U10 — Each view fits its parts into the stage's free area
+
+The readouts on the stage's top edge and the tools on its bottom edge float over the canvas. Every camera view frames its parts (the whole machine, or the parts of a close-up) in the **free area** between those bands, by two rules:
+
+1. **Nothing covers the machine.** The fit uses the free area, not the whole canvas, so no readout, tool or the dock (which sits beside or under the canvas) ever hides part of it. The camera's centre is moved to the free area's centre (a view offset), so the machine sits in the middle of what is free, and orbiting pivots around it.
+2. **Contain at 90%.** The parts are as large as they can be while all of them show: they fill 90% of whichever side of the free area runs out first. In a wide, flat stage that is the height; in a laptop's stage beside the dock, in a portrait or a phone's stage, usually the width or the height, whichever the machine's 2.3 : 1 silhouette meets first.
+
+The camera keeps each view's direction; the fit moves it only nearer or farther and sideways, measured on the corners of the parts' bounding box as the camera sees them (not a bounding sphere, which would leave them smaller). The whole machine is fitted with its case whether the case is shown or not, so hiding the case does not move the camera; taken apart, it is fitted at its taken-apart size.
+
+**Resizing refits; the reader's camera is the reader's.** While the camera is in a view the page chose (on load, from the Views menu, Reset view or a lesson step), a change of the stage's size (the window, the dock opened or closed, a phone turned) or taking the machine apart refits it at once. Once the reader turns, moves or zooms the camera, it stays where they put it until they choose a view or Reset view. Code: `js/scene/framing.js`, tested in `tests/scene/framing.test.js`.
+
+*Supersedes* the fixed views of M3 (a bounding sphere fitted once to the camera's narrower angle, which ignored the bands and let the machine run off a narrow stage and look small in a flat one). *Rejected:* fitting the shorter side of the stage at 90% (on a 1.9 : 1 laptop stage the 2.3 : 1 machine would then overflow the width); filling 90% of the whole canvas (the readouts and tools would cover the machine's ends).
 
 ## Part 4 — Open questions
 

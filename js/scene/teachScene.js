@@ -1,9 +1,10 @@
-// Scene helpers for the teaching page (M3): camera views, highlights, callout labels and
+// Scene helpers for the main page: camera views, highlights, callout labels and
 // the exploded view. The exploded view and the highlight matching are also used by the
 // acceptance checks (A3-3, A3-5), so they do not touch the DOM.
 
 import * as THREE from "three";
 /** @import { ViewName } from "../teach/player.js" */
+import { corners } from "./framing.js";
 import { gltfName } from "./rig.js";
 
 // ---- node matching ------------------------------------------------------------------------------
@@ -33,49 +34,54 @@ const shown = (o) => {
 export { shown as isShown };
 
 // ---- camera views -------------------------------------------------------------------------------
-/** @typedef {[THREE.Vector3Like, THREE.Vector3Like]} View */
 
 /**
- * Camera position looking at target from direction dir, far enough to fit a sphere of radius r (m).
- * @param {THREE.PerspectiveCamera} camera
- * @param {THREE.Vector3Like} target
- * @param {THREE.Vector3Like} dir
- * @param {number} r
- * @returns {View}
+ * A camera view: the parts it frames, and the direction it looks at them from (from the parts
+ * towards the camera). js/scene/framing.js fits the parts into the free part of the canvas.
+ * @typedef {object} ViewSubject
+ * @property {THREE.Vector3Like} dir
+ * @property {() => THREE.Vector3[]} points the corners of the parts' bounding box, now
+ *   (views of carriage parts follow the carriage)
  */
-export function fitView(camera, target, dir, r) {
-  const vfov = THREE.MathUtils.degToRad(camera.fov);
-  const hfov = 2 * Math.atan(Math.tan(vfov / 2) * camera.aspect);
-  const d = r / Math.sin(Math.min(vfov, hfov) / 2);
-  const p = new THREE.Vector3().copy(dir).normalize().multiplyScalar(d).add(target);
-  return [p, new THREE.Vector3().copy(target)];
-}
 
 /**
- * The page's camera views. Views of carriage parts follow the carriage.
- * @param {THREE.PerspectiveCamera} camera
+ * The page's camera views (docs/ui-design.md, U10).
  * @param {THREE.Object3D} root
- * @returns {Record<ViewName, () => View>}
+ * @returns {Record<ViewName, ViewSubject>}
  */
-export function makeViews(camera, root) {
-  /** @param {string} name */
-  const at = (name) => {
-    const n = findNodes(root, name)[0];
-    n.updateWorldMatrix(true, false);
-    return new THREE.Vector3().setFromMatrixPosition(n.matrixWorld);
+export function viewSubjects(root) {
+  /**
+   * The corners of the bounding box of the nodes matching the patterns.
+   * @param {string[]} patterns
+   * @returns {THREE.Vector3[]}
+   */
+  const boxOf = (patterns) => {
+    root.updateWorldMatrix(true, true);
+    const box = new THREE.Box3();
+    for (const p of patterns) for (const n of findNodes(root, p)) box.expandByObject(n);
+    return corners(box);
   };
   /**
-   * @param {string} a
-   * @param {string} b
+   * @param {THREE.Vector3Like} dir
+   * @param {string[]} patterns
+   * @returns {ViewSubject}
    */
-  const mid = (a, b) => at(a).add(at(b)).multiplyScalar(0.5);
+  const view = (dir, patterns) => ({ dir, points: () => boxOf(patterns) });
   return {
-    overview: () => fitView(camera, { x: -0.27, y: 0.02, z: 0 }, { x: 0.35, y: 0.42, z: 0.62 }, 0.45),
-    register: () => fitView(camera, { x: -0.28, y: 0.084, z: -0.066 }, { x: 0, y: 1, z: 0.12 }, 0.32),
-    knobs: () => fitView(camera, mid("pm.setting_dial.0", "pm.setting_dial.7"), { x: 0, y: 1.1, z: 0.8 }, 0.16),
-    front: () => fitView(camera, at("pm.magna_rota"), { x: 0.12, y: 0.15, z: 1 }, 0.1),
-    drum: () => fitView(camera, at("pm.drum.0").add(new THREE.Vector3(0, 0.02, -0.02)), { x: 0.7, y: 0.55, z: 0.75 }, 0.07),
-    carry: () => fitView(camera, mid("pi.carry_store.0", "pi.carry_store.3"), { x: -0.15, y: 0.9, z: -0.75 }, 0.1),
+    overview: {
+      dir: { x: 0.35, y: 0.42, z: 0.62 },
+      points: () => {
+        // The whole machine, case included whether shown or not: hiding the case does not move
+        // the camera.
+        root.updateWorldMatrix(true, true);
+        return corners(new THREE.Box3().setFromObject(root));
+      },
+    },
+    register: view({ x: 0, y: 1, z: 0.12 }, ["pi.window"]),
+    knobs: view({ x: 0, y: 1.1, z: 0.8 }, ["pm.setting_dial.*", "pm.setting_plate.*"]),
+    front: view({ x: 0.12, y: 0.15, z: 1 }, ["pm.magna_rota", "pm.main_crank", "pm.magna_plate"]),
+    drum: view({ x: 0.7, y: 0.55, z: 0.75 }, ["pm.drum.0", "pi.sum_wheel.0", "pm.setting_rack.0"]),
+    carry: view({ x: -0.15, y: 0.9, z: -0.75 }, ["pi.carry_store.0", "pi.carry_store.1", "pi.carry_store.2", "pi.carry_store.3", "pi.sum_wheel.0", "pi.sum_wheel.1", "pi.sum_wheel.2", "pi.sum_wheel.3"]),
   };
 }
 

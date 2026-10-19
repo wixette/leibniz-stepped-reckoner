@@ -242,6 +242,12 @@ export class Viewer {
    * @returns {void}
    */
   flyTo(position, target, seconds = 0.8) {
+    // A new flight replaces one under way, from wherever the camera is now.
+    if (this.flight) {
+      this.onFrame.splice(this.onFrame.indexOf(this.flight), 1);
+      this.flying--;
+      this.flight = null;
+    }
     const p0 = this.camera.position.clone();
     const t0 = this.controls.target.clone();
     const p1 = new THREE.Vector3().copy(position);
@@ -258,8 +264,10 @@ export class Viewer {
       if (t >= 1) {
         this.onFrame.splice(this.onFrame.indexOf(step), 1);
         this.flying--;
+        this.flight = null;
       }
     };
+    this.flight = step;
     this.onFrame.push(step);
   }
 
@@ -273,7 +281,26 @@ export class Viewer {
     this.renderer.setSize(w, h, false);
     this.camera.aspect = w / Math.max(1, h);
     this.camera.updateProjectionMatrix();
+    for (const cb of this.onResize) cb(w, h);
     this.invalidate(false);
+  }
+
+  /**
+   * Called after the canvas changed size (and the camera's aspect with it).
+   * @type {((width: number, height: number) => void)[]}
+   */
+  onResize = [];
+
+  /**
+   * The camera flight under way, if any.
+   * @private
+   * @type {((dt: number) => void) | null}
+   */
+  flight = null;
+
+  /** @returns {boolean} true while the camera flies to a view */
+  get isFlying() {
+    return this.flight !== null;
   }
 
   /**
