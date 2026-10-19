@@ -335,6 +335,14 @@ The wheel, a trackpad's pinch and a touch screen's pinch zoom the 3D view, withi
 
 *Rejected:* double-click or double-tap to zoom (a click on the machine already works its knobs and crank, so a double-click would turn a knob twice).
 
+### U25 — A wide dock lays its tabs out in a row
+
+The dock's three tabs stack each icon above its label. That suits a narrow dock beside the machine, but a wide dock has room to spare across and is short of height, especially below the machine, where a thinner tab bar leaves more room for the lesson.
+
+- **When the dock is about 480 px or wider, each tab's icon sits beside its label,** and the tab bar is 42 px tall instead of 60. Narrower, the tabs stack as before.
+- **It goes by the dock's own width,** not by where the dock is: a dock dragged wide beside the machine (U17) gets the row too, and a phone's dock below the machine (about 375 px) keeps the stacked tabs. In practice the row appears below the machine from tablets up, and beside it once the dock is widened.
+- **All ten languages fit at the narrowest row width.** The longest labels (Portuguese) leave 8 px to spare; the "lesson under way" dot sits after the label. The selected tab keeps its bar, and the keys are unchanged.
+
 ## Part 4 — Open questions
 
 - The link format (P8): which fields the first release promises (language, lesson and step, numbers on the machine).

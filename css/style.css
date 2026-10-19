@@ -404,6 +404,7 @@ a { color: var(--md-primary); }
 /* ---- dock ---------------------------------------------------------------------------------------- */
 .dock {
   position: relative;
+  container: dock / inline-size;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   min-width: 0;
@@ -460,6 +461,12 @@ body.resizing-rows, body.resizing-rows * { cursor: row-resize !important; }
 .tab[aria-selected="true"] { color: var(--md-primary); }
 .tab[aria-selected="true"]::after { content: ""; position: absolute; left: 22%; right: 22%; bottom: -1px; height: 3px; border-radius: 3px 3px 0 0; background: var(--md-primary); }
 .tab .dot { position: absolute; top: 8px; right: calc(50% - 20px); width: 8px; height: 8px; border-radius: 50%; background: var(--md-primary); }
+/* A wide dock lays each tab's icon beside its label, in a thinner bar, leaving more room for
+   the panel (U25). It goes by the dock's own width, beside the machine or below it. */
+@container dock (min-width: 470px) {
+  .tab { flex-direction: row; justify-content: center; gap: 8px; padding: 11px 8px 10px; white-space: nowrap; }
+  .tab .dot { position: static; flex: none; }
+}
 .panel { overflow-y: auto; min-height: 0; padding: 16px; scrollbar-gutter: stable; }
 .panel h2 { font-size: 20px; font-weight: 600; margin: 0 0 6px; line-height: 1.25; }
 .panel h3 { font-size: 13px; font-weight: 650; letter-spacing: 0.06em; text-transform: uppercase; color: var(--md-on-surface-variant); margin: 20px 0 8px; }
