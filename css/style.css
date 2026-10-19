@@ -1,6 +1,6 @@
 /* The simulator's page (docs/ui-design.md). A dark Material 3 scheme in brass and warm
-   neutrals (U5); the layout is a fixed frame (U1): top bar, stage and machine strip, dock,
-   status bar. */
+   neutrals (U5); the layout is a fixed frame (U1): top bar, stage (with the machine's toolbar
+   floating at its bottom, U18) and dock, status bar. */
 
 :root {
   color-scheme: dark;
@@ -157,7 +157,7 @@ a { color: var(--md-primary); }
 .topbar .spacer { flex: 1; }
 .lang-btn { gap: 6px; padding: 0 8px 0 10px; color: var(--md-on-surface-variant); font-weight: 600; }
 
-/* ---- workspace: stage + strip, and the dock ---------------------------------------------------------- */
+/* ---- workspace: the machine area and the dock ------------------------------------------------------ */
 .workspace {
   display: grid;
   grid-template-columns: minmax(0, 1fr) var(--dock-w);
@@ -165,11 +165,12 @@ a { color: var(--md-primary); }
 }
 .workspace.dock-closed { grid-template-columns: minmax(0, 1fr) 0; }
 .workspace.dock-closed .dock { display: none; }
-.machine-area { display: grid; grid-template-rows: minmax(0, 1fr) auto; min-width: 0; min-height: 0; }
+.machine-area { display: grid; grid-template-rows: minmax(0, 1fr); min-width: 0; min-height: 0; }
 
 /* the 3D stage */
 .stage {
   position: relative;
+  container: stage / inline-size;
   min-height: 0;
   overflow: hidden;
   background:
@@ -187,6 +188,17 @@ a { color: var(--md-primary); }
 }
 .stage-top { top: 12px; }
 .stage-top > * { pointer-events: auto; }
+/* the machine's toolbar floats at the stage's bottom, centred under the machine (U18) */
+.stage-bottom {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+.stage-bottom > * { pointer-events: auto; }
 .stage .grow { flex: 1; pointer-events: none; }
 .tools { display: flex; flex-wrap: wrap; gap: 6px; }
 /* the view menu's button names the view on show (U15) */
@@ -264,19 +276,37 @@ a { color: var(--md-primary); }
 }
 .callout .val.red, .hover-label .val.red { background: var(--red); color: #3a0a04; }
 
-/* ---- the machine strip ------------------------------------------------------------------------- */
+/* ---- the machine's toolbar (U18) ------------------------------------------------------------------ */
 .strip {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
   gap: 8px 6px;
-  padding: 12px 12px 8px;
+  max-width: 100%;
+  padding: 12px 10px 8px;
+  border: 1px solid var(--md-outline-variant);
+  border-radius: var(--radius-l);
   background: var(--md-surface-low);
-  border-top: 1px solid var(--md-outline-variant);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.4);
 }
 .strip .group { display: flex; align-items: center; gap: 4px; }
 .strip .sep { width: 1px; height: 28px; background: var(--md-outline-variant); margin: 0 4px; }
-@media (max-width: 1180px) { .strip .label { display: none; } }
+/* the toolbar fits the stage's own width (U18): labels go as room runs out, short ones last */
+@container stage (max-width: 1040px) { .strip .label { display: none; } }
+@container stage (max-width: 900px) {
+  .strip #toStopBtn .txt, .strip #resetBtn .txt { display: none; }
+  .strip #toStopBtn, .strip #resetBtn { padding: 0 10px; }
+}
+@container stage (max-width: 760px) {
+  .strip { gap: 8px 4px; }
+  .strip .sep { display: none; }
+}
+@container stage (max-width: 640px) {
+  .strip .btn .txt { display: none; }
+  .strip .btn.has-icon { padding: 0 10px; }
+  .strip .sep { display: none; }
+}
 .strip .grow { flex: 1; }
 .number-field {
   position: relative;
@@ -321,6 +351,7 @@ a { color: var(--md-primary); }
 
 /* ---- dock ---------------------------------------------------------------------------------------- */
 .dock {
+  position: relative;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   min-width: 0;
@@ -328,6 +359,35 @@ a { color: var(--md-primary); }
   background: var(--md-surface-mid);
   border-left: 1px solid var(--md-outline-variant);
 }
+/* the dock's resize handle (U17): its own edge; a grab pill shows on hover and focus beside the
+   machine, and always below it (like a bottom sheet's) */
+.dock-handle {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  bottom: 0;
+  left: -7px;
+  width: 14px;
+  display: grid;
+  place-items: center;
+  cursor: col-resize;
+  touch-action: none;
+}
+.dock-handle::before {
+  content: "";
+  width: 4px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: var(--md-outline);
+  opacity: 0;
+  transition: opacity 0.15s var(--ease), background-color 0.15s var(--ease);
+}
+.dock-handle:hover::before, body.resizing .dock-handle::before { opacity: 1; }
+.dock-handle:focus-visible { outline: none; }
+.dock-handle:focus-visible::before { opacity: 1; background: var(--md-primary); }
+body.resizing { user-select: none; }
+body.resizing-cols, body.resizing-cols * { cursor: col-resize !important; }
+body.resizing-rows, body.resizing-rows * { cursor: row-resize !important; }
 .tabs { display: flex; border-bottom: 1px solid var(--md-outline-variant); padding: 0 4px; }
 .tab {
   position: relative;
@@ -435,6 +495,13 @@ a { color: var(--md-primary); }
   color: var(--md-on-primary-container);
   font-weight: 560;
 }
+/* the controls the step asks for, right in the task line (U18) */
+.taskline { flex-wrap: wrap; }
+.taskline .task-controls { display: flex; flex-wrap: wrap; gap: 6px; margin-left: auto; }
+.taskline .btn { height: 32px; padding: 0 12px; }
+.taskline .btn.has-icon { padding-left: 10px; }
+.taskline .btn.icon-only { width: 32px; padding: 0; }
+.taskline .btn[aria-disabled="true"] { opacity: 0.45; }
 .taskline.ok { background: color-mix(in srgb, var(--success) 22%, var(--md-surface-high)); color: var(--success); }
 .taskline.watch { background: var(--md-surface-high); color: var(--md-on-surface-variant); }
 .taskline.blocked { background: color-mix(in srgb, var(--md-error) 18%, var(--md-surface-high)); color: var(--md-error); }
@@ -531,16 +598,16 @@ dialog::backdrop { background: var(--md-scrim); }
 
 /* ---- narrow or portrait: the regions stack (U1, P9) ------------------------------------------------------ */
 @media (max-width: 899px), (orientation: portrait) {
-  .workspace { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 55fr) minmax(0, 45fr); }
+  .workspace { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) var(--dock-h, 45%); }
   .workspace.dock-closed { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) 0; }
   .dock { border-left: 0; border-top: 1px solid var(--md-outline-variant); }
+  .dock-handle { top: -9px; bottom: auto; left: 0; right: 0; width: auto; height: 18px; cursor: row-resize; }
+  .dock-handle::before { width: 40px; height: 4px; opacity: 1; }
   .brand img { width: 48px; height: 25px; }
   .brand { font-size: 15px; }
 }
 @media (max-width: 599px) {
-  .strip .btn .txt, .strip .label, .chip .txt { display: none; }
-  .strip .btn.has-icon { padding: 0 10px; }
-  .strip .sep { display: none; }
+  .chip .txt { display: none; }
   .chip { padding: 0 8px; }
   .readout { padding: 4px 8px 5px; min-width: 0; }
   .readout output { font-size: 17px; }

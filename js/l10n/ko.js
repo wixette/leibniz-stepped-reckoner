@@ -8,6 +8,7 @@ export default {
   "app.description": "사칙연산을 모두 할 수 있었던 최초의 계산 기계, 라이프니츠의 계단식 계산기를 튜토리얼과 레슨이 있는 인터랙티브 3D 시뮬레이터로.",
 
   "bar.dockShow": "사이드 패널 보이기",
+  "dock.resize": "패널 크기 조절: 끌거나 화살표 키 사용, 두 번 클릭하면 기본 크기로",
   "bar.dockHide": "사이드 패널 숨기기",
   "bar.language": "언어",
   "bar.about": "정보",

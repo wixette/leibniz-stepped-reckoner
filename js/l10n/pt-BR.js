@@ -8,6 +8,7 @@ export default {
   "app.description": "A calculadora de Leibniz, a primeira máquina para as quatro operações da aritmética, como simulador 3D interativo com tutorial e lições.",
 
   "bar.dockShow": "Mostrar o painel lateral",
+  "dock.resize": "Redimensionar o painel: arraste ou use as setas; clique duplo para redefinir",
   "bar.dockHide": "Ocultar o painel lateral",
   "bar.language": "Idioma",
   "bar.about": "Sobre",

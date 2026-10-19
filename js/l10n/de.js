@@ -8,6 +8,7 @@ export default {
   "app.description": "Die Rechenmaschine von Leibniz, die erste Maschine für alle vier Grundrechenarten, als interaktiver 3D-Simulator mit Einführung und Lektionen.",
 
   "bar.dockShow": "Seitenleiste zeigen",
+  "dock.resize": "Bereichsgröße ändern: ziehen oder Pfeiltasten; Doppelklick stellt sie zurück",
   "bar.dockHide": "Seitenleiste ausblenden",
   "bar.language": "Sprache",
   "bar.about": "Über",

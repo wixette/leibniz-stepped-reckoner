@@ -3,7 +3,7 @@
 // (a new step, a new language); update() follows the machine (the task line, Back and Next).
 
 import { t, tn } from "../l10n/l10n.js";
-import { el, icon } from "../ui/components.js";
+import { el, icon, setTip } from "../ui/components.js";
 import { LESSONS } from "../teach/lessons.js";
 import { TUTORIAL } from "../teach/tutorial.js";
 /** @import { Lesson } from "../teach/player.js" */
@@ -11,6 +11,24 @@ import { TUTORIAL } from "../teach/tutorial.js";
 
 /** The version this module was loaded with (?v=), for the pictures it shows. */
 const V = new URL(import.meta.url).search;
+
+/**
+ * The toolbar controls a task can ask for, as the task line shows them (U18): the toolbar
+ * element each one works, its icon, and its label (or, for an icon alone, its tooltip).
+ * @type {Record<import("./app.js").StripControl, [string, import("../ui/components.js").IconName | null, string][]>}
+ */
+const TASK_CONTROLS = {
+  input: [["numInput", null, "strip.number"]],
+  add: [["addBtn", "rotate_right", "strip.add"]],
+  sub: [["subBtn", "rotate_left", "strip.sub"]],
+  shift: [
+    ["leftBtn", "keyboard_double_arrow_left", "strip.left.tip"],
+    ["rightBtn", "keyboard_double_arrow_right", "strip.right.tip"],
+  ],
+  pin: [["pinBtn", "radio_button_checked", "strip.pin"]],
+  toStop: [["toStopBtn", "fast_forward", "strip.toStop"]],
+  reset: [["resetBtn", "restart_alt", "strip.reset"]],
+};
 
 export class CourseUI {
   /** The dock tab on show (set by the page's tabs). */
@@ -20,7 +38,7 @@ export class CourseUI {
   /**
    * The live parts of the player, set while one is shown.
    * @private
-   * @type {{ taskline: HTMLElement; back: HTMLButtonElement; next: HTMLButtonElement; progress: HTMLElement } | null}
+   * @type {{ taskline: HTMLElement; back: HTMLButtonElement; next: HTMLButtonElement; progress: HTMLElement; shown?: string } | null}
    */
   live = null;
 
@@ -194,6 +212,34 @@ export class CourseUI {
     ]);
   }
 
+  /**
+   * The controls a task asks for, as buttons in the task line (U18). Each works the toolbar's own
+   * control, so the same locks, lesson rules and reasons apply.
+   * @private
+   * @param {import("./app.js").StripControl[]} controls
+   */
+  taskButtons(controls) {
+    return el(
+      "span",
+      { class: "task-controls" },
+      controls.flatMap((k) =>
+        TASK_CONTROLS[k].map(([id, ic, key]) => {
+          const b = el("button", { class: `btn tonal${ic ? " has-icon" : ""}${ic && key.endsWith(".tip") ? " icon-only" : ""}`, "data-for": id }, [
+            ic ? icon(ic) : null,
+            key.endsWith(".tip") ? null : el("span", { text: t(key) }),
+          ]);
+          if (key.endsWith(".tip")) setTip(b, t(key));
+          b.addEventListener("click", () => {
+            const target = document.getElementById(id);
+            if (id === "numInput") target?.focus();
+            else target?.click();
+          });
+          return b;
+        }),
+      ),
+    );
+  }
+
   /** Follow the machine: the task line, Back and Next. */
   update() {
     this.updateDots();
@@ -205,9 +251,19 @@ export class CourseUI {
     const watching = c.playing || this.app.busy;
     live.taskline.hidden = !task && !watching;
     live.taskline.className = `taskline${watching ? " watch" : done ? " ok" : ""}`;
-    live.taskline.replaceChildren(
-      ...(watching ? [icon("videocam"), el("span", { text: t("course.watching") })] : done ? [icon("check_circle-fill"), el("span", { text: t("course.done") })] : [icon("lightbulb"), el("span", { text: t("course.yourTurn") })]),
-    );
+    // Rebuilt only when it changes, so a task button keeps the focus while the machine moves.
+    const shown = watching ? "watch" : done ? "done" : `turn:${task?.controls.join(",") ?? ""}`;
+    if (live.shown !== shown) {
+      live.shown = shown;
+      live.taskline.replaceChildren(
+        ...(watching ? [icon("videocam"), el("span", { text: t("course.watching") })] : done ? [icon("check_circle-fill"), el("span", { text: t("course.done") })] : [icon("lightbulb"), el("span", { text: t("course.yourTurn") })]),
+        ...(task && !watching && !done ? [this.taskButtons(task.controls)] : []),
+      );
+    }
+    // a task button is as usable as the toolbar control it works
+    for (const b of /** @type {NodeListOf<HTMLElement>} */ (live.taskline.querySelectorAll("[data-for]"))) {
+      b.setAttribute("aria-disabled", document.getElementById(/** @type {string} */ (b.dataset.for))?.getAttribute("aria-disabled") ?? "false");
+    }
     live.next.disabled = !this.app.canNext();
     live.back.disabled = c.i === 0 || this.app.busy;
   }

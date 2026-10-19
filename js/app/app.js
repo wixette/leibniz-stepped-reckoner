@@ -15,6 +15,7 @@ import { Animator } from "./animator.js";
 import { Stage } from "./stage.js";
 import { CourseUI } from "./course.js";
 import { showAbout } from "./about.js";
+import { wireDockHandle } from "./dockHandle.js";
 
 /**
  * @template {HTMLElement} [T=HTMLElement]
@@ -511,6 +512,7 @@ export class App {
     };
     setDock(store.get("lsr-dock") !== "closed");
     dockBtn.addEventListener("click", () => setDock(ws.classList.contains("dock-closed")));
+    wireDockHandle({ workspace: ws, dock: $("dock"), handle: $("dockHandle"), store, close: () => setDock(false) });
     const langBtn = $("langBtn");
     langBtn.addEventListener("click", () =>
       showMenu(

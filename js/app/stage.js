@@ -95,20 +95,25 @@ export class Stage {
     c.screenSpacePanning = true;
     c.addEventListener("start", () => (this.fitted = null)); // the reader took the camera
     this.viewer.onResize.push(() => this.reframe());
+    // the bands can change height on their own (a language's longer words wrap the toolbar)
+    const bands = new ResizeObserver(() => this.reframe());
+    for (const b of host.querySelectorAll(".stage-top, .stage-bottom")) bands.observe(b);
   }
 
   /**
-   * The band of the stage the machine must stay clear of: the readouts and the view controls
-   * along its top (U10, U15), measured from the page.
+   * The bands of the stage the machine must stay clear of: the readouts and the view controls
+   * along its top (U10, U15), and the machine's toolbar along its bottom (U18), measured from
+   * the page.
    * @returns {Insets}
    */
   insets() {
     const h = this.host.getBoundingClientRect();
     const top = this.host.querySelector(".stage-top")?.getBoundingClientRect();
+    const bottom = this.host.querySelector(".stage-bottom")?.getBoundingClientRect();
     const gap = 8;
     return {
       top: top ? Math.max(0, top.bottom - h.top) + gap : gap,
-      bottom: gap,
+      bottom: bottom ? Math.max(0, h.bottom - bottom.top) + gap : gap,
       left: gap,
       right: gap,
     };

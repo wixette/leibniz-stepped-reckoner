@@ -60,26 +60,27 @@ Also:
 
 ```
 ┌ [logo] Leibniz's Calculating Machine                      [dock] [文A EN ▾] [ⓘ] ┐  top bar
-├──────────────────────────────────────────────────────┬───────────────────────────┤
-│ RESULT 0 000 000 010 000   TURNS 1   [⌂][🎥 Carry ▾]│ Get started│Lessons│Refs │  dock tabs
-│                                                      │ ┌───────────────────────┐ │
-│                 THE MACHINE (3D stage)               │ │ Lesson 2 · The carry  │ │
-│                                                      │ │ ●●●○○○○○  step 3 of 8 │ │
-│                                                      │ │ Behind each result... │ │
-├──────────────────────────────────────────────────────┤ │ ▸ Your turn: set 1    │ │
-│ [ 00000001 ]  [↻ +][↺ −]  [◀ carriage ▶]  pin [–▾] [⇥ to stop] [reset]          │  machine strip
-├──────────────────────────────────────────────────────┴───────────────────────────┤
+├─────────────────────────────────────────────────────┬────────────────────────────┤
+│ RESULT 0 000 000 010 000  TURNS 1   [⌂][🎥 Carry ▾] ┃ Get started│Lessons│Refs   │  dock tabs
+│                                                     ┃ ┌────────────────────────┐ │
+│                THE MACHINE (3D stage)               ┃ │ Lesson 2 · The carry   │ │
+│                                                     ┃ │ ●●●○○○○○  step 3 of 8  │ │
+│                                                     ┃ │ Behind each result...  │ │
+│                                                     ┃ │ ▸ Your turn  [Number]  │ │  task line (U18)
+│ ╭[00000001] [↻ +][↺ −] [◀ 0 ▶] [pin –] [⇥] [reset]╮ ┃ └────────────────────────┘ │  toolbar (U18)
+├─────────────────────────────────────────────────────┴────────────────────────────┤
 │ The ribs added 1 to the units: 9 → 0, and the carry is stored.   Lesson 2 · 3/8  │  status bar
 └──────────────────────────────────────────────────────────────────────────────────┘
+  ┃ = the dock's edge, its resize handle (U17)
 ```
 
-On a narrow (under 900 px) or portrait window the same regions stack: top bar, stage, machine strip, dock, status bar. The dock then takes the lower part and scrolls.
+On a narrow (under 900 px) or portrait window the same regions stack: top bar, stage (with its toolbar), dock, status bar. The dock then takes the lower part and scrolls; its top edge carries a grab pill to resize it (U17).
 
 ## Part 3 — Decisions
 
 ### U1 — Desktop first: the dock on the right of a wide window, below on a narrow one
 
-The page is a fixed frame: top bar, stage, machine strip, dock, status bar; the page itself never scrolls. On a wide (landscape, 900 px or more) window the dock sits to the right of the stage, 360–440 px wide, and can be closed from the top bar; the stage takes the rest. On a narrow or portrait window the dock goes below the machine strip. Either way the stage keeps a shape not far from square, which suits a 3D view that also flies to close-ups.
+The page is a fixed frame: top bar, stage (with the machine's toolbar floating at its bottom, U18), dock, status bar; the page itself never scrolls. On a wide (landscape, 900 px or more) window the dock sits to the right of the stage, 340–440 px wide by default and resizable by its edge (U17), and can be closed from the top bar; the stage takes the rest. On a narrow or portrait window the dock goes below the stage. Either way the stage keeps a shape not far from square, which suits a 3D view that also flies to close-ups.
 
 *Why on the right, unlike the 8800 simulator (dock below):* the 8800's panel is a flat 2.24 : 1 picture, so the room it leaves is underneath. Our machine, seen whole, is about 2.3 : 1, so its size on a wide screen is limited by the stage's *height*. A dock below takes height: on a 1366 × 768 Chromebook it leaves the machine about 620 px wide, against about 900 px with the dock on the right (and about 1,070 against 1,400 px on a 1920 × 1080 screen). The close-up views (drum, carry, Magna Rota) are nearly square subjects, and lesson text reads better in a column than in a wide strip. *Rejected:* dock below on wide screens (letterboxes the 3D view); a floating lesson card over the stage (breaks P1).
 
@@ -87,7 +88,7 @@ The page is a fixed frame: top bar, stage, machine strip, dock, status bar; the 
 
 Opening the page gives a working machine at once: every control enabled, nothing to choose first. The dock opens on *Get started* the first time (and on the reader's last tab after that), inviting the tutorial without blocking the machine.
 
-Starting the tutorial or a lesson enters **course mode**: the step player takes the dock, the machine strip greys the controls the current step does not use (P6, the status line says why), and the status bar shows where you are. Leaving (Close, Finish, or opening another lesson) returns to free play with the machine as it is.
+Starting the tutorial or a lesson enters **course mode**: the step player takes the dock, the machine toolbar greys the controls the current step does not use (P6, the status line says why), and the status bar shows where you are. Leaving (Close, Finish, or opening another lesson) returns to free play with the machine as it is.
 
 ### U3 — Three dock tabs: Get started, Lessons, References
 
@@ -95,11 +96,11 @@ Starting the tutorial or a lesson enters **course mode**: the step player takes 
 - **Lessons**: a path of six lessons, each building on the one before (U6), with progress ticks remembered in the browser.
 - **References**: where to see the machine and read more, grouped, each link with one line on why it is worth a click.
 
-Free play has no tab: its controls are the machine strip, under the machine (P2).
+Free play has no tab: its controls are the machine toolbar, under the machine (P2).
 
-### U4 — The machine strip and the stage's own tools
+### U4 — The machine's toolbar and the stage's own tools
 
-- **Machine strip** (under the stage): the number on the setting knobs, turn forward (add) and back (subtract), carriage left and right with its place, the Magna Rota's pin, turn to the stop, reset. Icon plus short label on wide screens, icons with tooltips on narrow ones.
+- **Machine toolbar** (floating at the stage's bottom, centred under the machine, U18): the number on the setting knobs, turn forward (add) and back (subtract), carriage left and right with its place, the Magna Rota's pin, turn to the stop, reset. Icon plus short label on wide screens, icons with tooltips on narrow ones.
 - **Readouts** sit on the stage's top edge: the result as on the machine, grouped in threes; the Magna Rota's turn count (red when subtracting); the carriage's place.
 - **View controls** float at the stage's top right (U15): a Reset view button (⌂) and the Views menu, whose button names the view on show. The menu holds the seven views (two of them inside views, U11, and Taken apart) and a Show case switch. Opening the front, fading and taking apart follow the view (U14, U15). They change how the machine is *shown*, not its state, so they stay enabled in a lesson, except where a step depends on them.
 
@@ -128,7 +129,7 @@ Logo and title on the left; on the right the dock toggle, the language menu and 
 
 ### U9 — The 3D stage behaves like a 3D viewer
 
-Orbit by dragging, pan with the right button or two fingers, zoom with the wheel or a pinch, damped and limited so the machine cannot be lost; *Reset view* always brings it back, framed by U10. Hovering a part shows its name and live value; a part that can be operated shows a pointer cursor and what a click will do. The model loads with a progress indicator on the stage; until then the strip is greyed with the reason in the status line.
+Orbit by dragging, pan with the right button or two fingers, zoom with the wheel or a pinch, damped and limited so the machine cannot be lost; *Reset view* always brings it back, framed by U10. Hovering a part shows its name and live value; a part that can be operated shows a pointer cursor and what a click will do. The model loads with a progress indicator on the stage; until then the toolbar is greyed with the reason in the status line.
 
 ### U10 — Each view fits its parts into the stage's free area
 
@@ -222,15 +223,35 @@ Taking apart is a way of looking at the machine, like the close-ups: it has its 
 
 ### U16 — The cranks turn either way: drag them round, or Shift-click
 
-A click on the main crank turned it forward, and a click on the end crank shifted the carriage left. The other ways were only in the strip, and the one-way crank taught the wrong thing: on the real machine, the way you turn the crank is what decides between adding and subtracting.
+A click on the main crank turned it forward, and a click on the end crank shifted the carriage left. The other ways were only in the toolbar, and the one-way crank taught the wrong thing: on the real machine, the way you turn the crank is what decides between adding and subtracting.
 
-- **Drag a crank round its axle.** Pressing on a crank grabs it, rather than turning the camera, and dragging it about 30° round one way (and at least 10 pixels) commits one full turn that way. Forward adds and backward subtracts. For the end crank, the two ways shift the carriage left and right. One drag makes one turn; the next turn needs a new drag. The turn then plays as from the strip, so a crank is never left half-turned in the middle of a carry.
+- **Drag a crank round its axle.** Pressing on a crank grabs it, rather than turning the camera, and dragging it about 30° round one way (and at least 10 pixels) commits one full turn that way. Forward adds and backward subtracts. For the end crank, the two ways shift the carriage left and right. One drag makes one turn; the next turn needs a new drag. The turn then plays as from the toolbar, so a crank is never left half-turned in the middle of a carry.
 - **How the angle is read:** the grabbed point moves on a circle round the axle. The pointer's ray meets that circle's plane, and the angle it sweeps there, signed by the crank's axis, is how far the crank has been turned. That works from any view in which the plane is not seen exactly edge-on. Forward is the way the rig turns the crank as the machine adds, or as the carriage goes left.
 - **A click keeps its quick action** (forward, or left), and **Shift-click** goes the other way. The hover hint says all three, and changes as Shift is pressed. The cursor shows a hand over a crank, and a closed hand while it is held. The Get started panel names the drag too, since a touch screen has no hover.
-- **The same rules as the strip:** a drag or Shift-click resolves to the same operation as Add, Subtract or the carriage arrows, so locks and lesson rules apply. A crank that cannot turn either way now is not grabbed, and the drag turns the camera instead. A drag the way a lesson step does not allow, or against a carriage end or a full carry store, is refused, and the status line says why.
+- **The same rules as the toolbar:** a drag or Shift-click resolves to the same operation as Add, Subtract or the carriage arrows, so locks and lesson rules apply. A crank that cannot turn either way now is not grabbed, and the drag turns the camera instead. A drag the way a lesson step does not allow, or against a carriage end or a full carry store, is refused, and the status line says why.
 - **Acceptance checks:** A3-11 clicks and Shift-clicks both cranks on the model. A3-15 turns each crank 40° each way with the rig, from two views, and checks that the drag reads the same angle and sign.
 
 *Rejected:* ↻ and ↺ buttons beside the crank (controls floating in the scene, against U14 and U15); following the pointer turn by turn (a part-turn would stop in the middle of a carry); Shift-click alone (invisible, and impossible on a touch screen).
+
+### U17 — The dock resizes by its own edge
+
+The dock had a fixed size, so the reader could not give the machine more room, or the lesson text more. Now the dock's own edge is a resize handle: its left edge while it stands beside the machine, its top edge while it lies below.
+
+- **Below the machine it is a grab pill on the dock's top border,** like a phone's bottom sheet. The machine area above it is one block (the 3D view with its toolbar, U18), so the handle separates two regions, not a control from what it controls. Beside the machine the pill shows on hover and focus.
+- **Drag it, or move it with the arrow keys** (Shift for bigger steps; Home and End for the smallest and largest). Double-click or Enter returns the default size.
+- **The size is remembered for each layout,** beside and below, and clamped to the window as it changes. The dock keeps at least 300 px beside or 160 px below; the machine area keeps at least 360 px wide or 220 px tall.
+- **Dragged well past its smallest size** (by 60 px), the dock closes, as with the top bar's dock button. Its remembered size is kept for when it opens again.
+- **The 3D view refits as the dock moves** (U10).
+- It is a focusable separator (WAI-ARIA window splitter) that reports its size. Its tooltip says how to use it.
+
+### U18 — The toolbar floats under the machine, and the lesson brings its control
+
+With the dock on the right, the toolbar ran the full width under the stage, left-aligned, at the window's bottom-left corner: far from the machine, centred above it, and from the lesson text in the dock.
+
+- **The toolbar floats at the stage's bottom, centred under the machine,** as a compact bar like the view controls at the top right. It sits where the reader is already looking, and the 3D view gets the full height. The framing (U10) keeps the machine clear of it, and refits when the bar re-wraps (a longer language, a narrower stage). It wraps to two rows when the stage is narrow, and shows icons with tooltips on a phone.
+- **A step's task line shows the controls it asks for,** for example "Your turn [↻ Add]". Each button works the toolbar's own control, so the same locks, lesson rules and reasons apply (P6). It is greyed when that control is, and the toolbar still makes the asked-for control glow. In a lesson, the moment the reader most often hunts for a control, their eyes can stay in the dock. The number box is a button that puts the cursor in the toolbar's number field.
+
+*Rejected:* the controls in the top band beside the readouts (it would crowd the band that holds the numbers and the camera: top is state and camera, bottom is acting); the controls inside the dock (in free play the dock may be closed).
 
 ## Part 4 — Open questions
 

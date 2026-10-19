@@ -8,6 +8,7 @@ export default {
   "app.description": "萊布尼茲的步進計算機——第一部能做全部四則運算的計算機器——的互動式 3D 模擬器，附入門教學與課程。",
 
   "bar.dockShow": "顯示側邊欄",
+  "dock.resize": "調整面板大小：拖曳或用方向鍵；按兩下恢復預設",
   "bar.dockHide": "隱藏側邊欄",
   "bar.language": "語言",
   "bar.about": "關於",
