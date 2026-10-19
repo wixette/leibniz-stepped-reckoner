@@ -194,6 +194,13 @@ a { color: var(--md-primary); }
     radial-gradient(120% 90% at 50% 38%, #2a3747 0%, #18212c 55%, #0d1116 100%);
 }
 .stage canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+/* the 3D view takes the keyboard's focus (U24): its ring sits just inside the stage */
+.stage canvas:focus-visible { outline: 2px solid var(--md-primary); outline-offset: -3px; }
+/* zoom out and in, one joined pair of chips (U24) */
+.chip-pair { display: inline-flex; }
+.chip-pair .chip { padding: 0 7px; }
+.chip-pair .chip:first-child { border-top-right-radius: 0; border-bottom-right-radius: 0; }
+.chip-pair .chip:last-child { border-top-left-radius: 0; border-bottom-left-radius: 0; margin-left: -1px; }
 .stage-top {
   position: absolute;
   left: 12px;

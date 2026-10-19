@@ -25,6 +25,9 @@ export default {
 
   "tool.views": "Views",
   "tool.resetView": "Reset view",
+  "tool.zoomIn": "Zoom in (+)",
+  "tool.zoomOut": "Zoom out (−)",
+  "stage.keys": "3D view of the machine. Arrow keys turn it, Shift and the arrow keys move it, + and − zoom, Home resets the view.",
 
   "view.overview": "Whole machine",
   "view.apart": "Taken apart",
@@ -114,6 +117,7 @@ export default {
   "start.look.point": "Point at a part to see its name and value.",
   "start.look.click": "Click the knobs, the crank or the Magna Rota to operate them.",
   "start.look.crank": "Drag a crank round to turn it either way: forward adds, backward subtracts.",
+  "start.look.keys": "With the keyboard: Tab to the machine, then the arrow keys turn it, Shift and the arrows move it, + and − zoom.",
   "start.then": "Then go on with the lessons.",
 
   "lessons.lead": "Six short lessons, from adding to dividing, each building on the one before.",

@@ -23,6 +23,13 @@ import { wireDockHandle } from "./dockHandle.js";
  */
 const $ = (id) => /** @type {T} */ (document.getElementById(id));
 
+/** One zoom step (U24): the camera's distance grows or shrinks by this factor. */
+const ZOOM_STEP = 1.25;
+/** One arrow key turns the 3D view this far (degrees). */
+const TURN_STEP_DEG = 8;
+/** One Shift + arrow moves the 3D view this far (a share of the camera's distance). */
+const PAN_STEP = 0.06;
+
 /** Remembered in the browser (the page works without storage). */
 export const store = {
   /** @param {string} k */
@@ -531,6 +538,23 @@ export class App {
     this.render();
   }
 
+  /**
+   * Back to where the reader should be (⌂, or Home on the 3D view): in a lesson step, the step's
+   * own view and presentation; in free play, the whole machine as it first shows, case on.
+   */
+  resetView() {
+    const c = this.course;
+    if (c && !c.finished) {
+      this.showPresentation(true);
+      this.render();
+    } else {
+      this.endInside();
+      this.stage.casing = true;
+      this.stage.applyToggles();
+      this.chooseView("overview");
+    }
+  }
+
   /** @private */
   wireStage() {
     const viewsBtn = $("viewsBtn");
@@ -545,19 +569,57 @@ export class App {
       items.push({ label: t("view.case"), toggle: true, checked: this.stage.casing, divider: true, run: () => this.toggleCase() });
       showMenu(viewsBtn, items);
     });
-    $("resetViewBtn").addEventListener("click", () => {
-      // in a lesson step: back to the step's own view and presentation; in free play: the whole
-      // machine as it first shows, with the case on
-      const c = this.course;
-      if (c && !c.finished) {
-        this.showPresentation(true);
-        this.render();
-      } else {
-        this.endInside();
-        this.stage.casing = true;
-        this.stage.applyToggles();
-        this.chooseView("overview");
-      }
+    $("resetViewBtn").addEventListener("click", () => this.resetView());
+    // Zoom by buttons (U24): for boards and screens that pass no wheel or pinch through. They grey
+    // at the camera's limits, checked each frame (the wheel and pinch move it too).
+    const zoomIn = $("zoomInBtn");
+    const zoomOut = $("zoomOutBtn");
+    zoomIn.addEventListener("click", () => zoomIn.getAttribute("aria-disabled") !== "true" && this.stage.zoom(1 / ZOOM_STEP));
+    zoomOut.addEventListener("click", () => zoomOut.getAttribute("aria-disabled") !== "true" && this.stage.zoom(ZOOM_STEP));
+    /** @type {string} */
+    let room = "";
+    this.stage.viewer.addFrameCallback(() => {
+      const r = this.stage.zoomRoom();
+      const now = `${r.nearer}${r.farther}`;
+      if (now === room) return;
+      room = now;
+      zoomIn.setAttribute("aria-disabled", String(!r.nearer));
+      zoomOut.setAttribute("aria-disabled", String(!r.farther));
+    });
+    // The 3D view by keyboard (U24), while it has the focus: the arrow keys turn it, Shift and the
+    // arrow keys move it, + and − zoom, Home resets the view.
+    const canvas = this.stage.viewer.renderer.domElement;
+    canvas.tabIndex = 0;
+    canvas.setAttribute("role", "application");
+    canvas.addEventListener("keydown", (e) => {
+      if (e.ctrlKey || e.metaKey || e.altKey) return; // the browser's own zoom and shortcuts
+      const turn = (TURN_STEP_DEG * Math.PI) / 180;
+      /** @type {Record<string, () => void>} */
+      const keys = e.shiftKey
+        ? {
+            ArrowLeft: () => this.stage.pan(PAN_STEP, 0),
+            ArrowRight: () => this.stage.pan(-PAN_STEP, 0),
+            ArrowUp: () => this.stage.pan(0, -PAN_STEP),
+            ArrowDown: () => this.stage.pan(0, PAN_STEP),
+          }
+        : {
+            ArrowLeft: () => this.stage.orbit(turn, 0),
+            ArrowRight: () => this.stage.orbit(-turn, 0),
+            // each arrow turns the machine as dragging that way does
+            ArrowUp: () => this.stage.orbit(0, turn),
+            ArrowDown: () => this.stage.orbit(0, -turn),
+          };
+      Object.assign(keys, {
+        "+": () => this.stage.zoom(1 / ZOOM_STEP),
+        "=": () => this.stage.zoom(1 / ZOOM_STEP),
+        "-": () => this.stage.zoom(ZOOM_STEP),
+        _: () => this.stage.zoom(ZOOM_STEP),
+        Home: () => this.resetView(),
+      });
+      const act = keys[e.key];
+      if (!act) return;
+      e.preventDefault();
+      act();
     });
   }
 
@@ -702,6 +764,7 @@ export class App {
     // the view on show, on the Views menu's button
     const viewName = t(`view.${this.view}`);
     $("viewName").textContent = viewName;
+    this.stage.viewer.renderer.domElement.setAttribute("aria-label", t("stage.keys"));
     setTip($("viewsBtn"), `${t("tool.views")}: ${viewName}`);
     // the course and the mode
     this.courseUI.update();

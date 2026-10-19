@@ -91,6 +91,7 @@ export class CourseUI {
       ["info", "start.look.point"],
       ["radio_button_checked", "start.look.click"],
       ["rotate_right", "start.look.crank"],
+      ["keyboard", "start.look.keys"],
     ];
     return el("div", {}, [
       el("div", { class: "card hero" }, [

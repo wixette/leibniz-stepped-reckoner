@@ -23,6 +23,9 @@ export default {
 
   "tool.views": "Vistas",
   "tool.resetView": "Restablecer la vista",
+  "tool.zoomIn": "Acercar (+)",
+  "tool.zoomOut": "Alejar (−)",
+  "stage.keys": "Vista 3D de la máquina. Las flechas la giran, Mayús y las flechas la desplazan, + y − acercan y alejan, Inicio restablece la vista.",
 
   "view.overview": "Máquina completa",
   "view.apart": "Desmontada",
@@ -112,6 +115,7 @@ export default {
   "start.look.point": "Señala una pieza para ver su nombre y su valor.",
   "start.look.click": "Haz clic en las perillas, la manivela o la Magna Rota para accionarlas.",
   "start.look.crank": "Arrastra una manivela en círculo para girarla en cualquier sentido: hacia adelante suma, hacia atrás resta.",
+  "start.look.keys": "Con el teclado: ve a la máquina con Tab; las flechas la giran, Mayús y las flechas la desplazan, + y − acercan y alejan.",
   "start.then": "Después sigue con las lecciones.",
 
   "lessons.lead": "Seis lecciones cortas, de la suma a la división, cada una basada en la anterior.",

@@ -23,6 +23,9 @@ export default {
 
   "tool.views": "Viste",
   "tool.resetView": "Ripristina la vista",
+  "tool.zoomIn": "Ingrandisci (+)",
+  "tool.zoomOut": "Riduci (−)",
+  "stage.keys": "Vista 3D della macchina. Le frecce la ruotano, Maiusc e le frecce la spostano, + e − ingrandiscono e riducono, Inizio ripristina la vista.",
 
   "view.overview": "Macchina intera",
   "view.apart": "Smontata",
@@ -112,6 +115,7 @@ export default {
   "start.look.point": "Punta un pezzo per vederne il nome e il valore.",
   "start.look.click": "Fai clic sulle manopole, sulla manovella o sulla Magna Rota per azionarle.",
   "start.look.crank": "Trascina in tondo una manovella per girarla in un verso o nell’altro: in avanti somma, all’indietro sottrae.",
+  "start.look.keys": "Con la tastiera: vai alla macchina con Tab; le frecce la ruotano, Maiusc e le frecce la spostano, + e − ingrandiscono e riducono.",
   "start.then": "Poi continua con le lezioni.",
 
   "lessons.lead": "Sei brevi lezioni, dalla somma alla divisione, ognuna basata sulla precedente.",

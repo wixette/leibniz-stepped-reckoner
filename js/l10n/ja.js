@@ -23,6 +23,9 @@ export default {
 
   "tool.views": "視点",
   "tool.resetView": "視点をリセット",
+  "tool.zoomIn": "拡大（+）",
+  "tool.zoomOut": "縮小（−）",
+  "stage.keys": "機械の 3D 表示。矢印キーで回転、Shift と矢印キーで移動、+ と − で拡大・縮小、Home で表示を元に戻します。",
 
   "view.overview": "機械全体",
   "view.apart": "分解",
@@ -112,6 +115,7 @@ export default {
   "start.look.point": "部品にポインターを合わせると、名前と値が表示されます。",
   "start.look.click": "つまみ、クランク、マグナ・ロータはクリックで操作できます。",
   "start.look.crank": "クランクはドラッグして回すと、どちら向きにも回せます。前に回すと足し算、後ろに回すと引き算です。",
+  "start.look.keys": "キーボードでは：Tab で機械を選び、矢印キーで回転、Shift と矢印で移動、+ と − で拡大・縮小します。",
   "start.then": "そのあとはレッスンに進みましょう。",
 
   "lessons.lead": "足し算から割り算まで、前のレッスンを土台に進む 6 つの短いレッスン。",

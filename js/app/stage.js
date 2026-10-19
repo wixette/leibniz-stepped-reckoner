@@ -268,6 +268,70 @@ export class Stage {
     this.viewer.flyTo(f.position, f.target, reducedMotion() ? 0.001 : 0.8);
   }
 
+  // ---- moving the camera by keys and buttons (U24) ----------------------------------------------
+  /**
+   * Zoom by a factor of the distance to the orbit target (below 1: nearer), within the limits the
+   * mouse has. A short flight, so steps read as motion.
+   * @param {number} factor
+   */
+  zoom(factor) {
+    const { camera, controls } = this.viewer;
+    const off = camera.position.clone().sub(controls.target);
+    const d = THREE.MathUtils.clamp(off.length() * factor, controls.minDistance, controls.maxDistance);
+    this.step(controls.target.clone().addScaledVector(off.normalize(), d), controls.target.clone());
+  }
+
+  /**
+   * Turn the camera round the orbit target: across (theta) and up or down (phi), in radians,
+   * within the mouse's limits (never from underneath).
+   * @param {number} dTheta
+   * @param {number} dPhi
+   */
+  orbit(dTheta, dPhi) {
+    const { camera, controls } = this.viewer;
+    const s = new THREE.Spherical().setFromVector3(camera.position.clone().sub(controls.target));
+    s.theta += dTheta;
+    s.phi = THREE.MathUtils.clamp(s.phi + dPhi, Math.max(0.05, controls.minPolarAngle), Math.min(Math.PI - 0.05, controls.maxPolarAngle));
+    this.step(controls.target.clone().add(new THREE.Vector3().setFromSpherical(s)), controls.target.clone());
+  }
+
+  /**
+   * Move the camera and its target together, across and up the screen, by fractions of the
+   * distance to the target.
+   * @param {number} dx
+   * @param {number} dy
+   */
+  pan(dx, dy) {
+    const { camera, controls } = this.viewer;
+    const d = camera.position.distanceTo(controls.target);
+    camera.updateMatrixWorld();
+    const move = new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld, 0).multiplyScalar(dx * d);
+    move.addScaledVector(new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld, 1), dy * d);
+    this.step(camera.position.clone().add(move), controls.target.clone().add(move));
+  }
+
+  /**
+   * Whether the camera can come nearer or go farther (the zoom buttons grey at the limits).
+   * @returns {{ nearer: boolean; farther: boolean }}
+   */
+  zoomRoom() {
+    const { camera, controls } = this.viewer;
+    const d = camera.position.distanceTo(controls.target);
+    return { nearer: d > controls.minDistance * 1.01, farther: d < controls.maxDistance * 0.99 };
+  }
+
+  /**
+   * A small camera move the reader asked for: the camera is theirs now (U10).
+   * @private
+   * @param {THREE.Vector3} position
+   * @param {THREE.Vector3} target
+   */
+  step(position, target) {
+    this.fitted = null;
+    this.hoverBox.hidden = true;
+    this.viewer.flyTo(position, target, reducedMotion() ? 0.001 : 0.22);
+  }
+
   // ---- pointing and clicking -------------------------------------------------------------------
   /**
    * @private

@@ -23,6 +23,9 @@ export default {
 
   "tool.views": "시점",
   "tool.resetView": "시점 초기화",
+  "tool.zoomIn": "확대 (+)",
+  "tool.zoomOut": "축소 (−)",
+  "stage.keys": "기계의 3D 보기. 화살표 키로 돌리고, Shift와 화살표 키로 옮기고, +와 −로 확대·축소하며, Home 키로 보기를 초기화합니다.",
 
   "view.overview": "기계 전체",
   "view.apart": "분해",
@@ -112,6 +115,7 @@ export default {
   "start.look.point": "부품을 가리키면 이름과 값이 보입니다.",
   "start.look.click": "손잡이, 크랭크, 마그나 로타를 클릭해서 조작할 수 있습니다.",
   "start.look.crank": "크랭크를 끌어서 돌리면 어느 쪽으로든 돌릴 수 있습니다. 앞으로 돌리면 더하고, 뒤로 돌리면 뺍니다.",
+  "start.look.keys": "키보드로: Tab으로 기계를 선택한 뒤 화살표 키로 돌리고, Shift와 화살표로 옮기고, +와 −로 확대·축소합니다.",
   "start.then": "그다음에는 레슨으로 넘어가세요.",
 
   "lessons.lead": "덧셈부터 나눗셈까지, 앞 레슨을 바탕으로 이어지는 짧은 레슨 여섯 개.",

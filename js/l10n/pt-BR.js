@@ -23,6 +23,9 @@ export default {
 
   "tool.views": "Vistas",
   "tool.resetView": "Redefinir a vista",
+  "tool.zoomIn": "Aproximar (+)",
+  "tool.zoomOut": "Afastar (−)",
+  "stage.keys": "Vista 3D da máquina. As setas a giram, Shift e as setas a movem, + e − aproximam e afastam, Home redefine a vista.",
 
   "view.overview": "Máquina inteira",
   "view.apart": "Desmontada",
@@ -112,6 +115,7 @@ export default {
   "start.look.point": "Aponte para uma peça para ver o nome e o valor.",
   "start.look.click": "Clique nos botões, na manivela ou na Magna Rota para acioná-los.",
   "start.look.crank": "Arraste uma manivela em círculo para girá-la em qualquer sentido: para a frente soma, para trás subtrai.",
+  "start.look.keys": "Com o teclado: vá até a máquina com Tab; as setas a giram, Shift e as setas a movem, + e − aproximam e afastam.",
   "start.then": "Depois continue com as lições.",
 
   "lessons.lead": "Seis lições curtas, da soma à divisão, cada uma baseada na anterior.",

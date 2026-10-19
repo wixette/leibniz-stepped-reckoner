@@ -23,6 +23,9 @@ export default {
 
   "tool.views": "視角",
   "tool.resetView": "重設視角",
+  "tool.zoomIn": "放大（+）",
+  "tool.zoomOut": "縮小（−）",
+  "stage.keys": "機器的立體視圖。方向鍵旋轉，Shift 加方向鍵平移，+ 和 − 縮放，Home 鍵恢復視圖。",
 
   "view.overview": "整部機器",
   "view.apart": "拆開",
@@ -112,6 +115,7 @@ export default {
   "start.look.point": "把游標移到零件上，可以看到它的名稱和數值。",
   "start.look.click": "點選旋鈕、曲柄或大輪就能操作它們。",
   "start.look.crank": "拖著曲柄轉圈，兩個方向都能轉：向前是加，向後是減。",
+  "start.look.keys": "用鍵盤：按 Tab 鍵選取機器，然後用方向鍵旋轉，Shift 加方向鍵平移，+ 和 − 縮放。",
   "start.then": "接著繼續學習課程。",
 
   "lessons.lead": "六堂短課，從加法到除法，每一堂都以前一堂為基礎。",

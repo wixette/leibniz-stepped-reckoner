@@ -23,6 +23,9 @@ export default {
 
   "tool.views": "Vues",
   "tool.resetView": "Réinitialiser la vue",
+  "tool.zoomIn": "Zoom avant (+)",
+  "tool.zoomOut": "Zoom arrière (−)",
+  "stage.keys": "Vue 3D de la machine. Les flèches la font tourner, Maj et les flèches la déplacent, + et − zooment, Début rétablit la vue.",
 
   "view.overview": "Machine entière",
   "view.apart": "Démontée",
@@ -112,6 +115,7 @@ export default {
   "start.look.point": "Pointez une pièce pour voir son nom et sa valeur.",
   "start.look.click": "Cliquez sur les boutons, la manivelle ou la Magna Rota pour les actionner.",
   "start.look.crank": "Faites tourner une manivelle en la faisant glisser, dans un sens ou dans l’autre : en avant elle additionne, en arrière elle soustrait.",
+  "start.look.keys": "Au clavier : allez à la machine avec Tab ; les flèches la font tourner, Maj et les flèches la déplacent, + et − zooment.",
   "start.then": "Continuez ensuite avec les leçons.",
 
   "lessons.lead": "Six leçons courtes, de l’addition à la division, chacune s’appuyant sur la précédente.",

@@ -53,7 +53,7 @@ Menu, dialog, icon button, tab, card, chip: each kind of control is one componen
 Also:
 - **Icons are Material Symbols, inline SVG.** No icon fonts, and no fonts or scripts from a CDN: the page must not need any network but its own site (school networks block a lot). Fonts and icons are vendored like three.js (`pnpm vendor`).
 - **Every icon button has a tooltip and a screen-reader name**, both translated.
-- **Keyboard first-class:** every control is reachable with Tab, has a visible focus ring, and the dock's tabs follow the WAI-ARIA tabs pattern.
+- **Keyboard first-class:** every control is reachable with Tab, has a visible focus ring, and the dock's tabs follow the WAI-ARIA tabs pattern. The 3D view itself takes the focus: arrows turn it, + and − zoom (U24).
 - **Motion is short and optional:** camera flights and panel transitions honour `prefers-reduced-motion`.
 
 ## Part 2 — The layout
@@ -102,7 +102,7 @@ Free play has no tab: its controls are the machine toolbar, under the machine (P
 
 - **Machine toolbar** (floating at the stage's bottom, centred under the machine, U18): the number on the setting knobs, turn forward (+) and back (−) as one pair, carriage left and right with its place as another, boxed and named like the number box (U21), the Magna Rota's pin (a dropdown box, U22) with turn to the stop joined to it (U23), reset (U20). Icon plus short label where there is room, icons with tooltips where there is not (U18).
 - **Readouts** sit on the stage's top edge: the result as on the machine, grouped in threes; the Magna Rota's turn count (red when subtracting); the carriage's place.
-- **View controls** float at the stage's top right (U15): a Reset view button (⌂) and the Views menu, whose button names the view on show. The menu holds the seven views (two of them inside views, U11, and Taken apart) and a Show case switch. Opening the front, fading and taking apart follow the view (U14, U15). They change how the machine is *shown*, not its state, so they stay enabled in a lesson, except where a step depends on them.
+- **View controls** float at the stage's top right (U15): a Reset view button (⌂), a − / + zoom pair (U24) and the Views menu, whose button names the view on show. The menu holds the seven views (two of them inside views, U11, and Taken apart) and a Show case switch. Opening the front, fading and taking apart follow the view (U14, U15). They change how the machine is *shown*, not its state, so they stay enabled in a lesson, except where a step depends on them.
 
 ### U5 — A dark Material 3 theme for a classroom: blue, with one colour per meaning
 
@@ -318,6 +318,22 @@ Run to stop showed ⏩ and its words. The icon read as a video's fast-forward, a
 - **It is joined to the pin's box, like a split button:** the box sets the stop, the button runs the crank to it. On its own an icon is a guess; attached to "Pin" its meaning comes from the box. It is greyed exactly when the box shows "–", and says why when pressed (P6).
 - **Its name stays** in the tooltip and the accessible name ("Turn the crank forward until the pin reaches the stop"), and the lesson task line still shows it with its words (U18).
 - **Reset keeps its word where there is room** (it drops to its icon on a narrow stage). Its ⟳ is easily taken for the view's Reset (⌂), and it clears the machine, so the word guards against a slip.
+
+### U24 — The 3D view by keyboard, and zoom buttons
+
+The wheel, a trackpad's pinch and a touch screen's pinch zoom the 3D view, within a nearest and a farthest distance. Two gaps remained. The 3D view could not be used by keyboard at all, the one exception to "every control reachable with Tab". And classroom boards and projector touch screens often pass neither a wheel nor a pinch through, while some readers never find the pinch.
+
+- **The 3D view takes the keyboard's focus** (Tab reaches it; its ring sits just inside the stage). While it has the focus:
+  - the arrow keys turn it, each as dragging that way does (8° a press; up and down within the same limits as the mouse, never from underneath);
+  - Shift and the arrow keys move it;
+  - + and − zoom (also = and the underscore, so no Shift is needed);
+  - Home resets the view, as ⌂ does.
+
+  Each press is a short animated step. Keys act only while the 3D view has the focus, so typing a number is never affected, and the browser's own Ctrl/⌘ shortcuts pass through. Its accessible name lists the keys, and the Get started panel names them too.
+- **A joined − / + pair** sits in the view controls at the top right, between ⌂ and the Views menu. Each press zooms by a factor of 1.25 towards the orbit's centre, in a short flight. A button greys at its limit; the limits are checked as the camera moves, whatever moved it.
+- **A step by key or button is the reader's camera,** like a drag (U10): a resize no longer refits the view, and Reset view brings it back.
+
+*Rejected:* double-click or double-tap to zoom (a click on the machine already works its knobs and crank, so a double-click would turn a knob twice).
 
 ## Part 4 — Open questions
 

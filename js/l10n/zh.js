@@ -23,6 +23,9 @@ export default {
 
   "tool.views": "视角",
   "tool.resetView": "重置视角",
+  "tool.zoomIn": "放大（+）",
+  "tool.zoomOut": "缩小（−）",
+  "stage.keys": "机器的三维视图。方向键旋转，Shift 加方向键平移，+ 和 − 缩放，Home 键恢复视图。",
 
   "view.overview": "整台机器",
   "view.apart": "拆开",
@@ -112,6 +115,7 @@ export default {
   "start.look.point": "把指针移到零件上，可以看到它的名称和数值。",
   "start.look.click": "点击旋钮、曲柄或大轮可以操作它们。",
   "start.look.crank": "拖着曲柄转圈，两个方向都能转：向前是加，向后是减。",
+  "start.look.keys": "用键盘：按 Tab 键选中机器，然后用方向键旋转，Shift 加方向键平移，+ 和 − 缩放。",
   "start.then": "然后继续学习课程。",
 
   "lessons.lead": "六节短课，从加法到除法，每一节都以前一节为基础。",

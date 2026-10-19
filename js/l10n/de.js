@@ -23,6 +23,9 @@ export default {
 
   "tool.views": "Ansichten",
   "tool.resetView": "Ansicht zurücksetzen",
+  "tool.zoomIn": "Vergrößern (+)",
+  "tool.zoomOut": "Verkleinern (−)",
+  "stage.keys": "3D-Ansicht der Maschine. Pfeiltasten drehen sie, Umschalt und Pfeiltasten verschieben sie, + und − zoomen, Pos1 setzt die Ansicht zurück.",
 
   "view.overview": "Ganze Maschine",
   "view.apart": "Zerlegt",
@@ -112,6 +115,7 @@ export default {
   "start.look.point": "Zeig auf ein Teil, um seinen Namen und Wert zu sehen.",
   "start.look.click": "Klick die Knöpfe, die Kurbel oder die Magna Rota an, um sie zu bedienen.",
   "start.look.crank": "Zieh eine Kurbel herum, um sie in beide Richtungen zu drehen: vorwärts addiert, rückwärts subtrahiert.",
+  "start.look.keys": "Mit der Tastatur: Mit Tab zur Maschine, dann drehen die Pfeiltasten sie, Umschalt und Pfeile verschieben sie, + und − zoomen.",
   "start.then": "Danach geht es mit den Lektionen weiter.",
 
   "lessons.lead": "Sechs kurze Lektionen, vom Addieren bis zum Dividieren, jede baut auf der vorigen auf.",
