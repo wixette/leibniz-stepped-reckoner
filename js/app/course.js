@@ -13,21 +13,27 @@ import { TUTORIAL } from "../teach/tutorial.js";
 const V = new URL(import.meta.url).search;
 
 /**
- * The toolbar controls a task can ask for, as the task line shows them (U18): the toolbar
- * element each one works, its icon, and its label (or, for an icon alone, its tooltip).
- * @type {Record<import("./app.js").StripControl, [string, import("../ui/components.js").IconName | null, string][]>}
+ * A toolbar control as the task line shows it (U18): the toolbar element it works, its icon,
+ * and its label: a message key, or a sign (the crank's + and −, U20); tip names it to a screen
+ * reader and in its tooltip when the label is not words.
+ * @typedef {{ id: string; icon?: import("../ui/components.js").IconName; label?: string; sign?: string; tip?: string }} TaskControl
+ */
+
+/**
+ * The toolbar controls a task can ask for.
+ * @type {Record<import("./app.js").StripControl, TaskControl[]>}
  */
 const TASK_CONTROLS = {
-  input: [["numInput", null, "strip.number"]],
-  add: [["addBtn", "rotate_right", "strip.add"]],
-  sub: [["subBtn", "rotate_left", "strip.sub"]],
+  input: [{ id: "numInput", label: "strip.number" }],
+  add: [{ id: "addBtn", icon: "rotate_right", sign: "+", tip: "strip.add.tip" }],
+  sub: [{ id: "subBtn", icon: "rotate_left", sign: "−", tip: "strip.sub.tip" }],
   shift: [
-    ["leftBtn", "keyboard_double_arrow_left", "strip.left.tip"],
-    ["rightBtn", "keyboard_double_arrow_right", "strip.right.tip"],
+    { id: "leftBtn", icon: "keyboard_double_arrow_left", tip: "strip.left.tip" },
+    { id: "rightBtn", icon: "keyboard_double_arrow_right", tip: "strip.right.tip" },
   ],
-  pin: [["pinBtn", "radio_button_checked", "strip.pin"]],
-  toStop: [["toStopBtn", "fast_forward", "strip.toStop"]],
-  reset: [["resetBtn", "restart_alt", "strip.reset"]],
+  pin: [{ id: "pinBtn", icon: "radio_button_checked", label: "strip.pin" }],
+  toStop: [{ id: "toStopBtn", icon: "fast_forward", label: "strip.toStop" }],
+  reset: [{ id: "resetBtn", icon: "restart_alt", label: "strip.reset" }],
 };
 
 export class CourseUI {
@@ -223,12 +229,14 @@ export class CourseUI {
       "span",
       { class: "task-controls" },
       controls.flatMap((k) =>
-        TASK_CONTROLS[k].map(([id, ic, key]) => {
-          const b = el("button", { class: `btn tonal${ic ? " has-icon" : ""}${ic && key.endsWith(".tip") ? " icon-only" : ""}`, "data-for": id }, [
+        TASK_CONTROLS[k].map(({ id, icon: ic, label, sign, tip }) => {
+          const iconOnly = !label && !sign;
+          const b = el("button", { class: `btn tonal${ic ? " has-icon" : ""}${iconOnly ? " icon-only" : ""}`, "data-for": id }, [
             ic ? icon(ic) : null,
-            key.endsWith(".tip") ? null : el("span", { text: t(key) }),
+            label ? el("span", { text: t(label) }) : null,
+            sign ? el("span", { class: "sym", "aria-hidden": "true", text: sign }) : null,
           ]);
-          if (key.endsWith(".tip")) setTip(b, t(key));
+          if (tip) setTip(b, t(tip));
           b.addEventListener("click", () => {
             const target = document.getElementById(id);
             if (id === "numInput") target?.focus();

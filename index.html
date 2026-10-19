@@ -128,20 +128,22 @@
                 <input id="numInput" inputmode="numeric" enterkeyhint="done" autocomplete="off" maxlength="8" value="0" data-l10n-tip="strip.number.tip" />
               </div>
               <span class="sep"></span>
-              <div class="group">
-                <button class="btn filled has-icon" id="addBtn" data-control="add" data-l10n-tip="strip.add.tip"><i data-icon="rotate_right"></i><span class="txt" data-l10n="strip.add">Add</span></button>
-                <button class="btn tonal has-icon" id="subBtn" data-control="sub" data-l10n-tip="strip.sub.tip"><i data-icon="rotate_left"></i><span class="txt" data-l10n="strip.sub">Subtract</span></button>
+              <div class="pair" role="group">
+                <button class="btn tonal has-icon" id="addBtn" data-control="add" data-l10n-tip="strip.add.tip"><i data-icon="rotate_right"></i><span class="sym" aria-hidden="true">+</span></button>
+                <button class="btn tonal has-icon" id="subBtn" data-control="sub" data-l10n-tip="strip.sub.tip"><i data-icon="rotate_left"></i><span class="sym" aria-hidden="true">−</span></button>
               </div>
               <span class="sep"></span>
               <div class="group" id="carriageGroup">
                 <span class="label" data-l10n="strip.carriage">Carriage</span>
-                <button class="btn icon-only" id="leftBtn" data-control="shift" data-l10n-tip="strip.left.tip"><i data-icon="keyboard_double_arrow_left"></i></button>
-                <output class="carriage-place" id="placeStrip">0</output>
-                <button class="btn icon-only" id="rightBtn" data-control="shift" data-l10n-tip="strip.right.tip"><i data-icon="keyboard_double_arrow_right"></i></button>
+                <span class="pair">
+                  <button class="btn tonal icon-only" id="leftBtn" data-control="shift" data-l10n-tip="strip.left.tip"><i data-icon="keyboard_double_arrow_left"></i></button>
+                  <output class="carriage-place" id="placeStrip">0</output>
+                  <button class="btn tonal icon-only" id="rightBtn" data-control="shift" data-l10n-tip="strip.right.tip"><i data-icon="keyboard_double_arrow_right"></i></button>
+                </span>
               </div>
               <span class="sep"></span>
               <div class="group">
-                <button class="btn outlined has-icon pin-btn" id="pinBtn" data-control="pin" aria-haspopup="menu" data-l10n-tip="strip.pin.tip"><i data-icon="radio_button_checked"></i><span class="txt" data-l10n="strip.pin">Pin</span>&nbsp;<b id="pinValue">–</b></button>
+                <button class="btn tonal has-icon pin-btn" id="pinBtn" data-control="pin" aria-haspopup="menu" data-l10n-tip="strip.pin.tip"><i data-icon="radio_button_checked"></i><span class="txt" data-l10n="strip.pin">Pin</span>&nbsp;<b id="pinValue">–</b></button>
                 <button class="btn tonal has-icon" id="toStopBtn" data-control="toStop" data-l10n-tip="strip.toStop.tip"><i data-icon="fast_forward"></i><span class="txt" data-l10n="strip.toStop">Run to stop</span></button>
               </div>
               <span class="sep"></span>

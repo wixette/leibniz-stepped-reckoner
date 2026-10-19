@@ -291,6 +291,19 @@ a { color: var(--md-primary); }
   box-shadow: 0 6px 22px rgba(0, 0, 0, 0.4);
 }
 .strip .group { display: flex; align-items: center; gap: 4px; }
+/* One control's two ways, joined and alike (U20): the crank forward and back, the carriage left
+   and right. Every machine operation is a tonal button: none looks like the default or the
+   active one; a lesson marks the one it asks for (the glow, and its task line, U18). Reset, which
+   clears the machine, is the one quiet text button, at the end. */
+.pair { display: inline-flex; align-items: stretch; gap: 2px; }
+.pair > * { border-radius: 6px; }
+.pair > :first-child { border-radius: var(--radius-full) 6px 6px var(--radius-full); }
+.pair > :last-child { border-radius: 6px var(--radius-full) var(--radius-full) 6px; }
+.pair .btn.icon-only { width: 36px; color: var(--md-on-secondary-container); }
+.pair .carriage-place { display: grid; place-items: center; height: 40px; min-width: 32px; padding: 0 6px; background: var(--md-secondary-container); color: var(--md-on-secondary-container); }
+/* the crank's buttons: its turning icon and the sign of what the turn does, the same in every
+   language (the words are in the tooltip and the accessible name) */
+.btn .sym { font-size: 22px; font-weight: 600; line-height: 1; min-width: 0.6em; text-align: center; }
 .strip .sep { width: 1px; height: 28px; background: var(--md-outline-variant); margin: 0 4px; }
 /* the toolbar fits the stage's own width (U18): labels go as room runs out, short ones last */
 @container stage (max-width: 1040px) { .strip .label { display: none; } }

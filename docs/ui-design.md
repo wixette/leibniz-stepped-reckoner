@@ -100,7 +100,7 @@ Free play has no tab: its controls are the machine toolbar, under the machine (P
 
 ### U4 — The machine's toolbar and the stage's own tools
 
-- **Machine toolbar** (floating at the stage's bottom, centred under the machine, U18): the number on the setting knobs, turn forward (add) and back (subtract), carriage left and right with its place, the Magna Rota's pin, turn to the stop, reset. Icon plus short label on wide screens, icons with tooltips on narrow ones.
+- **Machine toolbar** (floating at the stage's bottom, centred under the machine, U18): the number on the setting knobs, turn forward (+) and back (−) as one pair, carriage left and right with its place as another, the Magna Rota's pin, turn to the stop, reset (U20). Icon plus short label where there is room, icons with tooltips where there is not (U18).
 - **Readouts** sit on the stage's top edge: the result as on the machine, grouped in threes; the Magna Rota's turn count (red when subtracting); the carriage's place.
 - **View controls** float at the stage's top right (U15): a Reset view button (⌂) and the Views menu, whose button names the view on show. The menu holds the seven views (two of them inside views, U11, and Taken apart) and a Show case switch. Opening the front, fading and taking apart follow the view (U14, U15). They change how the machine is *shown*, not its state, so they stay enabled in a lesson, except where a step depends on them.
 
@@ -264,6 +264,17 @@ The number typed into the box under the machine reached the knobs only on Enter,
 - **Unchanged:** non-digits are dropped, at most 8 digits (one per knob), an empty box sets 0, and while the machine turns, or when a step does not use the knobs, typing is refused with the reason (P6).
 
 *Rejected:* a Set button beside the box (one more step, and a button next to Add and Subtract suggests that setting the knobs calculates something).
+
+### U20 — The crank's two buttons: its turning icons with + and −, an equal pair
+
+The buttons were labelled Add and Subtract, and Add was filled (the main action, in Material) while Subtract was tonal, so they looked like one active and one inactive button, which they are not. The words were also long in some languages ("Addieren / Subtrahieren", "Additionner / Soustraire").
+
+- **The labels are the crank's turning icon and the sign of what the turn does,** ↻ + and ↺ −. The signs are the same in every language, so the buttons are equally short in all ten. The icons keep them from reading as "make the number bigger or smaller": they say "turn forward: add", as the machine does (U16). The words stay in the tooltip and the accessible name ("Turn the crank forward once: adds the number on the knobs"). The minus is the true minus sign (−), larger than the body text.
+- **They are one joined pair, alike:** one crank, two ways. The carriage's left and right arrows are a joined pair too, with its place between them.
+- **The toolbar is consistent:** every machine operation is a tonal button. None looks like the default or the active one; in a lesson the step's own control is marked by the glow and its task-line button (U18). Reset, which clears the machine, is the one quiet text button, at the end.
+- **The texts that named the buttons say "press +" or "press −"** (in the tutorial and the subtraction lesson, and in Get started), and the task line shows the same ↻ + and ↺ −.
+
+*Rejected:* "Add" and "Sub" (only shortens English; "Sub" means nothing, or something else, in most of our languages); signs without the crank icons (a bare − reads as "smaller" or "remove").
 
 ## Part 4 — Open questions
 
