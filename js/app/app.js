@@ -353,6 +353,15 @@ export class App {
     return this.inside?.parts ?? [];
   }
 
+  /**
+   * The parts Focus keeps besides the highlighted ones: the lesson step's context.
+   * @returns {string[]}
+   */
+  focusContext() {
+    const c = this.course;
+    return c && !c.finished ? presentation(c.lesson, c.i).context : [];
+  }
+
   /** Show the step's presentation: case, open front, taken apart, highlights, view. */
   showPresentation() {
     const c = this.course;
@@ -363,7 +372,7 @@ export class App {
     this.stage.setExplode(p.explode);
     this.stage.applyToggles();
     this.focus = p.focus && p.highlight.length > 0;
-    this.stage.highlight(p.highlight, this.focus);
+    this.stage.highlight(p.highlight, this.focus, p.context);
     this.stage.setCallouts(p.callouts.map((x) => ({ node: x.node, text: () => t(x.text), value: x.value })));
     if (p.view !== this.lastView) this.stage.fly(p.view);
     this.lastView = p.view;
@@ -494,7 +503,7 @@ export class App {
       const parts = this.highlightParts();
       if (parts.length === 0) return this.say(() => t("tool.focus.off"), true);
       this.focus = !this.focus;
-      this.stage.highlight(parts, this.focus);
+      this.stage.highlight(parts, this.focus, this.focusContext());
       this.render();
     });
     const viewsBtn = $("viewsBtn");

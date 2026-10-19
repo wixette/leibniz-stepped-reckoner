@@ -126,6 +126,7 @@ const carry = {
       casing: false,
       view: "carry",
       highlight: ["pi.carry_store.0", "pi.carry_store.1", "pi.carry_store.2", "pi.carry_store.3"],
+      context: ["pi.sum_wheel.0", "pi.sum_wheel.1", "pi.sum_wheel.2", "pi.sum_wheel.3"],
       callouts: [{ node: "pi.carry_store.0", text: "l.carry.pentagonUnits" }],
       text: "l.carry.stores",
     },
@@ -138,6 +139,7 @@ const carry = {
     {
       do: [{ theta: 360 }],
       highlight: ["pm.zweihorn_add.0", "pm.zweihorn_add.1", "pm.zweihorn_add.2", "pm.zweihorn_add.3"],
+      context: [0, 1, 2, 3, 4].flatMap((k) => [`pi.carry_store.${k}`, `pi.sum_wheel.${k}`]),
       callouts: [{ node: "pm.zweihorn_add.0", text: "l.carry.lever" }],
       text: "l.carry.passedOn",
       expect: (m) => m.shownNumber() === 10000 && allLevel(m),
@@ -193,7 +195,7 @@ const subtract = {
     {
       casing: false,
       view: "carry",
-      highlight: ["pi.sum_wheel.0", "pi.carry_store.0", "pi.carry_store.1", "pi.carry_store.2"],
+      highlight: ["pi.sum_wheel.0", "pi.sum_wheel.1", "pi.sum_wheel.2", "pi.sum_wheel.3", "pi.carry_store.0", "pi.carry_store.1", "pi.carry_store.2"],
       text: "l.sub.turnBack",
       task: {
         check: (m) => m.turns === -1 && m.shownNumber() === 999 && allLevel(m),

@@ -67,6 +67,8 @@ import { registerValue } from "../sim/operations.js";
  * @property {number} [explode] exploded-view factor 0..1
  * @property {boolean} [focus] fade the parts that are not highlighted
  * @property {string[]} [highlight] node names; "prefix.*" matches a group
+ * @property {string[]} [context] parts Focus keeps without highlighting them: what the text needs
+ *   to be seen besides the parts it names (the readouts of highlighted parts are kept anyway, U12)
  * @property {Callout[]} [callouts]
  * @property {Action[]} [do]
  * @property {Task} [task]
@@ -91,6 +93,7 @@ import { registerValue } from "../sim/operations.js";
  * @property {number} explode
  * @property {boolean} focus
  * @property {string[]} highlight
+ * @property {string[]} context
  * @property {Callout[]} callouts
  */
 
@@ -101,7 +104,7 @@ import { registerValue } from "../sim/operations.js";
  */
 export function presentation(lesson, i) {
   /** @type {Presentation} */
-  const p = { view: "overview", casing: true, cutaway: false, explode: 0, focus: false, highlight: [], callouts: [] };
+  const p = { view: "overview", casing: true, cutaway: false, explode: 0, focus: false, highlight: [], context: [], callouts: [] };
   lesson.steps.slice(0, i + 1).forEach((s) => {
     if (s.view) p.view = s.view;
     if (s.casing !== undefined) p.casing = s.casing;
@@ -111,6 +114,7 @@ export function presentation(lesson, i) {
   });
   const s = lesson.steps[i];
   p.highlight = s.highlight ?? [];
+  p.context = s.context ?? [];
   p.callouts = s.callouts ?? [];
   return p;
 }

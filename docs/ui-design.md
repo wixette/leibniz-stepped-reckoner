@@ -154,6 +154,16 @@ The stepped drum and the carry sit inside the case and behind the carriage's fro
 
 *Rejected:* locking the controls in an inside view (it would hide the very motion it exists to show); a clipping plane through the case and carriage (clearer, but it belongs to the 3D quality work; it would follow the same rules).
 
+### U12 — Focus keeps what the step asks you to see, digits included
+
+Focus fades everything except what the step is about. A step names the parts it highlights, but the model splits some parts from the digits you read on them, so fading "everything not highlighted" faded the digits too (the windows' plate stayed, the 16 result digits behind it faded). Focus therefore keeps three things:
+
+- **The highlighted parts.** They glow, with or without Focus.
+- **Their readouts,** kept as they are, without the glow: the result wheels behind the windows, the dial around each knob, and the Magna Rota's plate with the stop where its red number is read. This is one table in the scene code, so every step, every inside view and every later lesson gets it.
+- **The step's context:** parts the text needs to be seen working but does not single out. The carry lever step keeps the stores and wheels it acts on, and the carry store step keeps the wheels they sit behind.
+
+Acceptance check A3-12 holds every step and every inside view to this.
+
 ## Part 4 — Open questions
 
 - The link format (P8): which fields the first release promises (language, lesson and step, numbers on the machine).

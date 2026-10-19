@@ -96,6 +96,29 @@ export function viewSubjects(root) {
 // ---- highlight and focus ------------------------------------------------------------------------
 const GLOW = new THREE.Color(0xffa31a);
 
+/**
+ * The parts that show a part's value, though the model makes them separate parts: Focus keeps
+ * them with it (U12), or focusing on the windows would fade the digits behind them.
+ * @type {[RegExp, (m: RegExpMatchArray) => string[]][]}
+ */
+const READOUTS = [
+  [/^pi\.window$/, () => ["pi.sum_wheel.*"]], // the digits are on the result wheels behind the windows
+  [/^pm\.setting_dial\.(\d+|\*)$/, (m) => [`pm.setting_plate.${m[1]}`]], // a knob's digits are on its dial
+  [/^pm\.magna_rota$/, () => ["pm.magna_plate"]], // the red number is read at the stop on the plate
+];
+
+/**
+ * The parts that show the values of the given parts (see READOUTS).
+ * @param {string[]} patterns
+ * @returns {string[]}
+ */
+export function readouts(patterns) {
+  return patterns.flatMap((p) => READOUTS.flatMap(([re, f]) => {
+    const m = p.match(re);
+    return m ? f(m) : [];
+  }));
+}
+
 /** Makes some parts glow and (with focus) fades the rest. Materials are cloned, never edited. */
 export class Highlighter {
   /**
@@ -126,18 +149,19 @@ export class Highlighter {
   faded = new Set();
 
   /**
-   * @param {string[]} patterns
+   * Make the parts glow; with focus, fade every part except them, their readouts and the context.
+   * @param {string[]} patterns the parts to highlight
    * @param {boolean} focus
+   * @param {string[]} [context] parts focus keeps as they are (not highlighted)
    * @returns {void}
    */
-  set(patterns, focus) {
+  set(patterns, focus, context = []) {
     this.faded.clear();
-    /** @type {Set<THREE.Mesh>} */
-    const lit = new Set();
-    for (const p of patterns) for (const n of findNodes(this.root, p)) n.traverse((o) => (/** @type {THREE.Mesh} */ (o)).isMesh && lit.add(/** @type {THREE.Mesh} */ (o)));
+    const lit = this.meshes(patterns);
+    const kept = this.meshes([...patterns, ...readouts(patterns), ...context]);
     for (const [mesh, orig] of this.originals) {
       const on = lit.has(mesh);
-      const fade = focus && lit.size > 0 && !on;
+      const fade = focus && lit.size > 0 && !kept.has(mesh);
       if (!on && !fade) {
         mesh.material = orig;
         continue;
@@ -162,6 +186,18 @@ export class Highlighter {
       };
       mesh.material = Array.isArray(orig) ? orig.map(edit) : edit(orig);
     }
+  }
+
+  /**
+   * @private
+   * @param {string[]} patterns
+   * @returns {Set<THREE.Mesh>}
+   */
+  meshes(patterns) {
+    /** @type {Set<THREE.Mesh>} */
+    const out = new Set();
+    for (const p of patterns) for (const n of findNodes(this.root, p)) n.traverse((o) => (/** @type {THREE.Mesh} */ (o)).isMesh && out.add(/** @type {THREE.Mesh} */ (o)));
+    return out;
   }
 }
 

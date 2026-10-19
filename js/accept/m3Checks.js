@@ -6,7 +6,7 @@ import * as THREE from "three";
 import { applyM2Pose, m2NodeNames } from "../scene/m2Pose.js";
 import { Rig } from "../scene/rig.js";
 import { frame } from "../scene/framing.js";
-import { Exploder, findNodes, isShown, viewSubjects } from "../scene/teachScene.js";
+import { Exploder, Highlighter, findNodes, isShown, viewSubjects } from "../scene/teachScene.js";
 import { Machine } from "../sim/machine.js";
 import { MESSAGES } from "../l10n/all.js";
 import { LOCALES } from "../l10n/l10n.js";
@@ -113,7 +113,7 @@ export function runM3Checks(root) {
     for (const l of COURSES) {
       l.steps.forEach((s, i) => {
         if (s.view && !VIEWS.includes(s.view)) bad.push(`${l.id} step ${i + 1}: view ${s.view}`);
-        for (const n of [...(s.highlight ?? []), ...(s.callouts ?? []).map((c) => c.node)]) {
+        for (const n of [...(s.highlight ?? []), ...(s.context ?? []), ...(s.callouts ?? []).map((c) => c.node)]) {
           refs++;
           if (findNodes(root, n).length === 0) bad.push(`${l.id} step ${i + 1}: ${n}`);
         }
@@ -296,6 +296,54 @@ export function runM3Checks(root) {
     m.reset();
     pose();
     return { passed: bad.length === 0, detail: bad.join("; ") || "dial digit, knob, Magna Rota hole, pin, main crank, result wheel and end crank all act like their controls" };
+  });
+
+  run("A3-12", "Focus keeps what a step or an inside view asks you to see: its parts, their digits and its context", () => {
+    /** @type {string[]} */
+    const bad = [];
+    const hl = new Highlighter(root);
+    /**
+     * Whether focus fades any mesh of the part.
+     * @param {string} n
+     */
+    const fadedPart = (n) => findNodes(root, n).some((o) => {
+      let f = false;
+      o.traverse((x) => (f ||= hl.faded.has(x)));
+      return f;
+    });
+    /**
+     * The parts that must stay: the highlighted ones, the digits they show, the context.
+     * @param {string[]} parts
+     * @param {string[]} context
+     */
+    const mustStay = (parts, context) => [
+      ...parts,
+      ...context,
+      ...(parts.includes("pi.window") ? ["pi.sum_wheel.*"] : []),
+      ...parts.flatMap((n) => (n.startsWith("pm.setting_dial.") ? [n.replace("setting_dial", "setting_plate")] : [])),
+      ...(parts.includes("pm.magna_rota") ? ["pm.magna_plate"] : []),
+    ];
+    let checked = 0;
+    /**
+     * @param {string} what
+     * @param {string[]} parts
+     * @param {string[]} context
+     */
+    const check = (what, parts, context) => {
+      if (parts.length === 0) return;
+      checked++;
+      hl.set(parts, true, context);
+      if (hl.faded.size === 0) bad.push(`${what}: nothing faded`);
+      for (const n of mustStay(parts, context)) if (fadedPart(n)) bad.push(`${what}: ${n} faded`);
+    };
+    for (const l of COURSES) l.steps.forEach((_, i) => {
+      const p = presentation(l, i);
+      check(`${l.id} step ${i + 1}`, p.highlight, p.context);
+    });
+    const views = viewSubjects(root);
+    for (const v of VIEWS) check(`view ${v}`, views[v].inside ?? [], []);
+    hl.set([], false);
+    return { passed: bad.length === 0, detail: bad.join("; ") || `${checked} focused steps and inside views keep their parts and digits` };
   });
 
   run("A3-10", "Labels name a part's place in words and show its current value apart from the name", () => {
