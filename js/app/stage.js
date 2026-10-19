@@ -456,9 +456,10 @@ export class Stage {
     canvas.addEventListener(
       "pointerdown",
       (e) => {
-        down = { x: e.clientX, y: e.clientY, t: performance.now() };
         this.hoverBox.hidden = true;
-        if (e.button !== 0) return;
+        down = null;
+        if (e.button !== 0) return; // the other buttons pan the camera, and never click a part
+        down = { x: e.clientX, y: e.clientY, t: performance.now() };
         const hit = this.pick(e.clientX, e.clientY);
         const crank = hit ? crankAt(hit.object) : null;
         // Grab only a crank that can turn one way or the other now; otherwise drag the camera.

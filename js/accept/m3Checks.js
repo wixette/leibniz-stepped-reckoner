@@ -1,10 +1,11 @@
-// Acceptance spec for M3 (plan §10.1, A3-1..A3-6; A3-7 is the page's ?selftest running
-// these, A3-8 the M0-M2 specs in the same `pnpm test`). The lessons, the presentation and
-// the exploded view are the same code the teaching page runs.
+// Acceptance spec for M3 (plan §10.1, A3-1..A3-6, A3-9..A3-11; A3-12..A3-15 are in
+// docs/ui-design.md, U10, U12, U13 and U16; A3-7 is the page's ?selftest running these, A3-8
+// the M0-M2 specs in the same `pnpm test`). The lessons, the presentation and the exploded
+// view are the same code the main page runs.
 
 import * as THREE from "three";
 import { applyM2Pose, m2NodeNames } from "../scene/m2Pose.js";
-import { Rig } from "../scene/rig.js";
+import { gltfName, Rig } from "../scene/rig.js";
 import { centreOnFreeArea, frame } from "../scene/framing.js";
 import { Exploder, Highlighter, findNodes, isShown, viewSubjects } from "../scene/teachScene.js";
 import { Machine } from "../sim/machine.js";
@@ -14,10 +15,8 @@ import { LESSONS } from "../teach/lessons.js";
 import { PART_KEYS, partInfo, partName } from "../teach/partInfo.js";
 import { TUTORIAL } from "../teach/tutorial.js";
 import { applyIntentNow, CrankDrag, intentAt } from "../teach/partActions.js";
-import { anchors, rayHits } from "./harness.js";
-import { gltfName } from "../scene/rig.js";
+import { anchors, rayHits, result } from "./harness.js";
 import { INSIDE_VIEWS, matches, presentation, replayTo, runLesson, VIEWS } from "../teach/player.js";
-import { result } from "./harness.js";
 /** @import { CheckResult } from "./harness.js" */
 
 /** Exploded offsets and the rest pose must agree to this (m). */

@@ -1,4 +1,4 @@
-// Scripted M1 scenarios, shared by the pose exporter (Blender sweep) and acceptance tests.
+// Scripted M1 scenarios, for the pose exporter (Blender sweep, tools/export-m1-poses.mjs).
 
 import { CarrySlice } from "../sim/carrySlice.js";
 /** @import { CarryMode } from "../sim/carrySlice.js" */

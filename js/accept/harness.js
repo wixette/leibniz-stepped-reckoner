@@ -6,6 +6,9 @@ import * as THREE from "three";
 import { acceleratedRaycast, MeshBVH } from "three-mesh-bvh";
 import { gltfName } from "../scene/rig.js";
 
+// anchors() lives with the rig, so the page can use it without loading the checks' BVH code
+export { anchors } from "../scene/rig.js";
+
 const M = 1000; // m -> mm
 
 /**
@@ -130,24 +133,6 @@ export function intersects(a, b) {
     }
   }
   return false;
-}
-
-/**
- * Anchor points declared by the build (extras[key], node-local metres) in world space.
- * @param {THREE.Object3D} part
- * @param {string} key
- * @returns {THREE.Vector3[]}
- */
-export function anchors(part, key) {
-  const flat = (/** @type {Record<string, unknown>} */ (part.userData))[key];
-  if (!Array.isArray(flat) || flat.length % 3) throw new Error(`${part.name} has no anchors "${key}"`);
-  refresh(part);
-  /** @type {THREE.Vector3[]} */
-  const out = [];
-  for (let i = 0; i < flat.length; i += 3) {
-    out.push(new THREE.Vector3(flat[i], flat[i + 1], flat[i + 2]).applyMatrix4(part.matrixWorld));
-  }
-  return out;
 }
 
 /**

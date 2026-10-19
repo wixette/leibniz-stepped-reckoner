@@ -28,6 +28,8 @@ export class Animator {
    * @type {((blocked: 1 | -1 | null) => void) | null}
    */
   onDone = null;
+  /** Called after a step's action set the machine up at once (a reset): not an operation. */
+  onSetUp = () => {};
 
   /**
    * @param {Machine} machine
@@ -146,7 +148,10 @@ export class Animator {
             break;
           }
         }
-      } else applyAction(m, a);
+      } else {
+        applyAction(m, a);
+        if ("reset" in a) this.onSetUp();
+      }
     }
   }
 }

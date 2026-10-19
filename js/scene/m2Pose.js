@@ -1,5 +1,5 @@
 // Maps a Machine pose to motion values per glTF node (Blender names) for the M2 model.
-// Shared by page 03, the acceptance tests and the pose exporter for the Blender sweep.
+// Shared by the main page, page 03, the acceptance tests and the pose exporter for the Blender sweep.
 
 import * as THREE from "three";
 /** @import { Machine } from "../sim/machine.js" */

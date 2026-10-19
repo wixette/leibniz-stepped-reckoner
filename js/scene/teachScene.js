@@ -1,6 +1,7 @@
 // Scene helpers for the main page: camera views, highlights, callout labels and
-// the exploded view. The exploded view and the highlight matching are also used by the
-// acceptance checks (A3-3, A3-5), so they do not touch the DOM.
+// the exploded view. The views, the exploded view and the highlights are also used by the
+// acceptance checks (A3-3, A3-5, A3-12..A3-14), so they do not touch the DOM; only the
+// labels (fillLabel, Callouts) do.
 
 import * as THREE from "three";
 /** @import { ViewName } from "../teach/player.js" */
@@ -137,13 +138,24 @@ export function readouts(patterns) {
   }));
 }
 
-/** Makes some parts glow and (with fade) fades the rest. Materials are cloned, never edited. */
+/**
+ * Makes some parts glow and (with fade) fades the rest. Materials are cloned, never edited, and
+ * each clone is made once (one per material and look) and reused, so steps and views can change
+ * the highlight as often as they like without piling up materials.
+ */
 export class Highlighter {
   /**
    * @private
    * @type {Map<THREE.Mesh, THREE.Material | THREE.Material[]>}
    */
   originals = new Map();
+
+  /**
+   * The clones, by original material and look ("lit", "dim" or "lit dim").
+   * @private
+   * @type {Map<THREE.Material, Map<string, THREE.Material>>}
+   */
+  clones = new Map();
 
   /**
    * @private
@@ -185,11 +197,19 @@ export class Highlighter {
         continue;
       }
       if (dim) this.faded.add(mesh);
+      const look = `${on ? "lit" : ""} ${dim ? "dim" : ""}`;
       /**
        * @param {THREE.Material} m
        * @returns {THREE.Material}
        */
       const edit = (m) => {
+        const byLook = this.clones.get(m) ?? new Map();
+        this.clones.set(m, byLook);
+        const made = byLook.get(look);
+        if (made) {
+          made.needsUpdate = true; // the quality may have changed shadows since it was last shown
+          return made;
+        }
         const c = /** @type {THREE.MeshStandardMaterial} */ (m.clone());
         if (on && c.emissive) {
           c.emissive = GLOW.clone();
@@ -200,6 +220,7 @@ export class Highlighter {
           c.opacity = 0.15;
           c.depthWrite = false;
         }
+        byLook.set(look, c);
         return c;
       };
       mesh.material = Array.isArray(orig) ? orig.map(edit) : edit(orig);

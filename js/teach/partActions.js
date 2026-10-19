@@ -4,8 +4,7 @@
 // the page and the tests (A3-11, A3-15) share it.
 
 import * as THREE from "three";
-import { anchors } from "../accept/harness.js";
-import { gltfName } from "../scene/rig.js";
+import { anchors, gltfName } from "../scene/rig.js";
 /** @import { Machine } from "../sim/machine.js" */
 import { t } from "../l10n/l10n.js";
 /** @import { Task } from "./player.js" */

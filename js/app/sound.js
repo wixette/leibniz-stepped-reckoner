@@ -6,7 +6,8 @@
 // - the carriage starts one place: the full revolution (the end crank turns once a place);
 // - a carry stored (a wheel passed 9): a short tick; a carry passed on: a step;
 // - the Magna Rota's pin put in or taken out: a step.
-// The app adds the two that are not motion: the crank refused (blocked) and the crank at the stop.
+// The app adds the three that are not motion: the crank refused (blocked), the crank at the stop
+// and Reset's ratchet.
 // Sound starts after the reader's first press or key, as browsers require. Web Audio: decoded
 // once, played with no delay, overlapping, each a little different in pitch and loudness so
 // that repeated clicks do not sound recorded.
@@ -67,15 +68,18 @@ export class Sound {
    */
   last = null;
 
-  /** Start listening for the first press or key, after which sound may start. */
+  /**
+   * Listen for the reader's presses and keys, after which sound may start. A touch's pointerdown
+   * does not count as a gesture (its pointerup does), and a context can be suspended again later
+   * (iOS interrupts it for a call), so every gesture resumes it while it is not running.
+   */
   constructor() {
     const unlock = () => {
-      window.removeEventListener("pointerdown", unlock, true);
-      window.removeEventListener("keydown", unlock, true);
       this.start();
+      const ctx = this.ctx;
+      if (ctx && ctx.state !== "running") ctx.resume().catch(() => {});
     };
-    window.addEventListener("pointerdown", unlock, true);
-    window.addEventListener("keydown", unlock, true);
+    for (const type of ["pointerdown", "pointerup", "keydown"]) window.addEventListener(type, unlock, true);
   }
 
   /** @private */

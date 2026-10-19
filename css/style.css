@@ -88,7 +88,6 @@ button, input, select { font: inherit; color: inherit; }
 a { color: var(--md-primary); }
 :focus-visible { outline: 2px solid var(--md-primary); outline-offset: 2px; }
 .icon { width: 20px; height: 20px; fill: currentColor; flex: none; display: block; }
-.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* ---- buttons (Material 3: filled, tonal, text, icon; state layers) --------------------------- */
 .btn {
@@ -125,7 +124,6 @@ a { color: var(--md-primary); }
 .btn:active::before { opacity: var(--state-press); }
 .btn.filled { background: var(--md-primary); color: var(--md-on-primary); }
 .btn.tonal { background: var(--md-secondary-container); color: var(--md-on-secondary-container); }
-.btn.outlined { border: 1px solid var(--md-outline); color: var(--md-on-surface); }
 .btn.has-icon { padding-left: 12px; }
 .btn[disabled], .btn[aria-disabled="true"] {
   cursor: default;
@@ -137,7 +135,6 @@ a { color: var(--md-primary); }
 }
 .btn[disabled]::before, .btn[aria-disabled="true"]::before { display: none; }
 .btn.icon-only { width: 40px; padding: 0; color: var(--md-on-surface-variant); }
-.btn.icon-only.on { color: var(--md-primary); }
 /* a task's control: the one the step asks for */
 .btn.wanted:not([disabled]):not([aria-disabled="true"]) { box-shadow: 0 0 0 2px var(--attention), 0 0 14px color-mix(in srgb, var(--attention) 45%, transparent); }
 
@@ -162,7 +159,6 @@ a { color: var(--md-primary); }
 .chip::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: currentColor; opacity: 0; z-index: -1; }
 .chip:hover::before { opacity: var(--state-hover); }
 .chip:active::before { opacity: var(--state-press); }
-.chip[aria-pressed="true"] { background: var(--md-secondary-container); color: var(--md-on-secondary-container); border-color: transparent; }
 .chip[aria-disabled="true"] { opacity: 0.4; cursor: default; }
 .chip[aria-disabled="true"]::before { display: none; }
 .chip .icon { width: 18px; height: 18px; }
@@ -360,11 +356,10 @@ a { color: var(--md-primary); }
   background: var(--md-surface-low);
   box-shadow: 0 6px 22px rgba(0, 0, 0, 0.4);
 }
-.strip .group { display: flex; align-items: center; gap: 4px; }
 /* One control's two ways, joined and alike (U20): the crank forward and back (the carriage's
    left and right are joined to its place's box, below). Every machine operation is a tonal button: none looks like the default or the
    active one; a lesson marks the one it asks for (the glow, and its task line, U18). Reset, which
-   clears the machine, is the one quiet text button, at the end. */
+   clears the machine, is the one quiet text button, at the end (only the sound switch follows it, U29). */
 .pair { display: inline-flex; align-items: stretch; gap: 2px; }
 .pair > * { border-radius: 6px; }
 .pair > :first-child { border-radius: var(--radius-full) 6px 6px var(--radius-full); }
@@ -389,7 +384,6 @@ a { color: var(--md-primary); }
   .strip .btn.has-icon { padding: 0 10px; }
   .strip .sep { display: none; }
 }
-.strip .grow { flex: 1; }
 .number-field, .field-group {
   position: relative;
   display: flex;
@@ -426,7 +420,7 @@ a { color: var(--md-primary); }
   outline: none;
 }
 .number-field.wanted { border-color: var(--attention); box-shadow: 0 0 0 2px var(--attention), 0 0 14px color-mix(in srgb, var(--attention) 45%, transparent); }
-.number-field input:disabled { color: color-mix(in srgb, var(--md-on-surface) 38%, transparent); }
+.number-field input[aria-disabled="true"] { color: color-mix(in srgb, var(--md-on-surface) 38%, transparent); }
 /* the carriage's place: a value in its box, like the pin's hole (U21) */
 .value-field { justify-content: center; min-width: 76px; padding: 0 12px; }
 .carriage-place { min-width: 2ch; text-align: center; font-size: 18px; font-weight: 560; }
@@ -626,7 +620,6 @@ body.resizing-rows, body.resizing-rows * { cursor: row-resize !important; }
 .taskline .btn[aria-disabled="true"] { opacity: 0.45; }
 .taskline.ok { background: var(--success-container); color: var(--on-success-container); }
 .taskline.watch { background: var(--md-surface-high); color: var(--md-on-surface-variant); }
-.taskline.blocked { background: color-mix(in srgb, var(--md-error) 18%, var(--md-surface-high)); color: var(--md-error); }
 .navrow { display: flex; gap: 8px; justify-content: space-between; align-items: center; margin-top: 4px; }
 .finish-card { text-align: center; padding: 24px 16px; }
 .finish-card .icon { width: 40px; height: 40px; margin: 0 auto 8px; color: var(--success); }

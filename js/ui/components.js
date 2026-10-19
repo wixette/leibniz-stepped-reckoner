@@ -76,13 +76,15 @@ let tipBox = null;
 let tipTimer;
 
 /**
- * Give an element a tooltip (shown on hover and keyboard focus) and a screen-reader name.
+ * Give an element a tooltip (shown on hover and keyboard focus) and a screen-reader name. An
+ * element with its own visible label (data-tip-describes: a text button, a labelled field) keeps
+ * that label as its name, and the tooltip describes it.
  * @param {HTMLElement} e
  * @param {string} text
  */
 export function setTip(e, text) {
   e.dataset.tip = text;
-  e.setAttribute("aria-label", text);
+  e.setAttribute(e.hasAttribute("data-tip-describes") ? "aria-description" : "aria-label", text);
   if (e.dataset.tipBound) return;
   e.dataset.tipBound = "1";
   const show = () => {

@@ -155,7 +155,7 @@ export class DigitSlice {
   }
 
   /**
-   * Crank angles (|theta|, ascending) where something starts or stops moving in the
+   * Crank angles (|theta|, ascending) where a visible change has just completed in the
    * current turn. Used by the "step to next event" control.
    * @param {1 | -1} dir
    * @returns {number[]}

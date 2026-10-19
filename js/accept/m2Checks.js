@@ -1,6 +1,6 @@
-// Acceptance spec for M2 (plan §10.1, A2-1..A2-9; A2-10 runs the M0/M1 specs in the
-// same `pnpm test`). Poses the full machine through Machine -> applyM2Pose -> Rig,
-// exactly as page 03 does.
+// Acceptance spec for M2 (plan §10.1, A2-1..A2-9 and A2-11..A2-13; A2-10 runs the M0/M1
+// specs in the same `pnpm test`). Poses the full machine through Machine -> applyM2Pose ->
+// Rig, exactly as the main page and page 03 do.
 
 import * as THREE from "three";
 import { applyM2Pose, m2NodeNames } from "../scene/m2Pose.js";

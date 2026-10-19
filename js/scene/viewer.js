@@ -79,8 +79,6 @@ export class Viewer {
   dirty = true;
   /** @private */
   sceneDirty = true;
-  /** @private */
-  flying = 0;
   /**
    * @private
    * @type {number[]}
@@ -136,7 +134,16 @@ export class Viewer {
     host.appendChild(this.renderer.domElement);
 
     const pmrem = new THREE.PMREMGenerator(this.renderer);
-    this.scene.environment = pmrem.fromScene(studioEnvironment(), 0.02).texture;
+    const studio = studioEnvironment();
+    this.scene.environment = pmrem.fromScene(studio, 0.02).texture;
+    // only the environment map is kept: free the generator and the studio it was rendered from
+    pmrem.dispose();
+    studio.traverse((o) => {
+      const m = /** @type {THREE.Mesh} */ (o);
+      if (!m.isMesh) return;
+      m.geometry.dispose();
+      /** @type {THREE.Material} */ (m.material).dispose();
+    });
     this.scene.background = options.transparent ? null : new THREE.Color(0xe9e7e2);
 
     const key = new THREE.DirectionalLight(0xfff4e6, 1.2);
@@ -243,17 +250,12 @@ export class Viewer {
    */
   flyTo(position, target, seconds = 0.8) {
     // A new flight replaces one under way, from wherever the camera is now.
-    if (this.flight) {
-      this.onFrame.splice(this.onFrame.indexOf(this.flight), 1);
-      this.flying--;
-      this.flight = null;
-    }
+    if (this.flight) this.endFlight(this.flight);
     const p0 = this.camera.position.clone();
     const t0 = this.controls.target.clone();
     const p1 = new THREE.Vector3().copy(position);
     const t1 = new THREE.Vector3().copy(target);
     let t = 0;
-    this.flying++;
     /** @param {number} dt */
     const step = (dt) => {
       t = Math.min(1, t + dt / seconds);
@@ -261,14 +263,21 @@ export class Viewer {
       this.camera.position.lerpVectors(p0, p1, e);
       this.controls.target.lerpVectors(t0, t1, e);
       this.invalidate(false);
-      if (t >= 1) {
-        this.onFrame.splice(this.onFrame.indexOf(step), 1);
-        this.flying--;
-        this.flight = null;
-      }
+      if (t >= 1) this.endFlight(step);
     };
     this.flight = step;
     this.onFrame.push(step);
+  }
+
+  /**
+   * Take a flight's frame callback off, once (a flight replaced in the frame it ends in is gone).
+   * @private
+   * @param {(dt: number) => void} step
+   */
+  endFlight(step) {
+    const i = this.onFrame.indexOf(step);
+    if (i >= 0) this.onFrame.splice(i, 1);
+    if (this.flight === step) this.flight = null;
   }
 
   /**

@@ -56,7 +56,7 @@ export const store = {
   },
 };
 
-/** @param {number} n */
+/** @param {number | string} n a number, or its digits */
 export const group3 = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 
 /**
@@ -94,8 +94,10 @@ export class App {
    * @type {{ view: ViewName; parts: string[]; context: string[]; casing: boolean | null } | null}
    */
   inside = null;
-  /** Called after the page's texts were put in a new language (panels the app does not own). */
-  /** @type {() => void} */
+  /**
+   * Called after the page's texts were put in a new language (panels the app does not own).
+   * @type {() => void}
+   */
   onRetranslate = () => {};
 
   constructor() {
@@ -105,6 +107,8 @@ export class App {
       () => this.stage.apart,
       () => this.changed(),
     );
+    this.animator.onSetUp = () => this.sound.resync(this.machine); // setting up is silent (U29)
+    window.addEventListener("pagehide", () => this.keepPlace()); // a reload or the logo's link leaves it too
     this.stage.allow = (i) => (i && possible(i, this.machine) && this.controlState(controlOf(i), shiftDir(i)).enabled ? i : null);
     this.stage.onRefused = (i) => this.refuse(i);
     this.stage.onIntent = (i) => this.doIntent(i);
@@ -228,6 +232,12 @@ export class App {
     const before = this.machine.turns;
     this.animator.play(this.animator.expand([{ toStop: true }]), () => {
       const n = this.machine.turns - before;
+      if (!this.machine.blocked) {
+        // stopped short of the pin: something else blocks the crank (a full carry store)
+        this.sound.play("refuse");
+        this.say(this.blockText(1), true);
+        return this.afterLearner();
+      }
       if (n !== 0) this.sound.play("stop"); // the crank meets the pin
       this.say(() => tn("status.ranToStop", n));
       this.afterLearner();
@@ -315,6 +325,7 @@ export class App {
    * @param {"tab-start" | "tab-lessons"} tab
    */
   startCourse(lesson, tab) {
+    if (this.course && this.course.lesson !== lesson) this.keepPlace(); // opening another leaves this one (U2)
     if (this.resumable()?.lesson === lesson) store.set("lsr-resume", ""); // a fresh start replaces it
     this.settle();
     this.endInside();
@@ -487,13 +498,18 @@ export class App {
   /** Leave the course: free play again, with the machine as it is. Its step is kept to resume (U27). */
   closeCourse() {
     this.settle();
-    const c = this.course;
-    if (c && !c.finished) store.set("lsr-resume", JSON.stringify({ id: c.lesson.id, i: c.i, tab: c.tab }));
+    this.keepPlace();
     this.course = null;
     this.clearPresentation();
     this.say(() => "");
     this.courseUI.rebuild();
     this.render();
+  }
+
+  /** Remember the course under way, if unfinished, at its step (U27). */
+  keepPlace() {
+    const c = this.course;
+    if (c && !c.finished) store.set("lsr-resume", JSON.stringify({ id: c.lesson.id, i: c.i, tab: c.tab }));
   }
 
   /**
@@ -558,9 +574,6 @@ export class App {
 
   /** The machine's sounds (U29). */
   sound = new Sound();
-
-  /** Sets the machine's sound off or on (set by the toolbar's wiring). @type {(muted: boolean) => void} */
-  setMuted = () => {};
 
   /** Opens the dock if it is closed (set by the top bar's wiring). */
   openDock = () => {};
@@ -799,11 +812,9 @@ export class App {
     const setMuted = (/** @type {boolean} */ muted) => {
       this.sound.muted = muted;
       store.set("lsr-sound", muted ? "off" : "on");
-      soundBtn.setAttribute("aria-pressed", String(muted));
       soundBtn.replaceChildren(icon(muted ? "volume_off" : "volume_up"));
       setTip(soundBtn, t(muted ? "strip.unmute" : "strip.mute"));
     };
-    this.setMuted = setMuted;
     setMuted(store.get("lsr-sound") === "off");
     soundBtn.addEventListener("click", () => setMuted(!this.sound.muted));
     const pinBtn = $("pinBtn");
@@ -849,7 +860,7 @@ export class App {
   render() {
     const m = this.machine;
     // readouts
-    $("resultOut").textContent = group3(m.shownNumber());
+    $("resultOut").textContent = group3(m.shownText());
     const ring = Math.trunc(m.ringTurns + m.theta / 360);
     const turns = $("turnsOut");
     turns.textContent = String(Math.abs(ring));

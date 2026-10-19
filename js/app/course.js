@@ -59,10 +59,19 @@ export class CourseUI {
     this.live = null;
     const start = /** @type {HTMLElement} */ (document.getElementById("panel-start"));
     const lessons = /** @type {HTMLElement} */ (document.getElementById("panel-lessons"));
+    // Rebuilt from inside the dock (Next, Back, a lesson, Start), the keyboard's focus goes back to
+    // the same control, or else to the panel's heading or step, rather than to the page.
+    const active = document.activeElement;
+    const from = active instanceof HTMLElement ? [start, lessons].find((p) => p.contains(active)) : undefined;
+    const role = from ? /** @type {HTMLElement} */ (active).dataset.focus : undefined;
     start.replaceChildren(c?.tab === "tab-start" ? this.player() : this.startHome());
     lessons.replaceChildren(c?.tab === "tab-lessons" ? this.player() : this.lessonList());
     this.updateDots();
     this.update();
+    if (from) {
+      const again = role ? from.querySelector(`[data-focus="${role}"]`) : null;
+      /** @type {HTMLElement | null} */ (again ?? from.querySelector("[data-focus-home]"))?.focus();
+    }
   }
 
   /** Show a dot on the tab of a course under way while another tab is on show. */
@@ -95,12 +104,12 @@ export class CourseUI {
     ];
     return el("div", {}, [
       el("div", { class: "card hero" }, [
-        el("h2", { text: t("start.welcome") }),
+        el("h2", { tabindex: "-1", "data-focus-home": "", text: t("start.welcome") }),
         el("p", { text: t("start.lead") }),
         el("p", { class: "lead", text: t("start.minutes") }),
         el("ol", { class: "chapters" }, chapters.map((k) => el("li", { text: t(k) }))),
         cta,
-        doneTut ? el("span", { class: "lead", text: `  ✓ ${t("course.completed")}` }) : null,
+        doneTut ? el("span", { class: "lead", text: `  ✓ ${t("course.tutorialCompleted")}` }) : null,
       ]),
       el("p", { class: "lead", text: t("start.orTry") }),
       el("h3", { text: t("start.look") }),
@@ -116,7 +125,7 @@ export class CourseUI {
   lessonList() {
     const done = new Set(this.app.doneCourses());
     return el("div", {}, [
-      el("h2", { text: t("tab.lessons") }),
+      el("h2", { tabindex: "-1", "data-focus-home": "", text: t("tab.lessons") }),
       el("p", { class: "lead", text: t("lessons.lead") }),
       el(
         "ol",
@@ -152,23 +161,24 @@ export class CourseUI {
     const kicker = chapter ? `${t("course.chapter", { i: chapterKeys.indexOf(chapter) + 1, n: chapterKeys.length })} · ${t(chapter)}` : isTutorial ? t("tut.title") : t("course.lessonNo", { n: lessonNo });
 
     const close = el("button", { class: "btn icon-only" }, [icon("close")]);
-    close.setAttribute("aria-label", t("course.close.tip"));
-    close.title = t("course.close.tip");
+    setTip(close, t("course.close.tip"));
     close.addEventListener("click", () => app.closeCourse());
-    const back = el("button", { class: "btn has-icon" }, [icon("chevron_left"), el("span", { text: t("course.back") })]);
+    const back = el("button", { class: "btn has-icon", "data-focus": "back" }, [icon("chevron_left"), el("span", { text: t("course.back") })]);
     back.addEventListener("click", () => app.back());
     const last = c.i === n - 1;
-    const next = el("button", { class: "btn filled" }, [el("span", { text: t(last ? "course.finish" : "course.next") }), icon(last ? "check" : "chevron_right")]);
+    // Next keeps the focus from step to step, and is described by the step's text, so a screen
+    // reader reads the new step when it gets the focus.
+    const next = el("button", { class: "btn filled", "data-focus": "next", "aria-describedby": "stepText" }, [el("span", { text: t(last ? "course.finish" : "course.next") }), icon(last ? "check" : "chevron_right")]);
     next.addEventListener("click", () => app.next());
     const progress = el(
       "div",
-      { class: "progress", role: "progressbar", "aria-valuemin": "1", "aria-valuemax": String(n), "aria-valuenow": String(c.i + 1) },
+      { class: "progress", role: "progressbar", "aria-valuemin": "1", "aria-valuemax": String(n), "aria-valuenow": String(c.i + 1), "aria-valuetext": t("course.stepOf", { i: c.i + 1, n }), "aria-label": t(lesson.title) },
       lesson.steps.map((_, i) => el("i", { class: i < c.i ? "done" : i === c.i ? "now" : "" })),
     );
     const taskline = el("div", { class: "taskline", role: "status" });
     const figure = step.image
       ? el("figure", { class: "figure" }, [
-          el("img", { src: step.image.file + V, alt: t(step.image.credit), loading: "lazy" }),
+          el("img", { src: step.image.file + V, alt: "", loading: "lazy" }), // the caption says what it is
           el("figcaption", { text: t(step.image.credit) }),
         ])
       : null;
@@ -180,7 +190,7 @@ export class CourseUI {
       // the step as one card: its picture beside or above its text and task line (U26)
       el("div", { class: `card step-card${figure ? " has-figure" : ""}` }, [
         figure,
-        el("div", { class: "step-body" }, [el("p", { class: "step-text", text: t(step.text) }), taskline]),
+        el("div", { class: "step-body" }, [el("p", { class: "step-text", id: "stepText", tabindex: "-1", "data-focus-home": "", text: t(step.text) }), taskline]),
       ]),
       el("div", { class: "navrow" }, [back, next]),
     ]);
@@ -214,7 +224,7 @@ export class CourseUI {
     buttons.push(close);
     return el("div", { class: "card finish-card" }, [
       icon("celebration"),
-      el("h2", { text: t("course.wellDone") }),
+      el("h2", { tabindex: "-1", "data-focus-home": "", text: t("course.wellDone") }),
       el("p", { class: "lead", text: isTutorial ? t("status.tutorialDone") : t("status.lessonDone", { title: t(lesson.title) }) }),
       following ? el("p", { text: `${t("course.nextLesson")}: ${t(following.title)}` }) : null,
       el("div", { class: "navrow", style: "justify-content:center" }, buttons),
@@ -259,23 +269,28 @@ export class CourseUI {
     if (!live || !c || c.finished) return;
     const task = c.lesson.steps[c.i].task;
     const done = task ? task.check(this.app.machine) : false;
-    const watching = c.playing || this.app.busy;
+    // Watching a demonstration; while the reader's own operation runs, the task's buttons stay
+    // (greyed like their toolbar controls), so the one pressed keeps the focus.
+    const watching = c.playing;
     live.taskline.hidden = !task && !watching;
     live.taskline.className = `taskline${watching ? " watch" : done ? " ok" : ""}`;
     // Rebuilt only when it changes, so a task button keeps the focus while the machine moves.
     const shown = watching ? "watch" : done ? "done" : `turn:${task?.controls.join(",") ?? ""}`;
     if (live.shown !== shown) {
       live.shown = shown;
+      const hadFocus = live.taskline.contains(document.activeElement);
       live.taskline.replaceChildren(
         ...(watching ? [icon("videocam"), el("span", { text: t("course.watching") })] : done ? [icon("check_circle-fill"), el("span", { text: t("course.done") })] : [icon("lightbulb"), el("span", { text: t("course.yourTurn") })]),
         ...(task && !watching && !done ? [this.taskButtons(task.controls)] : []),
       );
+      if (hadFocus && !live.taskline.contains(document.activeElement)) live.next.focus(); // the task is done: Next is the way on
     }
     // a task button is as usable as the toolbar control it works
     for (const b of /** @type {NodeListOf<HTMLElement>} */ (live.taskline.querySelectorAll("[data-for]"))) {
       b.setAttribute("aria-disabled", document.getElementById(/** @type {string} */ (b.dataset.for))?.getAttribute("aria-disabled") ?? "false");
     }
-    live.next.disabled = !this.app.canNext();
-    live.back.disabled = c.i === 0 || this.app.busy;
+    // aria-disabled, not disabled, so Next and Back keep the focus while a step plays
+    live.next.setAttribute("aria-disabled", String(!this.app.canNext()));
+    live.back.setAttribute("aria-disabled", String(c.i === 0 || this.app.busy));
   }
 }

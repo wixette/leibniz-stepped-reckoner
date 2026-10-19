@@ -6,7 +6,7 @@
     <title>Leibniz's Stepped Reckoner: a 3D simulator with lessons</title>
     <meta name="description" content="Leibniz's stepped reckoner, the first calculating machine for all four operations of arithmetic, as an interactive 3D simulator with a tutorial and lessons." />
     <meta name="theme-color" content="#0f1317" />
-    <link rel="icon" href="images/favicon.ico?v=0.0.1" sizes="32x32" />
+    <link rel="icon" href="images/favicon.ico?v=0.0.1" sizes="16x16 32x32 48x48" />
     <link rel="icon" href="images/favicon.svg?v=0.0.1" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=0.0.1" />
     <link rel="manifest" href="manifest.webmanifest?v=0.0.1" />
@@ -102,12 +102,12 @@
       <div class="mode" id="modeBox">
         <button class="chip mode-free" id="modeFree" aria-haspopup="menu" aria-expanded="false" data-l10n-tip="mode.tip.free"><i data-icon="touch_app"></i><span class="mode-label" data-l10n="mode.free">Free play</span><i data-icon="keyboard_arrow_down"></i></button>
         <span class="chip-pair mode-lesson" id="modeLesson" role="group" hidden>
-          <button class="chip course" id="modeShow" data-l10n-tip="mode.tip.show"><i data-icon="school"></i><span class="mode-long" id="modeLong"></span><span class="mode-short" id="modeShort"></span></button>
+          <button class="chip course" id="modeShow" data-l10n-tip="mode.tip.show" data-tip-describes><i data-icon="school"></i><span class="mode-long" id="modeLong"></span><span class="mode-short" id="modeShort"></span></button>
           <button class="chip" id="modeLeave" data-l10n-tip="mode.tip.leave"><i data-icon="close"></i><span class="txt" data-l10n="mode.leave">Free play</span></button>
         </span>
       </div>
       <div class="spacer"></div>
-      <button class="btn icon-only" id="dockBtn" data-l10n-tip="bar.dockHide"><i data-icon="right_panel_close"></i></button>
+      <button class="btn icon-only" id="dockBtn" aria-controls="dock" data-l10n-tip="bar.dockHide"><i data-icon="right_panel_close"></i></button>
       <button class="btn lang-btn" id="langBtn" aria-haspopup="menu" data-l10n-tip="bar.language">
         <i data-icon="translate"></i><span id="langShort">EN</span><i data-icon="keyboard_arrow_down"></i>
       </button>
@@ -119,9 +119,9 @@
         <div class="stage" id="stage">
           <div class="stage-top">
             <div class="readouts" aria-live="off">
-              <div class="readout result"><label data-l10n="read.result">Result</label><output id="resultOut">0</output></div>
-              <div class="readout"><label data-l10n="read.turns">Turns</label><output id="turnsOut">0</output></div>
-              <div class="readout"><label data-l10n="read.place">Carriage</label><output id="placeOut">0</output></div>
+              <div class="readout result"><label for="resultOut" data-l10n="read.result">Result</label><output id="resultOut">0</output></div>
+              <div class="readout"><label for="turnsOut" data-l10n="read.turns">Turns</label><output id="turnsOut">0</output></div>
+              <div class="readout"><label for="placeOut" data-l10n="read.place">Carriage</label><output id="placeOut">0</output></div>
             </div>
             <div class="grow"></div>
             <div class="tools" role="group">
@@ -137,7 +137,7 @@
             <div class="strip" id="strip" role="toolbar">
               <div class="number-field" id="numberField">
                 <label for="numInput" data-l10n="strip.number">Number on the knobs</label>
-                <input id="numInput" inputmode="numeric" enterkeyhint="done" autocomplete="off" maxlength="8" value="0" data-l10n-tip="strip.number.tip" />
+                <input id="numInput" inputmode="numeric" enterkeyhint="done" autocomplete="off" maxlength="8" value="0" data-l10n-tip="strip.number.tip" data-tip-describes />
               </div>
               <span class="sep"></span>
               <div class="pair" role="group">
@@ -156,13 +156,14 @@
                 <button class="btn tonal icon-only" id="toStopBtn" data-control="toStop" data-l10n-tip="strip.toStop.tip"><i data-icon="last_page"></i></button>
               </div>
               <span class="sep"></span>
-              <button class="btn has-icon" id="resetBtn" data-control="reset" data-l10n-tip="strip.reset.tip"><i data-icon="restart_alt"></i><span class="txt" data-l10n="strip.reset">Reset</span></button>
-              <button class="btn icon-only sound-btn" id="soundBtn" aria-pressed="false"><i data-icon="volume_up"></i></button>
+              <button class="btn has-icon" id="resetBtn" data-control="reset" data-l10n-tip="strip.reset.tip" data-tip-describes><i data-icon="restart_alt"></i><span class="txt" data-l10n="strip.reset">Reset</span></button>
+              <button class="btn icon-only sound-btn" id="soundBtn"><i data-icon="volume_up"></i></button>
             </div>
           </div>
           <div class="loader" id="loader">
             <div class="bar"><i id="loaderBar"></i></div>
             <div id="loaderText">…</div>
+            <noscript>The simulator needs JavaScript. Please turn it on, or use another browser.</noscript>
           </div>
           <div class="hover-label" id="hover" hidden></div>
         </div>
@@ -193,6 +194,14 @@
       <div class="dialog-body" id="aboutBody"></div>
     </dialog>
 
+    <!-- A browser too old for the page's modules (import maps, JSON modules) stops before
+         main.js runs, which would leave the loader at "…": say so instead. -->
+    <script>
+      addEventListener("error", () => {
+        const text = document.getElementById("loaderText");
+        if (text && text.textContent === "…") text.textContent = "This browser cannot run the simulator. Please use a current version of Chrome, Edge, Firefox or Safari.";
+      });
+    </script>
     <script type="module" src="js/main.js?v=0.0.1"></script>
   </body>
 </html>
