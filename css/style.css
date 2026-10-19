@@ -23,6 +23,8 @@
   --md-on-surface-variant: #c1c7d0;
   --md-outline: #8b919a;
   --md-outline-variant: #3f464f;
+  /* a card's fine edge, between its surface and the outline */
+  --card-edge: #343a43;
   --md-scrim: rgba(0, 0, 0, 0.55);
   /* amber, one meaning only: your turn. The control a step asks for (its glow), the task line,
      and (the same hue, in 3D) the parts a step points at. */
@@ -409,7 +411,9 @@ a { color: var(--md-primary); }
   grid-template-rows: auto minmax(0, 1fr);
   min-width: 0;
   min-height: 0;
-  background: var(--md-surface-mid);
+  /* Three levels (U5): the tab bar a band of its own, the body the darkest well the content
+     sits in, the cards raised above it with a fine outline. */
+  background: var(--md-surface);
   border-left: 1px solid var(--md-outline-variant);
 }
 /* the dock's resize handle (U17): its own edge; a grab pill shows on hover and focus beside the
@@ -441,7 +445,7 @@ a { color: var(--md-primary); }
 body.resizing { user-select: none; }
 body.resizing-cols, body.resizing-cols * { cursor: col-resize !important; }
 body.resizing-rows, body.resizing-rows * { cursor: row-resize !important; }
-.tabs { display: flex; border-bottom: 1px solid var(--md-outline-variant); padding: 0 4px; }
+.tabs { display: flex; border-bottom: 1px solid var(--md-outline-variant); padding: 0 4px; background: var(--md-surface-high); }
 .tab {
   position: relative;
   flex: 1;
@@ -478,6 +482,7 @@ body.resizing-rows, body.resizing-rows * { cursor: row-resize !important; }
 /* cards and lists */
 .card {
   padding: 16px;
+  border: 1px solid var(--card-edge);
   border-radius: var(--radius-l);
   background: var(--md-surface-high);
   margin-bottom: 12px;
@@ -500,7 +505,7 @@ body.resizing-rows, body.resizing-rows * { cursor: row-resize !important; }
   gap: 12px;
   width: 100%;
   padding: 12px 12px 12px 14px;
-  border: 0;
+  border: 1px solid var(--card-edge);
   border-radius: var(--radius-m);
   background: var(--md-surface-high);
   text-align: left;

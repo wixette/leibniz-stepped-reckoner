@@ -121,6 +121,7 @@ The first version used a brass-gold primary on warm neutrals to match the machin
 | Red (error) | Something was refused | A refused control's reason in the status line, a blocked step |
 | The machine's red | Counting backward | The turns readout when the Magna Rota turns back, as its red digits do |
 
+- **The dock has three surface levels,** so its parts do not blur together in the dark: the tab bar is a raised band with a divider under it, the body is the darkest well the content sits in, and cards (a step, a lesson, Get started's welcome) are raised above it with a fine edge. Before, the tab bar, the body and the space around the content shared one colour, and only the cards differed, and only slightly.
 - **Hover and press are visible:** a control lightens by 14% under the pointer and 22% when pressed (Material's 8% and 12% barely showed on the blue-grey buttons). A dropdown box also lightens its fill on hover.
 - **Contrast:** every text colour on its background reaches at least 7:1 (WCAG AAA). The outlines of the setting boxes reach 5.4:1 against the toolbar.
 - Type is Roboto Flex (Latin, Latin Extended, Greek, Cyrillic; CJK falls back to the system's Noto/PingFang/Hiragino/Malgun), with tabular figures for every number.
