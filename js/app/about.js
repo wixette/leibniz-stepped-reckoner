@@ -32,8 +32,12 @@ export function showAbout() {
   close.onclick = () => dialog.close();
   // A press and release both on the dimmed backdrop also close it (the padding is on the inner
   // parts, so only the backdrop is the <dialog> itself); a text selection dragged out does not.
+  // (A block body: an on… handler that returns false cancels the press, and with it any text
+  // selection started in the dialog.)
   let pressedOut = false;
-  dialog.onpointerdown = (e) => (pressedOut = e.target === dialog);
+  dialog.onpointerdown = (e) => {
+    pressedOut = e.target === dialog;
+  };
   dialog.onclick = (e) => {
     if (pressedOut && e.target === dialog) dialog.close();
     pressedOut = false;
