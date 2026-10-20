@@ -622,7 +622,8 @@ body.resizing-rows, body.resizing-rows * { cursor: row-resize !important; }
 .taskline.watch { background: var(--md-surface-high); color: var(--md-on-surface-variant); }
 .navrow { display: flex; gap: 8px; justify-content: space-between; align-items: center; margin-top: 4px; }
 .finish-card { text-align: center; padding: 24px 16px; }
-.finish-card .icon { width: 40px; height: 40px; margin: 0 auto 8px; color: var(--success); }
+/* the card's own celebration icon, not the icons in its buttons */
+.finish-card > .icon { width: 40px; height: 40px; margin: 0 auto 8px; color: var(--success); }
 
 /* ---- status bar ------------------------------------------------------------------------------------- */
 .statusbar {
