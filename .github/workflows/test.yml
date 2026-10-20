@@ -9,12 +9,12 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           # The acceptance tests load the real .glb, which is kept in Git LFS.
           lfs: true
-      - uses: pnpm/action-setup@v4 # the version comes from package.json's packageManager
-      - uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@v6 # the version comes from package.json's packageManager
+      - uses: actions/setup-node@v7
         with:
           node-version: '24.x'
       # Development only: three.js for Node (tests) and TypeScript's checker. The pages
@@ -24,7 +24,7 @@ jobs:
       # (tools/check-refs.mjs).
       - run: pnpm check:refs
       # Every file's licence is declared (REUSE.toml, LICENSES/).
-      - uses: fsfe/reuse-action@v5
+      - uses: fsfe/reuse-action@v6
       # The JSDoc types, checked strictly against the code (tsconfig.json).
       - run: pnpm typecheck
       # Simulator logic, kinematics, acceptance tests on the .glb, vendor/ and the
