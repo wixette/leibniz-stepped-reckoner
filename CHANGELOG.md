@@ -2,6 +2,10 @@
 
 What changed in each release. Versions follow `package.json` and are tagged `vX.Y.Z` ([docs/development.md](docs/development.md), *Versions and releases*). The design decisions cited (U1, U2, …) are in [docs/ui-design.md](docs/ui-design.md).
 
+## Unreleased
+
+- The page's description (for search engines and the installed app) and `package.json`'s now say what the simulator is first, and name the lessons and the ten languages, as the GitHub repository's description does.
+
 ## 1.0.0
 
 The first public release: the prototype's teaching page becomes the simulator, with free play first and a tutorial, six lessons and references beside the machine.

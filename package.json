@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Leibniz's stepped reckoner, the first calculating machine for all four operations of arithmetic, as an interactive 3D simulator in the browser.",
+  "description": "Interactive 3D simulator of Leibniz's stepped reckoner, the first mechanical calculator to add, subtract, multiply and divide. Lessons in 10 languages, in the browser.",
   "license": "Apache-2.0",
   "homepage": "https://wixette.github.io/leibniz-stepped-reckoner/",
   "repository": {
