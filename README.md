@@ -4,7 +4,7 @@
 
 **A working 3D model of the first calculating machine for all four operations of arithmetic, in your browser.** Set a number on its knobs, turn the crank, and watch it add, carry, subtract, multiply and divide, from the inside.
 
-**▶ [Open the simulator](https://wixette.github.io/leibniz-stepped-reckoner/)**: nothing to install, free, in ten languages.
+**[Open the simulator](https://wixette.github.io/leibniz-stepped-reckoner/)**: nothing to install, free, in ten languages.
 
 ![The simulator in free play: the whole machine in its oak case, the readouts above it, the toolbar below it, and the Get started panel on the right](images/readme/free-play.jpg)
 
@@ -34,15 +34,15 @@ This simulator lets you operate a faithful 3D model of the surviving machine: 8 
 
 1. **[Open the simulator](https://wixette.github.io/leibniz-stepped-reckoner/).** It runs in any current browser (Chrome or Edge 123, Safari 17.2, Firefox 138 or later), on a laptop, a Chromebook, a tablet or a phone.
 2. **Set a number.** Type `2` in the *Number on the knobs* box under the machine. The units knob (the one on the right) turns to 2.
-3. **Turn the crank forward.** Press **↻ +**. The crank turns once and the result windows on top of the machine show `2`.
-4. **Add another number.** Replace the 2 in the box with `3` (so the knobs show 3, not 23) and press **↻ +** again. The windows show `5`: you have just calculated on a machine from about 1700.
+3. **Turn the crank forward.** Press the **+** button (a turning arrow with a plus sign) under the machine. The crank turns once and the result windows on top of the machine show `2`.
+4. **Add another number.** Replace the 2 in the box with `3` (so the knobs show 3, not 23) and press **+** again. The windows show `5`: you have just calculated on a machine from about 1700.
 5. **Carry on learning.** Press *Start the tutorial* in the panel on the right for a five-minute tour, then work through the lessons.
 
 ## Finding your way around the page
 
 | Region | What it is for |
 |---|---|
-| **Top bar** | The mode you are in (*Free play*, or the lesson and its step, with **✕ Free play** to leave it), the panel button, the language menu (文A) and *About*. |
+| **Top bar** | The mode you are in (*Free play*, or the lesson and its step, with a **Free play** button beside it to leave the lesson), then on the right the button that shows or hides the panel, the language menu (it shows the current language, such as **EN**) and *About*. |
 | **The machine** (3D view) | The machine itself. Readouts at the top left show the **Result** (as the windows show it), the **Turns** counted by the Magna Rota (red when turned backward) and the **Carriage**'s place. The view controls are at the top right. |
 | **The toolbar** (under the machine) | Everything that operates the machine (below). |
 | **The panel** (right, or below on a narrow screen) | Three tabs: **Get started** (the tutorial), **Lessons** and **References**. Drag its edge to resize it; it can be hidden from the top bar. |
@@ -53,11 +53,11 @@ This simulator lets you operate a faithful 3D model of the surviving machine: 8 
 | Control | What it does |
 |---|---|
 | **Number on the knobs** | Type a number of up to 8 digits; the knobs follow as you type. |
-| **↻ +** and **↺ −** | Turn the crank once forward (adds the number on the knobs to the result) or backward (subtracts it). |
-| **«  Carriage  »** | Slide the carriage one place left or right. Each place to the left makes a turn count ten times as much. |
-| **Pin** and **→\|** | Put the Magna Rota's pin in a hole 1–9, or take it out. *Run to stop* (→\|) then turns the crank forward until the pin reaches the stop: hole 5 means five turns. |
+| **+** and **−** (each with a turning arrow) | Turn the crank once forward (adds the number on the knobs to the result) or backward (subtracts it). |
+| **Carriage**, between a left and a right arrow | The arrows slide the carriage one place left or right; the box shows its place. Each place to the left makes a turn count ten times as much. |
+| **Pin**, and **Run to stop** beside it (an arrow running into a bar) | The Pin box puts the Magna Rota's pin in a hole 1–9, or takes it out. *Run to stop* then turns the crank forward until the pin reaches the stop: hole 5 means five turns. |
 | **Reset** | Clear the machine: all wheels and knobs to 0, the carriage home, the pin out. |
-| **🔊** | Turn the machine's sounds on or off. |
+| **Sound** (the speaker, at the end) | Turn the machine's sounds on or off. |
 
 ### Looking around in 3D
 
@@ -65,12 +65,20 @@ This simulator lets you operate a faithful 3D model of the surviving machine: 8 
 |---|---|---|---|
 | Turn the view | drag | drag with one finger | arrow keys |
 | Move the view | right-drag | drag with two fingers | Shift + arrow keys |
-| Zoom | scroll, or the 🔍 buttons | pinch, or the 🔍 buttons | `+` and `−` |
-| Go back to the start | ⌂ (*Reset view*) | ⌂ | Home |
+| Zoom | scroll, or the **Zoom in** and **Zoom out** buttons (magnifying glasses with + and −, top right) | pinch, or the zoom buttons | `+` and `−` |
+| Go back to the start | **Reset view** (the house, top right) | **Reset view** | Home |
 
 **Point at any part** to see its name and its current value (the digit on a wheel, whether a carry store holds a carry, and so on). **You can also operate the machine by clicking its parts:** click a knob to step its digit (or a digit on its dial to set it), click the crank to turn it forward and Shift-click to turn it back, drag either crank round its axle to turn it either way, click a hole of the Magna Rota to put the pin in, or click a result wheel to move the carriage under it.
 
 The **Views** menu (top right) flies the camera to a close-up: *Whole machine*, *Taken apart*, *Result*, *Setting knobs*, *Magna Rota*, and two **inside views**, *Stepped drum* and *Carry*, which hide the case, open the carriage and fade the parts around the ones they show, while the machine keeps working. *Show case* puts the oak case back on or takes it off. While the machine is taken apart it cannot calculate; choose another view to put it back together.
+
+| Taken apart | Stepped drum |
+|---|---|
+| ![The machine taken apart: the cover plates and the row of result wheels lifted above the carriage, over the oak case](images/readme/view-apart.jpg) | ![The Stepped drum view: the units knob set to 3, its stepped drum and the small gear of the result wheel, the rest of the machine faded](images/readme/view-drum.jpg) |
+| The parts lifted apart, so you can see how they fit together: the result register at the back, which stays in place, and the carriage at the front, which slides. | An inside view: the case is hidden and the rest of the machine faded. Here 3 is set on the units knob, and part-way through a turn the drum's teeth are turning the result wheel's small gear: the result already reads 1. |
+| **Carry** | **Magna Rota** |
+| ![The Carry view from behind: the first four result wheels, their carry stores and pentagons, part-way through 9999 + 1](images/readme/view-carry.jpg) | ![The Magna Rota view: the big wheel with its black and red numbers, the pin in hole 5, the crank in its centre](images/readme/view-magna.jpg) |
+| The other inside view, from behind: the first four wheels and their carry stores, part-way through 9999 + 1. A tilted pentagon is a carry stored but not yet passed on. | The Magna Rota with its pin in hole 5, after two of the five turns of 1709 × 5. Its black numbers count forward turns (2 at the stop), the red ones backward turns; the crank in its centre turns every drum. |
 
 ## The tutorial and the six lessons
 
@@ -89,13 +97,11 @@ The **Lessons** tab then goes from adding to dividing. Each lesson builds on the
 
 ![Lesson 2, the carry: in the Carry view the case is hidden and the other parts are faded, so the units' result wheel, its carry store and its tilted pentagon stand out; the lesson's step is in the panel on the right](images/readme/lesson-carry.jpg)
 
-You can leave a lesson at any time (✕ *Free play* in the top bar) to try something on your own, and pick it up again later from the *Free play* menu. Finished lessons get a tick, remembered in your browser.
+You can leave a lesson at any time (the **Free play** button in the top bar) to try something on your own, and pick it up again later from the *Free play* menu. Finished lessons get a tick, remembered in your browser.
 
 ## How the machine calculates
 
 A short guide to the parts you will meet in the lessons, in the order a calculation uses them.
-
-![Lesson 1, in the Stepped drum view: the units knob set to 3, its stepped drum with its graded teeth, and the small gear of the result wheel they turn, the rest of the machine faded](images/readme/lesson-drum.jpg)
 
 - **Setting knobs.** The 8 knobs on the front part (the *carriage*) hold the number to add or subtract, one digit each, with the units on the right.
 - **Stepped drums.** Under each knob is a stepped drum: a cylinder with nine teeth of graded length. Setting a digit slides the drum along, so that exactly that many teeth will meet the small gear of a result wheel as the drum turns. Set 3, and three teeth pass: the result wheel moves three steps.
@@ -120,16 +126,16 @@ That is 5 + 6 + 3 = 14 turns of the crank instead of 365 additions. Lesson 5 tak
 
 Use **Reset** before each one.
 
-- **Eight carries in one turn.** Set 99999999 (the largest number the knobs hold) and press **↻ +**. Then set 1, choose the *Carry* view, and press **↻ +** again: every pentagon tilts, the carries run along, and the result is 100000000.
-- **Times eleven without multiplying.** Set 12 and press **↻ +**. Slide the carriage one place left (**«**) and press **↻ +** again. 12 + 120 = 132 = 12 × 11.
+- **Eight carries in one turn.** Set 99999999 (the largest number the knobs hold) and press **+**. Then set 1, choose the *Carry* view, and press **+** again: every pentagon tilts, the carries run along, and the result is 100000000.
+- **Times eleven without multiplying.** Set 12 and press **+**. Slide the carriage one place left (the carriage's left arrow) and press **+** again. 12 + 120 = 132 = 12 × 11.
 - **Times by the pin.** Set 25, put the pin in hole 4 and press *Run to stop*: 100. Watch the Magna Rota count the turns.
-- **Go below zero.** Set 1 and press **↺ −**. What do the windows show, and why?
+- **Go below zero.** Set 1 and press **−**. What do the windows show, and why?
 - **Look inside.** Choose *Taken apart* in the Views menu to see the two main parts separated, then *Stepped drum*: set a digit and turn the crank to watch the drum's teeth turn the result wheel.
 
 ## For teachers
 
 - **No installation, no accounts.** The simulator is a static web page that needs no network but its own site (no fonts or scripts from other servers), so it works on school networks that block a lot. It is laid out for a laptop or Chromebook, and every lesson can also be done on a phone.
-- **Ten languages:** English, Español, Français, Deutsch, Italiano, Português (Brasil), 简体中文, 繁體中文, 日本語 and 한국어. Choose one from the 文A menu, or link to it directly by adding `?lang=` to the address: `?lang=de`, `?lang=fr`, `?lang=pt-BR`, `?lang=zh-TW`, … ([German](https://wixette.github.io/leibniz-stepped-reckoner/?lang=de), [Japanese](https://wixette.github.io/leibniz-stepped-reckoner/?lang=ja)).
+- **Ten languages:** English, Español, Français, Deutsch, Italiano, Português (Brasil), 简体中文, 繁體中文, 日本語 and 한국어. Choose one from the language menu in the top bar, or link to it directly by adding `?lang=` to the address: `?lang=de`, `?lang=fr`, `?lang=pt-BR`, `?lang=zh-TW`, … ([German](https://wixette.github.io/leibniz-stepped-reckoner/?lang=de), [Japanese](https://wixette.github.io/leibniz-stepped-reckoner/?lang=ja)).
 - **Progress stays on the device.** Finished lessons, a lesson left half-way, the language, the panel's size and the sound setting are remembered in the browser, and nothing is sent anywhere.
 - **The texts can be copied** into a worksheet: the lesson steps, the tutorial and the result can be selected like any text.
 - **Accessible:** every control can be reached with the keyboard and has a translated name for screen readers; animations follow the system's *reduce motion* setting.

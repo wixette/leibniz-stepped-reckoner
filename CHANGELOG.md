@@ -30,6 +30,7 @@ The first public release: the prototype's teaching page becomes the simulator, w
 - The result readout and the register's value are exact for all 16 digits (the largest product, 99999999 × 99999999, read one too low), and an overdrawn register is always seen as below zero.
 - Sound now starts on touch screens, and comes back after the system interrupts it.
 - Run to stop says why when a full carry store, not the pin, stops the crank.
+- A turn refused because a carry store would have to hold two carries says what to do in either case: shift over a carry no lever reaches and pass it on with an idle turn, or, when the lever would come too late, turn once with 0 on the knobs first (it used to say "no carry lever reaches" in both).
 - A right-click or middle-click on a part no longer works it.
 - A lesson left for another, or by reloading the page, is remembered at its step.
 - A lesson step that sets the machine up is silent, as setting up is (U29).
@@ -37,7 +38,7 @@ The first public release: the prototype's teaching page becomes the simulator, w
 - A browser too old for the page says so, instead of loading for ever.
 - The page no longer loads the acceptance checks' code (three-mesh-bvh) when it starts; highlighting reuses its materials instead of making new ones at every step.
 - Translations: corrections in Korean, Portuguese, German, Italian, Japanese, Traditional and Simplified Chinese, Spanish and French, and the tutorial's and the lessons' "Completed" each in its own grammatical gender.
-- `pnpm build:model` and `pnpm check:model` fail when a Blender script fails (they always passed), and take Blender's path from `$BLENDER`. The site is deployed only once the tests pass on `main`.
+- `pnpm build:model` and `pnpm check:model` fail when a Blender script fails (they always passed), and take Blender's path from `$BLENDER`. The site is deployed only once the tests pass on `main`, and CI uses the actions' Node 24 releases.
 
 ## 0.0.1
 
