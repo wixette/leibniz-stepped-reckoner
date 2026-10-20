@@ -1,5 +1,5 @@
 {
-  "_schema": "Every numeric entry is {v, unit, conf, src, note?}. conf: doc = documented in a source; est = photo-scaled estimate; design = our own choice where sources are silent. Units: mm and deg (see docs/conventions.md). Source tags: research/sources/bibliography.md. Photo scaling: digit pitch P = 37 mm used as the ruler.",
+  "_schema": "Every numeric entry is {v, unit, conf, src, note?}. conf: doc = documented in a source; est = photo-scaled estimate; design = our own choice where sources are silent. Units: mm and deg (see docs/conventions.md). Source tags: research/sources/bibliography.md. Photo scaling: digit pitch P = 37 mm used as the ruler. version is the parameter set's own (each .glb records it as params_version), not the release's.",
   "version": "0.1.0",
   "fidelity_target": "B",
   "reference_machine": "Surviving 'younger' machine, GWLB Hannover (8/16/1 digits); proportions read from the true-to-scale Lehmann/TU Dresden replica (2001) photos on Wikimedia Commons",

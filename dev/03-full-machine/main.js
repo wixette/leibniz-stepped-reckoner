@@ -181,7 +181,7 @@ function blockText(dir) {
   const b = machine.startBlock(dir);
   if (b === null) return null;
   if (b === "shifting") return "the carriage is still moving.";
-  if (b === "pin") return dir > 0 ? "the pin is on the stop: take it out or move it to turn again." : "with the pin in, the Magna Rota only turns forward: take the pin out to subtract.";
+  if (b === "pin") return dir > 0 ? "the pin is on the stop: take it out or move it to turn again." : "turned back, the pin has come round to the stop's other side: another turn back would jam it. Take the pin out or move it.";
   const k = b.storeFull;
   const need = k - (machine.offset + C - 1);
   return (

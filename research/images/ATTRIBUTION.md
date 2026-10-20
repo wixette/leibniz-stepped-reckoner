@@ -20,7 +20,7 @@ These are 1280 px downsampled copies. **The licence, author and source URL for e
 - **CC BY-SA 4.0**: about 38 photos of the Lehmann/TU Dresden replica at Technische Sammlungen Dresden, by Dr. Bernd Gross, Plenuska, Eremeev, Wuselig, Jeremy Wolf and SchiDD. Attribution is required, and derivative works must use the same licence.
 - **CC BY 3.0**: `Leibniz_Rechenmaschine_(1690).jpg` (the original, GWLB) and `Leibniz-Rechenmaschine_hg.jpg` (Hannes Grobe).
 - **CC BY-SA 3.0 / 4.0**: `Leibnitzrechenmaschine.jpg` and `Staffelwalzeprinzipbha.jpg`
-- **Public domain**: Meyers (1890s) drawings, the Turck photo, the Leupold engraving (Library of Congress scan), and Leibniz's own sketches
+- **Public domain**: the Meyers drawings (1893 and 1904), the Turck photo, the Leupold engraving (Library of Congress scan), and Leibniz's own sketches
 
 The Commons GIF animations were not downloaded: *Stepped drum mechanism.gif* is 62 MB. Their links are in the catalogue.
 

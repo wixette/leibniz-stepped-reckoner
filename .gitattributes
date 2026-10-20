@@ -1,8 +1,9 @@
 # Text normalisation
 * text=auto eol=lf
 
-# Git LFS: 3D sources and generated binary assets.
-# Research reference images stay in plain git (small and stable).
+# Git LFS: 3D sources and generated binary assets (today, the .glb models in assets/).
+# Images, sounds, fonts and research reference images stay in plain git (small and
+# stable); git detects them as binary, so line endings are never converted in them.
 *.blend      filter=lfs diff=lfs merge=lfs -text
 *.glb        filter=lfs diff=lfs merge=lfs -text
 *.gltf       filter=lfs diff=lfs merge=lfs -text

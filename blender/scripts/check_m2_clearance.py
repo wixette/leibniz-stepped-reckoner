@@ -27,8 +27,8 @@ def main():
     with open(path, encoding="utf-8") as f:
         poses = json.load(f)["poses"][::every]
     build_m2.build(params.load())
-    sweep.run(poses, "M2")
+    return sweep.run(poses, "M2")
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(0 if main() else 1)

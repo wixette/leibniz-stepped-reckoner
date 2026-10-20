@@ -1,6 +1,6 @@
 # Modelling and animation plan: Leibniz stepped reckoner (target B)
 
-- **Status:** draft v0.1 · 2026-10-17
+- **Status:** M0–M2 done; M3 built, and redesigned for release 1.0.0 (2026-10-20, [docs/ui-design.md](../docs/ui-design.md)); M4 open. First written 2026-10-17.
 - **Inputs:** [`../research/REPORT.md`](../research/REPORT.md), [`../research/sources/notes-mechanism.md`](../research/sources/notes-mechanism.md), [`../params/machine.json`](../params/machine.json), [decision 0001](decisions/0001-carry-interpretation.md)
 - **Conventions:** [`docs/conventions.md`](../docs/conventions.md)
 
@@ -157,19 +157,19 @@ These must be planned now, because they change how the meshes are cut.
 | **M0: one-digit slice** ✅ done 2026-10-17 ([notes](m0-notes.md)) | Drum + setting dial/rack + receiving gear + result wheel + Einzahn + carry store + pentagon, built procedurally from params, exported, and shown in a minimal three.js page with a θ slider | Turning θ adds the set digit. 9 + 1 stores a carry and tilts the pentagon. No visible mesh collisions. |
 | **M1: 3-digit carry slice** ✅ done 2026-10-17 ([notes](m1-notes.md)) | 3 digits plus Zweihörner, the drive gears and the sim logic (both carry modes). Step mode. **Acceptance-test harness** (glTF-in-Node, readout/contact/clearance checks, `?selftest`), retrofitted to M0 first. | 999 + 1 ripples in one turn (`ripple`) and needs extra idle turns (`historical`, 900 → 000 + carry → 1000). `pnpm test` runs the M0 and M1 acceptance specs (§10.1) and passes. |
 | **M2: full machine** ✅ done 2026-10-18 ([notes](m2-notes.md)): mechanism 2026-10-17; casing, photo overlay (carriage, Magna Rota, frame and case within 5 % of the photos) and materials 2026-10-18. Chromebook performance not measured yet. | 16-digit register, 8-digit carriage, Magna Rota with pin and stop, counter, lead screw and carriage shift, casing, materials | Every worked example animates correctly. Within the performance budget. Photo overlay within about 5 %. |
-| **M3: teaching layer** 🟡 built 2026-10-18 ([notes](m3-notes.md)); teacher test, German review and Chromebook measurement open | UI (EN/DE), camera presets, cut-away, exploded view, labels, guided lessons (9999 + 1, 1709 × 365, a division) | Usable by a teacher without instructions (to be tested with 1–2 teachers) |
-| **M4: fidelity upgrade (target C)** | Replace `est`/`design` params with documented values from NL 183 or GWLB/mbe | Params mostly `doc`. Decision 0001 revisited. |
+| **M3: teaching layer** 🟡 built 2026-10-18 ([notes](m3-notes.md)), redesigned for release 1.0.0 on 2026-10-20 ([ui-design.md](../docs/ui-design.md)); teacher test, translation review and Chromebook measurement open | UI (EN/DE, then ten languages), camera presets, cut-away, exploded view, labels, guided lessons (9999 + 1, 1709 × 365, a division) | Usable by a teacher without instructions (to be tested with 1–2 teachers) |
+| **M4: fidelity upgrade (target C)** | Replace `est`/`design` params with documented values from NL 183 or the GWLB (§12) | Params mostly `doc`. Decision 0001 revisited. |
 
 M0 and M1 also prove the pipeline (params → Blender → glTF → three.js), which the later milestones reuse.
 
-**Each milestone has a permanent experiment page** in `dev/NN-name/`, linked from `dev/index.html`:
+**Each model milestone has a permanent experiment page** in `dev/NN-name/`, linked from `dev/index.html`. M3 is the site's main page instead (`index.html`):
 
 | Milestone | Page |
 |---|---|
 | M0 | `01-digit-slice` |
 | M1 | `02-carry-slice` |
 | M2 | `03-full-machine` |
-| M3 | `04-teaching` |
+| M3 | `index.html` (the main page) |
 
 A milestone is accepted when **`pnpm test` passes its acceptance spec** (§10.1) and you have tested its page by hand. Earlier pages must keep working as shared code (`js/sim/`, `js/scene/`, params) evolves, so they double as live regression tests. Every page has a **Reset machine** control and a `?selftest` mode that plays the same acceptance scenarios on screen.
 
@@ -223,7 +223,7 @@ M2 design decisions:
   - Every early "other horn" pass falls in 6.9–52.4°, before the ribs.
   - Spreads run 120° → 29°, in the same spirit as Lehmann's 135 → 39.
   - The add and sub arms sit in separate planes.
-- **The Magna Rota is geared 10 : 1 to the crank** (one dial turn = ten operations). Its ring has 10 holes. A pin in hole m stops the crank after m turns at the fixed stop between 0 and 9 (Leupold). The ring also serves as the 1-digit revolution counter: the quotient digit is read off it, as in the sources. Because the finger is on one side of the pin, a pinned ring only turns forward: multiplication uses the pin, and division uses the ring as a counter with the pin out (black numbers count additions, red numbers subtractions). The operator's main crank sits in the middle of the ring.
+- **The Magna Rota is geared 10 : 1 to the crank** (one dial turn = ten operations). Its ring has 10 holes. A pin in hole m stops the crank after m turns at the fixed stop between 0 and 9 (Leupold). The ring also serves as the 1-digit revolution counter: the quotient digit is read off it, as in the sources. Turned back, the pin comes round to the finger's far face, leaving 9 − m whole backward turns (m2-notes). Multiplication uses the pin, and division uses the ring as a counter with the pin out (black numbers count additions, red numbers subtractions). The operator's main crank sits in the middle of the ring.
 
 | ID | Statement | Kind |
 |---|---|---|
@@ -243,7 +243,8 @@ M2 design decisions:
 
 #### M3: teaching layer
 
-M3 design decisions:
+M3 design decisions, as first built. **The 1.0.0 redesign superseded several of them** ([docs/ui-design.md](../docs/ui-design.md)): ten languages instead of EN/DE, with every text and part name a message key in `js/l10n/` (U7); six lessons and a tutorial instead of four lessons (U6); free play as the home (U2); and the view, not the step, deciding the case, the front and fading (U13–U15). The acceptance checks A3-12…A3-15 were added with them; their statements are in ui-design.md (U12, U13, U10, U16).
+
 - **A learner page, separate from the developer page.** `index.html` (the site's main page) is built for pupils, teachers and visitors. It reuses the sim, the scene code and the M2 model. Page 03 stays the developer page (crank-angle slider, carry modes, self-test hooks).
 - **Audience:** pupils from about 12, their teachers, and museum visitors. Short sentences, one idea per step, the mechanism named in both languages.
 - **EN/DE everywhere.**
@@ -266,7 +267,7 @@ M3 design decisions:
 
 | ID | Statement | Kind |
 |---|---|---|
-| A3-1 | Every UI string and every lesson text has an English and a German entry, and every part of the M2 model (moving or static) has `label_en` and `label_de`. | i18n |
+| A3-1 | Every UI string and every lesson text has an English and a German entry, and every part of the M2 model (moving or static) has `label_en` and `label_de`. *Since 1.0.0:* every text of the tutorial and the lessons, and every part's name, exists in all ten languages. | i18n |
 | A3-2 | Each lesson runs from its first step to its last, headless, with a scripted learner doing its tasks, and ends in its stated state (lesson 1: 8, after the demonstration 3 and the learner's 5; lesson 2: 10000 and every pentagon level; lesson 3: 623785; lesson 4: quotient 365 on the ring, remainder 0). | logic |
 | A3-3 | Every part a lesson highlights or labels, and every camera view it names, exists in the model or the page. | contract |
 | A3-4 | A learner task does not unlock Next until its check passes: a wrong setting, turn or shift leaves it locked, and the right one unlocks it. | logic |
@@ -296,9 +297,12 @@ Still open for M3:
 
 ## 12. Data requested
 
-Documented dimensions for M4 depend on primary material held by others. The following has been asked for, or is to be asked for, together with licence terms that allow use in this open simulator (CC BY or CC BY-SA, or at least dimension tables), with credit to the holders:
+Documented dimensions for M4 depend on primary material held by others. Each request asks for licence terms that allow use in this open simulator (CC BY or CC BY-SA, or at least dimension tables), with credit to the holders:
 
-1. **Deutsches Museum archive:** copies of **NL 183/460, /465, /466 PLAN, /467 and /746** (N. J. Lehmann's documents, drawings, calculations and photos of his reconstructions).
-2. **mbe Marc Brandt engineering (Burgdorf), with the GWLB:** the c. 2011 CAD model (made for the GWLB, based on the Badur/Rottstedt design) and the 2020 measurements of all parts of the original (taken with mbe's support for a Leibniz Universität Hannover glass model). Sources: research/sources/bibliography.md (LEIBNIZCENTRAL, HANNOVER2020).
+1. **Deutsches Museum archive:** copies of **NL 183/460, /465, /466 PLAN, /467 and /746** (N. J. Lehmann's documents, drawings, calculations and photos of his reconstructions). Requested 2026-10-18; no answer yet.
+2. **mbe Marc Brandt engineering (Burgdorf):** the c. 2011 CAD model (made for the GWLB, based on the Badur/Rottstedt design) and the 2020 measurements of all parts of the original (taken with mbe's support for a Leibniz Universität Hannover glass model). Sources: research/sources/bibliography.md (LEIBNIZCENTRAL, HANNOVER2020). Requested 2026-10-18. **Declined 2026-10-19:** having consulted Klaus Badur, mbe may not provide any data or dimensions. The machine, and with it all rights, belongs to the GWLB, so a request has to go to the GWLB officially.
+3. **Gottfried Wilhelm Leibniz Bibliothek (GWLB), Hannover:** the owner of the original and of the rights to the CAD model. To be asked officially for, in order of preference, the CAD model, a table of dimensions, or permission to use dimensions with credit. Not asked yet. Its published terms require a reproduction permission for photographs of the machine (digitisation and reproductions department), and name no open licence; the request should expect conditions rather than CC BY-SA.
+
+Independent of any permission: *Das letzte Original* (GWLB 2014; WALSDORF2014 in the bibliography), co-written by Klaus Badur, may give dimensions, which can be used as facts with a citation.
 
 Settled: Stein 2007 has been read (research/sources/bibliography.md, STEIN2007), and decision 0001 was confirmed on 2026-10-17 (`ripple` default, `historical` second mode).

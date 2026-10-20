@@ -1,9 +1,11 @@
-// Scene helpers for the teaching page (M3): camera views, highlights, callout labels and
-// the exploded view. The exploded view and the highlight matching are also used by the
-// acceptance checks (A3-3, A3-5), so they do not touch the DOM.
+// Scene helpers for the main page: camera views, highlights, callout labels and
+// the exploded view. The views, the exploded view and the highlights are also used by the
+// acceptance checks (A3-3, A3-5, A3-12..A3-14), so they do not touch the DOM; only the
+// labels (fillLabel, Callouts) do.
 
 import * as THREE from "three";
 /** @import { ViewName } from "../teach/player.js" */
+import { corners } from "./framing.js";
 import { gltfName } from "./rig.js";
 
 // ---- node matching ------------------------------------------------------------------------------
@@ -33,62 +35,127 @@ const shown = (o) => {
 export { shown as isShown };
 
 // ---- camera views -------------------------------------------------------------------------------
-/** @typedef {[THREE.Vector3Like, THREE.Vector3Like]} View */
 
 /**
- * Camera position looking at target from direction dir, far enough to fit a sphere of radius r (m).
- * @param {THREE.PerspectiveCamera} camera
- * @param {THREE.Vector3Like} target
- * @param {THREE.Vector3Like} dir
- * @param {number} r
- * @returns {View}
+ * The corners of every mesh's own bounding box under the objects, in world space. Framing on
+ * these rather than on one box around everything keeps the fit tight when the parts do not fill
+ * a box: taken apart, they spread into an L, and the one box's far corners, seen at an angle,
+ * would shrink the parts and push them off-centre (U10).
+ * @param {THREE.Object3D[]} objects
+ * @returns {THREE.Vector3[]}
  */
-export function fitView(camera, target, dir, r) {
-  const vfov = THREE.MathUtils.degToRad(camera.fov);
-  const hfov = 2 * Math.atan(Math.tan(vfov / 2) * camera.aspect);
-  const d = r / Math.sin(Math.min(vfov, hfov) / 2);
-  const p = new THREE.Vector3().copy(dir).normalize().multiplyScalar(d).add(target);
-  return [p, new THREE.Vector3().copy(target)];
+export function partCorners(objects) {
+  /** @type {THREE.Vector3[]} */
+  const out = [];
+  for (const o of objects) {
+    o.updateWorldMatrix(true, true);
+    o.traverse((x) => {
+      const m = /** @type {THREE.Mesh} */ (x);
+      if (!m.isMesh) return;
+      if (!m.geometry.boundingBox) m.geometry.computeBoundingBox();
+      const box = /** @type {THREE.Box3} */ (m.geometry.boundingBox);
+      for (const c of corners(box)) out.push(c.applyMatrix4(m.matrixWorld));
+    });
+  }
+  return out;
 }
 
 /**
- * The page's camera views. Views of carriage parts follow the carriage.
- * @param {THREE.PerspectiveCamera} camera
+ * A camera view: the parts it frames, and the direction it looks at them from (from the parts
+ * towards the camera). js/scene/framing.js fits the parts into the free part of the canvas.
+ * @typedef {object} ViewSubject
+ * @property {THREE.Vector3Like} dir
+ * @property {() => THREE.Object3D[]} objects the parts it frames
+ * @property {() => THREE.Vector3[]} points the corners of each part's own bounding box, where
+ *   the parts are now (views of carriage parts follow the carriage)
+ * @property {string[]} [inside] for a view of parts inside the machine (U11): the parts it
+ *   highlights while the case is hidden, the front open and the other parts faded
+ */
+
+/**
+ * The page's camera views (docs/ui-design.md, U10).
  * @param {THREE.Object3D} root
- * @returns {Record<ViewName, () => View>}
+ * @returns {Record<ViewName, ViewSubject>}
  */
-export function makeViews(camera, root) {
-  /** @param {string} name */
-  const at = (name) => {
-    const n = findNodes(root, name)[0];
-    n.updateWorldMatrix(true, false);
-    return new THREE.Vector3().setFromMatrixPosition(n.matrixWorld);
-  };
+export function viewSubjects(root) {
   /**
-   * @param {string} a
-   * @param {string} b
+   * A view of the given objects.
+   * @param {THREE.Vector3Like} dir
+   * @param {() => THREE.Object3D[]} objects
+   * @returns {ViewSubject}
    */
-  const mid = (a, b) => at(a).add(at(b)).multiplyScalar(0.5);
+  const of = (dir, objects) => ({ dir, objects, points: () => partCorners(objects()) });
+  /**
+   * @param {THREE.Vector3Like} dir
+   * @param {string[]} patterns
+   * @returns {ViewSubject}
+   */
+  const view = (dir, patterns) => of(dir, () => patterns.flatMap((p) => findNodes(root, p)));
   return {
-    overview: () => fitView(camera, { x: -0.27, y: 0.02, z: 0 }, { x: 0.35, y: 0.42, z: 0.62 }, 0.45),
-    register: () => fitView(camera, { x: -0.28, y: 0.084, z: -0.066 }, { x: 0, y: 1, z: 0.12 }, 0.32),
-    knobs: () => fitView(camera, mid("pm.setting_dial.0", "pm.setting_dial.7"), { x: 0, y: 1.1, z: 0.8 }, 0.16),
-    front: () => fitView(camera, at("pm.magna_rota"), { x: 0.12, y: 0.15, z: 1 }, 0.1),
-    drum: () => fitView(camera, at("pm.drum.0").add(new THREE.Vector3(0, 0.02, -0.02)), { x: 0.7, y: 0.55, z: 0.75 }, 0.07),
-    carry: () => fitView(camera, mid("pi.carry_store.0", "pi.carry_store.3"), { x: -0.15, y: 0.9, z: -0.75 }, 0.1),
+    // The whole machine, case included whether shown or not: hiding the case does not move
+    // the camera.
+    overview: of({ x: 0.35, y: 0.42, z: 0.62 }, () => [root]),
+    // The whole machine as it is, taken apart (the stage frames it with the parts moved out).
+    apart: of({ x: 0.35, y: 0.5, z: 0.62 }, () => [root]),
+    register: view({ x: 0, y: 1, z: 0.12 }, ["pi.window"]),
+    knobs: view({ x: 0, y: 1.1, z: 0.8 }, ["pm.setting_dial.*", "pm.setting_plate.*"]),
+    front: view({ x: 0.12, y: 0.15, z: 1 }, ["pm.magna_rota", "pm.main_crank", "pm.magna_plate"]),
+    drum: {
+      ...view({ x: 0.7, y: 0.55, z: 0.75 }, ["pm.drum.0", "pi.sum_wheel.0", "pm.setting_rack.0"]),
+      inside: ["pm.drum.0", "pm.setting_rack.0", "pi.sum_wheel.0"],
+    },
+    carry: {
+      ...view({ x: -0.15, y: 0.9, z: -0.75 }, ["pi.carry_store.0", "pi.carry_store.1", "pi.carry_store.2", "pi.carry_store.3", "pi.sum_wheel.0", "pi.sum_wheel.1", "pi.sum_wheel.2", "pi.sum_wheel.3"]),
+      inside: [0, 1, 2, 3].flatMap((k) => [`pi.carry_store.${k}`, `pi.sum_wheel.${k}`, `pm.zweihorn_add.${k}`, `pm.zweihorn_sub.${k}`]),
+    },
   };
 }
 
-// ---- highlight and focus ------------------------------------------------------------------------
+// ---- highlight and fade --------------------------------------------------------------------------
+/** The parts a step points at glow amber: the page's one colour for "your turn" (U5). */
 const GLOW = new THREE.Color(0xffa31a);
 
-/** Makes some parts glow and (with focus) fades the rest. Materials are cloned, never edited. */
+/**
+ * The parts that show a part's value, though the model makes them separate parts: Focus keeps
+ * them with it (U12), or fading around the windows would fade the digits behind them.
+ * @type {[RegExp, (m: RegExpMatchArray) => string[]][]}
+ */
+const READOUTS = [
+  [/^pi\.window$/, () => ["pi.sum_wheel.*"]], // the digits are on the result wheels behind the windows
+  [/^pm\.setting_dial\.(\d+|\*)$/, (m) => [`pm.setting_plate.${m[1]}`]], // a knob's digits are on its dial
+  [/^pm\.magna_rota$/, () => ["pm.magna_plate"]], // the red number is read at the stop on the plate
+];
+
+/**
+ * The parts that show the values of the given parts (see READOUTS).
+ * @param {string[]} patterns
+ * @returns {string[]}
+ */
+export function readouts(patterns) {
+  return patterns.flatMap((p) => READOUTS.flatMap(([re, f]) => {
+    const m = p.match(re);
+    return m ? f(m) : [];
+  }));
+}
+
+/**
+ * Makes some parts glow and (with fade) fades the rest. Materials are cloned, never edited, and
+ * each clone is made once (one per material and look) and reused, so steps and views can change
+ * the highlight as often as they like without piling up materials.
+ */
 export class Highlighter {
   /**
    * @private
    * @type {Map<THREE.Mesh, THREE.Material | THREE.Material[]>}
    */
   originals = new Map();
+
+  /**
+   * The clones, by original material and look ("lit", "dim" or "lit dim").
+   * @private
+   * @type {Map<THREE.Material, Map<string, THREE.Material>>}
+   */
+  clones = new Map();
 
   /**
    * @private
@@ -106,40 +173,70 @@ export class Highlighter {
   }
 
   /**
-   * @param {string[]} patterns
-   * @param {boolean} focus
+   * The meshes faded: clicks and hover labels pass through them (U11).
+   * @type {Set<THREE.Object3D>}
+   */
+  faded = new Set();
+
+  /**
+   * Make the parts glow; with fade, fade every part except them, their readouts and the context.
+   * @param {string[]} patterns the parts to highlight
+   * @param {boolean} fade
+   * @param {string[]} [context] parts fading keeps as they are (not highlighted)
    * @returns {void}
    */
-  set(patterns, focus) {
-    /** @type {Set<THREE.Mesh>} */
-    const lit = new Set();
-    for (const p of patterns) for (const n of findNodes(this.root, p)) n.traverse((o) => (/** @type {THREE.Mesh} */ (o)).isMesh && lit.add(/** @type {THREE.Mesh} */ (o)));
+  set(patterns, fade, context = []) {
+    this.faded.clear();
+    const lit = this.meshes(patterns);
+    const kept = this.meshes([...patterns, ...readouts(patterns), ...context]);
     for (const [mesh, orig] of this.originals) {
       const on = lit.has(mesh);
-      const fade = focus && lit.size > 0 && !on;
-      if (!on && !fade) {
+      const dim = fade && lit.size > 0 && !kept.has(mesh);
+      if (!on && !dim) {
         mesh.material = orig;
         continue;
       }
+      if (dim) this.faded.add(mesh);
+      const look = `${on ? "lit" : ""} ${dim ? "dim" : ""}`;
       /**
        * @param {THREE.Material} m
        * @returns {THREE.Material}
        */
       const edit = (m) => {
+        const byLook = this.clones.get(m) ?? new Map();
+        this.clones.set(m, byLook);
+        const made = byLook.get(look);
+        if (made) {
+          made.needsUpdate = true; // the quality may have changed shadows since it was last shown
+          return made;
+        }
         const c = /** @type {THREE.MeshStandardMaterial} */ (m.clone());
         if (on && c.emissive) {
           c.emissive = GLOW.clone();
           c.emissiveIntensity = 0.45;
         }
-        if (fade) {
+        if (dim) {
           c.transparent = true;
           c.opacity = 0.15;
           c.depthWrite = false;
         }
+        byLook.set(look, c);
         return c;
       };
       mesh.material = Array.isArray(orig) ? orig.map(edit) : edit(orig);
     }
+  }
+
+  /**
+   * @private
+   * @param {string[]} patterns
+   * @returns {Set<THREE.Mesh>}
+   */
+  meshes(patterns) {
+    /** @type {Set<THREE.Mesh>} */
+    const out = new Set();
+    for (const p of patterns) for (const n of findNodes(this.root, p)) n.traverse((o) => (/** @type {THREE.Mesh} */ (o)).isMesh && out.add(/** @type {THREE.Mesh} */ (o)));
+    return out;
   }
 }
 

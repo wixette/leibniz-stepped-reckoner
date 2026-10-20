@@ -79,8 +79,6 @@ export class Viewer {
   dirty = true;
   /** @private */
   sceneDirty = true;
-  /** @private */
-  flying = 0;
   /**
    * @private
    * @type {number[]}
@@ -121,10 +119,14 @@ export class Viewer {
    */
   host;
 
-  /** @param {HTMLElement} host */
-  constructor(host) {
+  /**
+   * @param {HTMLElement} host
+   * @param {{ transparent?: boolean }} [options] transparent: no background of its own, so the
+   *   page's shows through (the main page's dark stage); the developer pages keep the light grey.
+   */
+  constructor(host, options = {}) {
     this.host = host;
-    this.renderer = new THREE.WebGLRenderer({ antialias: true });
+    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: !!options.transparent });
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     // Neutral keeps the hue of brass (ACES pushes yellows towards olive)
     this.renderer.toneMapping = THREE.NeutralToneMapping;
@@ -132,8 +134,17 @@ export class Viewer {
     host.appendChild(this.renderer.domElement);
 
     const pmrem = new THREE.PMREMGenerator(this.renderer);
-    this.scene.environment = pmrem.fromScene(studioEnvironment(), 0.02).texture;
-    this.scene.background = new THREE.Color(0xe9e7e2);
+    const studio = studioEnvironment();
+    this.scene.environment = pmrem.fromScene(studio, 0.02).texture;
+    // only the environment map is kept: free the generator and the studio it was rendered from
+    pmrem.dispose();
+    studio.traverse((o) => {
+      const m = /** @type {THREE.Mesh} */ (o);
+      if (!m.isMesh) return;
+      m.geometry.dispose();
+      /** @type {THREE.Material} */ (m.material).dispose();
+    });
+    this.scene.background = options.transparent ? null : new THREE.Color(0xe9e7e2);
 
     const key = new THREE.DirectionalLight(0xfff4e6, 1.2);
     key.position.set(0.25, 0.45, 0.3);
@@ -176,10 +187,11 @@ export class Viewer {
 
   /**
    * @param {string} url
+   * @param {(fraction: number) => void} [onProgress] the share of the file loaded so far
    * @returns {Promise<THREE.Group>}
    */
-  async load(url) {
-    const gltf = await new GLTFLoader().loadAsync(url);
+  async load(url, onProgress) {
+    const gltf = await new GLTFLoader().loadAsync(url, (e) => onProgress?.(e.total ? e.loaded / e.total : 0));
     gltf.scene.traverse((o) => {
       const m = /** @type {THREE.Mesh} */ (o);
       if (!m.isMesh) return;
@@ -237,12 +249,13 @@ export class Viewer {
    * @returns {void}
    */
   flyTo(position, target, seconds = 0.8) {
+    // A new flight replaces one under way, from wherever the camera is now.
+    if (this.flight) this.endFlight(this.flight);
     const p0 = this.camera.position.clone();
     const t0 = this.controls.target.clone();
     const p1 = new THREE.Vector3().copy(position);
     const t1 = new THREE.Vector3().copy(target);
     let t = 0;
-    this.flying++;
     /** @param {number} dt */
     const step = (dt) => {
       t = Math.min(1, t + dt / seconds);
@@ -250,12 +263,21 @@ export class Viewer {
       this.camera.position.lerpVectors(p0, p1, e);
       this.controls.target.lerpVectors(t0, t1, e);
       this.invalidate(false);
-      if (t >= 1) {
-        this.onFrame.splice(this.onFrame.indexOf(step), 1);
-        this.flying--;
-      }
+      if (t >= 1) this.endFlight(step);
     };
+    this.flight = step;
     this.onFrame.push(step);
+  }
+
+  /**
+   * Take a flight's frame callback off, once (a flight replaced in the frame it ends in is gone).
+   * @private
+   * @param {(dt: number) => void} step
+   */
+  endFlight(step) {
+    const i = this.onFrame.indexOf(step);
+    if (i >= 0) this.onFrame.splice(i, 1);
+    if (this.flight === step) this.flight = null;
   }
 
   /**
@@ -268,7 +290,26 @@ export class Viewer {
     this.renderer.setSize(w, h, false);
     this.camera.aspect = w / Math.max(1, h);
     this.camera.updateProjectionMatrix();
+    for (const cb of this.onResize) cb(w, h);
     this.invalidate(false);
+  }
+
+  /**
+   * Called after the canvas changed size (and the camera's aspect with it).
+   * @type {((width: number, height: number) => void)[]}
+   */
+  onResize = [];
+
+  /**
+   * The camera flight under way, if any.
+   * @private
+   * @type {((dt: number) => void) | null}
+   */
+  flight = null;
+
+  /** @returns {boolean} true while the camera flies to a view */
+  get isFlying() {
+    return this.flight !== null;
   }
 
   /**

@@ -9,9 +9,25 @@
 import { Machine } from "../sim/machine.js";
 /** @import { CarryMode } from "../sim/machine.js" */
 import { registerValue } from "../sim/operations.js";
-/** @import { Text } from "./i18n.js" */
 
-/** @typedef {"overview" | "register" | "knobs" | "front" | "drum" | "carry"} ViewName */
+/** @typedef {"overview" | "apart" | "register" | "knobs" | "front" | "drum" | "carry"} ViewName */
+
+/**
+ * Every view, in the order of the Views menu (docs/ui-design.md, U15).
+ * @type {readonly ViewName[]}
+ */
+export const VIEWS = ["overview", "apart", "register", "knobs", "front", "drum", "carry"];
+
+/**
+ * The inside views (docs/ui-design.md, U11, U13): their subject sits inside the machine, so they
+ * clear the way to it (case hidden, front open, other parts faded). Every other view shows the
+ * machine closed. In free play and in lessons alike, the view decides this, not the step.
+ * @type {ReadonlySet<ViewName>}
+ */
+export const INSIDE_VIEWS = new Set(["drum", "carry"]);
+
+/** The view that shows the machine taken apart (U15): it moves parts, so the controls lock. */
+export const APART_VIEW = /** @type {const} */ ("apart");
 
 /**
  * A scripted machine action:
@@ -46,18 +62,26 @@ import { registerValue } from "../sim/operations.js";
 /**
  * @typedef {object} Callout
  * @property {string} node
- * @property {Text} text
+ * @property {string} text message key (js/l10n)
+ * @property {false} [value] no live value: the callout names an area, not the part it is pinned to
+ */
+
+/**
+ * A picture shown with a step (the tutorial's first chapter), with its credit line.
+ * @typedef {object} Picture
+ * @property {string} file path from the site's root
+ * @property {string} credit message key: what it shows, who made it, its licence
  */
 
 /**
  * @typedef {object} Step
- * @property {Text} text
+ * @property {string} text message key (js/l10n)
+ * @property {string} [chapter] message key: a chapter starts here (the tutorial)
+ * @property {Picture} [image]
  * @property {ViewName} [view]
- * @property {boolean} [casing] show the case and cover plates
- * @property {boolean} [cutaway] hide the carriage front panel
- * @property {number} [explode] exploded-view factor 0..1
- * @property {boolean} [focus] fade the parts that are not highlighted
- * @property {string[]} [highlight] node names; "prefix.*" matches a group
+ * @property {string[]} [highlight] the step's subject: node names; "prefix.*" matches a group
+ * @property {string[]} [context] parts fading keeps without highlighting them: what the text needs
+ *   to be seen besides the parts it names (the readouts of highlighted parts are kept anyway, U12)
  * @property {Callout[]} [callouts]
  * @property {Action[]} [do]
  * @property {Task} [task]
@@ -67,21 +91,23 @@ import { registerValue } from "../sim/operations.js";
 /**
  * @typedef {object} Lesson
  * @property {string} id
- * @property {Text} title
- * @property {Text} summary
+ * @property {string} title message key
+ * @property {string} summary message key
  * @property {Step[]} steps
  * @property {(m: Machine) => boolean} finalCheck
  */
 
 /**
- * What the page shows for a step: presentation settings carry over from earlier steps.
+ * What the page shows for a step. The view carries over from earlier steps; taking apart,
+ * the case, the front and fading follow from the view (U13, U15).
  * @typedef {object} Presentation
  * @property {ViewName} view
- * @property {boolean} casing
- * @property {boolean} cutaway
- * @property {number} explode
- * @property {boolean} focus
+ * @property {boolean} casing show the case and cover plates
+ * @property {boolean} cutaway hide the carriage front panel
+ * @property {number} explode taken apart (1) or together (0)
+ * @property {boolean} fade fade the parts that are not the step's subject
  * @property {string[]} highlight
+ * @property {string[]} context
  * @property {Callout[]} callouts
  */
 
@@ -92,16 +118,18 @@ import { registerValue } from "../sim/operations.js";
  */
 export function presentation(lesson, i) {
   /** @type {Presentation} */
-  const p = { view: "overview", casing: true, cutaway: false, explode: 0, focus: false, highlight: [], callouts: [] };
+  const p = { view: "overview", casing: true, cutaway: false, explode: 0, fade: false, highlight: [], context: [], callouts: [] };
   lesson.steps.slice(0, i + 1).forEach((s) => {
     if (s.view) p.view = s.view;
-    if (s.casing !== undefined) p.casing = s.casing;
-    if (s.cutaway !== undefined) p.cutaway = s.cutaway;
-    if (s.explode !== undefined) p.explode = s.explode;
-    if (s.focus !== undefined) p.focus = s.focus;
   });
+  const inside = INSIDE_VIEWS.has(p.view);
+  p.casing = !inside;
+  p.cutaway = inside;
+  p.fade = inside;
+  p.explode = p.view === APART_VIEW ? 1 : 0;
   const s = lesson.steps[i];
   p.highlight = s.highlight ?? [];
+  p.context = s.context ?? [];
   p.callouts = s.callouts ?? [];
   return p;
 }

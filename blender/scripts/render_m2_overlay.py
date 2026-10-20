@@ -93,7 +93,6 @@ def overlay(model_png, photo, s_ph, knob0, offset, out):
     pitch = p.v("layout.digit_pitch")
     m2 = "geometry.m2."
     # model reference point: units knob axis (x) and the carriage's top front edge (z)
-    import math  # noqa: F401
     knob_dx = p.v("geometry.setting.rack_pitch_line_x") + p.v("geometry.setting.pinion_teeth") * p.v("geometry.setting.pinion_module") / 2
     xr_mm = knob_dx - pitch * offset
     zr_mm = p.v(m2 + "casing")["carriage_cover_z"][1]

@@ -5,8 +5,10 @@ import { Machine } from "../sim/machine.js";
 /** @import { CarryMode } from "../sim/machine.js" */
 
 /**
- * - turn: whole crank turns (with the pin in, until the stop)
+ * - turn: this many whole crank turns that way (one if times is not given)
  * - shift: move the carriage to this offset (end crank)
+ * - input: set this number on the knobs
+ * - pin: put the Magna Rota's pin in this hole (null: take it out)
  * @typedef {(
  *   | { turn: 1 | -1; times?: number }
  *   | { shift: number }

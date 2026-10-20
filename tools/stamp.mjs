@@ -1,6 +1,6 @@
 // Writes the version into every file name the pages give, so that a cache (the
 // browser's, or a CDN's) can keep each file as long as it likes: a new release asks for
-// new names. As in the 8800 simulator.
+// new names. As in the 8800 simulator (https://github.com/wixette/8800-simulator).
 //
 //     pnpm version 1.2.0    (sets the version, then runs this)
 //     pnpm stamp            (after a version set any other way)
@@ -15,8 +15,10 @@
 //   libraries, which import one another by relative paths, and the JSON in params/,
 //   which the simulation imports as a module. The map turns each into the versioned
 //   name, for that page alone;
-// - the models, which the scripts fetch themselves, take the version from the URL of
-//   the module that loads them (import.meta.url).
+// - each local file a stylesheet names by url() (the font files) gets the same, in
+//   css/ and dev/ (STYLESHEETS);
+// - the models and images, which the scripts fetch themselves, take the version from the
+//   URL of the module that loads them (import.meta.url).
 //
 // The pages themselves are never cached for long (see the README), so they are always
 // the newest, and so are the names in them.
@@ -24,7 +26,6 @@
 import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
-import { VENDORED } from "./vendor.mjs";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 
@@ -32,20 +33,46 @@ const ROOT = fileURLToPath(new URL("..", import.meta.url));
 export const PAGES = ["index.html", "dev/01-digit-slice/index.html", "dev/02-carry-slice/index.html", "dev/03-full-machine/index.html"];
 
 /**
- * Every module a page may load, relative to the repository root: the .js files in js/,
- * the vendored ones, and the JSON in params/.
+ * Files under a folder of the repository with one of the given endings, relative to the
+ * repository root.
+ * @param {string} root
+ * @param {string} dir
+ * @param {string[]} endings
+ * @returns {string[]}
+ */
+const walk = (root, dir, endings) =>
+  readdirSync(join(root, dir), { withFileTypes: true }).flatMap((e) =>
+    e.isDirectory() ? walk(root, `${dir}/${e.name}`, endings) : endings.some((x) => e.name.endsWith(x)) ? [`${dir}/${e.name}`] : [],
+  );
+
+/**
+ * Every module a page may load, relative to the repository root: the .js files in js/ and
+ * vendor/, the JSON in params/, and package.json (About shows the version).
  * @param {string} [root]
  * @returns {string[]}
  */
 export function moduleFiles(root = ROOT) {
-  /** @param {string} dir @returns {string[]} */
-  const walk = (dir) =>
-    readdirSync(join(root, dir), { withFileTypes: true }).flatMap((e) =>
-      e.isDirectory() ? walk(`${dir}/${e.name}`) : e.name.endsWith(".js") ? [`${dir}/${e.name}`] : [],
-    );
-  const vendored = Object.entries(VENDORED).flatMap(([pkg, files]) => files.filter((f) => f.endsWith(".js")).map((f) => `vendor/${pkg}/${f}`));
-  const params = readdirSync(join(root, "params")).filter((f) => f.endsWith(".json")).map((f) => `params/${f}`);
-  return [...walk("js"), ...vendored, ...params].sort();
+  return [...walk(root, "js", [".js"]), ...walk(root, "vendor", [".js"]), ...walk(root, "params", [".json"]), "package.json"].sort();
+}
+
+/**
+ * The stylesheets whose url()s are stamped.
+ * @param {string} [root]
+ * @returns {string[]}
+ */
+export function stylesheets(root = ROOT) {
+  return [...walk(root, "css", [".css"]), ...walk(root, "dev", [".css"])].sort();
+}
+
+/**
+ * A stylesheet, with the version in every local file its url()s name. Stamping a stamped
+ * stylesheet again changes nothing.
+ * @param {string} css
+ * @param {string} version
+ * @returns {string}
+ */
+export function stampCss(css, version) {
+  return css.replace(/url\((["']?)(?![a-z]+:|\/\/|#)([^?#"')]+\.[a-z0-9]+)(\?v=[^"')]*)?\1\)/gi, (_w, q, file) => `url(${q}${file}?v=${version}${q})`);
 }
 
 /**
@@ -73,8 +100,8 @@ export function stamp(html, page, version, modules) {
     three: url("vendor/three/build/three.module.js") + v,
     "three-mesh-bvh": url("vendor/three-mesh-bvh/build/index.module.js") + v,
   };
-  for (const f of VENDORED.three.filter((f) => f.startsWith("examples/jsm/"))) {
-    imports[`three/addons/${f.slice("examples/jsm/".length)}`] = url(`vendor/three/${f}`) + v;
+  for (const f of modules.filter((f) => f.startsWith("vendor/three/examples/jsm/"))) {
+    imports[`three/addons/${f.slice("vendor/three/examples/jsm/".length)}`] = url(f) + v;
   }
   for (const file of modules) imports[url(file)] = url(file) + v;
   const json = JSON.stringify({ imports }, null, 2).replace(/\n/g, "\n    ");
@@ -91,5 +118,10 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     const after = stamp(before, page, version, modules);
     if (after !== before) writeFileSync(join(ROOT, page), after);
     process.stdout.write(`${page} ${after === before ? "already has" : "now has"} version ${version} in its file names.\n`);
+  }
+  for (const sheet of stylesheets()) {
+    const before = readFileSync(join(ROOT, sheet), "utf8");
+    const after = stampCss(before, version);
+    if (after !== before) writeFileSync(join(ROOT, sheet), after);
   }
 }
