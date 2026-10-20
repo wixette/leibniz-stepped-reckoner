@@ -49,6 +49,32 @@ describe("Machine (16-digit register, 8-digit carriage)", () => {
     }
   });
 
+  it("full-size 8 × 8-digit products are exact, and divide back, in both modes", () => {
+    // Exact in BigInt: up to 16 digits, beyond what a Number holds exactly. The register's
+    // value counts the carries still waiting in its stores.
+    /** @param {Machine} m */
+    const exact = (m) => {
+      let x = BigInt(m.shownText());
+      m.pending.forEach((p, k) => (x += BigInt(p) * 10n ** BigInt(k + 1)));
+      return x + BigInt(m.carryOut) * 10n ** BigInt(m.registerDigits);
+    };
+    let seed = 3;
+    /** @param {number} n */
+    const rnd = (n) => ((seed = (seed * 1103515245 + 12345) % 2 ** 31), Math.floor((seed / 2 ** 31) * n));
+    for (const mode of /** @type {const} */ (["ripple", "historical"])) {
+      const pairs = [[99_999_999, 99_999_999], ...Array.from({ length: 10 }, () => [10_000_000 + rnd(90_000_000), 10_000_000 + rnd(90_000_000)])];
+      for (const [a, b] of pairs) {
+        const m = new Machine();
+        m.setMode(mode);
+        m.setNumber(a);
+        multiply(m, b);
+        assert.equal(exact(m), BigInt(a) * BigInt(b), `${mode}: ${a} × ${b}`);
+        assert.equal(Number(divide(m, a).join("")), b, `${mode}: ${a} × ${b} ÷ ${a}`);
+        assert.equal(exact(m), 0n, `${mode}: ${a} × ${b} ÷ ${a} leaves no remainder`);
+      }
+    }
+  });
+
   it("a carry above the carriage stays stored until the carriage is shifted over it", () => {
     const m = new Machine();
     m.setResult(999_999_999);
