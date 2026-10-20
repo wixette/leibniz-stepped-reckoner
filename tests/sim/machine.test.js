@@ -160,6 +160,12 @@ describe("Machine (16-digit register, 8-digit carriage)", () => {
     assert.deepEqual(m.startBlock(1), { storeFull: 9 });
     assert.equal(m.turn(1), false);
     assert.equal(registerValue(m), 10_009_999_998); // nothing moved, nothing lost
+    // what the page advises (status.blockedStoreLate): an idle turn the same way first
+    m.setNumber(0);
+    assert.equal(m.turn(1), true);
+    m.setNumber(99_999_999);
+    assert.equal(m.turn(1), true);
+    assert.equal(registerValue(m), 10_009_999_998 + 9_999_999_900);
   });
 
   it("random additions and subtractions at any carriage place stay exact, in both modes", () => {

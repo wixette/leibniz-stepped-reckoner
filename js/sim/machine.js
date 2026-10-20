@@ -330,8 +330,8 @@ export class Machine {
 
   // ---------------------------------------------------------------------------------------
   /**
-   * Carriage digit working on register digit k, or -1 if k is outside the carriage.
-   * @protected
+   * Carriage digit working on register digit k, or -1 if k is outside the carriage (no lever
+   * passes its store).
    * @param {number} k
    * @returns {number}
    */

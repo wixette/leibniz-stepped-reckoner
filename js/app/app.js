@@ -202,7 +202,12 @@ export class App {
   blockText(dir) {
     const b = this.machine.startBlock(dir);
     if (b === "pin") return () => t(dir > 0 ? "status.blockedPin" : "status.blockedPinSub");
-    if (b !== null && b !== "shifting") return () => t("status.blockedStore", { place: placeWord(b.storeFull) });
+    if (b !== null && b !== "shifting") {
+      // a store asked to hold two carries: one waiting where no lever reaches it (shift over it,
+      // pass it on with an idle turn), or one whose lever would come too late (an idle turn first)
+      const key = this.machine.carriageIndex(b.storeFull) < 0 ? "status.blockedStore" : "status.blockedStoreLate";
+      return () => t(key, { place: placeWord(b.storeFull) });
+    }
     return () => t("status.busy");
   }
 
