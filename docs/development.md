@@ -48,6 +48,8 @@ CI runs them on every push and pull request, together with the REUSE lint ([lice
 
 The version is kept in one place, `package.json`. Set it with `pnpm version <x.y.z>`, which also writes it into the pages' file names (see *Deploying behind a cache*) and does not commit or tag ([.npmrc](../.npmrc)). A release is a pull request named for its version; it is tagged `vX.Y.Z` on GitHub, on the merge commit, and its changes are listed in [CHANGELOG.md](../CHANGELOG.md). Each push to `main` deploys the site to GitHub Pages once its tests have passed ([.github/workflows/pages.yml](../.github/workflows/pages.yml)).
 
+**Screenshots.** `pnpm shots` takes the release pictures ([tools/shots.mjs](../tools/shots.mjs)): the README's six (`images/readme/`), and a set for posts: the Taken apart view from several sides and distances, the drum and carry views from several sides, and the multiplication lesson step by step. It serves the repository itself and drives headless Chrome, at 1600 × 900; view shots are the stage alone, with the dock hidden. `--lang en,zh` takes them in each language given, into `shots/<lang>/` (or `--out <folder>`), and `--only <text>` only those whose name contains it. Chrome is found at its usual place, or set `CHROME` to its path.
+
 ## Deploying behind a cache
 
 To deploy, copy the whole directory to a web server, with the Git LFS files checked out.
@@ -89,4 +91,4 @@ A CDN must count the query string in its cache key (most do unless told not to).
 | `dev/` | Developer pages, one per milestone |
 | `vendor/` | three.js, three-mesh-bvh, the Roboto Flex font and the Material Symbols icons, copied from npm (`pnpm vendor`) |
 | `tests/` | `node --test` tests |
-| `tools/` | Reference check, vendoring, version stamps, icons and pose export scripts |
+| `tools/` | Reference check, vendoring, version stamps, icons, screenshots and pose export scripts |

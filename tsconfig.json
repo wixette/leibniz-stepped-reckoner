@@ -18,5 +18,5 @@
     "types": ["node"],
     "skipLibCheck": true
   },
-  "include": ["js", "dev", "tests", "tools/export-*.mjs", "tools/vendor.mjs", "tools/stamp.mjs", "tools/icons.mjs"]
+  "include": ["js", "dev", "tests", "tools/export-*.mjs", "tools/vendor.mjs", "tools/stamp.mjs", "tools/icons.mjs", "tools/shots.mjs"]
 }
