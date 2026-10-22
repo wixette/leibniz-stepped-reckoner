@@ -22,6 +22,7 @@
     "stamp": "node tools/stamp.mjs",
     "icons": "node tools/icons.mjs",
     "shots": "node tools/shots.mjs",
+    "video": "node tools/video.mjs",
     "version": "node tools/stamp.mjs",
     "fixture": "python3 -I blender/scripts/export_kinematics_fixture.py",
     "poses:m1": "node tools/export-m1-poses.mjs",

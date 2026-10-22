@@ -6,6 +6,7 @@ What changed in each release. Versions follow `package.json` and are tagged `vX.
 
 - The page's description (for search engines and the installed app) and `package.json`'s now say what the simulator is first, and name the lessons and the ten languages, as the GitHub repository's description does.
 - `pnpm shots` takes the release screenshots, the README's and a set for posts, in any of the languages ([docs/development.md](docs/development.md), *Versions and releases*).
+- `pnpm video` makes the release videos, with the machine's sound: taken apart, the drum, the carry, an addition and a multiplication, in any of the languages.
 
 ## 1.0.0
 
