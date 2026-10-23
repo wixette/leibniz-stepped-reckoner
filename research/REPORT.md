@@ -92,7 +92,7 @@ The lessons are about **how the machine calculates**. That part is well document
    - **NL 183/467**: calculations, 153 sheets;
    - **NL 183/746**: photos.
 
-   This is the highest-value item. **Requested 2026-10-18; quote received by 2026-10-23:** 392 PDF scans at 150 dpi for €402 (plus VAT, or plus fees from abroad). Dimensions from them may be used with a citation; the scans may not be published. Details in design/modelling-and-animation-plan.md §12.
+   This is the highest-value item. **Requested 2026-10-18; quote received by 2026-10-23:** 392 PDF scans at 150 dpi for €402 (plus VAT, or plus fees from abroad). Dimensions from them may be used with a citation; the scans may not be published. **/465 and /466 PLAN ordered 2026-10-23** (135 scans, €153.70); /467 (184 scans) later if needed. Details in design/modelling-and-animation-plan.md §12.
 2. **Download Stein 2007** in a normal browser: https://leopard.tu-braunschweig.de/servlets/MCRFileNodeServlet/dbbs_derivate_00028671/Stein_Vier-Spezies-Rechenmaschine.pdf
 3. **Buy *Das letzte Original*** (GWLB 2014, ISBN 978-3-943922-08-0) and get **Stein & Kopp 2010** (*Studia Leibnitiana* 42/1, 128 pp.) through a library. Stein 2007 turned out to be a 2-page abstract with no dimensions (read 2026-10-18). Stein & Kopp 2010 is the full engineering account: gear kinematics, the optimisation and the Hannover model's design changes. The shorter 2006 congress papers (STEIN-KOPP2006 in the bibliography) are a cheaper first step.
 4. Optionally contact the **Arithmeum** (Prof. Ina Prinz, Mario Wolfram) or the **TU Dresden Kustodie** (Dr. Jörg Zaun) for measurements or permission to photograph the internals.
