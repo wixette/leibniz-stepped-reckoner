@@ -92,7 +92,7 @@ The lessons are about **how the machine calculates**. That part is well document
    - **NL 183/467**: calculations, 153 sheets;
    - **NL 183/746**: photos.
 
-   This is the highest-value item.
+   This is the highest-value item. **Requested 2026-10-18; quote received by 2026-10-23:** 392 PDF scans at 150 dpi for €402 (plus VAT, or plus fees from abroad). Dimensions from them may be used with a citation; the scans may not be published. Details in design/modelling-and-animation-plan.md §12.
 2. **Download Stein 2007** in a normal browser: https://leopard.tu-braunschweig.de/servlets/MCRFileNodeServlet/dbbs_derivate_00028671/Stein_Vier-Spezies-Rechenmaschine.pdf
 3. **Buy *Das letzte Original*** (GWLB 2014, ISBN 978-3-943922-08-0) and get **Stein & Kopp 2010** (*Studia Leibnitiana* 42/1, 128 pp.) through a library. Stein 2007 turned out to be a 2-page abstract with no dimensions (read 2026-10-18). Stein & Kopp 2010 is the full engineering account: gear kinematics, the optimisation and the Hannover model's design changes. The shorter 2006 congress papers (STEIN-KOPP2006 in the bibliography) are a cheaper first step.
 4. Optionally contact the **Arithmeum** (Prof. Ina Prinz, Mario Wolfram) or the **TU Dresden Kustodie** (Dr. Jörg Zaun) for measurements or permission to photograph the internals.
@@ -158,7 +158,7 @@ The question here is whether teachers and students already have something of sim
 
 - **Code under Apache-2.0 and content (models, textures, docs) under CC BY-SA 4.0** is a standard and compatible split. three.js is MIT and fits under Apache-2.0.
 - Replica photos on Commons are mostly **CC BY-SA 4.0**. They are fine as modelling *references*. Any texture or image derived directly from them must keep attribution and share-alike, which CC BY-SA content already does.
-- **Facts and dimensions are not copyrightable, but drawings are.** Measurements from Ludwig, Stein, Kopp or Lehmann may be used. Their drawings or images must not be copied without permission. The Deutsches Museum's NL 183 records are marked CC BY-SA 4.0, but confirm that this covers the scans themselves when you request them.
+- **Facts and dimensions are not copyrightable, but drawings are.** Measurements from Ludwig, Stein, Kopp or Lehmann may be used. Their drawings or images must not be copied without permission. The Deutsches Museum's NL 183 catalogue records are marked CC BY-SA 4.0, but that does not cover the scans: the archive supplies them as working copies only, not for publication (confirmed by 2026-10-23). Dimensions taken from them may be published, cited as "Deutsches Museum München, NL 183/…".
 - The 1897 and 1727 scans are public domain.
 
 ---
