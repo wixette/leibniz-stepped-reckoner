@@ -9,10 +9,12 @@ REPORT.md                      feasibility report
 sources/
   notes-mechanism.md           subsystem-by-subsystem mechanism notes with angles
   notes-history-and-reconstructions.md
+  notes-nl183.md               facts from Lehmann's replica drawings (Deutsches Museum NL 183/465, /466 PLAN)
   bibliography.md              annotated sources (relevance and access status)
   raw-ocr/                     Jordan 1897 and Burkhardt 1897 full text (German, public domain)
 data/
   machine_spec.json            parameters with confidence and sources
+  nl183_dimensions.csv         dimensions from NL 183/465 and /466 PLAN, one per row, with page
   component_inventory.csv      part list for modelling and rigging
   worked_examples.json         animation and test scripts
   wikimedia_commons_catalog.json   licences of the downloaded images
