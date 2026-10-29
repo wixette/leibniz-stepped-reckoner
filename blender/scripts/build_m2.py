@@ -294,7 +294,9 @@ def build(p):
     D = [(X[j], zd) for j in range(C)]
     cdl = math.hypot(Lv[0][0] - D[0][0], Lv[0][1] - D[0][1])
     zg = p.v(M1 + "drive_gear_teeth")
-    dg = geom.GearSpec(zg, cdl / zg)
+    dg = geom.GearSpec(zg, cdl / zg, p.v(M1 + "drive_gear_thickness_factor"),
+                       (p.v(M1 + "drive_gear_tip_diameter") - cdl) / 2.0 / (cdl / zg))  # pitch diameter = centre distance
+    collar = p.v(M1 + "drum_gear_collar")
     drum_first, lever_first = [0.0] * C, [0.0] * C
     drum_first[0] = ang(Lv[0][0] - D[0][0], Lv[0][1] - D[0][1])
     for j in range(C):
@@ -317,6 +319,7 @@ def build(p):
         # left, y <= py + 7.6): it only has to carry the drum (front >= -18, flange -22).
         mb.prism(geom.rect(-sq, -sq, sq, sq), "XZ", shaft_y0, gy1, "steel")
         mb.prism(geom.gear_outline(dg, drum_first[j]), "XZ", gy0, gy1, "brass_satin")
+        mb.prism(geom.circle(collar["diameter"] / 2.0, 32), "XZ", gy1, min(gy1 + collar["length"], zpy0 - 0.5), "brass_satin", smooth=True)
         mb.prism(geom.circle(3.5, 24), "XZ", gy0 - 1.0, gy0, "brass_satin", smooth=True)
         shaft = mb.build(f"pm.drum_shaft.{j}", col, (x, 0, zd))
         bl.set_motion(shaft, "rotate", (0, 1, 0), f"Drum shaft {j} with drive gear", f"Staffelwalzenwelle {j}")

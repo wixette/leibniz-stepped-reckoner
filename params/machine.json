@@ -628,19 +628,42 @@
         "note": "NL183/465 p. 87 puts the lever 4.9 mm above the drum axis, with fingers on radius 14.65; that moves the carry geometry and its timing, which stay as designed until decision 0001 is revisited (design/m4-notes.md, D3, phase 3)."
       },
       "drive_gear_teeth": {
-        "v": 19,
+        "v": 10,
         "unit": "count",
+        "conf": "doc",
+        "src": "NL183/465 p. 53, 64 (gears V and S, z 10, m 2)",
+        "note": "Equal drum and lever gears, module = centre distance / 10: 1.925 at our 19.25 mm (the replica's 18.9 mm comes with the lever 4.9 mm above the drum axis, phase 3 of design/m4-notes.md). Lehmann likewise takes the pitch diameter equal to the centre distance (\"d0 = a\")."
+      },
+      "drive_gear_tip_diameter": {
+        "v": 22.9,
+        "unit": "mm",
+        "conf": "doc",
+        "src": "NL183/465 p. 53 (\"normally 24, but 22.9 because of the small centre distance\")"
+      },
+      "drive_gear_thickness_factor": {
+        "v": 0.95,
+        "unit": "-",
         "conf": "design",
-        "src": "equal drum and lever gears; module = centre distance / 19"
+        "src": "tooth thickness at the pitch circle / half the pitch; with 10 teeth and a 22.9 tip, 1.0 leaves no backlash and 0.95 leaves 0.14 mm at the tightest point of a turn (2D sweep, 2026-10-29)"
+      },
+      "drum_gear_collar": {
+        "v": {
+          "diameter": 14.0,
+          "length": 5.0
+        },
+        "unit": "mm",
+        "conf": "doc",
+        "src": "NL183/465 p. 53, 64 (gear S: 7 wide plus a 5 mm collar, hub 14, on the 8 mm drum axle)",
+        "note": "In M2 it stops 0.5 mm short of the Zweihorn pins (y 91.5), so it is 4 mm long there."
       },
       "drive_gear_y": {
         "v": [
           80.0,
-          83.0
+          87.0
         ],
         "unit": "mm",
         "conf": "design",
-        "src": "behind the Einzahn pins (<= 79)"
+        "src": "behind the Einzahn pins (<= 79); 7 wide as gear S (NL183/465 p. 53). The replica's lever-side gear V is 37.5 long; here the lever shaft carries the horns there, so it is 7 wide too."
       },
       "zweihorn_pin_path_radius": {
         "v": 17.0,
@@ -825,7 +848,7 @@
       "drive_gear_y": {
         "v": [
           80.0,
-          83.0
+          87.0
         ],
         "unit": "mm",
         "conf": "design",

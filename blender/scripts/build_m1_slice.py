@@ -82,7 +82,9 @@ def build(p):
     # Drive gears (equal): centre distance drum <-> lever.
     cdl = math.hypot(Lv[0][0] - D[0][0], Lv[0][1] - D[0][1])
     zg = p.v(M1 + "drive_gear_teeth")
-    dg = geom.GearSpec(zg, cdl / zg)
+    dg = geom.GearSpec(zg, cdl / zg, p.v(M1 + "drive_gear_thickness_factor"),
+                       (p.v(M1 + "drive_gear_tip_diameter") - cdl) / 2.0 / (cdl / zg))  # pitch diameter = centre distance
+    collar = p.v(M1 + "drum_gear_collar")
     gy0, gy1 = p.v(M1 + "drive_gear_y")
     # Chain phases: drum0 -> lever0 -> drum1 -> lever1 -> ...
     drum_first, lever_first = [0.0] * n, [0.0] * n
@@ -144,6 +146,7 @@ def build(p):
             mb.prism(geom.circle(4.5, 24), "XZ", -70.5, -66.5, "brass_satin", smooth=True)
             mb.prism([(u, w + 11.0) for u, w in geom.circle(1.6, 16)], "XZ", -85, -73.5, "steel_dark", smooth=True)
         mb.prism(geom.gear_outline(dg, drum_first[i]), "XZ", gy0, gy1, "brass_satin")
+        mb.prism(geom.circle(collar["diameter"] / 2.0, 32), "XZ", gy1, gy1 + collar["length"], "brass_satin", smooth=True)
         mb.prism(geom.circle(3.5, 24), "XZ", gy0 - 1.0, gy0, "brass_satin", smooth=True)
         shaft = mb.build(f"pm.drum_shaft.{i}", col, (x, 0, zd))
         bl.set_motion(shaft, "rotate", (0, 1, 0), f"Drum shaft {i} with drive gear", f"Staffelwalzenwelle {i} mit Antriebsrad")

@@ -1,6 +1,6 @@
 # M4: fidelity upgrade from NL 183 (plan)
 
-Release v1.1.0. Status: **planned 2026-10-29, decisions D1–D3 agreed the same day; phase 1 done and reviewed by the owner 2026-10-29; D4 agreed the same day; phase 2 begun with the frame and carriage lengths.**
+Release v1.1.0. Status: **planned 2026-10-29, decisions D1–D3 agreed the same day; phase 1 done and reviewed by the owner 2026-10-29; D4 agreed the same day; phase 2 done 2026-10-29, as far as the drawings fit the model (D5 agreed the same day).**
 
 M4 replaces estimated (`est`) and designed (`design`) parameters with values documented in Lehmann's drawings of the Dresden replica, Deutsches Museum NL 183/465 and /466 PLAN. The facts, with pages, are in [research/sources/notes-nl183.md](../research/sources/notes-nl183.md) (§10 lists the candidate parameters) and [research/data/nl183_dimensions.csv](../research/data/nl183_dimensions.csv). The scans stay outside the repository ([docs/licensing.md](../docs/licensing.md)).
 
@@ -12,6 +12,7 @@ M4 replaces estimated (`est`) and designed (`design`) parameters with values doc
 | **D2** | Setting dial: Lehmann's 13 divisions or our 10? | **Lehmann's 13 divisions** (agreed 2026-10-29): digits 0–9 at 27.7°, a 110.7° blank sector with the finger-lever stop, the 10-tooth module-1.25 pinion, 3.02 mm per digit. The photo of the original shows the same layout (evidence below). |
 | **D3** | Carry timing | **Keep our design timing** (6.5° lever stagger, spreads 120° → 29°) until /467 is read (agreed 2026-10-29). Phase 3 waits for it. |
 | **D4** | Carriage positions: Lehmann's 8 (shift 7 places; the 16th digit only by a carry, used as a sign place) or our 9? | **Lehmann's 8** (agreed 2026-10-29): offsets 0–7 (`layout.carriage_positions`, `Machine.maxOffset`). With 9 the carriage at offset 8 would reach 9.75 mm past the replica's left wall; with 8 the frame takes the replica's 610 mm between its walls. |
+| **D5** | Exterior: the original's oak case (as now, from the photos) or the replica's steel frame with cladding, trim strips and feet? And the large gears A, B, C? | **Keep the oak case; A, B, C stay out of v1.1.0** unless /467 shows where they go (agreed 2026-10-29; phase 2 notes). |
 
 ### Evidence for D2
 
@@ -50,20 +51,23 @@ Moved to later phases:
 
 Checks: `pnpm test` 379/379, `pnpm typecheck`, `pnpm check:refs`, the M0–M2 builds (M2: 166 k triangles, 7.0 MB), and `pnpm check:model`.
 
-### Phase 2: new geometry
+### Phase 2: new geometry (done 2026-10-29)
 
 Done (2026-10-29), after D4:
 - **8 carriage positions**: `layout.carriage_positions` 8 (doc), `Machine.maxOffset` from it; the scenarios, the pose export, A2-2/A2-3 and the tests use offset 7 for the far end.
 - **Frame lengths** (`geometry.m2.frame_x`, doc): side walls 10 mm thick and 610 apart, register digit 15 28.5 from the crank-side wall and digit 0 34 from the other; the base is the lower frame, 629 long (end bars 11 on the crank side and 8 on the other: the plan view on p. 93 is drawn with the front at the top). The rear wall, front bar and window plate span the 610. Before, the base was 667 (Jordan's 670 for the original).
 - **Side walls** (design in Y and Z, `geometry.m2.frame`): low in front, where the carriage's counter section passes over them, and taller behind under the register cover, like the replica's walls with their low front part and tall rear block (p. 95). The lead screw runs in a notch in each wall, as the replica's screw runs in its walls, instead of on two bearing blocks.
 - **Counter dial 73 right of knob 0** (p. 51, 52; the photo fit gave 79).
+- **Drive chain** (`geometry.m1.drive_gear_*`): the drum and lever gears are the replica's gears S, 10 teeth with a 22.9 tip (doc), 7 wide, the drum's with its Ø14 collar (4 mm in M2, where the Zweihorn pins sit behind it). Lange's schematic of the original (/466 PLAN p. 1) confirms the arrangement: one row driven by the crank, drum and lever gears alternating. The module is our centre distance / 10, 1.925 (the replica's 18.9 centres need the lever height of phase 3); like Lehmann, the pitch diameter is the centre distance. Tooth thickness 0.95 leaves 0.14 mm at the tightest point (2D sweep). The replica's lever-side gear V is 37.5 long; our lever shafts carry the horns there, so both gears are 7 wide.
 - **Kept from the photos:** the carriage box (468 long). Lehmann's 439 is the cover plate alone: measured from the knobs, the photographed box reaches about 9 mm further left and 16 mm further right, with its end walls and trims. The carriage floor's ends stay where they were (see its note). The oak case stays as it was.
 
-Still to do (the pointed, profile-shifted receiving gear and the ribs cut as teeth of the 16-tooth gear came with phase 1):
-- drive chain: 10-tooth module-2 gears at 18.9 mm centres, the 37.5 mm long gear;
-- large gears A, B, C (61 teeth, module 1.5, three spokes) at the crank end, replacing our 10 : 1 Magna Rota gearing (`geometry.m2.magna_rota_gear_ratio`);
-- frame outlines: the side walls' real profile, bars, trim strips, feet;
-- optional: revolution counter internals (cam, 12-slot driver, 12 : 10 gears); Muldenrad and Einzahn profiles (partly scaled values, so weaker).
+(The pointed, profile-shifted receiving gear and the ribs cut as teeth of the 16-tooth gear came with phase 1.)
+
+Not done (decision D5, agreed 2026-10-29), and why:
+- **Large gears A, B, C** (61 teeth, module 1.5, three spokes, on bearing blocks marked "crank side", p. 6, 26, 57, 60, 61). The sheets give the parts but not where they sit or what they connect: the crank's shaft, a drum shaft (B has a square bore) or the counter. Lange draws them exploded in front of the carriage, meshing in a row (/466 PLAN p. 8). Three equal gears turn 1 : 1, so they are not the Magna Rota's 10 : 1 reduction, as this plan first assumed. In our model the crank sits in the Magna Rota in the middle of the carriage front (photos), and a Ø94.5 gear there would cut through the carriage floor and the base; placing them would be invention.
+- **The replica's exterior:** the ladder-shaped lower frame (bars a, b, c), the upper frame's moulded end pieces, the front cladding, the trim strips with 56 screws and ball-head nuts, and four turned brass feet Ø36 × 45 (p. 7–13, 23–25, 93–111). Our model stands in the oak case of the original's photos instead, on an oak board and bearers, with the floor lowered for the crank knob; feet 45 high do not fit that case.
+- **Revolution counter internals** (optional): the counter is not simulated (the Magna Rota counts turns), so its cam, 12-slot driver and gears would be hidden, static parts.
+- Muldenrad and Einzahn profiles (optional; partly scaled values, so weaker).
 
 ### Phase 3: Lehmann's lever arrangement (deferred)
 

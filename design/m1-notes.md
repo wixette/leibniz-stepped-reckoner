@@ -8,7 +8,7 @@
 
 | Node (per digit i) | Parts | Motion |
 |---|---|---|
-| `pm.drum_shaft.i` | shaft + **drive gear** (19 teeth; handwheel on digit 0 only) | +θ |
+| `pm.drum_shaft.i` | shaft + **drive gear** (19 teeth; 10 since M4, as gear S of the replica; handwheel on digit 0 only) | +θ |
 | `pi.sum_wheel.i` | as M0 + a **star** (10 teeth, i ≥ 1) that receives carries | −36° per step |
 | `pi.carry_store.i` | Einzahn horns (plane A) + **Muldenrad teeth** (plane B, alternating by digit) + **Fünfhorn** (plane C) + pentagon (behind the rear wall) | 18° stored, 72° executed |
 | `pm.lever.i` | lever shaft + drive gear (meshes drums i and i+1) + Zweihorn hub | −θ |
