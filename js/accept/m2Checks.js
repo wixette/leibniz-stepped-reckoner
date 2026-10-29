@@ -176,7 +176,7 @@ export function runM2Checks(root, opts = {}) {
     return { passed: bad.length === 0, detail: bad.join("; ") || `${R} register digits, ${C} carriage digits, Magna Rota, crank and lead screw present with anchors` };
   });
 
-  run("A2-2", "All 16 windows read 0–9; all 8 pointers aim at their digit (offsets 0 and 8)", () => {
+  run("A2-2", "All 16 windows read 0–9; all 8 pointers aim at their digit (offsets 0 and 7)", () => {
     /** @type {string[]} */
     const bad = [];
     for (const offset of [0, c.m.maxOffset]) {
@@ -192,10 +192,10 @@ export function runM2Checks(root, opts = {}) {
         }
       }
     }
-    return { passed: bad.length === 0, detail: bad.join("; ") || "16 windows × 10 digits and 8 pointers × 10 digits correct at offsets 0 and 8" };
+    return { passed: bad.length === 0, detail: bad.join("; ") || `16 windows × 10 digits and 8 pointers × 10 digits correct at offsets 0 and ${c.m.maxOffset}` };
   });
 
-  run("A2-3", "Every offset 0–8: drum j under gear o+j, lever j at store o+j, nothing intersecting at rest", () => {
+  run("A2-3", "Every offset 0–7: drum j under gear o+j, lever j at store o+j, nothing intersecting at rest", () => {
     /** @type {string[]} */
     const bad = [];
     state(c, {});

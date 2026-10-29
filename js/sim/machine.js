@@ -72,6 +72,9 @@ import * as M from "./kinematicsM1.js";
  */
 
 export const DIGIT_PITCH = machine.layout.digit_pitch.v; // mm
+/** Carriage positions: offsets 0..7 on the 16-digit register, so the top digit is reached
+ *  only by a carry (the replica's sign place, NL183/465 p. 124). */
+export const CARRIAGE_POSITIONS = machine.layout.carriage_positions.v;
 
 export class Machine {
   /**
@@ -84,6 +87,11 @@ export class Machine {
    * @type {number}
    */
   carriageDigits;
+  /**
+   * @readonly
+   * @type {number}
+   */
+  positions;
   /** @type {CarryMode} */
   mode = "ripple";
   /**
@@ -118,9 +126,10 @@ export class Machine {
   /** @protected */
   _theta = 0;
 
-  constructor(registerDigits = 16, carriageDigits = 8) {
+  constructor(registerDigits = 16, carriageDigits = 8, positions = CARRIAGE_POSITIONS) {
     this.registerDigits = registerDigits;
     this.carriageDigits = carriageDigits;
+    this.positions = Math.min(positions, registerDigits - carriageDigits + 1);
     this.settings = Array(carriageDigits).fill(0);
     this.digits = Array(registerDigits).fill(0);
     this.pending = Array(registerDigits).fill(0);
@@ -133,7 +142,7 @@ export class Machine {
     return this._theta === 0 && this.carriagePos === this.offset;
   }
   get maxOffset() {
-    return this.registerDigits - this.carriageDigits;
+    return this.positions - 1;
   }
 
   /** @returns {void} */

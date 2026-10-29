@@ -43,7 +43,7 @@ export const M2_SCENARIOS = [
     label: "ripple 999999999 + 1, shift, idle turn",
     mode: "ripple",
     result: 999_999_999,
-    ops: [{ input: 1 }, { turn: 1 }, { input: 0 }, { shift: 8 }, { shift: 1 }, { turn: 1 }],
+    ops: [{ input: 1 }, { turn: 1 }, { input: 0 }, { shift: 7 }, { shift: 1 }, { turn: 1 }],
   },
   {
     label: "ripple 99999999 + 99999999 (every rib, every lever)",
@@ -52,10 +52,10 @@ export const M2_SCENARIOS = [
     ops: [{ input: 99_999_999 }, { turn: 1 }],
   },
   {
-    label: "ripple 0 − 1 at offset 8 (borrow out of the top)",
+    label: "ripple 0 − 1 at offset 7 (borrow out of the top)",
     mode: "ripple",
     result: 0,
-    ops: [{ shift: 8 }, { input: 1 }, { turn: -1 }, { shift: 0 }],
+    ops: [{ shift: 7 }, { input: 1 }, { turn: -1 }, { shift: 0 }],
   },
   {
     label: "historical 9999 + 1 (+idle)",

@@ -1,6 +1,6 @@
 # M4: fidelity upgrade from NL 183 (plan)
 
-Release v1.1.0. Status: **planned 2026-10-29, decisions D1–D3 agreed the same day; phase 1 done and reviewed by the owner 2026-10-29; D4 open.**
+Release v1.1.0. Status: **planned 2026-10-29, decisions D1–D3 agreed the same day; phase 1 done and reviewed by the owner 2026-10-29; D4 agreed the same day; phase 2 begun with the frame and carriage lengths.**
 
 M4 replaces estimated (`est`) and designed (`design`) parameters with values documented in Lehmann's drawings of the Dresden replica, Deutsches Museum NL 183/465 and /466 PLAN. The facts, with pages, are in [research/sources/notes-nl183.md](../research/sources/notes-nl183.md) (§10 lists the candidate parameters) and [research/data/nl183_dimensions.csv](../research/data/nl183_dimensions.csv). The scans stay outside the repository ([docs/licensing.md](../docs/licensing.md)).
 
@@ -11,7 +11,7 @@ M4 replaces estimated (`est`) and designed (`design`) parameters with values doc
 | **D1** | Which machine do the dimensions follow? | **The Dresden replica, throughout** (agreed 2026-10-29). Digit pitch and lead 36.5 mm, not Burkhardt's 37 mm for the original. The model's proportions already come from photos of that replica, and mixing the two would be inconsistent. `reference_machine` in params and the page's About text say so. |
 | **D2** | Setting dial: Lehmann's 13 divisions or our 10? | **Lehmann's 13 divisions** (agreed 2026-10-29): digits 0–9 at 27.7°, a 110.7° blank sector with the finger-lever stop, the 10-tooth module-1.25 pinion, 3.02 mm per digit. The photo of the original shows the same layout (evidence below). |
 | **D3** | Carry timing | **Keep our design timing** (6.5° lever stagger, spreads 120° → 29°) until /467 is read (agreed 2026-10-29). Phase 3 waits for it. |
-| **D4** | Carriage positions: Lehmann's 8 (shift 7 places; the 16th digit only by a carry, used as a sign place) or our 9? | **Open.** Decides whether the frame can take the replica's 610 mm between its walls (phase 2). With 9, the carriage at offset 8 reaches 9.75 mm past the replica's left wall. |
+| **D4** | Carriage positions: Lehmann's 8 (shift 7 places; the 16th digit only by a carry, used as a sign place) or our 9? | **Lehmann's 8** (agreed 2026-10-29): offsets 0–7 (`layout.carriage_positions`, `Machine.maxOffset`). With 9 the carriage at offset 8 would reach 9.75 mm past the replica's left wall; with 8 the frame takes the replica's 610 mm between its walls. |
 
 ### Evidence for D2
 
@@ -52,11 +52,17 @@ Checks: `pnpm test` 379/379, `pnpm typecheck`, `pnpm check:refs`, the M0–M2 bu
 
 ### Phase 2: new geometry
 
-- receiving gear with pointed teeth and +0.674 profile shift (profile shift support in `blender/scripts/lib/geom.py`);
-- drum ribs cut as 9 shortened teeth of the 16-tooth gear;
+Done (2026-10-29), after D4:
+- **8 carriage positions**: `layout.carriage_positions` 8 (doc), `Machine.maxOffset` from it; the scenarios, the pose export, A2-2/A2-3 and the tests use offset 7 for the far end.
+- **Frame lengths** (`geometry.m2.frame_x`, doc): side walls 10 mm thick and 610 apart, register digit 15 28.5 from the crank-side wall and digit 0 34 from the other; the base is the lower frame, 629 long (end bars 11 on the crank side and 8 on the other: the plan view on p. 93 is drawn with the front at the top). The rear wall, front bar and window plate span the 610. Before, the base was 667 (Jordan's 670 for the original).
+- **Side walls** (design in Y and Z, `geometry.m2.frame`): low in front, where the carriage's counter section passes over them, and taller behind under the register cover, like the replica's walls with their low front part and tall rear block (p. 95). The lead screw runs in a notch in each wall, as the replica's screw runs in its walls, instead of on two bearing blocks.
+- **Counter dial 73 right of knob 0** (p. 51, 52; the photo fit gave 79).
+- **Kept from the photos:** the carriage box (468 long). Lehmann's 439 is the cover plate alone: measured from the knobs, the photographed box reaches about 9 mm further left and 16 mm further right, with its end walls and trims. The carriage floor's ends stay where they were (see its note). The oak case stays as it was.
+
+Still to do (the pointed, profile-shifted receiving gear and the ribs cut as teeth of the 16-tooth gear came with phase 1):
 - drive chain: 10-tooth module-2 gears at 18.9 mm centres, the 37.5 mm long gear;
 - large gears A, B, C (61 teeth, module 1.5, three spokes) at the crank end, replacing our 10 : 1 Magna Rota gearing (`geometry.m2.magna_rota_gear_ratio`);
-- frame outlines: side walls, bars, trim strips, feet; and the frame, cover and carriage lengths moved here from phase 1, after decision D4 (carriage positions: Lehmann's 8 or our 9);
+- frame outlines: the side walls' real profile, bars, trim strips, feet;
 - optional: revolution counter internals (cam, 12-slot driver, 12 : 10 gears); Muldenrad and Einzahn profiles (partly scaled values, so weaker).
 
 ### Phase 3: Lehmann's lever arrangement (deferred)

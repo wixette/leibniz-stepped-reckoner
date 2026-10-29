@@ -215,7 +215,7 @@ The new M1 parts follow, with A1 tests written alongside each one.
 #### M2: full machine
 
 M2 design decisions:
-- **Carriage.** The 8 drums, setting knobs, drive chain, Zweihorn levers and Magna Rota ride on one carriage (`pm.carriage`). It shifts in 37 mm steps (36.5 since M4; offset 0–8) by the lead screw and end crank, only at rest. Lever j acts on register store o + j.
+- **Carriage.** The 8 drums, setting knobs, drive chain, Zweihorn levers and Magna Rota ride on one carriage (`pm.carriage`). It shifts in 37 mm steps (36.5 since M4; offset 0–8, 0–7 since M4 decision D4, so the top digit is reached only by a carry) by the lead screw and end crank, only at rest. Lever j acts on register store o + j.
 - **Carries beyond the carriage window stay stored.** A store above the top lever has no lever to execute it. Its carry stays stored (pentagon tilted) until a later turn with the carriage shifted over it. This is the "open question" from §11, now modelled.
 - **A store holds one carry.** A turn that would store a second carry in a store whose first carry is still waiting is refused, and the page says the operator must shift first. Mechanically, the Einzahn would push the store from 18° to 36°, into the Muldenrad's transfer range (27–45°), half-turning the next wheel. Without this rule the sim lost the second carry silently (found 2026-10-18: adding 9 999 999 for the 201st time at offset 0).
 - **Faster carry execution.**
@@ -230,7 +230,7 @@ M2 design decisions:
 |---|---|---|
 | A2-1 | Contract: 16 result wheels and 16 stores on the register; 8 drums, knobs and levers plus the Magna Rota on `pm.carriage`. Anchors are present. | contract |
 | A2-2 | All 16 windows read 0–9 correctly, and all 8 setting pointers aim at their digit (both at offsets 0 and 8). | readout |
-| A2-3 | For every carriage offset 0–8, drum j sits under the receiving gear of register digit o + j and lever j lines up with store o + j, with nothing intersecting at rest. | geometry |
+| A2-3 | For every carriage offset 0–7 (0–8 before M4), drum j sits under the receiving gear of register digit o + j and lever j lines up with store o + j, with nothing intersecting at rest. | geometry |
 | A2-4 | **1709 × 365** with the Magna Rota (pins 5, 6, 3 at offsets 0, 1, 2) reads **623785**, and the pin rests against the stop after each multiplier digit. | readout |
 | A2-5 | **623785 ÷ 1709** by repeated subtraction and shifting gives quotient digits 3, 6, 5 (read on the Magna Rota) and remainder 0. | readout |
 | A2-6 | Ripple: **999999999 + 1** at offset 0 reads 000000000 with the carry for digit 8 stored (pentagon tilted, no lever there). After a shift to offset 1 and an idle turn, it reads 1000000000 with every pentagon level. | readout |
