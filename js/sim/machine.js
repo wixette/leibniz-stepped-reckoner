@@ -22,6 +22,7 @@
 // it (the operator must shift the carriage over that digit first), or one whose wheel would
 // pass 9 again before its lever arrives (after a shift brings a waiting carry under it).
 
+import machine from "../../params/machine.json" with { type: "json" };
 import * as K from "./kinematics.js";
 import * as M from "./kinematicsM1.js";
 
@@ -70,7 +71,10 @@ import * as M from "./kinematicsM1.js";
  * @property {number} magnaRota deg (ring)
  */
 
-export const DIGIT_PITCH = 37; // mm (params: layout.digit_pitch)
+export const DIGIT_PITCH = machine.layout.digit_pitch.v; // mm
+/** Carriage positions: offsets 0..7 on the 16-digit register, so the top digit is reached
+ *  only by a carry (the replica's sign place, NL183/465 p. 124). */
+export const CARRIAGE_POSITIONS = machine.layout.carriage_positions.v;
 
 export class Machine {
   /**
@@ -83,6 +87,11 @@ export class Machine {
    * @type {number}
    */
   carriageDigits;
+  /**
+   * @readonly
+   * @type {number}
+   */
+  positions;
   /** @type {CarryMode} */
   mode = "ripple";
   /**
@@ -117,9 +126,10 @@ export class Machine {
   /** @protected */
   _theta = 0;
 
-  constructor(registerDigits = 16, carriageDigits = 8) {
+  constructor(registerDigits = 16, carriageDigits = 8, positions = CARRIAGE_POSITIONS) {
     this.registerDigits = registerDigits;
     this.carriageDigits = carriageDigits;
+    this.positions = Math.min(positions, registerDigits - carriageDigits + 1);
     this.settings = Array(carriageDigits).fill(0);
     this.digits = Array(registerDigits).fill(0);
     this.pending = Array(registerDigits).fill(0);
@@ -132,7 +142,7 @@ export class Machine {
     return this._theta === 0 && this.carriagePos === this.offset;
   }
   get maxOffset() {
-    return this.registerDigits - this.carriageDigits;
+    return this.positions - 1;
   }
 
   /** @returns {void} */

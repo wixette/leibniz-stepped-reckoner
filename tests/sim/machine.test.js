@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { Machine } from "../../js/sim/machine.js";
+import { DIGIT_PITCH, Machine } from "../../js/sim/machine.js";
 import { divide, multiply, registerValue } from "../../js/sim/operations.js";
 
 describe("Machine (16-digit register, 8-digit carriage)", () => {
@@ -212,7 +212,7 @@ describe("Machine (16-digit register, 8-digit carriage)", () => {
         m.setMode(mode);
         let want = 0n;
         for (let step = 0; step < 20; step++) {
-          const o = rnd(9);
+          const o = rnd(m.maxOffset + 1);
           const x = rnd(3) === 0 ? 99_999_999 : rnd(10 ** (1 + rnd(8)));
           /** @type {1 | -1} */
           const dir = rnd(2) ? 1 : -1;
@@ -234,11 +234,11 @@ describe("Machine (16-digit register, 8-digit carriage)", () => {
     multiply(m, 99_999_999); // the largest product, beyond 2^53
     assert.equal(m.shownText(), (99_999_999n * 99_999_999n).toString());
     m.reset();
-    m.setOffset(8);
+    m.setOffset(7);
     m.setNumber(1);
-    m.turn(-1); // 0 - 10^8: the borrow leaves the top digit
-    assert.equal(m.shownText(), "9999999900000000");
-    assert.equal(registerValue(m), -100_000_000);
+    m.turn(-1); // 0 - 10^7: the borrow leaves the top digit
+    assert.equal(m.shownText(), "9999999990000000");
+    assert.equal(registerValue(m), -10_000_000);
   });
 
   it("shifts only at rest and within range", () => {
@@ -246,8 +246,8 @@ describe("Machine (16-digit register, 8-digit carriage)", () => {
     m.setTheta(100);
     assert.equal(m.setOffset(1), false);
     m.setTheta(0);
-    assert.equal(m.setOffset(9), false);
-    assert.equal(m.setOffset(8), true);
-    assert.equal(m.machinePose().carriageX, -8 * 37);
+    assert.equal(m.setOffset(8), false); // 8 positions (NL183/465 p. 124): the top digit only by a carry
+    assert.equal(m.setOffset(7), true);
+    assert.equal(m.machinePose().carriageX, -7 * DIGIT_PITCH);
   });
 });

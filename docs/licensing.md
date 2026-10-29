@@ -18,6 +18,10 @@ The repository follows the [REUSE](https://reuse.software) specification. [`REUS
 - **Public-domain scans** (publications before 1900) can be used freely, and are still cited.
 - **Copyrighted drawings and figures** (for example in modern papers and books, or drawings obtained from archives and museums) are **not** copied, traced or redistributed without written permission. **Facts and dimensions taken from them may be used**, with a citation: every value in `params/` carries a `source`.
 - **Scans obtained on request from an archive or museum:** check the licence stated on delivery before committing anything, and keep any written permission with the research notes.
+- **The Deutsches Museum's NL 183 scans** (Lehmann's papers; delivered 2026-10-29) are working copies for personal use. No image from them may be published, but information taken from them may be, cited as "Deutsches Museum München, NL 183/465" (or the actual file number). So:
+  - The PDFs, page images, crops and full transcripts are kept **outside the repository**, never committed, never attached to an issue or pull request, never shown on the page.
+  - The repository holds **facts** taken from them: dimensions, tooth counts, angles and short descriptions in our own words ([`research/sources/notes-nl183.md`](../research/sources/notes-nl183.md), [`research/data/nl183_dimensions.csv`](../research/data/nl183_dimensions.csv), and `params/` values whose `src` names the file and page). Quotations stay short.
+  - **No tracings or re-drawings of a sheet.** A diagram or model built from our own parameters is fine, even when those parameters came from the drawings. A figure that reproduces a sheet's layout, view or linework is not.
 
 Each third-party path gets its own annotation in `REUSE.toml`, and its licence text goes in `LICENSES/`.
 

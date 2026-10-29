@@ -35,10 +35,7 @@ export const SPRING_SNAP = val(T.spring_snap_deg);
 export const SPRING_FROM = val(T.spring_from_store);
 
 // --- layout (per digit) ------------------------------------------------------------
-const zd = val(G.drum.axis_z);
-const drumPitchR = (val(G.drum.module) * val(G.drum.virtual_teeth)) / 2;
-const rgPitchR = (val(G.receiving_gear.module) * val(G.receiving_gear.teeth)) / 2;
-const zs = zd + drumPitchR + rgPitchR;
+const zs = val(G.drum.axis_z) + val(G.receiving_gear.centre_distance); // result shaft height
 const [FDX, FDZ] = val(/** @type {Entry<number[]>} */ (G.carry_store.offset_xz));
 export const F = { x: FDX, z: zs + FDZ };
 export const L = { x: val(M1.lever_axis_dx), z: val(M1.lever_axis_z) };

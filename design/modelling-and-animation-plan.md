@@ -1,6 +1,6 @@
 # Modelling and animation plan: Leibniz stepped reckoner (target B)
 
-- **Status:** M0–M2 done; M3 built, and redesigned for release 1.0.0 (2026-10-20, [docs/ui-design.md](../docs/ui-design.md)); M4 open. First written 2026-10-17.
+- **Status:** M0–M2 done; M3 built, and redesigned for release 1.0.0 (2026-10-20, [docs/ui-design.md](../docs/ui-design.md)); M4 phases 1, 2 and 4 done for release 1.1.0 (2026-10-29), phase 3 waits for NL 183/467. First written 2026-10-17.
 - **Inputs:** [`../research/REPORT.md`](../research/REPORT.md), [`../research/sources/notes-mechanism.md`](../research/sources/notes-mechanism.md), [`../params/machine.json`](../params/machine.json), [decision 0001](decisions/0001-carry-interpretation.md)
 - **Conventions:** [`docs/conventions.md`](../docs/conventions.md)
 
@@ -41,11 +41,11 @@ Node names follow `docs/conventions.md`. Indices: `d` = drum/input digit 0–7, 
 | `pi.sum_wheel.r` (with receiving gear, Einzahn and result disc) | `pi.register` | rotation about Y, 36° per unit | 16 |
 | `pi.carry_store.r` (Muldenrad + Fünfhorn + pentagon disc + detent wheel) | `pi.register` | rotation about Y (18° store, 72° per completed carry) | 15 |
 | `pi.carry_transfer.r` (Zwischenrad / carry-drive gear) | `pi.register` | rotation about Y | 15 |
-| `pm.carriage` | root | translation along X, 37 mm steps | 1 |
+| `pm.carriage` | root | translation along X, 36.5 mm steps (37 until M4) | 1 |
 | `pm.box` (casing panels, top plate, decorations) | `pm.carriage` | static; panels can hide individually for the cut-away | 1 set |
 | `pm.drum_shaft.d` | `pm.carriage` | rotation about Y (θ) | 8 |
 | `pm.drum.d` | `pm.drum_shaft.d` | translation along Y (setting, 0–9 steps) | 8 |
-| `pm.setting_dial.d` (knob + pinion) | `pm.carriage` | rotation about Z, 36° per digit | 8 |
+| `pm.setting_dial.d` (knob + pinion) | `pm.carriage` | rotation about Z, 27.7° per digit (13 divisions, M4; 36° until then) | 8 |
 | `pm.setting_rack.d` | `pm.carriage` | translation along Y (with the drum) | 8 |
 | `pm.drive_gear.n` | `pm.carriage` | rotation about Y (±θ, alternating) | 17 |
 | `pm.zweihorn.d` | `pm.drive_gear.(2d+1)` | follows its gear | 8 |
@@ -71,7 +71,7 @@ Node names follow `docs/conventions.md`. Indices: `d` = drum/input digit 0–7, 
 | Pentagon disc | Procedural regular pentagon | On the carry-store shaft, at the back. Its tilt is the visible "carry pending" flag. |
 | Setting dial, knob, rack | Procedural + simple manual knob | The hook-shaped knob seen in the photos is a small hand-made mesh, instanced 8 times. |
 | Magna Rota | Procedural rings and holes + **hand-made pierced decoration** | Decoration as a texture/alpha first; geometry only if it is cheap. |
-| Lead screw | Procedural helix, 37 mm pitch | Single start |
+| Lead screw | Procedural helix, 36.5 mm lead (37 until M4) | Single start |
 | Casing panels, decorative plates | **Manual** (`source/casing.blend`) | Simple box geometry with bevels. Ornament as normal or alpha maps. |
 | Frame, rails, feet, end crank | Mostly procedural, with hand-made turned feet and handle | Lathe profiles |
 | Oak case | Optional, later | Not needed for target B |
@@ -99,9 +99,9 @@ The **master clock** is the crank angle θ ∈ [0°, 360°). The drums turn 1:1 
 
 **Easing:** gear steps use smooth-step easing within each 22.5° window. Detents snap in the last 15 % of a step, which is visible as a small spring catch. Result wheels never move outside rib or carry events.
 
-**Carriage shift:** the end crank turns the screw. One full turn moves `pm.carriage` 37 mm. A spring catch indexes the positions, and the shift is only allowed at θ = 0, as on the real machine.
+**Carriage shift:** the end crank turns the screw. One full turn moves `pm.carriage` one digit pitch, 36.5 mm (37 until M4). A spring catch indexes the positions, and the shift is only allowed at θ = 0, as on the real machine.
 
-**Setting:** turning a setting dial by *s* steps slides its drum by *s* × 4.0 mm along Y (rack and pinion), only at θ = 0.
+**Setting:** turning a setting dial by *s* steps slides its drum by *s* × 3.02 mm along Y (rack and pinion; 4.0 mm until M4), only at θ = 0. A stop on the dial plate lets the knob turn only from 0 to 9 (M4, NL 183/465 p. 38).
 
 ## 6. Animation strategy
 
@@ -131,7 +131,7 @@ params/machine.json
 
 1. **Photo overlay.** Camera-match two reference photos in Blender (front: Commons *Rechenmaschine von Leibniz (Nachbau) 08*; underside: *Leibniz-Rechenmaschine TSD (10)*). Overlay the render at 50 % and record deviations in `design/fidelity-log.md`. M2 used the true front elevation *Rechenmaschine von Leibniz (Nachbau) 03* instead (*Nachbau 08* is taken from above), with an orthographic render scaled by the 37 mm knob pitch (`render_m2_overlay.py`); the deviations are in [m2-notes.md](m2-notes.md).
 2. **Proportion checklist:**
-   - digit pitch 37 mm;
+   - digit pitch 37 mm (36.5 since M4, from the drawings);
    - mechanism length 670 mm;
    - height about 170 mm;
    - Magna Rota about 124 mm;
@@ -158,7 +158,7 @@ These must be planned now, because they change how the meshes are cut.
 | **M1: 3-digit carry slice** ✅ done 2026-10-17 ([notes](m1-notes.md)) | 3 digits plus Zweihörner, the drive gears and the sim logic (both carry modes). Step mode. **Acceptance-test harness** (glTF-in-Node, readout/contact/clearance checks, `?selftest`), retrofitted to M0 first. | 999 + 1 ripples in one turn (`ripple`) and needs extra idle turns (`historical`, 900 → 000 + carry → 1000). `pnpm test` runs the M0 and M1 acceptance specs (§10.1) and passes. |
 | **M2: full machine** ✅ done 2026-10-18 ([notes](m2-notes.md)): mechanism 2026-10-17; casing, photo overlay (carriage, Magna Rota, frame and case within 5 % of the photos) and materials 2026-10-18. Chromebook performance not measured yet. | 16-digit register, 8-digit carriage, Magna Rota with pin and stop, counter, lead screw and carriage shift, casing, materials | Every worked example animates correctly. Within the performance budget. Photo overlay within about 5 %. |
 | **M3: teaching layer** 🟡 built 2026-10-18 ([notes](m3-notes.md)), redesigned for release 1.0.0 on 2026-10-20 ([ui-design.md](../docs/ui-design.md)); teacher test, translation review and Chromebook measurement open | UI (EN/DE, then ten languages), camera presets, cut-away, exploded view, labels, guided lessons (9999 + 1, 1709 × 365, a division) | Usable by a teacher without instructions (to be tested with 1–2 teachers) |
-| **M4: fidelity upgrade (target C)** | Replace `est`/`design` params with documented values from NL 183 or the GWLB (§12) | Params mostly `doc`. Decision 0001 revisited. |
+| **M4: fidelity upgrade (target C)** ✅ phases 1, 2, 4 done 2026-10-29 ([notes](m4-notes.md)) | Replace `est`/`design` params with documented values from NL 183 or the GWLB (§12). NL 183/465 received 2026-10-29; candidate values in [notes-nl183.md](../research/sources/notes-nl183.md) §10. Release 1.1.0; phase 3 (Lehmann's lever arrangement) waits for /467. | Params mostly `doc`. Decision 0001 revisited. |
 
 M0 and M1 also prove the pipeline (params → Blender → glTF → three.js), which the later milestones reuse.
 
@@ -190,6 +190,7 @@ Each statement becomes one test in `tests/accept/` (named by its ID) and one `?s
 | A0-7 | During the 9 → 0 step, the Einzahn pin and a Fünfhorn horn are in contact while the store moves, and they are clear at rest. | contact + clearance |
 | A0-8 | The pinion and the rack stay in contact and clear of each other across the whole setting range. | contact + clearance |
 | A0-9 | The `.glb` contains every node the page needs, each with motion extras (`motion`, `axis`). | contract |
+| A0-10 | The setting stop (added in M4): the pointer clears the stop for every setting 0–9, comes within 0.3 mm of it at 0 and at 9, and cannot turn a tenth of a division beyond either. | contact + clearance |
 
 #### M1: three-digit carry slice
 
@@ -214,7 +215,7 @@ The new M1 parts follow, with A1 tests written alongside each one.
 #### M2: full machine
 
 M2 design decisions:
-- **Carriage.** The 8 drums, setting knobs, drive chain, Zweihorn levers and Magna Rota ride on one carriage (`pm.carriage`). It shifts in 37 mm steps (offset 0–8) by the lead screw and end crank, only at rest. Lever j acts on register store o + j.
+- **Carriage.** The 8 drums, setting knobs, drive chain, Zweihorn levers and Magna Rota ride on one carriage (`pm.carriage`). It shifts in 37 mm steps (36.5 since M4; offset 0–8, 0–7 since M4 decision D4, so the top digit is reached only by a carry) by the lead screw and end crank, only at rest. Lever j acts on register store o + j.
 - **Carries beyond the carriage window stay stored.** A store above the top lever has no lever to execute it. Its carry stays stored (pentagon tilted) until a later turn with the carriage shifted over it. This is the "open question" from §11, now modelled.
 - **A store holds one carry.** A turn that would store a second carry in a store whose first carry is still waiting is refused, and the page says the operator must shift first. Mechanically, the Einzahn would push the store from 18° to 36°, into the Muldenrad's transfer range (27–45°), half-turning the next wheel. Without this rule the sim lost the second carry silently (found 2026-10-18: adding 9 999 999 for the 201st time at offset 0).
 - **Faster carry execution.**
@@ -229,7 +230,7 @@ M2 design decisions:
 |---|---|---|
 | A2-1 | Contract: 16 result wheels and 16 stores on the register; 8 drums, knobs and levers plus the Magna Rota on `pm.carriage`. Anchors are present. | contract |
 | A2-2 | All 16 windows read 0–9 correctly, and all 8 setting pointers aim at their digit (both at offsets 0 and 8). | readout |
-| A2-3 | For every carriage offset 0–8, drum j sits under the receiving gear of register digit o + j and lever j lines up with store o + j, with nothing intersecting at rest. | geometry |
+| A2-3 | For every carriage offset 0–7 (0–8 before M4), drum j sits under the receiving gear of register digit o + j and lever j lines up with store o + j, with nothing intersecting at rest. | geometry |
 | A2-4 | **1709 × 365** with the Magna Rota (pins 5, 6, 3 at offsets 0, 1, 2) reads **623785**, and the pin rests against the stop after each multiplier digit. | readout |
 | A2-5 | **623785 ÷ 1709** by repeated subtraction and shifting gives quotient digits 3, 6, 5 (read on the Magna Rota) and remainder 0. | readout |
 | A2-6 | Ripple: **999999999 + 1** at offset 0 reads 000000000 with the carry for digit 8 stored (pentagon tilted, no lever there). After a shift to offset 1 and an idle turn, it reads 1000000000 with every pentagon level. | readout |
@@ -238,8 +239,9 @@ M2 design decisions:
 | A2-9 | Sampled clearance at the runtime transforms across add and subtract turns, carriage shifts and a multiplier run. | clearance |
 | A2-10 | The M0 and M1 specs still pass (shared-code regression). | regression |
 | A2-11 | A carry store holds one carry. With digit 8's carry waiting above the carriage and digits 0–8 at 9, a turn adding 1 is refused (nothing moves; store 8 stays at 18°). After a shift, an idle turn and the shift back, the same addition completes, and the register holds the exact value (2 000 000 000). | readout |
-| A2-12 | Casing: the oak case, the oak base and bearers, and the brass cover plates are static parts (the carriage cover rides with the carriage), so the page can hide them together. No woodwork sits outside them, so hiding them leaves only the mechanism. All 16 windows read through the cover openings at offsets 0 and 8. | readout |
+| A2-12 | Casing: the oak case, the oak base and bearers, and the brass cover plates are static parts (the carriage cover rides with the carriage), so the page can hide them together. No woodwork sits outside them, so hiding them leaves only the mechanism. All 16 windows read through the cover openings at offsets 0 and 8 (7 since M4). | readout |
 | A2-13 | Both cranks can be turned by hand. Over a full turn, at both carriage ends, the main crank's knob stays at least 10 mm above the case's front wall top and floor (room for fingers), and the end crank's knob stays above the table. Added 2026-10-18: the knob used to run in a 6 mm slot behind the front wall. | geometry |
+| A2-14 | No flickering faces. At rest at both carriage ends, no two parts (or two materials of one part) have overlapping faces in the same plane facing the same way, which the renderer cannot order (z-fighting). Added 2026-10-29: the carriage cover's end walls lay in the front panel's faces and flickered as the view moved, since v1.0.0. | geometry |
 
 #### M3: teaching layer
 
@@ -299,7 +301,14 @@ Still open for M3:
 
 Documented dimensions for M4 depend on primary material held by others. Each request asks for licence terms that allow use in this open simulator (CC BY or CC BY-SA, or at least dimension tables), with credit to the holders:
 
-1. **Deutsches Museum archive:** copies of **NL 183/460, /465, /466 PLAN, /467 and /746** (N. J. Lehmann's documents, drawings, calculations and photos of his reconstructions). Requested 2026-10-18; no answer yet.
+1. **Deutsches Museum archive:** copies of **NL 183/460, /465, /466 PLAN, /467 and /746** (N. J. Lehmann's documents, drawings, calculations and photos of his reconstructions). Requested 2026-10-18. **Answered by 2026-10-23** (W. Schinhan, Archiv, ref. AZ FII-61400-2026):
+   - **Offer:** 392 PDF scans at 150 dpi ("very legible"), €1 per scan plus a €10 base fee. The scans do not exist yet: the archive makes them for the order, at its standard 150 dpi for working copies. (The finding aid lists 6 + 125 + 10 + 153 sheets and 78 photos, 372 items in all; the reply does not say what the other 20 scans are.) That is €478.38 with 19 % VAT inside Germany. From abroad there is no VAT, but payment comes first, against an advance invoice: €402 plus 6 % (€24.12) by Visa/Mastercard, or €402 plus the bank's transfer fee (0 to about €40 depending on the country). To order: confirm, give a billing address and, from abroad, the payment method.
+   - **Terms:** the PDFs are working copies for personal use only. No image from them may be published. **Information taken from them (dimensions, tooth counts, angles) may be published**, cited as "Deutsches Museum München, NL 183/460" (the archive's example; use the actual file number).
+   - **Images for publication** would be TIFF scans from the museum's Bildstelle at €24 per scan, arranged separately.
+   - The archive reads the catalogue's CC BY-SA 4.0 note as "no commercial use of downloads". That is not what CC BY-SA says, but it does not matter here: the scans' own terms are stricter, and only facts from them go into the project.
+   - **Batch 1, /465 and /466 PLAN**, asked for on 2026-10-23, to see how far they answer the construction questions before ordering more. **Quote received the same day:** /465 is 126 scans; /466 PLAN is 9 scans (8 sheets and 1 arrow-shaped drawing). That is €135 + €10 base fee + 6 % card fee = **€153.70**, paid by card from New Zealand against an advance invoice. After consulting the head of the archive, Dr. Röschner, the archive confirmed that PDF scans are **always 150 dpi**, whatever the size of the original; the standard is legibility. /467 would be **184 scans** (more than its 153 sheets), orderable with batch 1 or later. **Batch 1 ordered 2026-10-23** (/467 left until batch 1 has been read); next, the archive sends an advance invoice, scans after payment and emails a download link.
+   - **Batch 1 delivered 2026-10-29** (A. Krutsch, ref. AZ FII-62000-2026), as download links valid for 30 days: /465 is 127 pages, /466 PLAN 9 sheets. /465 turns out to be the TU Dresden workshop drawings of the replica (1988–89): dimensions, materials and gear data for nearly every part. Findings, and what they change in `params/`, are in [research/sources/notes-nl183.md](../research/sources/notes-nl183.md). The PDFs are kept outside the repository (docs/licensing.md).
+   - **What /466 PLAN contains**, from an overview photo the archive sent (for illustration only; not to be published or committed): a large print, "Die Leibniz'sche Rechenmaschine gezeichnet nach dem Original in der Landesbibliothek Hannover von Werner Lange, März 1958", an exploded pictorial view of the machine **drawn from the original** (so after Burkhardt's restoration), with lettered parts, three large spoked gears A, B, C, one centre distance dimensioned, and Lehmann's pencil notes; tracings of the carry chain for three digits in isometric layout (star wheels, Fünfhörner, part-toothed wheels, the row of digit wheels); sheets that seem to show, for one digit after another, a 10-division wheel with a two-armed lever at a different angle each time, possibly the Zweihorn stagger (decision 0001); and a large tooth-profile drawing with dimension lines. Mostly schematic: the part dimensions are more likely in /465.
 2. **mbe Marc Brandt engineering (Burgdorf):** the c. 2011 CAD model (made for the GWLB, based on the Badur/Rottstedt design) and the 2020 measurements of all parts of the original (taken with mbe's support for a Leibniz Universität Hannover glass model). Sources: research/sources/bibliography.md (LEIBNIZCENTRAL, HANNOVER2020). Requested 2026-10-18. **Declined 2026-10-19:** having consulted Klaus Badur, mbe may not provide any data or dimensions. The machine, and with it all rights, belongs to the GWLB, so a request has to go to the GWLB officially.
 3. **Gottfried Wilhelm Leibniz Bibliothek (GWLB), Hannover:** the owner of the original and of the rights to the CAD model. To be asked officially for, in order of preference, the CAD model, a table of dimensions, or permission to use dimensions with credit. Not asked yet. Its published terms require a reproduction permission for photographs of the machine (digitisation and reproductions department), and name no open licence; the request should expect conditions rather than CC BY-SA.
 

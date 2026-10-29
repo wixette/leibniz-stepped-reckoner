@@ -2,6 +2,28 @@
 
 What changed in each release. Versions follow `package.json` and are tagged `vX.Y.Z` ([docs/development.md](docs/development.md), *Versions and releases*). The design decisions cited (U1, U2, …) are in [docs/ui-design.md](docs/ui-design.md).
 
+## 1.1.0
+
+The machine follows N. J. Lehmann's workshop drawings of the TU Dresden replica, kept in the Deutsches Museum's archive (NL 183/465 and NL 183/466 PLAN), where they fit the model ([design/m4-notes.md](design/m4-notes.md)).
+
+**The machine**
+- The digit pitch and the lead screw are 36.5 mm (37 before, from Burkhardt's description of the original).
+- The stepped drum is a 16-tooth module-2 wheel, 36 mm across, with its 9 ribs in 3.02 mm steps and a boss; the receiving gear has 10 pointed, profile-shifted teeth, 26.5 mm from the drum.
+- The setting dial has 13 divisions, the digits on ten of them, and a stop the knob's pointer meets at 0 and at 9; one digit moves the drum 3.02 mm, one rib.
+- The carriage has 8 positions, as on the replica: it shifts 7 places, so the 16th result digit is reached only by a carry.
+- The frame follows the drawings in length: side walls 610 mm apart with the lead screw running in them, the base 629 mm long, and the counter dial 73 mm right of the units knob.
+- The drive chain between the drums and the carry levers has the replica's gears: 10 teeth, 22.9 mm across and 7 mm wide, with a collar on each drum's gear.
+- The About box and the tutorial credit the drawings, and say which sizes follow them, in all ten languages.
+
+**Fixed**
+- A thin strip at the left end of the carriage's front panel flickered when the view moved (since 1.0.0): the end walls of the carriage cover lay in the panel's faces. They now start behind it, and a new acceptance check, A2-14, finds faces of two parts lying in one plane.
+
+**Tools and pages**
+- `pnpm shots` takes the release screenshots, the README's and a set for posts, in any of the languages ([docs/development.md](docs/development.md), *Versions and releases*).
+- `pnpm video` makes the release videos, with the machine's sound: taken apart, the drum, the carry, an addition and a multiplication, in any of the languages.
+- Both write to `~/Downloads/leibniz-v<version>-media/` by default: release media are never kept in the repository.
+- The page's description (for search engines and the installed app) and `package.json`'s now say what the simulator is first, and name the lessons and the ten languages, as the GitHub repository's description does.
+
 ## 1.0.0
 
 The first public release: the prototype's teaching page becomes the simulator, with free play first and a tutorial, six lessons and references beside the machine.

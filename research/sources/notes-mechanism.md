@@ -98,7 +98,7 @@ Burkhardt assumed every carry needs one full rib pitch (22.5°). His budget: 3 t
 ## 6. Carriage shift (Schlittenverschiebung)
 
 - The **crank at the left end** (K in Jordan's fig. 2) turns a **lead screw with a 37 mm pitch**. One turn moves the input carriage by exactly **one decimal place**. A spring-loaded catch (*Einfallfeder*) holds the carriage in each position. [BURKHARDT1897][WIKI]
-- **[inference]** So the **digit pitch (centre-to-centre spacing of digits) is ≈37 mm**. That fits the 67 cm length: 16 result digits × 37 mm ≈ 592 mm, plus the end frames. Check this against photos or drawings before relying on it.
+- **[inference]** So the **digit pitch (centre-to-centre spacing of digits) is ≈37 mm**. That fits the 67 cm length: 16 result digits × 37 mm ≈ 592 mm, plus the end frames. Check this against photos or drawings before relying on it. **Checked 2026-10-29:** Lehmann's drawings of the Dresden replica use **36.5 mm** throughout, lead screw included (Deutsches Museum München, NL 183/465 p. 13, 28, 45; [notes-nl183.md](notes-nl183.md)); the model follows them since M4.
 - Leupold's 1727 engraving shows the motion crank on the right, while the 1892 photo shows it on the left. Jordan speculated that this reflects two different machines. [JORDAN1897]
 
 ## 7. Multiplier dial (Magna Rota) and revolution counter

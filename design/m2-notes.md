@@ -9,7 +9,7 @@
 | Node | Parts | Motion |
 |---|---|---|
 | `pi.sum_wheel.k`, `pi.carry_store.k` (k = 0…15) | the M1 register parts, 16 times, fixed to the frame | as M1 |
-| `pm.carriage` | carriage floor, nut on the lead screw, drum and knob bearings | translates −37 mm per place (offset 0–8) |
+| `pm.carriage` | carriage floor, nut on the lead screw, drum and knob bearings | translates −37 mm per place (offset 0–8; since M4 −36.5 mm, offset 0–7) |
 | `pm.carriage_panel` | front panel, stepped on the right as on the original (hidden for the cut-away view) | rigid with the carriage |
 | `pm.drum_shaft.j` … `pm.zweihorn_sub.j` (j = 0…7) | the M1 drum, setting and carry-lever parts, on the carriage | as M1; lever j acts on store o + j |
 | `frame.lead_screw` | 37 mm pitch screw and the end crank (outside the case's left wall) | 360° per place |
@@ -176,7 +176,7 @@ Digit height is 0.70 × the font size passed to `bl.glyph_mesh` (measured).
 | Check | Result |
 |---|---|
 | `pnpm test` | 299 tests, including the A0, A1 and A2 acceptance specs; about 12 s in total |
-| A2-9 (in `pnpm test`) | 765 poses (every 15°, every 1/8 place) over 5 scenarios: 1709 × 365, 999999999 + 1 with shifts across the whole travel, 99999999 + 99999999, 0 − 1 at offset 8, historical 9999 + 1 |
+| A2-9 (in `pnpm test`) | 765 poses (every 15°, every 1/8 place) over 5 scenarios: 1709 × 365, 999999999 + 1 with shifts across the whole travel, 99999999 + 99999999, 0 − 1 at offset 8 (7 since M4), historical 9999 + 1 |
 | `pnpm check:model` | M0_CLEARANCE_OK; M1_CLEARANCE_OK (all 462 moving pairs × 7957 poses); **M2_CLEARANCE_OK: all 5712 moving pairs (with the casing and base) × 8399 poses** (1° crank steps, 1/32-place shifts, 5 scenarios, plus dialling at offsets 0 and 8), 0.05 mm margin, about 3.5 min. Rerun 2026-10-18 after the overlay layout and the materials. |
 | Browser `?selftest` | page 01: 9/9; page 02: 6/6; page 03: 12/12 (rerun 2026-10-18; A2-8 reports 164 132 triangles, 6.57 MiB) |
 | Page 03 by hand | 2026-10-17: 1709 × 365 = 623785 and 623785 ÷ 1709 = 365 r 0 (worked examples, 2× speed); turn to the stop with pin 3; 999 999 999 + 1 with a shift. 2026-10-18: the overview and front views with the new layout and materials; pages 01 and 02 with the new viewer lighting. |

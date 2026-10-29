@@ -3,15 +3,15 @@
 Run headless:
   Blender --background --factory-startup --python build_m2.py -- [--out PATH] [--blend PATH]
 
-Register (fixed), digit k at x = -37 k:
+Register (fixed), digit k at x = -36.5 k:
   pi.sum_wheel.k     result shaft, receiving gear, digit disc, Einzahn, star (k >= 1)
   pi.carry_store.k   Einzahn horns, Muldenrad teeth, Fünfhorn, pentagon
   pi.window          16 reading windows (static)
-  frame.static       brass frame: rear wall, front bar, brackets, screw bearings (static)
-  frame.lead_screw   37 mm lead screw + end crank outside the case (rotate about +X)
-Carriage pm.carriage (translate along +X), carriage digit j at x = -37 j (offset 0):
+  frame.static       brass frame: side walls 610 apart, rear wall, front bar, brackets (static)
+  frame.lead_screw   36.5 mm lead screw + end crank outside the case (rotate about +X)
+Carriage pm.carriage (translate along +X), carriage digit j at x = -36.5 j (offset 0):
   pm.carriage_panel  front panel (static; hideable for a cut-away view)
-  pm.drum_shaft.j / pm.drum.j / pm.setting_rack.j / pm.setting_dial.j / pm.setting_plate.j
+  pm.drum_shaft.j / pm.drum.j / pm.setting_rack.j / pm.setting_dial.j / pm.setting_plate.j / pm.setting_stop.j
   pm.lever.j / pm.zweihorn_add.j / pm.zweihorn_sub.j
   pm.magna_plate (static), pm.magna_rota (rotate about +Y), pm.magna_pin (rotate about +Y),
   pm.main_crank (rotate about +Y, 360 deg per turn; sits in the middle of the Magna Rota)
@@ -29,7 +29,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import bpy  # noqa: E402
-from lib import bl, geom, params  # noqa: E402
+from lib import bl, geom, kinematics, params  # noqa: E402
 from lib.bl import MeshBuilder  # noqa: E402
 
 DEFAULT_OUT = os.path.join(params.MACHINE_DIR, "assets", "m2-full-machine.glb")
@@ -82,8 +82,11 @@ def build(p):
     step = p.v(G + "drum.rib_length_step")
     add, ded = p.v(G + "drum.tooth_addendum"), p.v(G + "drum.tooth_dedendum")
     drum_gear = geom.GearSpec(p.v(G + "drum.virtual_teeth"), p.v(G + "drum.module"), p.v(G + "drum.rib_thickness_factor"), add, ded)
-    rg = geom.GearSpec(p.v(G + "receiving_gear.teeth"), p.v(G + "receiving_gear.module"), 1.0, add, ded)
-    zs = zd + drum_gear.rp + rg.rp
+    RG = G + "receiving_gear."
+    rg = geom.GearSpec(p.v(RG + "teeth"), p.v(RG + "module"), 1.0, p.v(RG + "addendum"), p.v(RG + "dedendum"),
+                       p.v(RG + "profile_shift"))
+    zs = zd + p.v(RG + "centre_distance")
+    kin = kinematics.Kin(p)
     y_gear, g_th = p.v(G + "receiving_gear.y"), p.v(G + "receiving_gear.thickness")
     Fdx, Fdz = p.v(G + "carry_store.offset_xz")
     zf = zs + Fdz
@@ -167,9 +170,11 @@ def build(p):
         bl.set_motion(store, "rotate", (0, 1, 0), f"Carry store {k}", f"Übertragsspeicher {k}")
         bl.parent(store, root)
 
-    # window plate (hung from the rear wall at both ends)
+    # window plate (hung from the rear wall at both ends), between the frame's side walls
+    fx_ = p.v(M2 + "frame_x")
+    in_x0, in_x1 = X[-1] - fx_["inner_left"], X[0] + fx_["inner_right"]
     zw = zs + rd + 2.0
-    xl, xr = X[-1] - 45.0, X[0] + 23.0
+    xl, xr = in_x0, in_x1 - 3.0
     mb = MeshBuilder()
     (wy0, wy1), (ry0w, ry1w) = dl["window_y"], dl["window_rail_y"]
     mb.prism(geom.rect(xl, ry0w, xr, wy0), "XY", zw, zw + 1.5, "brass_satin")
@@ -185,18 +190,23 @@ def build(p):
     window["read_half_size_mm"] = dl["read_half_size"]
     bl.parent(window, root)
 
-    # frame: base, rear wall, front bar hung from the wall, screw bearings
+    # frame: base (the replica's lower frame), side walls 610 apart, rear wall and front bar
+    # between them; the lead screw runs in a notch in each wall's low front part
     ls = p.v(M2 + "lead_screw")
     fr = p.v(M2 + "frame")
-    base_x0, base_x1 = X[-1] - fr["x_margin_left"], X[0] + fr["x_margin_right"]
+    sw = fx_["side_wall"]
+    base_x0, base_x1 = in_x0 - fx_["end_bar_left"], in_x1 + fx_["end_bar_right"]
     mb = MeshBuilder()
-    mb.prism(geom.rect(base_x0 + 5, 4.0, base_x1 - 15, 85.0), "XZ", wall0, wall1, "brass_satin")
-    mb.prism(geom.rect(X[-1] - 45, zs - 4.5, X[0] + 28, zs + 4.5), "XZ", 10.0, 13.0, "brass_satin")
-    for bx in (X[0] + 25.0, X[-1] - 45.0):
+    mb.prism(geom.rect(in_x0, 4.0, in_x1, 85.0), "XZ", wall0, wall1, "brass_satin")
+    mb.prism(geom.rect(in_x0, zs - 4.5, in_x1, zs + 4.5), "XZ", 10.0, 13.0, "brass_satin")
+    for bx in (in_x0, in_x1 - 3.0):
         mb.prism(geom.rect(bx, 13.0, bx + 3.0, wall0), "XY", zs - 4.5, zs + 4.5, "brass_satin")
-    for sx in (base_x0 + fr["bearing_inset_left"], base_x1 - fr["bearing_inset_right"]):
-        mb.prism(geom.rect(sx - 3, ls["y"] - 4, sx + 3, ls["y"] + 4), "XY", 4.0, ls["z"], "brass_satin")
-        mb.prism(geom.circle(4.5, 24), "YZ", sx - 3, sx + 3, "brass_satin", smooth=True, offset=(0, ls["y"], ls["z"]))
+    ny0, ny1, nz = ls["y"] - ls["radius"] - 2.5, ls["y"] + ls["radius"] + 2.5, ls["z"] - ls["radius"] - 2.5
+    ysp, zlow = fr["side_wall_y_split"], fr["side_wall_low_z"]
+    for wx0 in (in_x0 - sw, in_x1):
+        for r0 in (geom.rect(fr["y"][0], 4.0, ysp, nz), geom.rect(fr["y"][0], nz, ny0, zlow),
+                   geom.rect(ny1, nz, ysp, zlow), geom.rect(ysp, 4.0, wall0, fr["side_wall_top_z"])):
+            mb.prism(r0, "YZ", wx0, wx0 + sw, "brass_satin")
     frame = static(mb.build("frame.static", col))
     bl.parent(frame, root)
 
@@ -212,7 +222,7 @@ def build(p):
     bl.parent(base, root)
 
     # lead screw with a helical ridge, and the end crank (left end, outside the case wall)
-    sx0, sx1 = base_x0 + fr["screw_start_dx"], base_x1 - fr["bearing_inset_right"] + 3.0
+    sx0, sx1 = base_x0 + fr["screw_start_dx"], in_x1 + sw
     mb = MeshBuilder()
     mb.prism(geom.circle(ls["radius"], 24), "YZ", 0.0, sx1 - sx0, "steel", smooth=True)
     turns = (sx1 - sx0) / pitch_x
@@ -284,7 +294,9 @@ def build(p):
     D = [(X[j], zd) for j in range(C)]
     cdl = math.hypot(Lv[0][0] - D[0][0], Lv[0][1] - D[0][1])
     zg = p.v(M1 + "drive_gear_teeth")
-    dg = geom.GearSpec(zg, cdl / zg)
+    dg = geom.GearSpec(zg, cdl / zg, p.v(M1 + "drive_gear_thickness_factor"),
+                       (p.v(M1 + "drive_gear_tip_diameter") - cdl) / 2.0 / (cdl / zg))  # pitch diameter = centre distance
+    collar = p.v(M1 + "drum_gear_collar")
     drum_first, lever_first = [0.0] * C, [0.0] * C
     drum_first[0] = ang(Lv[0][0] - D[0][0], Lv[0][1] - D[0][1])
     for j in range(C):
@@ -305,8 +317,9 @@ def build(p):
         mb = MeshBuilder()
         # The square shaft starts behind the setting pinion of digit j + 1 (10.6 mm to its
         # left, y <= py + 7.6): it only has to carry the drum (front >= -18, flange -22).
-        mb.prism(geom.rect(-sq, -sq, sq, sq), "XZ", shaft_y0, gy1, "steel")
+        mb.prism(geom.rect(-sq, -sq, sq, sq), "XZ", shaft_y0, gy1 - 0.5, "steel")  # ends inside the gear (no shared face)
         mb.prism(geom.gear_outline(dg, drum_first[j]), "XZ", gy0, gy1, "brass_satin")
+        mb.prism(geom.circle(collar["diameter"] / 2.0, 32), "XZ", gy1, min(gy1 + collar["length"], zpy0 - 0.5), "brass_satin", smooth=True)
         mb.prism(geom.circle(3.5, 24), "XZ", gy0 - 1.0, gy0, "brass_satin", smooth=True)
         shaft = mb.build(f"pm.drum_shaft.{j}", col, (x, 0, zd))
         bl.set_motion(shaft, "rotate", (0, 1, 0), f"Drum shaft {j} with drive gear", f"Staffelwalzenwelle {j}")
@@ -321,14 +334,18 @@ def build(p):
         mb.prism(geom.circle(9.0, 40), "XZ", -4.0, -3.0, "brass_satin", smooth=True)
         mb.prism(geom.circle(7.0, 40), "XZ", -3.0, -1.0, "brass_satin", smooth=True)
         mb.prism(geom.circle(9.0, 40), "XZ", -1.0, 0.0, "brass_satin", smooth=True)
+        boss = p.v(G + "drum.boss")
+        mb.prism(geom.circle(boss["diameter"] / 2.0, 40), "XZ", L - 0.01, L + boss["length"], "brass_polished", smooth=True)
         drum = mb.build(f"pm.drum.{j}", col, (x, 0, zd))
         drum["core_radius_mm"], drum["rib_tip_radius_mm"] = drum_gear.rf, drum_gear.ra
         bl.set_motion(drum, "translate", (0, 1, 0), f"Stepped drum {j}", f"Staffelwalze {j}", unit="mm")
         bl.parent(drum, shaft)
 
         mb = MeshBuilder()
-        for poly in geom.rack_teeth(x_pl, pm_, [-2.0 - 4.0 * i for i in range(13)], back_u=x_pl - 5.0):
+        rack_c = kin.rack_centres()
+        for poly in geom.rack_teeth(x_pl, pm_, rack_c, back_u=x_pl - 5.0):
             mb.prism(poly, "XY", -4.0, 4.0, "steel")
+        mb.prism(geom.rect(x_pl - 5.0, max(rack_c), x_pl - 1.8, -1.3), "XY", -4.0, 4.0, "steel")  # bar to the fork
         mb.prism(geom.rect(7.2, -2.7, x_pl - 4.0, -1.3), "XY", -2.5, 2.5, "steel")
         rack = mb.build(f"pm.setting_rack.{j}", col, (x, 0, zd))
         bl.set_motion(rack, "translate", (0, 1, 0), f"Setting rack {j}", f"Einstellzahnstange {j}", unit="mm")
@@ -339,7 +356,7 @@ def build(p):
         mb.prism(geom.gear_outline(pin_g, 0.0), "XY", zd - 4.0, zd + 4.0, "brass_polished")
         mb.prism(geom.circle(1.5, 16), "XY", 8.0, z_plate + 10.0, "steel", smooth=True)
         mb.prism(geom.circle(5.0, 32), "XY", z_plate + 2.0, z_plate + 4.0, "brass_satin", smooth=True)
-        mb.prism(geom.radial_bar(0, dl["pointer_r"], 2.2, -90.0), "XY", z_plate + 2.0, z_plate + 3.2, "steel_dark")
+        mb.prism(geom.radial_bar(0, dl["pointer_r"], 2.2, -90.0), "XY", z_plate + 2.05, z_plate + 3.2, "steel_dark")  # not flush with the hub
         mb.prism(geom.rect(-1.5, -4.0, 1.5, 4.0), "XY", z_plate + 4.0, z_plate + 12.0, "brass_polished")
         dial = mb.build(f"pm.setting_dial.{j}", col, (px, py, 0))
         bl.set_anchors(dial, "pointer_tip", [(0.0, -dl["pointer_r"], z_plate + 2.6)])
@@ -350,7 +367,7 @@ def build(p):
         mb.prism(geom.circle(dl["setting_plate_r"], 48), "XY", z_plate, z_plate + 2.0, "brass_satin", smooth=True)
         pg = []
         for s in range(10):
-            a = math.radians(-90.0 + 36.0 * s)
+            a = math.radians(-90.0 + kin.dial_step * s)
             gx, gy = dl["setting_glyph_r"] * math.cos(a), dl["setting_glyph_r"] * math.sin(a)
             pg.append((gx, gy, z_plate + 2.25))
             verts, faces = bl.glyph_mesh(str(s), dl["setting_glyph_size"], 0.3)
@@ -358,6 +375,12 @@ def build(p):
         plate = static(mb.build(f"pm.setting_plate.{j}", col, (px, py, 0)))
         bl.set_anchors(plate, "glyph_anchors", pg)
         bl.parent(plate, carriage)
+        # stop: a lug in the pointer's plane, filling the blank sector between 9 and 0 (NL183/465 p. 38)
+        mb = MeshBuilder()
+        a9 = -90.0 + kin.dial_step * 9
+        mb.prism(geom.stop_lug(5.6, dl["pointer_r"] - 1.0, a9, 270.0, 1.1 + 0.15), "XY", z_plate + 2.0, z_plate + 3.4, "steel")
+        stop = static(mb.build(f"pm.setting_stop.{j}", col, (px, py, 0)))
+        bl.parent(stop, carriage)
 
         lx, lz = Lv[j]
         mb = MeshBuilder()
@@ -413,7 +436,7 @@ def build(p):
     bl.set_motion(mrota, "rotate", (0, 1, 0), "Magna Rota (multiplier dial and counter)", "Magna Rota (Multiplikator- und Umdrehungsscheibe)")
     bl.parent(mrota, carriage)
     mb = MeshBuilder()
-    mb.prism([(u, w + hr) for u, w in geom.circle(1.8, 16)], "XZ", ry0 - 6.0, ry0, "steel", smooth=True)
+    mb.prism([(u, w + hr) for u, w in geom.circle(1.8, 16)], "XZ", ry0 - 6.0, ry0 - 0.05, "steel", smooth=True)  # ends in the hole mark
     mb.prism([(u, w + hr) for u, w in geom.circle(3.0, 16)], "XZ", ry0 - 8.0, ry0 - 6.0, "steel_dark", smooth=True)
     mpin = mb.build("pm.magna_pin", col, (mx, 0, mz))
     bl.set_motion(mpin, "rotate", (0, 1, 0), "Pin in the Magna Rota (sets the multiplier digit)", "Stift (Multiplikatorziffer)")
@@ -475,13 +498,14 @@ def build(p):
     shafts = [(X[j] + x_pl + pin_g.rp - 2.5, X[j] + x_pl + pin_g.rp + 2.5) for j in range(C)]
     plate_with_hole_row(mb, cx0, ky0, xt, ky1, py - 2.5, py + 2.5, shafts, kz0, kz1, "brass_polished")
     mb.prism(geom.rect(xt, ky0, xr, ky1), "XY", zt - 2.0, zt, "brass_polished")           # lower top on the right
-    mb.prism(geom.rect(xt - 3.0, ky0, xt, ky1), "XY", zt, kz0, "brass_satin")             # riser between them
+    # the walls start behind the front panel: sharing its front face made them flicker (z-fighting)
+    mb.prism(geom.rect(xt - 3.0, pnl1, xt, ky1), "XY", zt, kz0, "brass_satin")            # riser between them
     wz0 = cs["carriage_wall_z0"]
-    mb.prism(geom.rect(cx0, ky0, cx0 + 3.0, ky1), "XY", wz0, kz0, "brass_satin")        # left end
-    mb.prism(geom.rect(xs - 3.0, ky0, xr, ky1), "XY", zn, zn + 2.0, "brass_satin")        # underside of the right part
-    mb.prism(geom.rect(xr - 3.0, ky0, xr, ky1), "XY", zn + 2.0, zt - 2.0, "brass_satin")  # right end
+    mb.prism(geom.rect(cx0, pnl1, cx0 + 3.0, ky1), "XY", wz0, kz0, "brass_satin")       # left end
+    mb.prism(geom.rect(xs - 3.0, pnl1, xr, ky1), "XY", zn, zn + 2.0, "brass_satin")       # underside of the right part
+    mb.prism(geom.rect(xr - 3.0, pnl1, xr, ky1), "XY", zn + 2.0, zt - 2.0, "brass_satin") # right end
     # revolution-counter dial plate (static: the counter is not modelled; the Magna Rota counts turns)
-    dx, dy, dr, dz = X[0] + cs_["dial_dx"], py - 8.0, cs_["dial_radius"], zt
+    dx, dy, dr, dz = X[0] + x_pl + pin_g.rp + cs_["dial_from_knob0"], py - 8.0, cs_["dial_radius"], zt
     mb.prism(geom.circle(dr, 64), "XY", dz, dz + 1.0, "brass_satin", smooth=True, offset=(dx, dy, 0))
     for a0 in (0.0, 180.0):
         ring = [(u + dx, w + dy) for u, w in annulus_half(dr - 6.0, dr - 13.0, a0)]
@@ -496,7 +520,7 @@ def build(p):
 
     # =========================================================== teaching extras (M3)
     labels = {
-        "frame.static": ("Frame: rear wall, front bar and bearings", "Gestell: Rückwand, Vorderleiste und Lager"),
+        "frame.static": ("Frame: side walls, rear wall and front bar", "Gestell: Seitenwände, Rückwand und Vorderleiste"),
         "frame.base": ("Oak base board and bearers", "Grundbrett und Auflageleisten aus Eiche"),
         "frame.case": ("Oak case", "Eichenkasten"),
         "frame.register_cover": ("Cover plate of the result register", "Deckplatte des Resultatwerks"),
@@ -507,6 +531,7 @@ def build(p):
     }
     for j in range(C):
         labels[f"pm.setting_plate.{j}"] = (f"Setting dial {j} (digits 0-9)", f"Einstellscheibe {j} (Ziffern 0-9)")
+        labels[f"pm.setting_stop.{j}"] = (f"Setting stop {j}", f"Anschlag des Stellknopfs {j}")
     for name, (en, de) in labels.items():
         bl.set_labels(bpy.data.objects[name], en, de)
     # exploded view: one offset per part group, matched by exact name or "prefix.*"

@@ -31,6 +31,9 @@ class Kin:
         self.carry_window_start = p.v("timing.carry_window")[0]
         self.per_carry = p.v("timing.per_carry_angle")
         self.store_pitch = p.v("pars_immobilis.fuenfhorn_pitch")
+        self.dial_step = 360.0 / p.v("pars_mobilis.setting_dial.divisions")
+        self.pinion_y = p.v("geometry.setting.pinion_y")
+        self.rack_pitch = math.pi * p.v("geometry.setting.pinion_module")
 
     # --- input side -------------------------------------------------------
     def drum_front_y(self, s):
@@ -144,5 +147,22 @@ class Kin:
 
     # --- setting dial -----------------------------------------------------
     def dial_angle(self, s):
-        """Rotation of the setting knob/pinion about Blender +Z (deg)."""
-        return 36.0 * s
+        """Rotation of the setting knob/pinion about Blender +Z (deg): one division per digit."""
+        return self.dial_step * s
+
+    def rack_centres(self, margin=1.5):
+        """Rack tooth centres (y, measured from the drum's front face) that stay in mesh with the
+        pinion over settings 0..9, with `margin` pitches to spare at each end.
+
+        At setting 0 a pinion tooth points at the rack, so a gap of the rack faces the pinion."""
+        p = self.rack_pitch
+        at0 = self.pinion_y - self.drum_front_y(0)                # the pinion, seen from the drum front at 0
+        lo = at0 - margin * p
+        hi = self.pinion_y - self.drum_front_y(9) + margin * p   # ... and at 9
+        first = lo + ((at0 + p / 2.0 - lo) % p)                   # centres half a pitch off the pinion at 0
+        out = []
+        c = first
+        while c <= hi:
+            out.append(c)
+            c += p
+        return out

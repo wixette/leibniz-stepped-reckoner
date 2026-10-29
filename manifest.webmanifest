@@ -1,7 +1,7 @@
 {
   "name": "Leibniz's Stepped Reckoner",
   "short_name": "Stepped Reckoner",
-  "description": "Leibniz's stepped reckoner, the first calculating machine for all four operations of arithmetic, as an interactive 3D simulator with a tutorial and lessons.",
+  "description": "Interactive 3D simulator of Leibniz's stepped reckoner, the first mechanical calculator to add, subtract, multiply and divide. Lessons in 10 languages, in the browser.",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#0f1317",

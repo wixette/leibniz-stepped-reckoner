@@ -49,7 +49,7 @@ def main():
     kin = kinematics.Kin(p)
     pose.apply(o, kin, 0, 0, 0)
     bpy.context.view_layer.update()
-    for name in ("shaft", "drum", "rack", "dial", "plate", "wheel", "store", "window", "frame"):
+    for name in ("shaft", "drum", "rack", "dial", "plate", "stop", "wheel", "store", "window", "frame"):
         lo, hi = bbox(o[name])
         print(f"BBOX {o[name].name:22s} x[{lo[0]:7.1f},{hi[0]:7.1f}] y[{lo[1]:7.1f},{hi[1]:7.1f}] z[{lo[2]:7.1f},{hi[2]:7.1f}]")
 
@@ -83,6 +83,8 @@ def main():
     sweep("drum collar <-> rack fork", [("drum", "rack")],
           [dict(setting=s, digit_start=0, theta=t) for s in range(10) for t in thetas[::4]])
     sweep("pinion <-> rack (dialling)", [("dial", "rack")],
+          [dict(setting=s / 20.0, digit_start=0, theta=0) for s in range(0, 181)])
+    sweep("pointer <-> setting stop (dialling)", [("dial", "stop")],
           [dict(setting=s / 20.0, digit_start=0, theta=0) for s in range(0, 181)])
     sweep("Einzahn <-> Fünfhorn (carry)", [("wheel", "store")],
           [dict(setting=1, digit_start=9, theta=t) for t in thetas])

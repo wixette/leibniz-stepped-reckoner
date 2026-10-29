@@ -30,6 +30,7 @@ Pages cannot be opened from `file://`, because browsers do not load modules from
 - **Git LFS**, for the 3D models: run `git lfs install` once, then clone as usual (or `git lfs pull` in an existing clone). Without it the `.glb` files are small pointer files, and the page and the acceptance tests fail with "not a glTF file".
 - For the checks only: **Node.js** 24 (22 or later works) and **pnpm** (the version is pinned in `package.json`; `corepack enable` installs it). `pnpm install` fetches three.js for the tests and TypeScript's checker; the pages do not use them.
 - For rebuilding the model only: **Blender** (the scripts call it at `/Applications/Blender.app`; see [conventions.md](conventions.md), *Code*).
+- For the screenshots and videos only: **Google Chrome**, and for the videos **ffmpeg** (with libx264).
 
 ## Checks
 
@@ -47,6 +48,12 @@ CI runs them on every push and pull request, together with the REUSE lint ([lice
 ## Versions and releases
 
 The version is kept in one place, `package.json`. Set it with `pnpm version <x.y.z>`, which also writes it into the pages' file names (see *Deploying behind a cache*) and does not commit or tag ([.npmrc](../.npmrc)). A release is a pull request named for its version; it is tagged `vX.Y.Z` on GitHub, on the merge commit, and its changes are listed in [CHANGELOG.md](../CHANGELOG.md). Each push to `main` deploys the site to GitHub Pages once its tests have passed ([.github/workflows/pages.yml](../.github/workflows/pages.yml)).
+
+**Screenshots.** `pnpm shots` takes the release pictures ([tools/shots.mjs](../tools/shots.mjs)): the README's six (copied by hand into `images/readme/`), and a set for posts: the Taken apart view from several sides and distances, the drum and carry views from several sides, and the multiplication lesson step by step. It serves the repository itself and drives headless Chrome, at 1600 × 900; view shots are the stage alone, with the dock hidden. `--lang en,zh` takes them in each language given, into `~/Downloads/leibniz-v<version>-media/shots/<lang>/` (or `--out <folder>`), and `--only <text>` only those whose name contains it. Chrome is found at its usual place, or set `CHROME` to its path.
+
+**Videos.** `pnpm video` makes the release clips ([tools/video.mjs](../tools/video.mjs)), 1920 × 1080 MP4 with the machine's sound: the machine taken apart and looked round, the stepped drum and the carry in slow motion, an addition and a multiplication from start to finish. They are made frame by frame, not recorded in real time: the tool replaces the page's clock and advances it one frame at a time, so the video is smooth however slow the rendering, and nothing on the screen or the sound card is recorded. The soundtrack is mixed afterwards from `audio/`, from a log of every sound the app played. It takes the same `--lang`, `--out` (default `~/Downloads/leibniz-v<version>-media/videos/<lang>/`) and `--only`, and `--fps` (30). It needs ffmpeg, and takes a few minutes for each language.
+
+Release media are never kept in the repository: both tools write outside it by default, and only the README's six pictures are committed.
 
 ## Deploying behind a cache
 
@@ -89,4 +96,4 @@ A CDN must count the query string in its cache key (most do unless told not to).
 | `dev/` | Developer pages, one per milestone |
 | `vendor/` | three.js, three-mesh-bvh, the Roboto Flex font and the Material Symbols icons, copied from npm (`pnpm vendor`) |
 | `tests/` | `node --test` tests |
-| `tools/` | Reference check, vendoring, version stamps, icons and pose export scripts |
+| `tools/` | Reference check, vendoring, version stamps, icons, screenshots, videos and pose export scripts |

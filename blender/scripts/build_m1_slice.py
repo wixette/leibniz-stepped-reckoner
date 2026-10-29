@@ -6,7 +6,7 @@ Run headless:
 Per digit i (x = -digit_pitch * i, digit 0 = units on the right):
   pm.drum_shaft.i     square shaft + drive gear (+ handwheel on digit 0)   rotate about +Y: theta
     pm.drum.i         stepped drum                                         translate along +Y: setting
-  pm.setting_rack.i, pm.setting_dial.i, pm.setting_plate.i                 as in M0
+  pm.setting_rack.i, pm.setting_dial.i, pm.setting_plate.i, pm.setting_stop.i   as in M0
   pi.sum_wheel.i      result shaft, receiving gear, digit disc, Einzahn,
                       star (i >= 1, receives carries from store i-1)       rotate about +Y
   pi.carry_store.i    store shaft, Einzahn horns, Muldenrad teeth,
@@ -24,7 +24,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import bpy  # noqa: E402
-from lib import bl, geom, params  # noqa: E402
+from lib import bl, geom, kinematics, params  # noqa: E402
 from lib.bl import MeshBuilder  # noqa: E402
 
 DEFAULT_OUT = os.path.join(params.MACHINE_DIR, "assets", "m1-carry-slice.glb")
@@ -62,8 +62,13 @@ def build(p):
     m = p.v(G + "drum.module")
     add, ded = p.v(G + "drum.tooth_addendum"), p.v(G + "drum.tooth_dedendum")
     drum_gear = geom.GearSpec(p.v(G + "drum.virtual_teeth"), m, p.v(G + "drum.rib_thickness_factor"), add, ded)
-    rg = geom.GearSpec(p.v(G + "receiving_gear.teeth"), p.v(G + "receiving_gear.module"), 1.0, add, ded)
-    zs = zd + drum_gear.rp + rg.rp
+    RG = G + "receiving_gear."
+    rg = geom.GearSpec(p.v(RG + "teeth"), p.v(RG + "module"), 1.0, p.v(RG + "addendum"), p.v(RG + "dedendum"),
+                       p.v(RG + "profile_shift"))
+    zs = zd + p.v(RG + "centre_distance")
+    kin = kinematics.Kin(p)
+    rack_c = kin.rack_centres()
+    boss = p.v(G + "drum.boss")
     y_gear = p.v(G + "receiving_gear.y")
     g_th = p.v(G + "receiving_gear.thickness")
     Fdx, Fdz = p.v(G + "carry_store.offset_xz")
@@ -77,7 +82,9 @@ def build(p):
     # Drive gears (equal): centre distance drum <-> lever.
     cdl = math.hypot(Lv[0][0] - D[0][0], Lv[0][1] - D[0][1])
     zg = p.v(M1 + "drive_gear_teeth")
-    dg = geom.GearSpec(zg, cdl / zg)
+    dg = geom.GearSpec(zg, cdl / zg, p.v(M1 + "drive_gear_thickness_factor"),
+                       (p.v(M1 + "drive_gear_tip_diameter") - cdl) / 2.0 / (cdl / zg))  # pitch diameter = centre distance
+    collar = p.v(M1 + "drum_gear_collar")
     gy0, gy1 = p.v(M1 + "drive_gear_y")
     # Chain phases: drum0 -> lever0 -> drum1 -> lever1 -> ...
     drum_first, lever_first = [0.0] * n, [0.0] * n
@@ -139,6 +146,7 @@ def build(p):
             mb.prism(geom.circle(4.5, 24), "XZ", -70.5, -66.5, "brass_satin", smooth=True)
             mb.prism([(u, w + 11.0) for u, w in geom.circle(1.6, 16)], "XZ", -85, -73.5, "steel_dark", smooth=True)
         mb.prism(geom.gear_outline(dg, drum_first[i]), "XZ", gy0, gy1, "brass_satin")
+        mb.prism(geom.circle(collar["diameter"] / 2.0, 32), "XZ", gy1, gy1 + collar["length"], "brass_satin", smooth=True)
         mb.prism(geom.circle(3.5, 24), "XZ", gy0 - 1.0, gy0, "brass_satin", smooth=True)
         shaft = mb.build(f"pm.drum_shaft.{i}", col, (x, 0, zd))
         bl.set_motion(shaft, "rotate", (0, 1, 0), f"Drum shaft {i} with drive gear", f"Staffelwalzenwelle {i} mit Antriebsrad")
@@ -154,6 +162,7 @@ def build(p):
         mb.prism(geom.circle(9.0, 40), "XZ", -4.0, -3.0, "brass_satin", smooth=True)
         mb.prism(geom.circle(7.0, 40), "XZ", -3.0, -1.0, "brass_satin", smooth=True)
         mb.prism(geom.circle(9.0, 40), "XZ", -1.0, 0.0, "brass_satin", smooth=True)
+        mb.prism(geom.circle(boss["diameter"] / 2.0, 40), "XZ", L - 0.01, L + boss["length"], "brass_polished", smooth=True)
         drum = mb.build(f"pm.drum.{i}", col, (x, 0, zd))
         drum["core_radius_mm"] = drum_gear.rf
         drum["rib_tip_radius_mm"] = drum_gear.ra
@@ -162,8 +171,9 @@ def build(p):
 
         # ------------------------------------------------ setting rack, dial, plate
         mb = MeshBuilder()
-        for poly in geom.rack_teeth(x_pl, pm_, [-2.0 - 4.0 * j for j in range(13)], back_u=x_pl - 5.0):
+        for poly in geom.rack_teeth(x_pl, pm_, rack_c, back_u=x_pl - 5.0):
             mb.prism(poly, "XY", -4.0, 4.0, "steel")
+        mb.prism(geom.rect(x_pl - 5.0, max(rack_c), x_pl - 1.8, -1.3), "XY", -4.0, 4.0, "steel")
         mb.prism(geom.rect(7.2, -2.7, x_pl - 4.0, -1.3), "XY", -2.5, 2.5, "steel")
         rack = mb.build(f"pm.setting_rack.{i}", col, (x, 0, zd))
         bl.set_motion(rack, "translate", (0, 1, 0), f"Setting rack {i}", f"Einstellzahnstange {i}", unit="mm")
@@ -186,7 +196,7 @@ def build(p):
         mb.prism(geom.circle(17.0, 48), "XY", z_plate, z_plate + 2.0, "brass_satin", smooth=True)
         glyphs = []
         for s in range(10):
-            a = math.radians(-90.0 + 36.0 * s)
+            a = math.radians(-90.0 + kin.dial_step * s)
             cx, cy = 12.8 * math.cos(a), 12.8 * math.sin(a)
             glyphs.append((cx, cy, z_plate + 2.25))
             verts, faces = bl.glyph_mesh(str(s), 3.8, 0.3)
@@ -195,6 +205,13 @@ def build(p):
         bl.set_anchors(plate, "glyph_anchors", glyphs)
         plate["motion"] = "static"
         bl.parent(plate, root)
+        mb = MeshBuilder()
+        a9 = -90.0 + kin.dial_step * 9
+        mb.prism(geom.stop_lug(5.6, pointer_len - 1.0, a9, 270.0, 1.1 + 0.15), "XY", z_plate + 2.0, z_plate + 3.4, "steel")
+        stop = mb.build(f"pm.setting_stop.{i}", col, (px, py, 0))
+        stop["motion"] = "static"
+        bl.set_labels(stop, f"Setting stop {i}", f"Anschlag des Stellknopfs {i}")
+        bl.parent(stop, root)
 
         # ------------------------------------------------ result wheel (+ star for carry-in)
         mb = MeshBuilder()

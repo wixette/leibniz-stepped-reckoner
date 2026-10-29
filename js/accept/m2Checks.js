@@ -1,4 +1,4 @@
-// Acceptance spec for M2 (plan §10.1, A2-1..A2-9 and A2-11..A2-13; A2-10 runs the M0/M1
+// Acceptance spec for M2 (plan §10.1, A2-1..A2-9 and A2-11..A2-14; A2-10 runs the M0/M1
 // specs in the same `pnpm test`). Poses the full machine through Machine -> applyM2Pose ->
 // Rig, exactly as the main page and page 03 do.
 
@@ -11,7 +11,7 @@ import { Machine } from "../sim/machine.js";
 import { registerValue } from "../sim/operations.js";
 import { M2_SCENARIOS, walkM2 } from "../tools/m2Scenarios.js";
 import { CollisionSweep } from "./collisions.js";
-import { anchors, fmt, intersects, minDistance, nearestIndex, node, rayHits, result, topEdgeTilt } from "./harness.js";
+import { anchors, coplanarOverlaps, fmt, intersects, minDistance, nearestIndex, node, rayHits, result, topEdgeTilt } from "./harness.js";
 /** @import { CheckResult } from "./harness.js" */
 import { ANGLE_TOL_DEG, CONTACT_PIN_MM } from "./m0Checks.js";
 import { readWindowM1 } from "./m1Checks.js";
@@ -163,7 +163,7 @@ export function runM2Checks(root, opts = {}) {
     }
     if (anchors(node(root, "pi.window"), "read_points").length !== R) bad.push("window read points");
     for (let j = 0; j < C; j++) {
-      for (const b of ["pm.drum", "pm.setting_dial", "pm.setting_plate", "pm.lever", "pm.zweihorn_add", "pm.zweihorn_sub"]) {
+      for (const b of ["pm.drum", "pm.setting_dial", "pm.setting_plate", "pm.setting_stop", "pm.lever", "pm.zweihorn_add", "pm.zweihorn_sub"]) {
         if (!onCarriage(part(c, b, j))) bad.push(`${b}.${j} not on the carriage`);
       }
       if (anchors(part(c, "pm.setting_plate", j), "glyph_anchors").length !== 10) bad.push(`plate ${j} glyphs`);
@@ -176,7 +176,7 @@ export function runM2Checks(root, opts = {}) {
     return { passed: bad.length === 0, detail: bad.join("; ") || `${R} register digits, ${C} carriage digits, Magna Rota, crank and lead screw present with anchors` };
   });
 
-  run("A2-2", "All 16 windows read 0–9; all 8 pointers aim at their digit (offsets 0 and 8)", () => {
+  run("A2-2", "All 16 windows read 0–9; all 8 pointers aim at their digit (offsets 0 and 7)", () => {
     /** @type {string[]} */
     const bad = [];
     for (const offset of [0, c.m.maxOffset]) {
@@ -192,10 +192,10 @@ export function runM2Checks(root, opts = {}) {
         }
       }
     }
-    return { passed: bad.length === 0, detail: bad.join("; ") || "16 windows × 10 digits and 8 pointers × 10 digits correct at offsets 0 and 8" };
+    return { passed: bad.length === 0, detail: bad.join("; ") || `16 windows × 10 digits and 8 pointers × 10 digits correct at offsets 0 and ${c.m.maxOffset}` };
   });
 
-  run("A2-3", "Every offset 0–8: drum j under gear o+j, lever j at store o+j, nothing intersecting at rest", () => {
+  run("A2-3", "Every offset 0–7: drum j under gear o+j, lever j at store o+j, nothing intersecting at rest", () => {
     /** @type {string[]} */
     const bad = [];
     state(c, {});
@@ -455,6 +455,19 @@ export function runM2Checks(root, opts = {}) {
       passed: bad.length === 0,
       detail: bad.join("; ") || `main crank knob clears the front wall by ${fmt(mainLow - wallTop, 1)} mm and the floor by ${fmt(mainLow - floorTop, 1)} mm; end crank knob ${fmt(endLow - table, 1)} mm above the table`,
     };
+  });
+
+  run("A2-14", "No flickering faces: no two parts share a face plane where they overlap, at rest at both carriage ends", () => {
+    // Two coplanar faces facing the same way flicker as the view moves (z-fighting); the
+    // carriage cover's end walls lay in the front panel's faces until 2026-10-29.
+    /** @type {string[]} */
+    const bad = [];
+    for (const offset of [0, c.m.maxOffset]) {
+      state(c, { offset, result: 0 });
+      pose(c);
+      for (const h of coplanarOverlaps(root)) bad.push(`offset ${offset}: ${h}`);
+    }
+    return { passed: bad.length === 0, detail: bad.join("; ") || `no overlapping coplanar faces at offsets 0 and ${c.m.maxOffset}` };
   });
 
   run("A2-8", `Budget: ≤ ${MAX_TRIANGLES / 1000}k triangles, ≤ 15 MB`, () => {

@@ -1,0 +1,66 @@
+subsystem,part,teil,quantity,value,unit,file,page,reading,note
+layout,result register,,digit pitch,36.5,mm,465,"13, 48, 111",clear,"16 windows at 28.5 + 15 x 36.5 + 34 = 610; also the carriage (15, 28, 53), the lead screw (45) and the jig (86)"
+layout,result register,,half pitch (carry axes),18.25,mm,465,"86, 87, 111",clear,Pentagon / carry-store axes sit halfway between digit axes
+layout,result register,,first digit axis from inner face of crank-side wall e,28.5,mm,465,"13, 111",clear,Digit axes at 28.5 + 36.5 n (n = 0..15); last at 576
+layout,result register,,last digit axis to inner face of wall d,34,mm,465,"13, 111",clear,
+layout,result register,,first pentagon axis from inner face of wall e,46.75,mm,465,"13, 111",clear,15 pentagon axes at 46.75 + 36.5 n (n = 0..14)
+layout,carriage,,setting stations,8,count,465,"53, 124",clear,
+layout,carriage,,carriage shift,7,places,465,124,clear,"Operating instructions: setting mechanism ""um 7 Stellen verschiebbar"""
+layout,carriage,,length over side walls,331,mm,465,48,clear,"""Wagenlänge 331"" = 7 + 1.5 + 11.5 + 292 + 11.5 + 1 + 6.5; 292 = 8 x 36.5. Bars g and h give 330 (117, 122)"
+layout,carriage,,drum centres from carriage ends,38.25 / 37.25,mm,465,48,clear,left / right
+frame,lower frame (Unterteil),,length x depth,629 x 154,mm,465,94,clear,629 corrected from 630; +6 mm rear bar
+frame,lower frame (Unterteil),,width between side walls,610,mm,465,"94, 108",clear,Bars a and b 647 long over the M6 studs; rear bar c 639
+frame,upper frame (Oberteil),,length x depth,610 x 72,mm,465,95,clear,Bars x and y 610 x 23 x 7.5
+frame,side wall,d,length x height x thickness,157.5 x 74.5 x 10,mm,465,96,clear,St 38u-2; two top slots 64.5 apart; 1 mm brass skin outside
+frame,side wall,e,length x height x thickness,157.5 x 71 x 10,mm,465,100,clear,Crank side; front boss with 16 mm bore 40 from the front
+frame,carriage side walls,k / l,depth x max height,153 x 38.5,mm,465,"113, 114, 116",clear,l is the crank side
+frame,carriage detents,a,detent holes,8 at 36.5,mm,465,107,clear,Conical 3 mm holes in lower-frame bar a: 8 carriage positions
+drum,stepped drum (Staffelwalze),t (1),quantity,8,count,465,"55, 63, 64",clear,16 and 20 struck out; brass
+drum,stepped drum (Staffelwalze),t (1),module / blank teeth,2 / 16,mm / count,465,"55, 63",clear,Cut as a z 16 gear; 9 teeth kept as ribs (22.5 deg apart)
+drum,stepped drum (Staffelwalze),t (1),tip diameter,36,mm,465,"55, 63",clear,Pitch diameter 32
+drum,stepped drum (Staffelwalze),t (1),toothed length,27.2,mm,465,"55, 63, 64",clear,Plus a 14 mm boss 5 long; 32.2 overall; 6 mm bore
+drum,stepped drum (Staffelwalze),t (1),rib lengths (milling dimensions),3.02 / 6.04 / 9.06 / 12.08 / 15.1 / 18.12 / 21.14 / 24.16 / 27.18,mm,465,63,clear,3.02 mm per digit; milled with a 5.5 mm cutter
+drum,drum axle,,overall length,187.75,mm,465,6,clear,Drum seat 8 mm dia x 64.55; journals 6 mm x 75.2 (rear) and 48 (rack side); 8 pieces
+drum,receiving gear (Einaufnahmerad),4,teeth / module,10 / 1.75,count / mm,465,"2, 54, 93",clear,"Pointed teeth (""Zahnrad (spitz)""); 16 pieces, one per register place"
+drum,receiving gear (Einaufnahmerad),4,profile shift x,0.674,,465,"54, 93",clear,x m = 1.18 mm; pressure angle 20 deg
+drum,receiving gear (Einaufnahmerad),4,tip diameter,23.36,mm,465,"54, 93",clear,Design 23; root diameter 15.66 on page 93 (13.42 on page 56); face width 2.5
+drum,receiving gear to drum,,centre distance,26.5,mm,465,"87, 93",clear,Page 93 checks tip clearance 0.67 against a mating tip radius of 18 (the drum)
+drive,long gear (Zahnradwalze),V,teeth / module / tip dia / length,10 / 2 / 22.9 / 37.5,,465,54,clear,"8 pieces; centre distance 18.9; tip reduced from the standard 24"
+drive,gear,S,teeth / module / tip dia,10 / 2 / 22.9,,465,"54, 65",clear,9 pieces (page 65); 14 mm hub; brass
+drive,gear,5,teeth / module / tip dia / width,10 / 1 / 12 / 3,,465,55,clear,16 pieces
+drive,large gears,A / B / C,teeth / module / tip dia / thickness,61 / 1.5 / 94.5 / 5,,465,"58, 61, 62",clear,"Brass; hub 20, bore 12; three 80 deg windows, 40 deg spokes; quantity 3 (58) or 7 (61)"
+setting,setting pinion,O,teeth / module / tip dia,10 / 1.25 / 15,,465,"58, 66",clear,Pitch diameter 12.5; 8 pieces; steel
+setting,setting rack,9,teeth / module / length,9 / 1.25 / 45,,465,"59, 60",clear,Pitch 3.925; centre distance to pinion 10.5; 46 on page 60
+setting,setting travel,,per digit,3.02,mm,465,57,clear,Pinion pitch circumference 39.25 / 13 = 3.02 = the drum's rib step
+setting,setting dial (Ziffernscheibe),n,divisions,13 x 27.7,deg,465,"35, 38",clear,Digits 0-9 on 10 divisions; 110.7 deg blank sector (finger-lever stop)
+setting,setting dial (Ziffernscheibe),n,diameter x thickness,35.5 x 1.5,mm,465,35,clear,Numerals 4 mm; brass; 33 mm on the layout sheets (47 and 53)
+setting,setting axle,m,length / shaft,65 / 6,mm,465,18,clear,4 x 4 square for the finger lever
+setting,carriage cover plate,,size,439 x 110 x 2,mm,465,"52, 53",clear,Brass; 8 stations at 48.75 + 36.5 n; windows 9.75-14.75 above each axle
+carry,two-finger lever (Zweihorn),w,quantity / thickness,8 / 5,count / mm,465,34,clear,Steel; hub 14; bore 6
+carry,two-finger lever (Zweihorn),w,finger-tip radius,14.65,mm,465,"34, 123",clear,
+carry,two-finger lever (Zweihorn),w,"spread at zero position, places 8 to 1 seen from the front",135 / 102 / 69 / 39 / 36 / 69 / 102 / 132,deg,465,31,clear,"Place 1 also 131; places 1 and 2 turned slightly inward; 33 deg steps"
+carry,two-finger lever (Zweihorn),w,pivot from result-wheel axis,18.25 across / 21.6 down,mm,465,"87, 120",clear,Pivot then 4.9 above the drum axis (21.6 + 4.9 = 26.5)
+carry,two-finger lever (Zweihorn),w,lever ratio,14.65 : 8,,465,123,clear,"9 deg in -> 4.9 deg out; 18 deg -> 9.8 deg; 8.7 deg judged a good compromise"
+carry,two-finger lever (Zweihorn),,Burkhardt's arrangement: spread / stagger,80 / 22.5,deg,465,126,clear,Printed figure: 8 levers at 80 deg each turned 22.5 deg (1/16) from the next
+carry,carry cover (Abdeckung),,length x width x height,610 x 80 x 18,mm,465,13,clear,Brass 0.5; 16 windows and 15 R4 notches at 36.5
+carry,parts per register,,carry units,15,count,465,"1, 2",clear,One first five-horn and one second five-horn per unit; shafts alternate long and short (8 + 7)
+counter,revolution counter cam,,lobes / tip radius,1 / 15.4,count / mm,465,78,clear,
+counter,revolution counter driver disc,16,slots / diameter,12 / 50,count / mm,465,73,clear,
+counter,revolution counter gears,19c / 19a,teeth / module,12 / 3 and 10 / 3,,465,"70, 71",clear,One step = 1/12 turn of 19c = 1/10 turn of the digit (one digit per crank turn) [derived]
+counter,revolution counter digit disc,23,diameter x thickness,47 x 4,mm,465,79,clear,Numerals 4 mm on radius 18.75; brass
+counter,carriage dial opening,,diameter / numeral radius,68 / 37.5,mm,465,"52, 53",clear,0-9 at 36 deg steps
+frame,lead screw (Transportspindel),,lead,36.5,mm,465,"45, 46",clear,Right hand; tolerance -0.05; one turn = one place
+frame,lead screw (Transportspindel),,overall length,658,mm,465,"45, 46",clear,"Grooved section 310 long, 17.5 dia; rest 11.5 dia; 8 mm square drive end"
+frame,lead screw (Transportspindel),,groove,R1.5 x 3 deep,mm,465,"45, 46",clear,Semicircular; the nut has a 3 mm pin with a hemispherical tip instead of a thread (42)
+frame,crank,,arm hole centres,90,mm,465,5,uncertain,Offset arm; developed length 130
+operation,result register,,sign place,"foremost digit: 0 = positive, 9 = ...",,465,124,uncertain,Reached only through a carry; the copy breaks off after 9 (negative is implied)
+operation,carry,,carry range,up to the result digit just beyond the carriage,,465,124,clear,Carries above the carriage stay stored
+drum,result axis to drum axis,,vertical distance,26.5,mm,466,6,clear,"Bild 1: result axis directly above the drum axis; also /465 p. 87, 93"
+carry,two-finger lever (Zweihorn),w,pivot from drum axis,18.25 across / 4.9 up,mm,466,6,clear,"Bild 1; 18.9 in a straight line"
+carry,carry wheel,,position,halfway between two result axes and level with them,,466,6,clear,Bild 1
+carry,pentagon,8,circumradius,20,mm,466,6,scaled,Regular pentagon on the carry-wheel axis; not dimensioned
+carry,Muldenrad (five-horn),,horns / pitch,5 / 72,count / deg,466,7,clear,Construction drawing about 20:1
+carry,Muldenrad (five-horn),,centre to 10-tooth wheel centre,18.2,mm,466,7,uncertain,The half pitch
+carry,Muldenrad (five-horn),,radius,12.5,mm,466,7,uncertain,Horn tips flattened 2 x 2.01
+carry,single tooth (Einzahn),,overlap / clearance,0.1 / 0.05,mm,466,7,clear,"""überlappt um 0,1, Abstand 0,05"""
+drive,large gears B to C (Lange 1958),B / C,centre distance,91.38,mm,466,9,clear,Pencil note on Lange's view of the original; matches z 61 m 1.5

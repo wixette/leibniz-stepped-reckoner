@@ -13,7 +13,7 @@ before(async () => {
   results = runM0Checks(await loadAsset("m0-digit-slice.glb"));
 }); // budget: docs/conventions.md asks for ~30 s per machine
 
-const IDS = ["A0-1", "A0-2", "A0-3", "A0-4", "A0-5", "A0-6", "A0-7", "A0-8", "A0-9"];
+const IDS = ["A0-1", "A0-2", "A0-3", "A0-4", "A0-5", "A0-6", "A0-7", "A0-8", "A0-9", "A0-10"];
 
 describe("M0 acceptance (one-digit slice)", () => {
   for (const id of IDS) it(id, () => {

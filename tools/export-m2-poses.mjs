@@ -30,7 +30,7 @@ for (const sc of M2_SCENARIOS) {
 }
 // Dialling: every knob/rack/drum through the full setting range at rest, at both ends
 // of the carriage travel.
-for (const offset of [0, 8]) {
+for (const offset of [0, new Machine().maxOffset]) {
   const m = new Machine();
   m.setOffset(offset);
   const base = m2NodeValues(m);
