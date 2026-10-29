@@ -210,6 +210,7 @@ export default {
   "part.lever": "Carry lever shaft",
   "part.zweihornAdd": "Carry lever, adding horn",
   "part.zweihornSub": "Carry lever, subtracting horn",
+  "part.settingStop": "Setting stop",
   "part.base": "Oak base",
   "part.case": "Oak case",
   "part.leadScrew": "Lead screw and end crank (slides the carriage)",

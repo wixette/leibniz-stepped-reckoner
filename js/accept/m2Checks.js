@@ -163,7 +163,7 @@ export function runM2Checks(root, opts = {}) {
     }
     if (anchors(node(root, "pi.window"), "read_points").length !== R) bad.push("window read points");
     for (let j = 0; j < C; j++) {
-      for (const b of ["pm.drum", "pm.setting_dial", "pm.setting_plate", "pm.lever", "pm.zweihorn_add", "pm.zweihorn_sub"]) {
+      for (const b of ["pm.drum", "pm.setting_dial", "pm.setting_plate", "pm.setting_stop", "pm.lever", "pm.zweihorn_add", "pm.zweihorn_sub"]) {
         if (!onCarriage(part(c, b, j))) bad.push(`${b}.${j} not on the carriage`);
       }
       if (anchors(part(c, "pm.setting_plate", j), "glyph_anchors").length !== 10) bad.push(`plate ${j} glyphs`);

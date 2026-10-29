@@ -22,6 +22,7 @@
 // it (the operator must shift the carriage over that digit first), or one whose wheel would
 // pass 9 again before its lever arrives (after a shift brings a waiting carry under it).
 
+import machine from "../../params/machine.json" with { type: "json" };
 import * as K from "./kinematics.js";
 import * as M from "./kinematicsM1.js";
 
@@ -70,7 +71,7 @@ import * as M from "./kinematicsM1.js";
  * @property {number} magnaRota deg (ring)
  */
 
-export const DIGIT_PITCH = 37; // mm (params: layout.digit_pitch)
+export const DIGIT_PITCH = machine.layout.digit_pitch.v; // mm
 
 export class Machine {
   /**

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { Machine } from "../../js/sim/machine.js";
+import { DIGIT_PITCH, Machine } from "../../js/sim/machine.js";
 import { divide, multiply, registerValue } from "../../js/sim/operations.js";
 
 describe("Machine (16-digit register, 8-digit carriage)", () => {
@@ -248,6 +248,6 @@ describe("Machine (16-digit register, 8-digit carriage)", () => {
     m.setTheta(0);
     assert.equal(m.setOffset(9), false);
     assert.equal(m.setOffset(8), true);
-    assert.equal(m.machinePose().carriageX, -8 * 37);
+    assert.equal(m.machinePose().carriageX, -8 * DIGIT_PITCH);
   });
 });

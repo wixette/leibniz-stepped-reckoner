@@ -208,6 +208,7 @@ export default {
   "part.lever": "Eixo da alavanca de transporte",
   "part.zweihornAdd": "Alavanca de transporte, chifre da soma",
   "part.zweihornSub": "Alavanca de transporte, chifre da subtração",
+  "part.settingStop": "Batente do botão de ajuste",
   "part.base": "Base de carvalho",
   "part.case": "Caixa de carvalho",
   "part.leadScrew": "Parafuso e manivela lateral (move o carro)",

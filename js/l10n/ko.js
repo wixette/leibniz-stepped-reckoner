@@ -208,6 +208,7 @@ export default {
   "part.lever": "받아올림 레버 축",
   "part.zweihornAdd": "받아올림 레버, 덧셈 뿔",
   "part.zweihornSub": "받아올림 레버, 뺄셈 뿔",
+  "part.settingStop": "설정 손잡이 멈춤쇠",
   "part.base": "참나무 받침",
   "part.case": "참나무 케이스",
   "part.leadScrew": "이송 나사와 옆 크랭크 (캐리지를 옮김)",

@@ -19,17 +19,22 @@ def _polar(r, deg):
 
 
 class GearSpec:
-    """Standard involute spur gear (or a virtual one, e.g. the stepped drum)."""
+    """Involute spur gear (or a virtual one, e.g. the stepped drum).
 
-    def __init__(self, teeth, module, thickness_factor=1.0, addendum=1.0, dedendum=1.25):
+    shift is the profile shift coefficient x: the tooth is cut x * module further out, so it
+    is thicker at the pitch circle (by 2 x tan(alpha) * module) and both its tip and root
+    move out by x * module, on the same base circle."""
+
+    def __init__(self, teeth, module, thickness_factor=1.0, addendum=1.0, dedendum=1.25, shift=0.0):
         self.z = teeth
         self.m = module
         self.rp = module * teeth / 2.0
         self.rb = self.rp * math.cos(math.radians(PRESSURE_ANGLE))
-        self.ra = self.rp + addendum * module
-        self.rf = self.rp - dedendum * module
+        self.ra = self.rp + (addendum + shift) * module
+        self.rf = self.rp - (dedendum - shift) * module
         # Half tooth thickness at the pitch circle, as an angle (rad).
-        self.half_pitch_angle = (math.pi * module / 2.0 * thickness_factor) / (2.0 * self.rp)
+        thickness = math.pi * module / 2.0 * thickness_factor + 2.0 * shift * module * math.tan(math.radians(PRESSURE_ANGLE))
+        self.half_pitch_angle = thickness / (2.0 * self.rp)
 
     def flank_half_angle(self, r):
         """Half-angle (deg) of the tooth at radius r (radial below the base circle)."""
@@ -98,6 +103,20 @@ def radial_bar(r0, r1, width, angle_deg):
         (ux * r1 + nx * h, uw * r1 + nw * h),
         (ux * r0 + nx * h, uw * r0 + nw * h),
     ]
+
+
+def stop_lug(r_in, r_out, a_from, a_to, offset, n=16):
+    """Annular sector from a_from to a_to (CCW) whose two side faces are straight lines
+    `offset` inside the radial lines at a_from and a_to: a bar of half-width `offset` lying
+    along either radial line just touches the face. Used for the setting stop, which the
+    knob's pointer meets at 0 and at 9."""
+    def arc(r, reverse):
+        a0 = a_from + math.degrees(math.asin(offset / r))
+        a1 = a_to - math.degrees(math.asin(offset / r))
+        pts = [_polar(r, a0 + (a1 - a0) * i / n) for i in range(n + 1)]
+        return list(reversed(pts)) if reverse else pts
+
+    return arc(r_out, False) + arc(r_in, True)
 
 
 def capsule(length, radius, angle_deg, cap_samples=10):

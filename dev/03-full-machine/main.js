@@ -5,7 +5,7 @@ import { applyM2Pose, m2NodeNames } from "../../js/scene/m2Pose.js";
 import { gltfName, Rig } from "../../js/scene/rig.js";
 import { Viewer } from "../../js/scene/viewer.js";
 import * as K from "../../js/sim/kinematics.js";
-import { Machine } from "../../js/sim/machine.js";
+import { DIGIT_PITCH, Machine } from "../../js/sim/machine.js";
 /** @import { CarryMode } from "../../js/sim/machine.js" */
 import { describeStep, snapshotM1 } from "../../js/sim/narrate.js";
 /** @import { Snapshot } from "../../js/sim/narrate.js" */
@@ -258,7 +258,7 @@ function phaseText(states) {
   const th = machine.theta;
   const stored = states.map((s, k) => (s === "stored" ? k : -1)).filter((k) => k >= 0);
   const exec = states.findIndex((s) => s === "executing");
-  if (machine.carriagePos !== machine.offset) return "The end crank turns the lead screw: the carriage moves one place (one turn = 37 mm).";
+  if (machine.carriagePos !== machine.offset) return `The end crank turns the lead screw: the carriage moves one place (one turn = ${DIGIT_PITCH} mm).`;
   if (exec >= 0) return `The carry lever at ${place(exec)} pushes its store: the ${place(exec + 1)} wheel turns one step.`;
   if (th === 0) {
     const blocked = machine.blocked ? " The pin is on the stop: take it out or move it to turn again." : "";

@@ -144,7 +144,7 @@ Use **Reset** before each one.
 
 ## How faithful is the model?
 
-The model is **kinematically faithful**: the mechanism and its angles follow the published sources (the timing of the drum's teeth, the stored carry and its pentagon, the staggered carry levers, the 37 mm step of the carriage), and the dimensions come from the published measurements and from photographs of the original and of the replica at TU Dresden. Many small part sizes had to be estimated, and the digits are deliberately larger than on the original so that they can be read on a screen.
+The model is **kinematically faithful**: the mechanism and its angles follow the published sources (the timing of the drum's teeth, the stored carry and its pentagon, the staggered carry levers, the 36.5 mm step of the carriage). Where they exist, the dimensions follow N. J. Lehmann's workshop drawings of the replica at TU Dresden, kept in the Deutsches Museum's archive; the rest come from the published measurements and from photographs of the original and of that replica. Many small part sizes had to be estimated, and the digits are deliberately larger than on the original so that they can be read on a screen.
 
 Where the sources disagree or say nothing, the choice is written down with its reason. The best-known example is the carry: historians read the original in two ways, and lesson 2 shows both ([decision 0001](design/decisions/0001-carry-interpretation.md)). Every dimension and angle, with its source and how sure we are of it, is in [params/machine.json](params/machine.json), and the research behind it is in [research/REPORT.md](research/REPORT.md).
 
@@ -179,6 +179,7 @@ Start with **[docs/development.md](docs/development.md)**: requirements, checks,
 The research and the model rely in particular on:
 - A. Burkhardt and W. Jordan, *Zeitschrift für Vermessungswesen* 26 (1897)
 - M. Ludwig (TU Dresden, 2006), on N. J. Lehmann's reconstructions
+- N. J. Lehmann's construction drawings of the TU Dresden replica: Deutsches Museum München, NL 183/465 and NL 183/466 PLAN (dimensions only; the drawings themselves are not reproduced)
 - E. Stein and F. O. Kopp (Leibniz Universität Hannover)
 - K. Badur and W. Rottstedt
 - the Arithmeum Bonn

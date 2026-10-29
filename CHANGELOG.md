@@ -7,6 +7,7 @@ What changed in each release. Versions follow `package.json` and are tagged `vX.
 - The page's description (for search engines and the installed app) and `package.json`'s now say what the simulator is first, and name the lessons and the ten languages, as the GitHub repository's description does.
 - `pnpm shots` takes the release screenshots, the README's and a set for posts, in any of the languages ([docs/development.md](docs/development.md), *Versions and releases*).
 - `pnpm video` makes the release videos, with the machine's sound: taken apart, the drum, the carry, an addition and a multiplication, in any of the languages.
+- The model follows N. J. Lehmann's workshop drawings of the Dresden replica (Deutsches Museum, NL 183/465), first part ([design/m4-notes.md](design/m4-notes.md), phase 1): the digit pitch and the lead screw are 36.5 mm; the stepped drum is a 16-tooth module-2 wheel, 36 mm across, with 9 ribs in 3.02 mm steps and a boss; the receiving gear has 10 pointed, profile-shifted teeth, 26.5 mm from the drum; the setting dial has 13 divisions, the digits on ten of them, and a stop the knob's pointer meets at 0 and at 9.
 
 ## 1.0.0
 

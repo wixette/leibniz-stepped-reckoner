@@ -208,6 +208,7 @@ export default {
   "part.lever": "Welle des Übertragshebels",
   "part.zweihornAdd": "Übertragshebel, Additionshorn",
   "part.zweihornSub": "Übertragshebel, Subtraktionshorn",
+  "part.settingStop": "Anschlag des Stellknopfs",
   "part.base": "Grundbrett aus Eiche",
   "part.case": "Eichenkasten",
   "part.leadScrew": "Schraube und Seitenkurbel (verschiebt den Schlitten)",

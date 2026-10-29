@@ -39,6 +39,7 @@ const PLACED = /** @type {const} */ ([
   ["pm.lever.", "part.lever"],
   ["pm.zweihorn_add.", "part.zweihornAdd"],
   ["pm.zweihorn_sub.", "part.zweihornSub"],
+  ["pm.setting_stop.", "part.settingStop"],
 ]);
 const SINGLE = /** @type {const} */ ([
   ["frame.base", "part.base"],

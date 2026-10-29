@@ -53,6 +53,7 @@ const parts = (root) => ({
   wheel: node(root, M0_NODES.wheel),
   store: node(root, M0_NODES.store),
   plate: node(root, "pm.setting_plate.0"),
+  stop: node(root, "pm.setting_stop.0"),
   window: node(root, "pi.window.0"),
   frame: node(root, "frame.static"),
 });
@@ -293,6 +294,25 @@ export function runM0Checks(root) {
       if (d > CONTACT_PIN_MM || intersects(p.dial, p.rack)) bad.push(`s=${s}: ${fmt(d)} mm`);
     }
     return { passed: bad.length === 0, detail: bad.join("; ") || `max gap ${fmt(worst)} mm over s = 0..9` };
+  });
+
+  run("A0-10", "The setting stop lets the knob turn from 0 to 9 and no further", () => {
+    /** @type {string[]} */
+    const bad = [];
+    let worst = Infinity;
+    for (let i = 0; i <= 36; i++) {
+      const s = i / 4;
+      rig.set("dial", K.dialAngle(s));
+      const d = minDistance(p.dial, p.stop);
+      worst = Math.min(worst, d);
+      if (d < CLEARANCE_MM || intersects(p.dial, p.stop)) bad.push(`s=${s}: ${fmt(d)} mm`);
+      if ((s === 0 || s === 9) && d > CONTACT_PIN_MM) bad.push(`s=${s}: pointer ${fmt(d)} mm from the stop`);
+    }
+    for (const s of [-0.1, 9.1]) {
+      rig.set("dial", K.dialAngle(s));
+      if (!intersects(p.dial, p.stop)) bad.push(`s=${s}: the knob turns past the stop`);
+    }
+    return { passed: bad.length === 0, detail: bad.join("; ") || `min clearance ${fmt(worst)} mm over s = 0..9; blocked beyond 0 and 9` };
   });
 
   c.m.reset();

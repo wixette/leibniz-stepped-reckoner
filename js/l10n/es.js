@@ -208,6 +208,7 @@ export default {
   "part.lever": "Eje de la palanca de acarreo",
   "part.zweihornAdd": "Palanca de acarreo, cuerno de suma",
   "part.zweihornSub": "Palanca de acarreo, cuerno de resta",
+  "part.settingStop": "Tope de la perilla de ajuste",
   "part.base": "Base de roble",
   "part.case": "Caja de roble",
   "part.leadScrew": "Tornillo y manivela lateral (mueve el carro)",

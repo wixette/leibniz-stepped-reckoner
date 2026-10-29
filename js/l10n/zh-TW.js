@@ -208,6 +208,7 @@ export default {
   "part.lever": "進位桿軸",
   "part.zweihornAdd": "進位桿，加法角",
   "part.zweihornSub": "進位桿，減法角",
+  "part.settingStop": "設定旋鈕擋塊",
   "part.base": "橡木底板",
   "part.case": "橡木外殼",
   "part.leadScrew": "導螺桿與側曲柄（移動滑架）",

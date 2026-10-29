@@ -32,6 +32,8 @@ const Y_GEAR = val(G.receiving_gear.y);
 export const SUM_STEP = val(machine.pars_immobilis.sum_wheel_step); // 36
 export const STORE_STEP = val(machine.pars_immobilis.einzahn_store_rotation); // 18
 export const STORE_PITCH = val(machine.pars_immobilis.fuenfhorn_pitch); // 72
+/** Knob rotation per setting digit (deg): the dial has 13 divisions, digits on ten of them. */
+export const DIAL_STEP = 360 / val(P.setting_dial.divisions); // 27.7
 
 const RE = val(G.result.einzahn_radius);
 const RPIN = val(G.result.einzahn_pin_radius);
@@ -57,12 +59,12 @@ export function drumFrontY(s) {
 }
 
 /**
- * Setting knob / pinion rotation about the vertical axis (deg).
+ * Setting knob / pinion rotation about the vertical axis (deg): one division per digit.
  * @param {number} s
  * @returns {number}
  */
 export function dialAngle(s) {
-  return 36 * s;
+  return DIAL_STEP * s;
 }
 
 /**

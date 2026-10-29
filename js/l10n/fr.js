@@ -208,6 +208,7 @@ export default {
   "part.lever": "Arbre du levier de retenue",
   "part.zweihornAdd": "Levier de retenue, corne d’addition",
   "part.zweihornSub": "Levier de retenue, corne de soustraction",
+  "part.settingStop": "Butée du bouton de réglage",
   "part.base": "Socle en chêne",
   "part.case": "Boîtier en chêne",
   "part.leadScrew": "Vis et manivelle latérale (déplace le chariot)",

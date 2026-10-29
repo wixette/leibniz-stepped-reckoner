@@ -208,6 +208,7 @@ export default {
   "part.lever": "Albero della leva di riporto",
   "part.zweihornAdd": "Leva di riporto, corno della somma",
   "part.zweihornSub": "Leva di riporto, corno della sottrazione",
+  "part.settingStop": "Fermo della manopola di impostazione",
   "part.base": "Base in rovere",
   "part.case": "Cassa in rovere",
   "part.leadScrew": "Vite e manovella laterale (sposta il carrello)",

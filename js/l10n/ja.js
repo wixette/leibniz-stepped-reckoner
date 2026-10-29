@@ -208,6 +208,7 @@ export default {
   "part.lever": "繰り上がりレバーの軸",
   "part.zweihornAdd": "繰り上がりレバー（足し算の角）",
   "part.zweihornSub": "繰り上がりレバー（引き算の角）",
+  "part.settingStop": "置数つまみのストッパー",
   "part.base": "オーク材の台",
   "part.case": "オーク材のケース",
   "part.leadScrew": "送りねじと側面クランク（キャリッジを動かす）",

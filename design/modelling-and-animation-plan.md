@@ -41,11 +41,11 @@ Node names follow `docs/conventions.md`. Indices: `d` = drum/input digit 0–7, 
 | `pi.sum_wheel.r` (with receiving gear, Einzahn and result disc) | `pi.register` | rotation about Y, 36° per unit | 16 |
 | `pi.carry_store.r` (Muldenrad + Fünfhorn + pentagon disc + detent wheel) | `pi.register` | rotation about Y (18° store, 72° per completed carry) | 15 |
 | `pi.carry_transfer.r` (Zwischenrad / carry-drive gear) | `pi.register` | rotation about Y | 15 |
-| `pm.carriage` | root | translation along X, 37 mm steps | 1 |
+| `pm.carriage` | root | translation along X, 36.5 mm steps (37 until M4) | 1 |
 | `pm.box` (casing panels, top plate, decorations) | `pm.carriage` | static; panels can hide individually for the cut-away | 1 set |
 | `pm.drum_shaft.d` | `pm.carriage` | rotation about Y (θ) | 8 |
 | `pm.drum.d` | `pm.drum_shaft.d` | translation along Y (setting, 0–9 steps) | 8 |
-| `pm.setting_dial.d` (knob + pinion) | `pm.carriage` | rotation about Z, 36° per digit | 8 |
+| `pm.setting_dial.d` (knob + pinion) | `pm.carriage` | rotation about Z, 27.7° per digit (13 divisions, M4; 36° until then) | 8 |
 | `pm.setting_rack.d` | `pm.carriage` | translation along Y (with the drum) | 8 |
 | `pm.drive_gear.n` | `pm.carriage` | rotation about Y (±θ, alternating) | 17 |
 | `pm.zweihorn.d` | `pm.drive_gear.(2d+1)` | follows its gear | 8 |
@@ -71,7 +71,7 @@ Node names follow `docs/conventions.md`. Indices: `d` = drum/input digit 0–7, 
 | Pentagon disc | Procedural regular pentagon | On the carry-store shaft, at the back. Its tilt is the visible "carry pending" flag. |
 | Setting dial, knob, rack | Procedural + simple manual knob | The hook-shaped knob seen in the photos is a small hand-made mesh, instanced 8 times. |
 | Magna Rota | Procedural rings and holes + **hand-made pierced decoration** | Decoration as a texture/alpha first; geometry only if it is cheap. |
-| Lead screw | Procedural helix, 37 mm pitch | Single start |
+| Lead screw | Procedural helix, 36.5 mm lead (37 until M4) | Single start |
 | Casing panels, decorative plates | **Manual** (`source/casing.blend`) | Simple box geometry with bevels. Ornament as normal or alpha maps. |
 | Frame, rails, feet, end crank | Mostly procedural, with hand-made turned feet and handle | Lathe profiles |
 | Oak case | Optional, later | Not needed for target B |
@@ -99,9 +99,9 @@ The **master clock** is the crank angle θ ∈ [0°, 360°). The drums turn 1:1 
 
 **Easing:** gear steps use smooth-step easing within each 22.5° window. Detents snap in the last 15 % of a step, which is visible as a small spring catch. Result wheels never move outside rib or carry events.
 
-**Carriage shift:** the end crank turns the screw. One full turn moves `pm.carriage` 37 mm. A spring catch indexes the positions, and the shift is only allowed at θ = 0, as on the real machine.
+**Carriage shift:** the end crank turns the screw. One full turn moves `pm.carriage` one digit pitch, 36.5 mm (37 until M4). A spring catch indexes the positions, and the shift is only allowed at θ = 0, as on the real machine.
 
-**Setting:** turning a setting dial by *s* steps slides its drum by *s* × 4.0 mm along Y (rack and pinion), only at θ = 0.
+**Setting:** turning a setting dial by *s* steps slides its drum by *s* × 3.02 mm along Y (rack and pinion; 4.0 mm until M4), only at θ = 0. A stop on the dial plate lets the knob turn only from 0 to 9 (M4, NL 183/465 p. 38).
 
 ## 6. Animation strategy
 
@@ -131,7 +131,7 @@ params/machine.json
 
 1. **Photo overlay.** Camera-match two reference photos in Blender (front: Commons *Rechenmaschine von Leibniz (Nachbau) 08*; underside: *Leibniz-Rechenmaschine TSD (10)*). Overlay the render at 50 % and record deviations in `design/fidelity-log.md`. M2 used the true front elevation *Rechenmaschine von Leibniz (Nachbau) 03* instead (*Nachbau 08* is taken from above), with an orthographic render scaled by the 37 mm knob pitch (`render_m2_overlay.py`); the deviations are in [m2-notes.md](m2-notes.md).
 2. **Proportion checklist:**
-   - digit pitch 37 mm;
+   - digit pitch 37 mm (36.5 since M4, from the drawings);
    - mechanism length 670 mm;
    - height about 170 mm;
    - Magna Rota about 124 mm;
@@ -158,7 +158,7 @@ These must be planned now, because they change how the meshes are cut.
 | **M1: 3-digit carry slice** ✅ done 2026-10-17 ([notes](m1-notes.md)) | 3 digits plus Zweihörner, the drive gears and the sim logic (both carry modes). Step mode. **Acceptance-test harness** (glTF-in-Node, readout/contact/clearance checks, `?selftest`), retrofitted to M0 first. | 999 + 1 ripples in one turn (`ripple`) and needs extra idle turns (`historical`, 900 → 000 + carry → 1000). `pnpm test` runs the M0 and M1 acceptance specs (§10.1) and passes. |
 | **M2: full machine** ✅ done 2026-10-18 ([notes](m2-notes.md)): mechanism 2026-10-17; casing, photo overlay (carriage, Magna Rota, frame and case within 5 % of the photos) and materials 2026-10-18. Chromebook performance not measured yet. | 16-digit register, 8-digit carriage, Magna Rota with pin and stop, counter, lead screw and carriage shift, casing, materials | Every worked example animates correctly. Within the performance budget. Photo overlay within about 5 %. |
 | **M3: teaching layer** 🟡 built 2026-10-18 ([notes](m3-notes.md)), redesigned for release 1.0.0 on 2026-10-20 ([ui-design.md](../docs/ui-design.md)); teacher test, translation review and Chromebook measurement open | UI (EN/DE, then ten languages), camera presets, cut-away, exploded view, labels, guided lessons (9999 + 1, 1709 × 365, a division) | Usable by a teacher without instructions (to be tested with 1–2 teachers) |
-| **M4: fidelity upgrade (target C)** | Replace `est`/`design` params with documented values from NL 183 or the GWLB (§12). NL 183/465 received 2026-10-29; candidate values in [notes-nl183.md](../research/sources/notes-nl183.md) §10. | Params mostly `doc`. Decision 0001 revisited. |
+| **M4: fidelity upgrade (target C)** | Replace `est`/`design` params with documented values from NL 183 or the GWLB (§12). NL 183/465 received 2026-10-29; candidate values in [notes-nl183.md](../research/sources/notes-nl183.md) §10. Planned for v1.1.0 in [m4-notes.md](m4-notes.md). | Params mostly `doc`. Decision 0001 revisited. |
 
 M0 and M1 also prove the pipeline (params → Blender → glTF → three.js), which the later milestones reuse.
 
@@ -190,6 +190,7 @@ Each statement becomes one test in `tests/accept/` (named by its ID) and one `?s
 | A0-7 | During the 9 → 0 step, the Einzahn pin and a Fünfhorn horn are in contact while the store moves, and they are clear at rest. | contact + clearance |
 | A0-8 | The pinion and the rack stay in contact and clear of each other across the whole setting range. | contact + clearance |
 | A0-9 | The `.glb` contains every node the page needs, each with motion extras (`motion`, `axis`). | contract |
+| A0-10 | The setting stop (added in M4): the pointer clears the stop for every setting 0–9, comes within 0.3 mm of it at 0 and at 9, and cannot turn a tenth of a division beyond either. | contact + clearance |
 
 #### M1: three-digit carry slice
 
@@ -214,7 +215,7 @@ The new M1 parts follow, with A1 tests written alongside each one.
 #### M2: full machine
 
 M2 design decisions:
-- **Carriage.** The 8 drums, setting knobs, drive chain, Zweihorn levers and Magna Rota ride on one carriage (`pm.carriage`). It shifts in 37 mm steps (offset 0–8) by the lead screw and end crank, only at rest. Lever j acts on register store o + j.
+- **Carriage.** The 8 drums, setting knobs, drive chain, Zweihorn levers and Magna Rota ride on one carriage (`pm.carriage`). It shifts in 37 mm steps (36.5 since M4; offset 0–8) by the lead screw and end crank, only at rest. Lever j acts on register store o + j.
 - **Carries beyond the carriage window stay stored.** A store above the top lever has no lever to execute it. Its carry stays stored (pentagon tilted) until a later turn with the carriage shifted over it. This is the "open question" from §11, now modelled.
 - **A store holds one carry.** A turn that would store a second carry in a store whose first carry is still waiting is refused, and the page says the operator must shift first. Mechanically, the Einzahn would push the store from 18° to 36°, into the Muldenrad's transfer range (27–45°), half-turning the next wheel. Without this rule the sim lost the second carry silently (found 2026-10-18: adding 9 999 999 for the 201st time at offset 0).
 - **Faster carry execution.**

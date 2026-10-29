@@ -208,6 +208,7 @@ export default {
   "part.lever": "进位杆轴",
   "part.zweihornAdd": "进位杆，加法角",
   "part.zweihornSub": "进位杆，减法角",
+  "part.settingStop": "置数旋钮挡块",
   "part.base": "橡木底板",
   "part.case": "橡木外壳",
   "part.leadScrew": "丝杠和侧曲柄（移动滑架）",
