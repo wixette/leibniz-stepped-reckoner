@@ -6,11 +6,22 @@
 import { spawn } from "node:child_process";
 import { createReadStream, mkdtempSync, readFileSync, rmSync, statSync } from "node:fs";
 import { createServer } from "node:http";
-import { tmpdir } from "node:os";
+import { homedir, tmpdir } from "node:os";
 import { extname, join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
 
 export const ROOT = fileURLToPath(new URL("..", import.meta.url));
+
+/**
+ * Where release media go by default: outside the repository, in
+ * ~/Downloads/leibniz-v<version>-media/<kind>. Release media are never kept in the repository.
+ * @param {string} kind "shots" or "videos"
+ * @returns {string}
+ */
+export function mediaDir(kind) {
+  const { version } = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf8"));
+  return join(homedir(), "Downloads", `leibniz-v${version}-media`, kind);
+}
 
 /** @type {Record<string, string>} */
 const TYPES = {

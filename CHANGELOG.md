@@ -21,6 +21,7 @@ The machine follows N. J. Lehmann's workshop drawings of the TU Dresden replica,
 **Tools and pages**
 - `pnpm shots` takes the release screenshots, the README's and a set for posts, in any of the languages ([docs/development.md](docs/development.md), *Versions and releases*).
 - `pnpm video` makes the release videos, with the machine's sound: taken apart, the drum, the carry, an addition and a multiplication, in any of the languages.
+- Both write to `~/Downloads/leibniz-v<version>-media/` by default: release media are never kept in the repository.
 - The page's description (for search engines and the installed app) and `package.json`'s now say what the simulator is first, and name the lessons and the ten languages, as the GitHub repository's description does.
 
 ## 1.0.0

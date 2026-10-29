@@ -1,7 +1,7 @@
 // The release videos, `pnpm video`: short clips of the machine at work, with its sound, in
 // one or more languages. 1920 × 1080, H.264 and AAC in MP4.
 //
-//     pnpm video                          (English, into videos/en/)
+//     pnpm video                          (English, into ~/Downloads/leibniz-v<version>-media/videos/en/)
 //     pnpm video --lang en,zh --out ~/Movies/lsr
 //     pnpm video --only carry --fps 60
 //
@@ -23,7 +23,7 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { parseArgs } from "node:util";
-import { openBrowser, ROOT, sleep } from "./headless.mjs";
+import { mediaDir, openBrowser, ROOT, sleep } from "./headless.mjs";
 
 const WIDTH = 1920;
 const HEIGHT = 1080;
@@ -272,7 +272,7 @@ window.__shiftView = () => {
 const { values: opts } = parseArgs({
   options: {
     lang: { type: "string", default: "en" },
-    out: { type: "string", default: join(ROOT, "videos") },
+    out: { type: "string", default: mediaDir("videos") },
     only: { type: "string", default: "" },
     fps: { type: "string", default: "30" },
   },

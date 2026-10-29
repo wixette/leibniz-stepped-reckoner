@@ -2,7 +2,7 @@
 // Taken apart view from several sides and distances, the drum and carry views, and the
 // multiplication lesson step by step), in one or more languages.
 //
-//     pnpm shots                          (English, into shots/en/)
+//     pnpm shots                          (English, into ~/Downloads/leibniz-v<version>-media/shots/en/)
 //     pnpm shots --lang en,zh --out ~/Pictures/shots
 //     pnpm shots --only apart             (the shots whose name contains "apart")
 //
@@ -14,7 +14,7 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { parseArgs } from "node:util";
-import { openBrowser, ROOT, sleep } from "./headless.mjs";
+import { mediaDir, openBrowser, sleep } from "./headless.mjs";
 
 const WIDTH = 1600;
 const HEIGHT = 900;
@@ -113,7 +113,7 @@ const SHOTS = [
 ];
 
 const { values: opts } = parseArgs({
-  options: { lang: { type: "string", default: "en" }, out: { type: "string", default: join(ROOT, "shots") }, only: { type: "string", default: "" } },
+  options: { lang: { type: "string", default: "en" }, out: { type: "string", default: mediaDir("shots") }, only: { type: "string", default: "" } },
 });
 const shots = SHOTS.filter((s) => s.name.includes(opts.only));
 const { send, evaluate, errors, load, close } = await openBrowser({ width: WIDTH, height: HEIGHT });
