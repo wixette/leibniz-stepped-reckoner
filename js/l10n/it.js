@@ -257,7 +257,7 @@ export default {
   "tut.what": "Questa è la calcolatrice di Gottfried Wilhelm Leibniz (1646–1716), costruita ad Hannover tra il 1690 circa e la sua morte. È l’unica sopravvissuta, ed è conservata dalla Biblioteca Gottfried Wilhelm Leibniz di Hannover.",
   "tut.four": "Fu la prima macchina per tutte e quattro le operazioni dell’aritmetica: sommare, sottrarre, moltiplicare e dividere. Leibniz pensava che le persone brillanti non dovessero perdere ore in lunghi calcoli quando una macchina poteva farli.",
   "tut.drum": "La sua idea chiave è il tamburo a gradini: un cilindro con nove denti di lunghezza diversa. Le calcolatrici meccaniche lo usarono per quasi 300 anni, fino all’arrivo delle calcolatrici elettroniche negli anni Settanta.",
-  "tut.model": "Questo modello 3D segue misure pubblicate e fotografie dell’originale e di una replica a Dresda. Molte piccole misure sono stime, ma ogni pezzo si muove come nella macchina.",
+  "tut.model": "Questo modello 3D segue i disegni d’officina di una replica costruita a Dresda, e misure pubblicate e fotografie dell’originale e di quella replica. Alcune piccole misure sono stime, ma ogni pezzo si muove come nella macchina.",
   "tut.register": "Totalizzatore",
   "tut.twoParts": "Smontata, la macchina ha due parti principali: dietro il totalizzatore, che resta fermo, e davanti il carrello, che scorre a sinistra e a destra. Leibniz le chiamava la parte fissa e la parte mobile.",
   "tut.windows": "Il risultato si legge nelle 16 finestre in alto, una cifra in ciascuna. Le unità sono a destra, come quando si scrive un numero.",

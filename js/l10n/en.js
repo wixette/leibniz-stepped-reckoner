@@ -259,7 +259,7 @@ export default {
   "tut.what": "This is the calculating machine of Gottfried Wilhelm Leibniz (1646–1716), built in Hannover between about 1690 and his death. It is the only one that survives, and the Gottfried Wilhelm Leibniz Library in Hannover keeps it.",
   "tut.four": "It was the first machine for all four operations of arithmetic: adding, subtracting, multiplying and dividing. Leibniz thought that clever people should not lose hours to long sums when a machine could do them.",
   "tut.drum": "Its key idea is the stepped drum: a cylinder with nine teeth of different lengths. Calculating machines used it for almost 300 years, until electronic calculators took over in the 1970s.",
-  "tut.model": "This 3D model follows published measurements and photographs of the original and of a replica in Dresden. Many small sizes are estimates, but every part moves the way it does in the machine.",
+  "tut.model": "This 3D model follows the workshop drawings of a replica built in Dresden, and published measurements and photographs of the original and of that replica. Some small sizes are estimates, but every part moves the way it does in the machine.",
   "tut.register": "Result register",
   "tut.twoParts": "Taken apart, the machine has two main parts: at the back the result register, which stays in place, and at the front the carriage, which slides left and right. Leibniz called them the fixed part and the moving part.",
   "tut.windows": "The result is read in the 16 windows on top, one digit in each. The units are on the right, as when you write a number.",

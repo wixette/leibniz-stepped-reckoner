@@ -257,7 +257,7 @@ export default {
   "tut.what": "Das ist die Rechenmaschine von Gottfried Wilhelm Leibniz (1646–1716), gebaut in Hannover zwischen etwa 1690 und seinem Tod. Sie ist die einzige, die erhalten ist; die Gottfried Wilhelm Leibniz Bibliothek in Hannover bewahrt sie auf.",
   "tut.four": "Sie war die erste Maschine für alle vier Grundrechenarten: Addieren, Subtrahieren, Multiplizieren und Dividieren. Leibniz fand, kluge Menschen sollten keine Stunden mit langen Rechnungen verlieren, wenn eine Maschine sie erledigen kann.",
   "tut.drum": "Ihre wichtigste Idee ist die Staffelwalze: ein Zylinder mit neun verschieden langen Zähnen. Rechenmaschinen verwendeten sie fast 300 Jahre lang, bis in den 1970er-Jahren elektronische Taschenrechner kamen.",
-  "tut.model": "Dieses 3D-Modell folgt veröffentlichten Maßen und Fotos des Originals und eines Nachbaus in Dresden. Viele kleine Maße sind geschätzt, aber jedes Teil bewegt sich so wie in der Maschine.",
+  "tut.model": "Dieses 3D-Modell folgt den Werkstattzeichnungen eines Nachbaus in Dresden sowie veröffentlichten Maßen und Fotos des Originals und dieses Nachbaus. Einige kleine Maße sind geschätzt, aber jedes Teil bewegt sich so wie in der Maschine.",
   "tut.register": "Resultatwerk",
   "tut.twoParts": "Zerlegt hat die Maschine zwei Hauptteile: hinten das Resultatwerk, das fest steht, und vorn den Schlitten, der sich nach links und rechts schieben lässt. Leibniz nannte sie den festen und den beweglichen Teil.",
   "tut.windows": "Das Ergebnis liest man in den 16 Fenstern oben ab, eine Ziffer in jedem. Die Einer stehen rechts, wie beim Schreiben einer Zahl.",

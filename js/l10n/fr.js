@@ -257,7 +257,7 @@ export default {
   "tut.what": "Voici la machine à calculer de Gottfried Wilhelm Leibniz (1646–1716), construite à Hanovre entre 1690 environ et sa mort. C’est la seule qui subsiste, et la bibliothèque Gottfried Wilhelm Leibniz de Hanovre la conserve.",
   "tut.four": "Ce fut la première machine pour les quatre opérations de l’arithmétique : additionner, soustraire, multiplier et diviser. Leibniz pensait que des esprits brillants ne devaient pas perdre des heures en longs calculs quand une machine pouvait les faire.",
   "tut.drum": "Son idée maîtresse est le cylindre à cannelures : un cylindre portant neuf dents de longueurs différentes. Les machines à calculer l’ont utilisé pendant près de 300 ans, jusqu’à l’arrivée des calculatrices électroniques dans les années 1970.",
-  "tut.model": "Ce modèle 3D suit les mesures publiées et les photographies de l’original et d’une réplique conservée à Dresde. Beaucoup de petites dimensions sont estimées, mais chaque pièce bouge comme dans la machine.",
+  "tut.model": "Ce modèle 3D suit les plans d’atelier d’une réplique construite à Dresde, ainsi que les mesures publiées et les photographies de l’original et de cette réplique. Quelques petites dimensions sont estimées, mais chaque pièce bouge comme dans la machine.",
   "tut.register": "Totalisateur",
   "tut.twoParts": "Démontée, la machine a deux parties principales : à l’arrière le totalisateur, qui reste en place, et à l’avant le chariot, qui se déplace à gauche et à droite. Leibniz les appelait la partie fixe et la partie mobile.",
   "tut.windows": "Le résultat se lit dans les 16 fenêtres du dessus, un chiffre dans chacune. Les unités sont à droite, comme quand on écrit un nombre.",

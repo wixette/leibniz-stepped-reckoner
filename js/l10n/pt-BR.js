@@ -257,7 +257,7 @@ export default {
   "tut.what": "Esta é a calculadora de Gottfried Wilhelm Leibniz (1646–1716), construída em Hanôver entre cerca de 1690 e a morte dele. É a única que sobreviveu, e a Biblioteca Gottfried Wilhelm Leibniz de Hanôver a guarda.",
   "tut.four": "Foi a primeira máquina para as quatro operações da aritmética: somar, subtrair, multiplicar e dividir. Leibniz achava que pessoas brilhantes não deveriam perder horas com contas longas quando uma máquina podia fazê-las.",
   "tut.drum": "Sua ideia principal é o tambor escalonado: um cilindro com nove dentes de comprimentos diferentes. As calculadoras mecânicas o usaram por quase 300 anos, até a chegada das calculadoras eletrônicas nos anos 1970.",
-  "tut.model": "Este modelo 3D segue medidas publicadas e fotografias do original e de uma réplica em Dresden. Muitas medidas pequenas são estimadas, mas cada peça se move como na máquina.",
+  "tut.model": "Este modelo 3D segue os desenhos de oficina de uma réplica construída em Dresden, e medidas publicadas e fotografias do original e dessa réplica. Algumas medidas pequenas são estimadas, mas cada peça se move como na máquina.",
   "tut.register": "Registrador de resultados",
   "tut.twoParts": "Desmontada, a máquina tem duas partes principais: atrás, o registrador de resultados, que fica parado, e na frente, o carro, que desliza para a esquerda e para a direita. Leibniz as chamava de parte fixa e parte móvel.",
   "tut.windows": "O resultado é lido nas 16 janelas de cima, um algarismo em cada. As unidades ficam à direita, como quando se escreve um número.",
