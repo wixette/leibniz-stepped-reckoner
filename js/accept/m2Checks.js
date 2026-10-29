@@ -1,4 +1,4 @@
-// Acceptance spec for M2 (plan §10.1, A2-1..A2-9 and A2-11..A2-13; A2-10 runs the M0/M1
+// Acceptance spec for M2 (plan §10.1, A2-1..A2-9 and A2-11..A2-14; A2-10 runs the M0/M1
 // specs in the same `pnpm test`). Poses the full machine through Machine -> applyM2Pose ->
 // Rig, exactly as the main page and page 03 do.
 
@@ -11,7 +11,7 @@ import { Machine } from "../sim/machine.js";
 import { registerValue } from "../sim/operations.js";
 import { M2_SCENARIOS, walkM2 } from "../tools/m2Scenarios.js";
 import { CollisionSweep } from "./collisions.js";
-import { anchors, fmt, intersects, minDistance, nearestIndex, node, rayHits, result, topEdgeTilt } from "./harness.js";
+import { anchors, coplanarOverlaps, fmt, intersects, minDistance, nearestIndex, node, rayHits, result, topEdgeTilt } from "./harness.js";
 /** @import { CheckResult } from "./harness.js" */
 import { ANGLE_TOL_DEG, CONTACT_PIN_MM } from "./m0Checks.js";
 import { readWindowM1 } from "./m1Checks.js";
@@ -455,6 +455,19 @@ export function runM2Checks(root, opts = {}) {
       passed: bad.length === 0,
       detail: bad.join("; ") || `main crank knob clears the front wall by ${fmt(mainLow - wallTop, 1)} mm and the floor by ${fmt(mainLow - floorTop, 1)} mm; end crank knob ${fmt(endLow - table, 1)} mm above the table`,
     };
+  });
+
+  run("A2-14", "No flickering faces: no two parts share a face plane where they overlap, at rest at both carriage ends", () => {
+    // Two coplanar faces facing the same way flicker as the view moves (z-fighting); the
+    // carriage cover's end walls lay in the front panel's faces until 2026-10-29.
+    /** @type {string[]} */
+    const bad = [];
+    for (const offset of [0, c.m.maxOffset]) {
+      state(c, { offset, result: 0 });
+      pose(c);
+      for (const h of coplanarOverlaps(root)) bad.push(`offset ${offset}: ${h}`);
+    }
+    return { passed: bad.length === 0, detail: bad.join("; ") || `no overlapping coplanar faces at offsets 0 and ${c.m.maxOffset}` };
   });
 
   run("A2-8", `Budget: ≤ ${MAX_TRIANGLES / 1000}k triangles, ≤ 15 MB`, () => {

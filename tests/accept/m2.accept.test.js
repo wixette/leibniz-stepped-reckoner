@@ -19,7 +19,7 @@ before(async () => {
   results = runM2Checks(await loadAsset(FILE), { bytes });
 });
 
-const IDS = ["A2-1", "A2-2", "A2-3", "A2-4", "A2-5", "A2-6", "A2-7", "A2-8", "A2-9", "A2-11", "A2-12", "A2-13"];
+const IDS = ["A2-1", "A2-2", "A2-3", "A2-4", "A2-5", "A2-6", "A2-7", "A2-8", "A2-9", "A2-11", "A2-12", "A2-13", "A2-14"];
 
 describe("M2 acceptance (full machine)", () => {
   for (const id of IDS) it(id, () => {

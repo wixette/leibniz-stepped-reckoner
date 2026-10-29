@@ -220,3 +220,96 @@ export function result(id, title, passed, detail) {
 
 /** @param {number} x */
 export const fmt = (x, d = 3) => (Number.isFinite(x) ? x.toFixed(d) : String(x));
+
+/**
+ * Clip a convex polygon by a convex counter-clockwise polygon (Sutherland-Hodgman).
+ * @param {number[][]} subj
+ * @param {number[][]} clipBy
+ * @returns {number[][]}
+ */
+function clipConvex(subj, clipBy) {
+  let out = subj;
+  for (let i = 0; i < clipBy.length && out.length; i++) {
+    const a = clipBy[i];
+    const b = clipBy[(i + 1) % clipBy.length];
+    /** @param {number[]} p */
+    const side = (p) => (b[0] - a[0]) * (p[1] - a[1]) - (b[1] - a[1]) * (p[0] - a[0]);
+    const inp = out;
+    out = [];
+    for (let j = 0; j < inp.length; j++) {
+      const p = inp[j];
+      const q = inp[(j + 1) % inp.length];
+      const sp = side(p);
+      const sq = side(q);
+      if (sp >= 0) out.push(p);
+      if (sp >= 0 !== sq >= 0) {
+        const t = sp / (sp - sq);
+        out.push([p[0] + t * (q[0] - p[0]), p[1] + t * (q[1] - p[1])]);
+      }
+    }
+  }
+  return out;
+}
+
+/** @param {number[][]} p */
+const polyArea = (p) => Math.abs(p.reduce((s, a, i) => s + a[0] * p[(i + 1) % p.length][1] - p[(i + 1) % p.length][0] * a[1], 0)) / 2;
+
+/**
+ * Overlapping coplanar faces of different meshes (or materials) that face the same way, at
+ * the current pose: the renderer cannot tell which is in front, so they flicker (z-fighting).
+ * Only faces square to the axes are compared, which covers the prisms the model is built from.
+ * @param {THREE.Object3D} root
+ * @param {number} [minAreaMm2] ignore overlaps smaller than this (mm²)
+ * @returns {string[]} "a|material vs b|material: N mm²", largest first
+ */
+export function coplanarOverlaps(root, minAreaMm2 = 0.5) {
+  root.updateMatrixWorld(true);
+  /** @type {Map<string, { who: string; tri: number[][] }[]>} */
+  const planes = new Map();
+  const v = [new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()];
+  const e1 = new THREE.Vector3();
+  const e2 = new THREE.Vector3();
+  root.traverse((o) => {
+    const mesh = /** @type {THREE.Mesh} */ (o);
+    if (!mesh.isMesh) return;
+    const g = mesh.geometry;
+    const pos = g.attributes.position;
+    const idx = g.index;
+    const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+    const groups = g.groups.length ? g.groups : [{ start: 0, count: idx ? idx.count : pos.count, materialIndex: 0 }];
+    for (const gr of groups) {
+      const who = `${mesh.name}|${mats[gr.materialIndex ?? 0]?.name ?? "?"}`;
+      for (let i = gr.start; i < gr.start + gr.count; i += 3) {
+        for (let k = 0; k < 3; k++) v[k].fromBufferAttribute(pos, idx ? idx.getX(i + k) : i + k).applyMatrix4(mesh.matrixWorld).multiplyScalar(M);
+        const n = e1.subVectors(v[1], v[0]).cross(e2.subVectors(v[2], v[0]));
+        if (n.length() < 1e-6) continue;
+        n.normalize();
+        const ax = [0, 1, 2].find((a) => Math.abs(n.getComponent(a)) > 0.9999);
+        if (ax === undefined) continue;
+        const [a1, a2] = [0, 1, 2].filter((a) => a !== ax);
+        const key = `${ax}${n.getComponent(ax) > 0 ? "+" : "-"}${Math.round(v[0].getComponent(ax) * 100)}`;
+        let tri = v.map((p) => [p.getComponent(a1), p.getComponent(a2)]);
+        const cross = (tri[1][0] - tri[0][0]) * (tri[2][1] - tri[0][1]) - (tri[2][0] - tri[0][0]) * (tri[1][1] - tri[0][1]);
+        if (cross < 0) tri = [tri[0], tri[2], tri[1]];
+        const list = planes.get(key) ?? [];
+        list.push({ who, tri });
+        planes.set(key, list);
+      }
+    }
+  });
+  /** @type {Map<string, number>} */
+  const pairs = new Map();
+  for (const tris of planes.values()) {
+    if (new Set(tris.map((t) => t.who)).size < 2) continue;
+    for (let i = 0; i < tris.length; i++) {
+      for (let j = i + 1; j < tris.length; j++) {
+        if (tris[i].who === tris[j].who) continue;
+        const ov = clipConvex(tris[i].tri, tris[j].tri);
+        if (ov.length < 3) continue;
+        const k = [tris[i].who, tris[j].who].sort().join(" vs ");
+        pairs.set(k, (pairs.get(k) ?? 0) + polyArea(ov));
+      }
+    }
+  }
+  return [...pairs].filter(([, a]) => a >= minAreaMm2).sort((p, q) => q[1] - p[1]).map(([k, a]) => `${k}: ${fmt(a, 1)} mm²`);
+}

@@ -317,7 +317,7 @@ def build(p):
         mb = MeshBuilder()
         # The square shaft starts behind the setting pinion of digit j + 1 (10.6 mm to its
         # left, y <= py + 7.6): it only has to carry the drum (front >= -18, flange -22).
-        mb.prism(geom.rect(-sq, -sq, sq, sq), "XZ", shaft_y0, gy1, "steel")
+        mb.prism(geom.rect(-sq, -sq, sq, sq), "XZ", shaft_y0, gy1 - 0.5, "steel")  # ends inside the gear (no shared face)
         mb.prism(geom.gear_outline(dg, drum_first[j]), "XZ", gy0, gy1, "brass_satin")
         mb.prism(geom.circle(collar["diameter"] / 2.0, 32), "XZ", gy1, min(gy1 + collar["length"], zpy0 - 0.5), "brass_satin", smooth=True)
         mb.prism(geom.circle(3.5, 24), "XZ", gy0 - 1.0, gy0, "brass_satin", smooth=True)
@@ -356,7 +356,7 @@ def build(p):
         mb.prism(geom.gear_outline(pin_g, 0.0), "XY", zd - 4.0, zd + 4.0, "brass_polished")
         mb.prism(geom.circle(1.5, 16), "XY", 8.0, z_plate + 10.0, "steel", smooth=True)
         mb.prism(geom.circle(5.0, 32), "XY", z_plate + 2.0, z_plate + 4.0, "brass_satin", smooth=True)
-        mb.prism(geom.radial_bar(0, dl["pointer_r"], 2.2, -90.0), "XY", z_plate + 2.0, z_plate + 3.2, "steel_dark")
+        mb.prism(geom.radial_bar(0, dl["pointer_r"], 2.2, -90.0), "XY", z_plate + 2.05, z_plate + 3.2, "steel_dark")  # not flush with the hub
         mb.prism(geom.rect(-1.5, -4.0, 1.5, 4.0), "XY", z_plate + 4.0, z_plate + 12.0, "brass_polished")
         dial = mb.build(f"pm.setting_dial.{j}", col, (px, py, 0))
         bl.set_anchors(dial, "pointer_tip", [(0.0, -dl["pointer_r"], z_plate + 2.6)])
@@ -436,7 +436,7 @@ def build(p):
     bl.set_motion(mrota, "rotate", (0, 1, 0), "Magna Rota (multiplier dial and counter)", "Magna Rota (Multiplikator- und Umdrehungsscheibe)")
     bl.parent(mrota, carriage)
     mb = MeshBuilder()
-    mb.prism([(u, w + hr) for u, w in geom.circle(1.8, 16)], "XZ", ry0 - 6.0, ry0, "steel", smooth=True)
+    mb.prism([(u, w + hr) for u, w in geom.circle(1.8, 16)], "XZ", ry0 - 6.0, ry0 - 0.05, "steel", smooth=True)  # ends in the hole mark
     mb.prism([(u, w + hr) for u, w in geom.circle(3.0, 16)], "XZ", ry0 - 8.0, ry0 - 6.0, "steel_dark", smooth=True)
     mpin = mb.build("pm.magna_pin", col, (mx, 0, mz))
     bl.set_motion(mpin, "rotate", (0, 1, 0), "Pin in the Magna Rota (sets the multiplier digit)", "Stift (Multiplikatorziffer)")
@@ -498,11 +498,12 @@ def build(p):
     shafts = [(X[j] + x_pl + pin_g.rp - 2.5, X[j] + x_pl + pin_g.rp + 2.5) for j in range(C)]
     plate_with_hole_row(mb, cx0, ky0, xt, ky1, py - 2.5, py + 2.5, shafts, kz0, kz1, "brass_polished")
     mb.prism(geom.rect(xt, ky0, xr, ky1), "XY", zt - 2.0, zt, "brass_polished")           # lower top on the right
-    mb.prism(geom.rect(xt - 3.0, ky0, xt, ky1), "XY", zt, kz0, "brass_satin")             # riser between them
+    # the walls start behind the front panel: sharing its front face made them flicker (z-fighting)
+    mb.prism(geom.rect(xt - 3.0, pnl1, xt, ky1), "XY", zt, kz0, "brass_satin")            # riser between them
     wz0 = cs["carriage_wall_z0"]
-    mb.prism(geom.rect(cx0, ky0, cx0 + 3.0, ky1), "XY", wz0, kz0, "brass_satin")        # left end
-    mb.prism(geom.rect(xs - 3.0, ky0, xr, ky1), "XY", zn, zn + 2.0, "brass_satin")        # underside of the right part
-    mb.prism(geom.rect(xr - 3.0, ky0, xr, ky1), "XY", zn + 2.0, zt - 2.0, "brass_satin")  # right end
+    mb.prism(geom.rect(cx0, pnl1, cx0 + 3.0, ky1), "XY", wz0, kz0, "brass_satin")       # left end
+    mb.prism(geom.rect(xs - 3.0, pnl1, xr, ky1), "XY", zn, zn + 2.0, "brass_satin")       # underside of the right part
+    mb.prism(geom.rect(xr - 3.0, pnl1, xr, ky1), "XY", zn + 2.0, zt - 2.0, "brass_satin") # right end
     # revolution-counter dial plate (static: the counter is not modelled; the Magna Rota counts turns)
     dx, dy, dr, dz = X[0] + x_pl + pin_g.rp + cs_["dial_from_knob0"], py - 8.0, cs_["dial_radius"], zt
     mb.prism(geom.circle(dr, 64), "XY", dz, dz + 1.0, "brass_satin", smooth=True, offset=(dx, dy, 0))
