@@ -2,6 +2,15 @@
 
 What changed in each release. Versions follow `package.json` and are tagged `vX.Y.Z` ([docs/development.md](docs/development.md), *Versions and releases*). The design decisions cited (U1, U2, …) are in [docs/ui-design.md](docs/ui-design.md).
 
+## 1.1.1
+
+The README is rewritten for newcomers; the simulator itself is unchanged.
+
+- It opens with the machine: a photo of the original in Hannover beside the simulator, seen from the same side.
+- *Your first sum* introduces the page as you use it, up to a look inside with the Stepped drum view; the full list of controls is folded away under *All the controls*.
+- *How it calculates, in six lessons* explains the mechanism one lesson at a time, each with a picture, instead of a table of lessons and a separate text.
+- `pnpm shots` takes the new picture of the whole machine (`view-whole`), cropped to the machine; a shot can now give a crop.
+
 ## 1.1.0
 
 The machine follows N. J. Lehmann's workshop drawings of the TU Dresden replica, kept in the Deutsches Museum's archive (NL 183/465 and NL 183/466 PLAN), where they fit the model ([design/m4-notes.md](design/m4-notes.md)).

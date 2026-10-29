@@ -6,12 +6,12 @@
     <title>Leibniz's Stepped Reckoner: a 3D simulator with lessons</title>
     <meta name="description" content="Interactive 3D simulator of Leibniz's stepped reckoner, the first mechanical calculator to add, subtract, multiply and divide. Lessons in 10 languages, in the browser." />
     <meta name="theme-color" content="#0f1317" />
-    <link rel="icon" href="images/favicon.ico?v=1.1.0" sizes="16x16 32x32 48x48" />
-    <link rel="icon" href="images/favicon.svg?v=1.1.0" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=1.1.0" />
-    <link rel="manifest" href="manifest.webmanifest?v=1.1.0" />
-    <link rel="stylesheet" href="css/fonts.css?v=1.1.0" />
-    <link rel="stylesheet" href="css/style.css?v=1.1.0" />
+    <link rel="icon" href="images/favicon.ico?v=1.1.1" sizes="16x16 32x32 48x48" />
+    <link rel="icon" href="images/favicon.svg?v=1.1.1" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=1.1.1" />
+    <link rel="manifest" href="manifest.webmanifest?v=1.1.1" />
+    <link rel="stylesheet" href="css/fonts.css?v=1.1.1" />
+    <link rel="stylesheet" href="css/style.css?v=1.1.1" />
     <!-- Every file name here carries the version (?v=), and so does each module the
          scripts import, through this map: bare names ("three") lead to the copies in
          vendor/ (pnpm vendor), and a release asks for new names, so no cache can serve
@@ -20,72 +20,72 @@
     <script type="importmap">
     {
       "imports": {
-        "three": "./vendor/three/build/three.module.js?v=1.1.0",
-        "three-mesh-bvh": "./vendor/three-mesh-bvh/build/index.module.js?v=1.1.0",
-        "three/addons/controls/OrbitControls.js": "./vendor/three/examples/jsm/controls/OrbitControls.js?v=1.1.0",
-        "three/addons/loaders/GLTFLoader.js": "./vendor/three/examples/jsm/loaders/GLTFLoader.js?v=1.1.0",
-        "three/addons/utils/BufferGeometryUtils.js": "./vendor/three/examples/jsm/utils/BufferGeometryUtils.js?v=1.1.0",
-        "three/addons/utils/SkeletonUtils.js": "./vendor/three/examples/jsm/utils/SkeletonUtils.js?v=1.1.0",
-        "./js/accept/collisions.js": "./js/accept/collisions.js?v=1.1.0",
-        "./js/accept/harness.js": "./js/accept/harness.js?v=1.1.0",
-        "./js/accept/m0Checks.js": "./js/accept/m0Checks.js?v=1.1.0",
-        "./js/accept/m1Checks.js": "./js/accept/m1Checks.js?v=1.1.0",
-        "./js/accept/m2Checks.js": "./js/accept/m2Checks.js?v=1.1.0",
-        "./js/accept/m3Checks.js": "./js/accept/m3Checks.js?v=1.1.0",
-        "./js/accept/selftestPanel.js": "./js/accept/selftestPanel.js?v=1.1.0",
-        "./js/app/about.js": "./js/app/about.js?v=1.1.0",
-        "./js/app/animator.js": "./js/app/animator.js?v=1.1.0",
-        "./js/app/app.js": "./js/app/app.js?v=1.1.0",
-        "./js/app/course.js": "./js/app/course.js?v=1.1.0",
-        "./js/app/dockHandle.js": "./js/app/dockHandle.js?v=1.1.0",
-        "./js/app/references.js": "./js/app/references.js?v=1.1.0",
-        "./js/app/sound.js": "./js/app/sound.js?v=1.1.0",
-        "./js/app/stage.js": "./js/app/stage.js?v=1.1.0",
-        "./js/l10n/all.js": "./js/l10n/all.js?v=1.1.0",
-        "./js/l10n/de.js": "./js/l10n/de.js?v=1.1.0",
-        "./js/l10n/en.js": "./js/l10n/en.js?v=1.1.0",
-        "./js/l10n/es.js": "./js/l10n/es.js?v=1.1.0",
-        "./js/l10n/fr.js": "./js/l10n/fr.js?v=1.1.0",
-        "./js/l10n/it.js": "./js/l10n/it.js?v=1.1.0",
-        "./js/l10n/ja.js": "./js/l10n/ja.js?v=1.1.0",
-        "./js/l10n/ko.js": "./js/l10n/ko.js?v=1.1.0",
-        "./js/l10n/l10n.js": "./js/l10n/l10n.js?v=1.1.0",
-        "./js/l10n/pt-BR.js": "./js/l10n/pt-BR.js?v=1.1.0",
-        "./js/l10n/zh-TW.js": "./js/l10n/zh-TW.js?v=1.1.0",
-        "./js/l10n/zh.js": "./js/l10n/zh.js?v=1.1.0",
-        "./js/main.js": "./js/main.js?v=1.1.0",
-        "./js/scene/framing.js": "./js/scene/framing.js?v=1.1.0",
-        "./js/scene/m0Pose.js": "./js/scene/m0Pose.js?v=1.1.0",
-        "./js/scene/m1Pose.js": "./js/scene/m1Pose.js?v=1.1.0",
-        "./js/scene/m2Pose.js": "./js/scene/m2Pose.js?v=1.1.0",
-        "./js/scene/rig.js": "./js/scene/rig.js?v=1.1.0",
-        "./js/scene/teachScene.js": "./js/scene/teachScene.js?v=1.1.0",
-        "./js/scene/viewer.js": "./js/scene/viewer.js?v=1.1.0",
-        "./js/sim/carrySlice.js": "./js/sim/carrySlice.js?v=1.1.0",
-        "./js/sim/digitSlice.js": "./js/sim/digitSlice.js?v=1.1.0",
-        "./js/sim/kinematics.js": "./js/sim/kinematics.js?v=1.1.0",
-        "./js/sim/kinematicsM1.js": "./js/sim/kinematicsM1.js?v=1.1.0",
-        "./js/sim/machine.js": "./js/sim/machine.js?v=1.1.0",
-        "./js/sim/narrate.js": "./js/sim/narrate.js?v=1.1.0",
-        "./js/sim/operations.js": "./js/sim/operations.js?v=1.1.0",
-        "./js/teach/lessons.js": "./js/teach/lessons.js?v=1.1.0",
-        "./js/teach/partActions.js": "./js/teach/partActions.js?v=1.1.0",
-        "./js/teach/partInfo.js": "./js/teach/partInfo.js?v=1.1.0",
-        "./js/teach/player.js": "./js/teach/player.js?v=1.1.0",
-        "./js/teach/tutorial.js": "./js/teach/tutorial.js?v=1.1.0",
-        "./js/tools/m1Scenarios.js": "./js/tools/m1Scenarios.js?v=1.1.0",
-        "./js/tools/m2Scenarios.js": "./js/tools/m2Scenarios.js?v=1.1.0",
-        "./js/ui/components.js": "./js/ui/components.js?v=1.1.0",
-        "./package.json": "./package.json?v=1.1.0",
-        "./params/machine.json": "./params/machine.json?v=1.1.0",
-        "./vendor/material-symbols/icons.js": "./vendor/material-symbols/icons.js?v=1.1.0",
-        "./vendor/three-mesh-bvh/build/index.module.js": "./vendor/three-mesh-bvh/build/index.module.js?v=1.1.0",
-        "./vendor/three/build/three.core.js": "./vendor/three/build/three.core.js?v=1.1.0",
-        "./vendor/three/build/three.module.js": "./vendor/three/build/three.module.js?v=1.1.0",
-        "./vendor/three/examples/jsm/controls/OrbitControls.js": "./vendor/three/examples/jsm/controls/OrbitControls.js?v=1.1.0",
-        "./vendor/three/examples/jsm/loaders/GLTFLoader.js": "./vendor/three/examples/jsm/loaders/GLTFLoader.js?v=1.1.0",
-        "./vendor/three/examples/jsm/utils/BufferGeometryUtils.js": "./vendor/three/examples/jsm/utils/BufferGeometryUtils.js?v=1.1.0",
-        "./vendor/three/examples/jsm/utils/SkeletonUtils.js": "./vendor/three/examples/jsm/utils/SkeletonUtils.js?v=1.1.0"
+        "three": "./vendor/three/build/three.module.js?v=1.1.1",
+        "three-mesh-bvh": "./vendor/three-mesh-bvh/build/index.module.js?v=1.1.1",
+        "three/addons/controls/OrbitControls.js": "./vendor/three/examples/jsm/controls/OrbitControls.js?v=1.1.1",
+        "three/addons/loaders/GLTFLoader.js": "./vendor/three/examples/jsm/loaders/GLTFLoader.js?v=1.1.1",
+        "three/addons/utils/BufferGeometryUtils.js": "./vendor/three/examples/jsm/utils/BufferGeometryUtils.js?v=1.1.1",
+        "three/addons/utils/SkeletonUtils.js": "./vendor/three/examples/jsm/utils/SkeletonUtils.js?v=1.1.1",
+        "./js/accept/collisions.js": "./js/accept/collisions.js?v=1.1.1",
+        "./js/accept/harness.js": "./js/accept/harness.js?v=1.1.1",
+        "./js/accept/m0Checks.js": "./js/accept/m0Checks.js?v=1.1.1",
+        "./js/accept/m1Checks.js": "./js/accept/m1Checks.js?v=1.1.1",
+        "./js/accept/m2Checks.js": "./js/accept/m2Checks.js?v=1.1.1",
+        "./js/accept/m3Checks.js": "./js/accept/m3Checks.js?v=1.1.1",
+        "./js/accept/selftestPanel.js": "./js/accept/selftestPanel.js?v=1.1.1",
+        "./js/app/about.js": "./js/app/about.js?v=1.1.1",
+        "./js/app/animator.js": "./js/app/animator.js?v=1.1.1",
+        "./js/app/app.js": "./js/app/app.js?v=1.1.1",
+        "./js/app/course.js": "./js/app/course.js?v=1.1.1",
+        "./js/app/dockHandle.js": "./js/app/dockHandle.js?v=1.1.1",
+        "./js/app/references.js": "./js/app/references.js?v=1.1.1",
+        "./js/app/sound.js": "./js/app/sound.js?v=1.1.1",
+        "./js/app/stage.js": "./js/app/stage.js?v=1.1.1",
+        "./js/l10n/all.js": "./js/l10n/all.js?v=1.1.1",
+        "./js/l10n/de.js": "./js/l10n/de.js?v=1.1.1",
+        "./js/l10n/en.js": "./js/l10n/en.js?v=1.1.1",
+        "./js/l10n/es.js": "./js/l10n/es.js?v=1.1.1",
+        "./js/l10n/fr.js": "./js/l10n/fr.js?v=1.1.1",
+        "./js/l10n/it.js": "./js/l10n/it.js?v=1.1.1",
+        "./js/l10n/ja.js": "./js/l10n/ja.js?v=1.1.1",
+        "./js/l10n/ko.js": "./js/l10n/ko.js?v=1.1.1",
+        "./js/l10n/l10n.js": "./js/l10n/l10n.js?v=1.1.1",
+        "./js/l10n/pt-BR.js": "./js/l10n/pt-BR.js?v=1.1.1",
+        "./js/l10n/zh-TW.js": "./js/l10n/zh-TW.js?v=1.1.1",
+        "./js/l10n/zh.js": "./js/l10n/zh.js?v=1.1.1",
+        "./js/main.js": "./js/main.js?v=1.1.1",
+        "./js/scene/framing.js": "./js/scene/framing.js?v=1.1.1",
+        "./js/scene/m0Pose.js": "./js/scene/m0Pose.js?v=1.1.1",
+        "./js/scene/m1Pose.js": "./js/scene/m1Pose.js?v=1.1.1",
+        "./js/scene/m2Pose.js": "./js/scene/m2Pose.js?v=1.1.1",
+        "./js/scene/rig.js": "./js/scene/rig.js?v=1.1.1",
+        "./js/scene/teachScene.js": "./js/scene/teachScene.js?v=1.1.1",
+        "./js/scene/viewer.js": "./js/scene/viewer.js?v=1.1.1",
+        "./js/sim/carrySlice.js": "./js/sim/carrySlice.js?v=1.1.1",
+        "./js/sim/digitSlice.js": "./js/sim/digitSlice.js?v=1.1.1",
+        "./js/sim/kinematics.js": "./js/sim/kinematics.js?v=1.1.1",
+        "./js/sim/kinematicsM1.js": "./js/sim/kinematicsM1.js?v=1.1.1",
+        "./js/sim/machine.js": "./js/sim/machine.js?v=1.1.1",
+        "./js/sim/narrate.js": "./js/sim/narrate.js?v=1.1.1",
+        "./js/sim/operations.js": "./js/sim/operations.js?v=1.1.1",
+        "./js/teach/lessons.js": "./js/teach/lessons.js?v=1.1.1",
+        "./js/teach/partActions.js": "./js/teach/partActions.js?v=1.1.1",
+        "./js/teach/partInfo.js": "./js/teach/partInfo.js?v=1.1.1",
+        "./js/teach/player.js": "./js/teach/player.js?v=1.1.1",
+        "./js/teach/tutorial.js": "./js/teach/tutorial.js?v=1.1.1",
+        "./js/tools/m1Scenarios.js": "./js/tools/m1Scenarios.js?v=1.1.1",
+        "./js/tools/m2Scenarios.js": "./js/tools/m2Scenarios.js?v=1.1.1",
+        "./js/ui/components.js": "./js/ui/components.js?v=1.1.1",
+        "./package.json": "./package.json?v=1.1.1",
+        "./params/machine.json": "./params/machine.json?v=1.1.1",
+        "./vendor/material-symbols/icons.js": "./vendor/material-symbols/icons.js?v=1.1.1",
+        "./vendor/three-mesh-bvh/build/index.module.js": "./vendor/three-mesh-bvh/build/index.module.js?v=1.1.1",
+        "./vendor/three/build/three.core.js": "./vendor/three/build/three.core.js?v=1.1.1",
+        "./vendor/three/build/three.module.js": "./vendor/three/build/three.module.js?v=1.1.1",
+        "./vendor/three/examples/jsm/controls/OrbitControls.js": "./vendor/three/examples/jsm/controls/OrbitControls.js?v=1.1.1",
+        "./vendor/three/examples/jsm/loaders/GLTFLoader.js": "./vendor/three/examples/jsm/loaders/GLTFLoader.js?v=1.1.1",
+        "./vendor/three/examples/jsm/utils/BufferGeometryUtils.js": "./vendor/three/examples/jsm/utils/BufferGeometryUtils.js?v=1.1.1",
+        "./vendor/three/examples/jsm/utils/SkeletonUtils.js": "./vendor/three/examples/jsm/utils/SkeletonUtils.js?v=1.1.1"
       }
     }
     </script>
@@ -96,7 +96,7 @@
          screen-reader name); data-icon is replaced by the inline SVG icon. -->
     <header class="topbar">
       <a class="brand" href="./" draggable="false">
-        <img src="images/logo-wide.svg?v=1.1.0" alt="" width="64" height="34" draggable="false" />
+        <img src="images/logo-wide.svg?v=1.1.1" alt="" width="64" height="34" draggable="false" />
         <span data-l10n="app.name">Leibniz's Stepped Reckoner</span>
       </a>
       <div class="mode" id="modeBox">
@@ -202,6 +202,6 @@
         if (text && text.textContent === "…") text.textContent = "This browser cannot run the simulator. Please use a current version of Chrome, Edge, Firefox or Safari.";
       });
     </script>
-    <script type="module" src="js/main.js?v=1.1.0"></script>
+    <script type="module" src="js/main.js?v=1.1.1"></script>
   </body>
 </html>
