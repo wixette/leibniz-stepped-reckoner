@@ -2,7 +2,7 @@
 
 What changed in each release. Versions follow `package.json` and are tagged `vX.Y.Z` ([docs/development.md](docs/development.md), *Versions and releases*). The design decisions cited (U1, U2, …) are in [docs/ui-design.md](docs/ui-design.md).
 
-## Unreleased
+## 1.1.0
 
 The machine follows N. J. Lehmann's workshop drawings of the TU Dresden replica, kept in the Deutsches Museum's archive (NL 183/465 and NL 183/466 PLAN), where they fit the model ([design/m4-notes.md](design/m4-notes.md)).
 
