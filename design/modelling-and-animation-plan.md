@@ -1,6 +1,6 @@
 # Modelling and animation plan: Leibniz stepped reckoner (target B)
 
-- **Status:** M0–M2 done; M3 built, and redesigned for release 1.0.0 (2026-10-20, [docs/ui-design.md](../docs/ui-design.md)); M4 open. First written 2026-10-17.
+- **Status:** M0–M2 done; M3 built, and redesigned for release 1.0.0 (2026-10-20, [docs/ui-design.md](../docs/ui-design.md)); M4 phases 1, 2 and 4 done for release 1.1.0 (2026-10-29), phase 3 waits for NL 183/467. First written 2026-10-17.
 - **Inputs:** [`../research/REPORT.md`](../research/REPORT.md), [`../research/sources/notes-mechanism.md`](../research/sources/notes-mechanism.md), [`../params/machine.json`](../params/machine.json), [decision 0001](decisions/0001-carry-interpretation.md)
 - **Conventions:** [`docs/conventions.md`](../docs/conventions.md)
 
@@ -158,7 +158,7 @@ These must be planned now, because they change how the meshes are cut.
 | **M1: 3-digit carry slice** ✅ done 2026-10-17 ([notes](m1-notes.md)) | 3 digits plus Zweihörner, the drive gears and the sim logic (both carry modes). Step mode. **Acceptance-test harness** (glTF-in-Node, readout/contact/clearance checks, `?selftest`), retrofitted to M0 first. | 999 + 1 ripples in one turn (`ripple`) and needs extra idle turns (`historical`, 900 → 000 + carry → 1000). `pnpm test` runs the M0 and M1 acceptance specs (§10.1) and passes. |
 | **M2: full machine** ✅ done 2026-10-18 ([notes](m2-notes.md)): mechanism 2026-10-17; casing, photo overlay (carriage, Magna Rota, frame and case within 5 % of the photos) and materials 2026-10-18. Chromebook performance not measured yet. | 16-digit register, 8-digit carriage, Magna Rota with pin and stop, counter, lead screw and carriage shift, casing, materials | Every worked example animates correctly. Within the performance budget. Photo overlay within about 5 %. |
 | **M3: teaching layer** 🟡 built 2026-10-18 ([notes](m3-notes.md)), redesigned for release 1.0.0 on 2026-10-20 ([ui-design.md](../docs/ui-design.md)); teacher test, translation review and Chromebook measurement open | UI (EN/DE, then ten languages), camera presets, cut-away, exploded view, labels, guided lessons (9999 + 1, 1709 × 365, a division) | Usable by a teacher without instructions (to be tested with 1–2 teachers) |
-| **M4: fidelity upgrade (target C)** | Replace `est`/`design` params with documented values from NL 183 or the GWLB (§12). NL 183/465 received 2026-10-29; candidate values in [notes-nl183.md](../research/sources/notes-nl183.md) §10. Planned for v1.1.0 in [m4-notes.md](m4-notes.md). | Params mostly `doc`. Decision 0001 revisited. |
+| **M4: fidelity upgrade (target C)** ✅ phases 1, 2, 4 done 2026-10-29 ([notes](m4-notes.md)) | Replace `est`/`design` params with documented values from NL 183 or the GWLB (§12). NL 183/465 received 2026-10-29; candidate values in [notes-nl183.md](../research/sources/notes-nl183.md) §10. Release 1.1.0; phase 3 (Lehmann's lever arrangement) waits for /467. | Params mostly `doc`. Decision 0001 revisited. |
 
 M0 and M1 also prove the pipeline (params → Blender → glTF → three.js), which the later milestones reuse.
 
@@ -239,8 +239,9 @@ M2 design decisions:
 | A2-9 | Sampled clearance at the runtime transforms across add and subtract turns, carriage shifts and a multiplier run. | clearance |
 | A2-10 | The M0 and M1 specs still pass (shared-code regression). | regression |
 | A2-11 | A carry store holds one carry. With digit 8's carry waiting above the carriage and digits 0–8 at 9, a turn adding 1 is refused (nothing moves; store 8 stays at 18°). After a shift, an idle turn and the shift back, the same addition completes, and the register holds the exact value (2 000 000 000). | readout |
-| A2-12 | Casing: the oak case, the oak base and bearers, and the brass cover plates are static parts (the carriage cover rides with the carriage), so the page can hide them together. No woodwork sits outside them, so hiding them leaves only the mechanism. All 16 windows read through the cover openings at offsets 0 and 8. | readout |
+| A2-12 | Casing: the oak case, the oak base and bearers, and the brass cover plates are static parts (the carriage cover rides with the carriage), so the page can hide them together. No woodwork sits outside them, so hiding them leaves only the mechanism. All 16 windows read through the cover openings at offsets 0 and 8 (7 since M4). | readout |
 | A2-13 | Both cranks can be turned by hand. Over a full turn, at both carriage ends, the main crank's knob stays at least 10 mm above the case's front wall top and floor (room for fingers), and the end crank's knob stays above the table. Added 2026-10-18: the knob used to run in a 6 mm slot behind the front wall. | geometry |
+| A2-14 | No flickering faces. At rest at both carriage ends, no two parts (or two materials of one part) have overlapping faces in the same plane facing the same way, which the renderer cannot order (z-fighting). Added 2026-10-29: the carriage cover's end walls lay in the front panel's faces and flickered as the view moved, since v1.0.0. | geometry |
 
 #### M3: teaching layer
 

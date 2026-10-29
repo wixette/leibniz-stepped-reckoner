@@ -1,6 +1,6 @@
 # M4: fidelity upgrade from NL 183 (plan)
 
-Release v1.1.0. Status: **planned 2026-10-29, decisions D1–D3 agreed the same day; phase 1 done and reviewed by the owner 2026-10-29; D4 agreed the same day; phase 2 done 2026-10-29, as far as the drawings fit the model (D5 agreed the same day).**
+Release v1.1.0. Status: **planned 2026-10-29, decisions D1–D3 agreed the same day; phase 1 done and reviewed by the owner 2026-10-29; D4 agreed the same day; phase 2 done 2026-10-29, as far as the drawings fit the model (D5 agreed the same day); phase 3 deferred past v1.1.0 (agreed 2026-10-29); phase 4 done 2026-10-29.**
 
 M4 replaces estimated (`est`) and designed (`design`) parameters with values documented in Lehmann's drawings of the Dresden replica, Deutsches Museum NL 183/465 and /466 PLAN. The facts, with pages, are in [research/sources/notes-nl183.md](../research/sources/notes-nl183.md) (§10 lists the candidate parameters) and [research/data/nl183_dimensions.csv](../research/data/nl183_dimensions.csv). The scans stay outside the repository ([docs/licensing.md](../docs/licensing.md)).
 
@@ -69,13 +69,19 @@ Not done (decision D5, agreed 2026-10-29), and why:
 - **Revolution counter internals** (optional): the counter is not simulated (the Magna Rota counts turns), so its cam, 12-slot driver and gears would be hidden, static parts.
 - Muldenrad and Einzahn profiles (optional; partly scaled values, so weaker).
 
-### Phase 3: Lehmann's lever arrangement (deferred)
+### Phase 3: Lehmann's lever arrangement (deferred past v1.1.0, agreed 2026-10-29)
 
 Spreads 135/102/69/39/36/69/102/132° (places ⑧…①) with their real phases, the lever 4.9 mm above the drum axis and its fingers on radius 14.65; decision 0001 revisited; the simulator's carry timing and the historical-mode tests (A1-3, A2-7) change. Needs the absolute lever phases, probably in /467. Not in v1.1.0 unless /467 arrives in time.
 
-### Phase 4: downstream
+### Phase 4: downstream (done 2026-10-29)
 
 Camera framing, label anchors and explode offsets on the page; acceptance specs; the About text and its credit to the Deutsches Museum, NL 183 (ten languages; `reference_machine` in params is done), `ref.tud.desc` ("checked against photos") and docs; CHANGELOG; release screenshots and videos (`pnpm shots`, `pnpm video`).
+
+Done:
+- **Page views:** all 32 release shots checked by eye (`pnpm shots`): the camera presets, the lessons' views and the Taken apart view frame the shorter machine as before, and the setting stop explodes with its plate. No preset needed changing.
+- **Acceptance specs:** A0-10 (setting stop), A2-2/A2-3/A2-12 at offset 7, and A2-14 (no flickering faces), added after the owner found a flickering strip at the carriage's left end (since v1.0.0): the carriage cover's end walls lay in the front panel's faces.
+- **Texts, ten languages:** the About box's reconstruction note (the main parts' sizes follow Lehmann's drawings), its credits ("Deutsches Museum München, NL 183/465 and NL 183/466 PLAN"), and `ref.tud.desc` (the model follows the replica's drawings and was checked against photos of it).
+- **Release pictures:** the README's six pictures retaken; the post set and the videos are made by `pnpm shots` and `pnpm video` (not committed: `shots/`, `videos/`).
 
 ## Acceptance
 
