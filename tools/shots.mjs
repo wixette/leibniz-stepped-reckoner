@@ -9,7 +9,7 @@
 // It drives headless Chrome at 1600 × 900 (tools/headless.mjs) and writes JPEGs. A view
 // shot is the stage alone, with the dock hidden (1600 × 814); a lesson shot is the whole
 // page. Each shot loads the page afresh and sets it up through the app as a reader would
-// leave it. The README's six pictures are images/readme/<name>.jpg.
+// leave it. The README's pictures are images/readme/<name>.jpg.
 
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
@@ -23,7 +23,7 @@ const QUALITY = 94;
 /**
  * A shot: its file name, the stage alone or the whole page, a setup run in the page as
  * the body of an async function (with the helpers in HELPERS), and how long to wait after.
- * @typedef {{ name: string; page?: boolean; setup: string; wait?: number }} Shot
+ * @typedef {{ name: string; page?: boolean; setup: string; wait?: number; crop?: number[] }} Shot
  */
 
 /** Run in the page before each setup. */
@@ -68,9 +68,10 @@ const SHOTS = [
   // The README's pictures.
   { name: "free-play", page: true, setup: "", wait: 3000 },
   { name: "lesson-carry", page: true, setup: `await lesson("carry", 3, false);`, wait: 3000 },
+  // from the front, as the photo of the original beside it; the machine alone (crop: x, y, width, height in the stage)
+  { name: "view-whole", setup: `await hideDock(); await view("overview"); await cam(-40, 12, 0.9);`, crop: [90, 75, 1310, 615] },
   { name: "view-apart", setup: APART },
   { name: "view-drum", setup: DRUM },
-  { name: "view-carry", setup: CARRY },
   {
     name: "view-magna",
     setup: `await hideDock(); app.setNumber(1709); app.setPin(5); app.machine.turn(1); app.machine.turn(1); app.changed(); await view("front");`,
@@ -91,6 +92,7 @@ const SHOTS = [
   { name: "drum-above", setup: `${DRUM} await cam(0, 25, 0.8);` },
   { name: "drum-wide-right", setup: `${DRUM} await cam(60, 20, 1.1);` },
   // The carry, the other parts faded, mid-turn in 9999 + 1.
+  { name: "view-carry", setup: CARRY },
   { name: "carry-left", setup: `${CARRY} await cam(-35, 5);` },
   { name: "carry-right", setup: `${CARRY} await cam(35, 10);` },
   { name: "carry-above", setup: `${CARRY} await cam(0, 25, 0.8);` },
@@ -130,7 +132,9 @@ for (const lang of opts.lang.split(",")) {
       errors.push(String(e));
     }
     await sleep(s.wait ?? 1200);
-    const clip = s.page ? undefined : { ...JSON.parse(await evaluate("JSON.stringify(document.getElementById('stage').getBoundingClientRect())")), scale: 1 };
+    /** @type {{ x: number; y: number; width: number; height: number; scale: number } | undefined} */
+    let clip = s.page ? undefined : { ...JSON.parse(await evaluate("JSON.stringify(document.getElementById('stage').getBoundingClientRect())")), scale: 1 };
+    if (clip && s.crop) clip = { x: clip.x + s.crop[0], y: clip.y + s.crop[1], width: s.crop[2], height: s.crop[3], scale: 1 };
     const shot = await send("Page.captureScreenshot", { format: "jpeg", quality: QUALITY, ...(clip && { clip }) });
     writeFileSync(join(dir, `${s.name}.jpg`), Buffer.from(shot.result.data, "base64"));
     if (errors.length) failed++;
