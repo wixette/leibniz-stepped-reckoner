@@ -13,7 +13,7 @@ The machine follows N. J. Lehmann's workshop drawings of the TU Dresden replica,
 - The carriage has 8 positions, as on the replica: it shifts 7 places, so the 16th result digit is reached only by a carry.
 - The frame follows the drawings in length: side walls 610 mm apart with the lead screw running in them, the base 629 mm long, and the counter dial 73 mm right of the units knob.
 - The drive chain between the drums and the carry levers has the replica's gears: 10 teeth, 22.9 mm across and 7 mm wide, with a collar on each drum's gear.
-- The About box credits the drawings, and says which sizes follow them, in all ten languages.
+- The About box and the tutorial credit the drawings, and say which sizes follow them, in all ten languages.
 
 **Fixed**
 - A thin strip at the left end of the carriage's front panel flickered when the view moved (since 1.0.0): the end walls of the carriage cover lay in the panel's faces. They now start behind it, and a new acceptance check, A2-14, finds faces of two parts lying in one plane.
