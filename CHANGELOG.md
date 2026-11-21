@@ -2,6 +2,17 @@
 
 What changed in each release. Versions follow `package.json` and are tagged `vX.Y.Z` ([docs/development.md](docs/development.md), *Versions and releases*). The design decisions cited (U1, U2, …) are in [docs/ui-design.md](docs/ui-design.md).
 
+## 1.2.0 (unreleased)
+
+**The carry of the original**
+- A new carry mode, *simultaneous*, follows the original in Hannover: all eight carry levers act at the same moment, as Klaus Badur, who measured the original, wrote in agreement with the GWLB. A carry made while carries are being passed on waits, its pentagon tilted, and later turns finish it. 9999 + 1 shows 9900, then 0000, then 10000, as the GWLB describes, and the model gets there from the lever geometry alone.
+- It replaces the *historical* mode, whose levers came highest digit first, which no source supports ([decision 0001](design/decisions/0001-carry-interpretation.md), addendum of 2026-11-21).
+- The carry lesson ends with the original's three turns, in all ten languages, and says that the one-turn carry shown first is that of N. J. Lehmann's Dresden replica. The default carry is still Lehmann's.
+
+**The page**
+- A *Carry* box in the toolbar chooses between the two in free play: *Lehmann* or *Original* (U30). It sits before Reset, and the two keep together where the toolbar wraps.
+- The toolbar drops Reset's label and its separators on narrower stages than before, so it stays one row on a 1280 px laptop with the panel open and on a 768 px tablet (two rows there before). A phone now has three rows of controls.
+
 ## 1.1.1
 
 The README is rewritten for newcomers; the simulator itself is unchanged.

@@ -121,6 +121,7 @@ export function setTip(e, text) {
  * @property {boolean} [toggle] an on/off switch (checked shows a ticked box), not a choice
  * @property {string | true} [divider] a line before the item, headed by the text if one is given
  * @property {string} [lang] the item's own language (the language menu)
+ * @property {string} [detail] a second, smaller line under the label (what the choice does)
  */
 
 /** @type {{ box: HTMLElement; anchor: HTMLElement } | null} */
@@ -150,7 +151,8 @@ export function showMenu(anchor, items) {
     if (it.divider) box.appendChild(el("div", { class: "menu-divider", role: "separator" }, [typeof it.divider === "string" ? el("span", { text: it.divider }) : null]));
     const role = it.checked === undefined ? "menuitem" : it.toggle ? "menuitemcheckbox" : "menuitemradio";
     const mark = it.checked === undefined ? null : it.toggle ? icon(it.checked ? "check_box" : "check_box_outline_blank") : it.checked ? icon("check") : el("span", { class: "check" });
-    const b = el("button", { role, tabindex: "-1", lang: it.lang }, [mark, el("span", { text: it.label })]);
+    const text = it.detail ? el("span", { class: "two-line" }, [el("span", { text: it.label }), el("small", { text: it.detail })]) : el("span", { text: it.label });
+    const b = el("button", { role, tabindex: "-1", lang: it.lang, class: it.detail ? "has-detail" : undefined }, [mark, text]);
     if (it.checked !== undefined) b.setAttribute("aria-checked", String(it.checked));
     b.addEventListener("click", () => {
       closeMenu();

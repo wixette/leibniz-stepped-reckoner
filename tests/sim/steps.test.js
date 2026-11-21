@@ -44,16 +44,16 @@ describe("M0 steps", () => {
 });
 
 describe("M1 steps", () => {
-  /** @type {[string, "ripple" | "historical", number, number, 1 | -1][]} */
+  /** @type {[string, "ripple" | "simultaneous", number, number, 1 | -1][]} */
   const cases = [];
-  for (const mode of /** @type {const} */ (["ripple", "historical"])) {
+  for (const mode of /** @type {const} */ (["ripple", "simultaneous"])) {
     for (const [r, x, dir] of /** @type {const} */ ([[999, 1, 1], [0, 1, -1], [456, 278, 1], [909, 91, 1], [990, 10, 1], [100, 1, -1], [0, 999, -1], [999, 999, 1], [123, 0, 1]])) {
       cases.push([`${mode} ${r}${dir > 0 ? "+" : "-"}${x}`, mode, r, x, dir]);
     }
   }
-  it("historical 999 + 1: the idle turn's early pass is described as a carry, not a rib", () => {
+  it("simultaneous 999 + 1: the idle turn's early pass is described as a carry, not a rib", () => {
     const m = new CarrySlice();
-    m.setMode("historical");
+    m.setMode("simultaneous");
     m.setResult(999);
     m.setNumber(1);
     m.turn(1);

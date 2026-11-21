@@ -8,8 +8,10 @@
 //                a Zweihorn horn executes it when it passes the store - but only stores
 //                under the carriage have a lever. A carry stored above the top lever stays
 //                stored (pentagon tilted) until the carriage is shifted over it.
-// Ripple mode staggers the levers units-first, so a secondary carry is stored before the
-// next lever arrives. Historical mode staggers them highest-first (decision 0001).
+// Ripple mode (Lehmann's Dresden replica) staggers the levers units-first, so a secondary
+// carry is stored before the next lever arrives. Simultaneous mode (the original, all levers
+// at one phase) leaves it stored for the next horn pass: each lever passes its store twice a
+// turn (both horns), so a waiting chain moves on two places per idle turn (decision 0001).
 // Magna Rota: geared 10:1 to the crank; its ring with 10 holes doubles as the
 // revolution counter (black numbers count additions, red ones subtractions). A pin in
 // hole m stops the crank after m forward turns (Leupold) - multiplication. Turned back, the
@@ -390,7 +392,7 @@ export class Machine {
       };
       // Only a store under the carriage has a Zweihorn passing it.
       if (j >= 0) {
-        for (const start of M.leverPasses(j, this.mode, dir, this.carriageDigits)) {
+        for (const start of M.leverPasses(j, this.mode, dir)) {
           const r = dir * store(start);
           const inPitch = ((r % K.STORE_PITCH) + K.STORE_PITCH) % K.STORE_PITCH;
           if (Math.abs(inPitch - K.STORE_STEP) < 1e-6) executions.push({ start, sign: dir });
@@ -437,7 +439,7 @@ export class Machine {
         return { wheel: K.sumWheelAngle(v), store: x.store(t), v };
       }),
       carriage: this.settings.map((s, j) => {
-        const ph = M.hornPhases(j, this.mode, this.carriageDigits);
+        const ph = M.hornPhases(j, this.mode);
         return {
           drumShaft: th,
           drumY: K.drumFrontY(s),

@@ -1272,11 +1272,12 @@
       "conf": "design",
       "src": "after the Zweihorn releases, the detent spring completes the store to 72 deg within 2 deg of crank (LUDWIG2006: Rastfedern complete the carry)"
     },
-    "historical_order": {
-      "v": "highest digit first",
+    "simultaneous_phase": {
+      "v": "all levers at the carry window start",
       "unit": "-",
-      "conf": "design",
-      "src": "decision 0001: reversing the lever stagger makes secondary carries wait for the next turn (reproduces GWLB 9999+1 -> 9900 -> 0000 -> 10000)"
+      "conf": "doc",
+      "src": "BADUR2026: on the original every Zweihorn has the same angle between its horns and is mounted at the same angle to its drum, so all levers engage together and complete their stored carries at the same time",
+      "note": "Carry mode 'simultaneous' (decision 0001). With our lever geometry this makes every spread 119 deg; BURKHARDT1897 (via LUDWIG2006) gives about 80 deg, so the absolute phase is still our design. The same phase for all levers, not the spread, decides the behaviour: 9999 + 1 -> 9900 -> 0000 (thousands pentagon tilted) -> 10000, as GWLB describes."
     },
     "spring_from_store": {
       "v": 45.0,

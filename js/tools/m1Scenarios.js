@@ -18,9 +18,9 @@ export const M1_SCENARIOS = [
   { label: "ripple 456+278", mode: "ripple", result: 456, turns: [{ input: 278, dir: 1 }] },
   { label: "ripple 999+999", mode: "ripple", result: 999, turns: [{ input: 999, dir: 1 }] },
   { label: "ripple 000-999", mode: "ripple", result: 0, turns: [{ input: 999, dir: -1 }] },
-  { label: "historical 999+1 (+idle)", mode: "historical", result: 999, turns: [{ input: 1, dir: 1 }, { input: 0, dir: 1 }] },
-  { label: "historical 000-1 (+idle)", mode: "historical", result: 0, turns: [{ input: 1, dir: -1 }, { input: 0, dir: -1 }] },
-  { label: "historical 909+91 (+idle)", mode: "historical", result: 909, turns: [{ input: 91, dir: 1 }, { input: 0, dir: 1 }] },
+  { label: "simultaneous 999+1 (+idle)", mode: "simultaneous", result: 999, turns: [{ input: 1, dir: 1 }, { input: 0, dir: 1 }] },
+  { label: "simultaneous 000-1 (+idle)", mode: "simultaneous", result: 0, turns: [{ input: 1, dir: -1 }, { input: 0, dir: -1 }] },
+  { label: "simultaneous 909+91 (+idle)", mode: "simultaneous", result: 909, turns: [{ input: 91, dir: 1 }, { input: 0, dir: 1 }] },
 ];
 
 /**

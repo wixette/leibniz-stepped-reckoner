@@ -1,6 +1,6 @@
 # 0001: Which carry behaviour does the simulator show?
 
-- **Status:** accepted 2026-10-17 by the project owner: `ripple` is the default mode, `historical` is the second mode
+- **Status:** accepted 2026-10-17 by the project owner: `ripple` is the default mode, `historical` is the second mode. **Amended 2026-11-21:** `historical` is replaced by `simultaneous`, the original's own carry (addendum at the end).
 - **Date:** 2026-10-17
 - **Context documents:** `research/sources/notes-mechanism.md` §5, `research/sources/notes-history-and-reconstructions.md`
 
@@ -70,3 +70,22 @@ Both modes use **the same geometry**. Only the Zweihorn phases differ: the stagg
 - **Morar (2015):** Leibniz added the pentagon to each carry "to show whether the carry has been correctly performed" (citing AA I 17, 105).
 
 Both support offering a mode where secondary carries can stay pending (`historical`), shown by tilted pentagons. Neither gives lever angles, so the timing table stays our design. Morar also notes that the surviving machine was changed in Burkhardt's 1890s restoration, so even measurements of it describe the restored state (research/sources/notes-history-and-reconstructions.md).
+
+## Addendum (2026-11-21): the original's levers all act at once; `simultaneous` replaces `historical`
+
+**New evidence (BADUR2026).** Klaus Badur, who measured the original before building his replica, wrote in agreement with the GWLB: on the original every Zweihorn has the same angle between its two horns, and every lever is mounted at the same angle to its drum. All levers therefore engage at the same moment and complete their stored carries together. This agrees with Burkhardt's "about 80°, the same on every digit" and with Stein and Kopp's "all digits transfer simultaneously" (I4). His assembly drawing gives the same layout as Lehmann's: 36.5 mm pitch, 26.5 mm from drum to result axis, lever axis 18.25 mm to the side, the store turning 18° when it takes a carry.
+
+**What the model does with it.** A new mode, `simultaneous`, gives every lever the same phase (the carry window start, 292°). Nothing else changes: the geometry, the two horn passes per turn and the store rules are the ones in this record. The behaviour then **emerges**:
+- 9999 + 1 → **9900** (the tens carry, made during the carry phase, missed its lever: tens pentagon tilted)
+- idle turn → **0000** (the other horn's early pass executes the hundreds, the main pass the thousands; the ten-thousands carry waits: thousands pentagon tilted)
+- idle turn → **10000**.
+
+This is GWLB's sequence, including "only two carries at once": each lever passes its store twice a turn, once with each horn, so a waiting chain moves on two places per idle turn. The M2 correction above concluded that `historical` could not produce it; equal phases do, without tuning.
+
+**Decision (project owner, 2026-11-21).**
+1. `historical` (highest digit first) is removed. Its stagger had no source.
+2. `simultaneous` takes its place, shown as **"Original (Hannover)"**; `ripple` stays the default, shown as **"Lehmann (Dresden)"**.
+3. The carry lesson ends with the original's three turns, and names Lehmann's replica as the source of the one-turn carry shown first.
+
+**Still open.** With our lever geometry the equal spread is 119°, not Burkhardt's 80°. The phase relative to the drum ribs is still our design (`timing.carry_window`). Badur was asked for the Zweihorn's spread (his part 21); the behaviour above does not depend on it, as long as all levers share one phase and the early pass comes before the ribs.
+

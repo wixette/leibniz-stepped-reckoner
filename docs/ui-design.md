@@ -100,7 +100,7 @@ Free play has no tab: its controls are the machine toolbar, under the machine (P
 
 ### U4 — The machine's toolbar and the stage's own tools
 
-- **Machine toolbar** (floating at the stage's bottom, centred under the machine, U18): the number on the setting knobs, turn forward (+) and back (−) as one pair, carriage left and right with its place as another, boxed and named like the number box (U21), the Magna Rota's pin (a dropdown box, U22) with turn to the stop joined to it (U23), reset (U20), and the machine's sound on or off (U29). Icon plus short label where there is room, icons with tooltips where there is not (U18).
+- **Machine toolbar** (floating at the stage's bottom, centred under the machine, U18): the number on the setting knobs, turn forward (+) and back (−) as one pair, carriage left and right with its place as another, boxed and named like the number box (U21), the Magna Rota's pin (a dropdown box, U22) with turn to the stop joined to it (U23), how the carry levers act (a dropdown box, U30), reset (U20), and the machine's sound on or off (U29). Icon plus short label where there is room, icons with tooltips where there is not (U18).
 - **Readouts** sit on the stage's top edge: the result as on the machine, grouped in threes; the Magna Rota's turn count (red when subtracting); the carriage's place.
 - **View controls** float at the stage's top right (U15): a Reset view button (⌂), a − / + zoom pair (U24) and the Views menu, whose button names the view on show. The menu holds the seven views (two of them inside views, U11, and Taken apart) and a Show case switch. Opening the front, fading and taking apart follow the view (U14, U15). They change how the machine is *shown*, not its state, so they stay enabled in a lesson, except where a step depends on them.
 
@@ -131,7 +131,7 @@ The first version used a brass-gold primary on warm neutrals to match the machin
 ### U6 — The learning path
 
 1. **Adding: the stepped drum** — one digit, then whole numbers at once.
-2. **The carry: 9999 + 1** — stored, then passed on; the historical reading as an aside.
+2. **The carry: 9999 + 1** — stored, then passed on (Lehmann's replica, in one turn); then the original in Hannover, whose levers all act at once, in three turns.
 3. **Subtracting: turn the other way** — 1000 − 1, borrowing as the mirror of carrying.
 4. **The carriage: places and × 10** — shifting multiplies the step by 10.
 5. **Multiplying: 1709 × 365** — with the Magna Rota's pin, in 14 turns.
@@ -407,3 +407,13 @@ The machine is a mechanism of gears, racks and levers, and hearing it work tells
 - The link format (P8): which fields the first release promises (language, lesson and step, numbers on the machine).
 - A light theme.
 - A teacher's view (all lessons unlocked, notes per lesson).
+
+### U30 — The carry is a dropdown box in the toolbar
+
+The machine can carry two ways (decision 0001): like N. J. Lehmann's Dresden replica, whose levers come one after another, so a chain of carries runs on within one turn; or like the original in Hannover, whose levers all act at once, so a carry made while carries are being passed on waits, its pentagon tilted, for another turn. The reader chooses in free play.
+
+- **It is a setting, so it is a box (U22's rule):** "Carry" on its border, a short word inside (*Lehmann*, *Original*), and a ▾. Its menu names the two machines on one line each and says what each does on a second, smaller line; the current one is ticked. Its accessible name says the setting ("Carry: The original (Hannover)"), its tooltip what it chooses.
+- **It sits after the pin, before Reset,** and the two stay together where the toolbar wraps: on a phone they make the last row (number, crank and sound; carriage and pin; carry and reset). The word inside is short so the box stays narrow (80–100 px); its minimum width keeps the longest name on its border (Japanese 繰り上がり) inside it. Reset's label goes below a 940 px stage and the separators below 820 px, so a 1280 px laptop with the dock and a 768 px tablet still have one row. A phone has three rows (it had two from 390 px): the toolbar's boxes are wider than two rows of a phone hold, and the carry's name should stay readable rather than become an icon.
+- **Only at rest, only in free play.** It changes the levers' phases, so it waits for the crank to stop; a lesson sets its own carry with each step's reset, so in a lesson the box is greyed like every control the step does not ask for. Reset keeps the choice; leaving a lesson keeps the machine as the lesson left it, the carry included, as for everything else.
+- The status line says what the choice means, and the Zweihörner turn to their new phases at once, visible in the Carry view.
+

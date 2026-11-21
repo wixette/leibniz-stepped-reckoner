@@ -58,10 +58,10 @@ describe("CarrySlice arithmetic (ripple)", () => {
   });
 });
 
-describe("CarrySlice historical mode (decision 0001)", () => {
+describe("CarrySlice simultaneous mode (decision 0001)", () => {
   it("999 + 1: 900 after the first turn (tens carry waits), 000 + carry after an idle turn", () => {
     const m = new CarrySlice();
-    m.setMode("historical");
+    m.setMode("simultaneous");
     m.setResult(999);
     add(m, 1);
     assert.equal(m.shownNumber(), 900);
@@ -75,7 +75,7 @@ describe("CarrySlice historical mode (decision 0001)", () => {
 
   it("executes a pending carry at the start of a turn and a new carry of the same digit later", () => {
     const m = new CarrySlice();
-    m.setMode("historical");
+    m.setMode("simultaneous");
     m.setResult(999);
     add(m, 1); // 900, tens carry pending
     add(m, 10); // tens: pending carry executed early, then 0 + 1 = 1 by the ribs
@@ -87,7 +87,7 @@ describe("CarrySlice historical mode (decision 0001)", () => {
   it("ends with the same number as ripple mode once idle turns finish the carries", () => {
     for (const [a, b] of [[999, 1], [909, 91], [990, 10], [555, 445]]) {
       const m = new CarrySlice();
-      m.setMode("historical");
+      m.setMode("simultaneous");
       m.setResult(a);
       add(m, b);
       for (let k = 0; k < 4 && m.pending.some((p) => p !== 0); k++) add(m, 0);
@@ -102,7 +102,7 @@ describe("CarrySlice operating rules", () => {
     m.setNumber(123);
     m.setTheta(100);
     assert.equal(m.setSetting(0, 5), false);
-    assert.equal(m.setMode("historical"), false);
+    assert.equal(m.setMode("simultaneous"), false);
     m.reset();
     assert.deepEqual([m.theta, m.carryOut, m.turns, ...m.settings, ...m.digits, ...m.pending], Array(12).fill(0));
   });

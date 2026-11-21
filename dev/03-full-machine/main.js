@@ -236,9 +236,9 @@ function render() {
   (/** @type {HTMLInputElement} */ ($("theta"))).disabled = busy();
   for (const b of /** @type {NodeListOf<HTMLButtonElement>} */ (document.querySelectorAll("[data-example]"))) b.disabled = busy();
   $("modeRipple").classList.toggle("on", machine.mode === "ripple");
-  $("modeHistorical").classList.toggle("on", machine.mode === "historical");
+  $("modeSimultaneous").classList.toggle("on", machine.mode === "simultaneous");
   (/** @type {HTMLButtonElement} */ ($("modeRipple"))).disabled = !rest;
-  (/** @type {HTMLButtonElement} */ ($("modeHistorical"))).disabled = !rest;
+  (/** @type {HTMLButtonElement} */ ($("modeSimultaneous"))).disabled = !rest;
 
   const phase = $("phase");
   // A store that cannot take another carry: say so instead of the usual phase text.
@@ -362,17 +362,20 @@ const EXAMPLES = {
     yield { shift: 0 };
   },
   *hist() {
-    yield* resetTo("historical");
+    yield* resetTo("simultaneous");
     machine.setResult(9999);
     machine.setNumber(1);
-    say("Historical (deferred) carry mode: 9999 + 1.");
+    say("The original's carry (all levers at once): 9999 + 1.");
     yield { pause: 1.5 };
     yield { turn: 1 };
-    say(`After one turn: ${machine.shownNumber()} – the tens carry made during the carry phase waits (pentagon tilted).`);
+    say(`After one turn: ${machine.shownNumber()} – the tens carry made during the carry phase missed its lever and waits (pentagon tilted).`);
     yield { pause: 2 };
     machine.setNumber(0);
     yield { turn: 1 };
-    say(`One idle turn finishes it: ${machine.shownNumber()}.`);
+    say(`One idle turn moves it on two places (one pass per horn): ${machine.shownNumber()}, the thousands pentagon tilted.`);
+    yield { pause: 2 };
+    yield { turn: 1 };
+    say(`A second idle turn finishes it: ${machine.shownNumber()}.`);
   },
 };
 
@@ -450,7 +453,7 @@ const setMode = (m) => {
   }
 };
 $("modeRipple").addEventListener("click", () => setMode("ripple"));
-$("modeHistorical").addEventListener("click", () => setMode("historical"));
+$("modeSimultaneous").addEventListener("click", () => setMode("simultaneous"));
 $("reset").addEventListener("click", () => {
   current = null;
   script = null;

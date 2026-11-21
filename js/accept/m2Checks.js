@@ -315,19 +315,27 @@ export function runM2Checks(root, opts = {}) {
     return { passed: ok, detail: `turn 1: ${showNum(r1)}, store 8 tilt ${fmt(t1[8], 1)}°; after shift + idle turn: ${showNum(r2)}, max tilt ${fmt(Math.max(...t2), 1)}°` };
   });
 
-  run("A2-7", "Historical 9999 + 1 reads 9900 (tens pentagon tilted), then 10000 after an idle turn", () => {
-    state(c, { mode: "historical", result: 9999, input: 1 });
-    c.m.turn(1);
-    pose(c);
-    const r1 = showNum(readAll(c)).slice(-5);
-    const t1 = tilts(c);
-    c.m.setNumber(0);
-    c.m.turn(1);
-    pose(c);
-    const r2 = showNum(readAll(c)).slice(-5);
-    const t2 = tilts(c);
-    const ok = r1 === "09900" && Math.abs(t1[1] - K.STORE_STEP) < ANGLE_TOL_DEG && r2 === "10000" && t2.every((x) => x < ANGLE_TOL_DEG);
-    return { passed: ok, detail: `turn 1: ${r1} (tens tilt ${fmt(t1[1], 1)}°); idle turn: ${r2}` };
+  run("A2-7", "Simultaneous (the original) 9999 + 1 reads 9900, then 0000 with the ten-thousands pentagon tilted, then 10000", () => {
+    state(c, { mode: "simultaneous", result: 9999, input: 1 });
+    /** @type {string[]} */
+    const r = [];
+    /** @type {number[][]} */
+    const t = [];
+    for (const input of [1, 0, 0]) {
+      c.m.setNumber(input);
+      c.m.turn(1);
+      pose(c);
+      r.push(showNum(readAll(c)).slice(-5));
+      t.push(tilts(c));
+    }
+    const tilted = (/** @type {number[]} */ ts, /** @type {number} */ k) =>
+      ts.every((x, i) => (i === k ? Math.abs(x - K.STORE_STEP) < ANGLE_TOL_DEG : x < ANGLE_TOL_DEG));
+    const ok =
+      r[0] === "09900" && tilted(t[0], 1) && r[1] === "00000" && tilted(t[1], 3) && r[2] === "10000" && t[2].every((x) => x < ANGLE_TOL_DEG);
+    return {
+      passed: ok,
+      detail: `turn 1: ${r[0]} (tens tilt ${fmt(t[0][1], 1)}°); idle turn: ${r[1]} (thousands tilt ${fmt(t[1][3], 1)}°); idle turn: ${r[2]}`,
+    };
   });
 
   run("A2-11", "A turn that would store a second carry above the carriage is refused; after a shift it completes", () => {

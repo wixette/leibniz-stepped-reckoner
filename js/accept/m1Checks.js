@@ -179,8 +179,8 @@ export function runM1Checks(root) {
     return { passed: ok, detail: `units stored tilt ${fmt(stored[0], 1)}°; after the turn ${showNum(r)}, carry out ${c.m.carryOut}, tilts ${t.map((x) => fmt(x, 1)).join("/")}` };
   });
 
-  run("A1-3", "Historical: 999 + 1 → 900 (tens carry waits) → 000 + carry after an idle turn", () => {
-    state(c, { mode: "historical", result: 999, input: 1 });
+  run("A1-3", "Simultaneous: 999 + 1 → 900 (tens carry waits) → 000 + carry after an idle turn", () => {
+    state(c, { mode: "simultaneous", result: 999, input: 1 });
     c.m.setTheta(360);
     pose(c);
     const r1 = readAll(c);

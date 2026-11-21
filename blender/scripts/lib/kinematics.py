@@ -137,7 +137,7 @@ class Kin:
         """Store rotation including the execution of a carry stored in this turn.
 
         executes: True when this digit's stored carry/borrow is executed in this turn's
-        carry window (ripple mode, or a primary carry in historical mode)."""
+        carry window (ripple mode, or a primary carry in simultaneous mode)."""
         a = self.store_angle(pending_start, v)
         if not executes:
             return a

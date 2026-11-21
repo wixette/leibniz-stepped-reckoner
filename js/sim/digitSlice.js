@@ -4,7 +4,7 @@
 // The crank angle theta runs 0..360 (adding) or 0..-360 (subtracting). Reaching
 // either end completes the operation and resets theta to 0. A carry stored by the
 // Einzahn during the rib window is executed in the carry window of the same turn
-// (decision 0001: ripple; for the units digit this is the same in historical mode),
+// (decision 0001: ripple; for the units digit this is the same in simultaneous mode),
 // and leaves the slice as "carry out" to the next (not modelled) digit.
 
 import * as K from "./kinematics.js";

@@ -91,9 +91,9 @@ function render() {
   if (document.activeElement !== input) input.value = String(settingNumber());
   for (const b of /** @type {NodeListOf<HTMLButtonElement>} */ (document.querySelectorAll("[data-preset]"))) b.disabled = !machine.atRest;
   $("modeRipple").classList.toggle("on", machine.mode === "ripple");
-  $("modeHistorical").classList.toggle("on", machine.mode === "historical");
+  $("modeSimultaneous").classList.toggle("on", machine.mode === "simultaneous");
   (/** @type {HTMLButtonElement} */ ($("modeRipple"))).disabled = !machine.atRest;
-  (/** @type {HTMLButtonElement} */ ($("modeHistorical"))).disabled = !machine.atRest;
+  (/** @type {HTMLButtonElement} */ ($("modeSimultaneous"))).disabled = !machine.atRest;
   $("modeHint").textContent =
     machine.mode === "ripple"
       ? "Levers act units first: a carry that creates another carry is passed on in the same turn (a ripple-carry adder)."
@@ -199,7 +199,7 @@ const setMode = (m) => {
   }
 };
 $("modeRipple").addEventListener("click", () => setMode("ripple"));
-$("modeHistorical").addEventListener("click", () => setMode("historical"));
+$("modeSimultaneous").addEventListener("click", () => setMode("simultaneous"));
 $("reset").addEventListener("click", () => {
   target = null;
   clearStep();

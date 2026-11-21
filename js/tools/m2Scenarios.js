@@ -58,10 +58,10 @@ export const M2_SCENARIOS = [
     ops: [{ shift: 7 }, { input: 1 }, { turn: -1 }, { shift: 0 }],
   },
   {
-    label: "historical 9999 + 1 (+idle)",
-    mode: "historical",
+    label: "simultaneous 9999 + 1 (+2 idle)",
+    mode: "simultaneous",
     result: 9999,
-    ops: [{ input: 1 }, { turn: 1 }, { input: 0 }, { turn: 1 }],
+    ops: [{ input: 1 }, { turn: 1 }, { input: 0 }, { turn: 1 }, { turn: 1 }],
   },
 ];
 

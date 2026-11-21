@@ -43,7 +43,8 @@ When you want more, the panel on the right holds a five-minute **tutorial** (*Ge
 | **+** and **−** | Turn the crank once forward (adds the number on the knobs to the result) or backward (subtracts it). |
 | **Carriage** ‹ › | Slide the carriage one place left or right; the box shows its place. Each place to the left makes a turn count ten times as much. |
 | **Pin** and **Run to stop** | Put the Magna Rota's pin in a hole 1–9, or take it out; *Run to stop* turns the crank until the pin reaches the stop (hole 5: five turns). |
-| **Reset** | All wheels and knobs to 0, the carriage home, the pin out. |
+| **Carry** | How the carry levers act: *Lehmann*, as on N. J. Lehmann's replica in Dresden (a chain of carries runs on within one turn), or *Original*, as on the machine in Hannover (all levers at once, so a carry can wait, its pentagon tilted, for another turn with 0 on the knobs). |
+| **Reset** | All wheels and knobs to 0, the carriage home, the pin out (the carry stays as chosen). |
 | **Sound** | The machine's sounds on or off. |
 
 | To… | Mouse or trackpad | Touch screen | Keyboard (Tab to the 3D view first) |
@@ -130,7 +131,7 @@ Use **Reset** before each one.
 
 The model is **kinematically faithful**: the mechanism and its angles follow the published sources (the timing of the drum's teeth, the stored carry and its pentagon, the staggered carry levers, the 36.5 mm step of the carriage). Where they exist, the dimensions follow N. J. Lehmann's workshop drawings of the replica at TU Dresden, kept in the Deutsches Museum's archive; the rest come from the published measurements and from photographs of the original and of that replica. Many small part sizes had to be estimated, and the digits are deliberately larger than on the original so that they can be read on a screen.
 
-Where the sources disagree or say nothing, the choice is written down with its reason. The best-known example is the carry: historians read the original in two ways, and lesson 2 shows both ([decision 0001](design/decisions/0001-carry-interpretation.md)). Every dimension and angle, with its source and how sure we are of it, is in [params/machine.json](params/machine.json), and the research behind it is in [research/REPORT.md](research/REPORT.md).
+Where the sources disagree or say nothing, the choice is written down with its reason. The best-known example is the carry: N. J. Lehmann's replica in Dresden passes a chain of carries on within one turn, while on the original in Hannover all the carry levers act at once and a carry can wait for the next turn. Lesson 2 shows both, and the toolbar's *Carry* box switches between them ([decision 0001](design/decisions/0001-carry-interpretation.md)). Every dimension and angle, with its source and how sure we are of it, is in [params/machine.json](params/machine.json), and the research behind it is in [research/REPORT.md](research/REPORT.md).
 
 ## Running it on your own computer
 
