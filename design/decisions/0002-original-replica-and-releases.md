@@ -44,3 +44,4 @@ Until v1.1 the model followed N. J. Lehmann's Dresden replica (decision D1 in `d
 - C3 the counter's drive gears and the carriage's detent lever;
 - the pentagons' height: in the GWLB CAD model they rise above the register, while ours sit on the carry stores' shafts at Lehmann's height (top edge level with the register cover); to be asked of Badur before changing;
 - reconsider the default carry.
+- after v1.3.0 is released, decide whether to keep `dev/03-full-machine/` (decided 2026-11-24: keep it through v1.3.0, whose refits its crank-angle slider and step mode help check). If it is not used, remove `dev/` with `js/sim/narrate.js`, `tests/sim/steps.test.js` and `Machine.stepStops()`, as the slice pages were in 1.2.0.
