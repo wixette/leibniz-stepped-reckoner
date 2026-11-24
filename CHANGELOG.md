@@ -2,16 +2,29 @@
 
 What changed in each release. Versions follow `package.json` and are tagged `vX.Y.Z` ([docs/development.md](docs/development.md), *Versions and releases*). The design decisions cited (U1, U2, …) are in [docs/ui-design.md](docs/ui-design.md).
 
-## 1.2.0 (unreleased)
+## 1.2.0
+
+The model moves toward the original in Hannover. Klaus Badur, who measured the original before building his replica, sent its dimensions and the angle of its carry levers, in agreement with the Gottfried Wilhelm Leibniz Library, and pages of his chapter in *Das letzte Original* on how it carries. The page now follows the original where he measured it and N. J. Lehmann's drawings of the Dresden replica elsewhere, and it can carry either way ([decision 0002](design/decisions/0002-original-replica-and-releases.md)).
 
 **The carry of the original**
-- A new carry mode, *simultaneous*, follows the original in Hannover: all eight carry levers act at the same moment, as Klaus Badur, who measured the original, wrote in agreement with the GWLB. A carry made while carries are being passed on waits, its pentagon tilted, and later turns finish it. 9999 + 1 shows 9900, then 0000, then 10000, as the GWLB describes, and the model gets there from the lever geometry alone.
-- It replaces the *historical* mode, whose levers came highest digit first, which no source supports ([decision 0001](design/decisions/0001-carry-interpretation.md), addendum of 2026-11-21).
-- The carry lesson ends with the original's three turns, in all ten languages, and says that the one-turn carry shown first is that of N. J. Lehmann's Dresden replica. The default carry is still Lehmann's.
+- A new carry, *Original*, follows the original: all eight carry levers act at the same moment, each 90° across its two horns. A carry made while carries are being passed on waits, its pentagon tilted; each further turn with 0 on the knobs finishes two, and the next sum finishes them by itself. 9999 + 1 shows 9900, then 0000, then 10000, and the book's example 099 + 3 shows 002, then 102. The model gets there from the lever geometry alone.
+- It replaces the *historical* mode, whose levers came highest digit first, which no source supports ([decision 0001](design/decisions/0001-carry-interpretation.md), addenda of 2026-11-21 and 2026-11-24).
+- The carry lesson ends with the original's three turns and a task on the new *Carry* box, in all ten languages. The default carry is still Lehmann's, the one-turn carry.
+
+**The machine**
+- The parts Badur measured have the original's sizes: result discs Ø35.5, setting discs Ø36, the revolution counter's steel ring Ø69.5 / Ø45 with its ten holes, the carriage hood 444 mm long with its front 111 mm high, and the carriage frame 333 mm long.
+- The pentagons are the original's, 40 mm across the corners, in two staggered rows behind the register, where they stand open as on the original (they were 26 mm, under the register's cover).
+- The oak case is the original's 755 mm long (806 before).
 
 **The page**
 - A *Carry* box in the toolbar chooses between the two in free play: *Lehmann* or *Original* (U30). It sits before Reset, and the two keep together where the toolbar wraps.
 - The toolbar drops Reset's label and its separators on narrower stages than before, so it stays one row on a 1280 px laptop with the panel open and on a 768 px tablet (two rows there before). A phone now has three rows of controls.
+- The References tab opens with *The original and its replicas*: how the original carries, what Lehmann, Stein and Kopp, and Badur and Rottstedt did with it, and which of them the model follows.
+- The About box and the tutorial say which sizes are the original's and which Lehmann's, and credit Badur's measurements as he approved.
+
+**Research**
+- Badur's measurements and the facts of his chapter (how the original carries, its counter, its carriage, how it is operated) are in the research notes, as facts only ([notes-mechanism.md](research/sources/notes-mechanism.md) §10); the book's text and figures are not in the repository.
+- Left for 1.3.0, waiting for Badur's answers or too large for this release: the crank's direction, the revolution counter and the Magna Rota, the stepped drums at the original's sizes, and the large gears behind the Magna Rota (decision 0002).
 
 ## 1.1.1
 

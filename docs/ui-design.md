@@ -94,7 +94,7 @@ Starting the tutorial or a lesson enters **course mode**: the step player takes 
 
 - **Get started**: the tutorial in three short chapters: *What is it?* (the machine's story, with historical pictures), *What's inside?* (a tour of the parts in 3D, taking it apart), *Your first sum* (2 + 3, done by the reader).
 - **Lessons**: a path of six lessons, each building on the one before (U6), with progress ticks remembered in the browser.
-- **References**: where to see the machine and read more, grouped, each link with one line on why it is worth a click.
+- **References**: where to see the machine and read more, grouped, each link with one line on why it is worth a click. It opens with a short text on the original and its replicas, and which of them the model follows (decision 0002).
 
 Free play has no tab: its controls are the machine toolbar, under the machine (P2).
 
