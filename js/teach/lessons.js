@@ -179,8 +179,23 @@ const carry = {
       text: "l.carry.originalDone",
       expect: (m) => m.shownNumber() === 10000 && allLevel(m),
     },
+    {
+      // the toolbar's Carry box (U30): back to the default, Lehmann's carry
+      view: "register",
+      text: "l.carry.switch",
+      task: {
+        check: (m) => m.mode === "ripple",
+        solve: (m) => {
+          m.setMode("ripple");
+        },
+        wrong: (m) => {
+          m.setMode("simultaneous");
+        },
+        controls: ["carry"],
+      },
+    },
   ],
-  finalCheck: (m) => m.shownNumber() === 10000 && allLevel(m),
+  finalCheck: (m) => m.shownNumber() === 10000 && allLevel(m) && m.mode === "ripple",
 };
 
 // ---------------------------------------------------------------------------------------------

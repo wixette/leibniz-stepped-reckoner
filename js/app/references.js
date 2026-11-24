@@ -60,6 +60,9 @@ export function referencesPanel() {
   return el("div", {}, [
     el("h2", { text: t("tab.refs") }),
     el("p", { class: "lead", text: t("refs.lead") }),
+    // the original and its replicas, and which one this model follows (decision 0002)
+    el("h3", { text: t("refs.replicas.title") }),
+    ...[1, 2, 3, 4].map((i) => el("p", { text: t(`refs.replicas.p${i}`) })),
     ...REFERENCES.flatMap(({ group, items }) => [
       el("h3", { text: t(group) }),
       el(

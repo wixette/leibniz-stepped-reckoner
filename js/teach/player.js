@@ -56,7 +56,7 @@ export const APART_VIEW = /** @type {const} */ ("apart");
  * @property {(m: Machine) => boolean} check Has the learner done it?
  * @property {(m: Machine) => void} solve Do it for them (Back/replay, tests).
  * @property {(m: Machine) => void} wrong A plausible mistake the check must reject (A3-4).
- * @property {("input" | "add" | "sub" | "shift" | "pin" | "toStop")[]} controls Which controls the learner needs for it.
+ * @property {("input" | "add" | "sub" | "shift" | "pin" | "toStop" | "carry")[]} controls Which controls the learner needs for it.
  */
 
 /**
