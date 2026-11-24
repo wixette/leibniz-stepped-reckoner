@@ -45,7 +45,10 @@ export function parts(root) {
 const DESIGNED = [
   /^framestatic~(pisum_wheel|picarry_store|pmdrum_shaft|pmsetting_dial|pmlever)\d+$/,
   /^framelead_screw~framestatic$/,
-  /^pmcarriage~(pmdrum_shaft|pmsetting_dial)\d+$/,
+  /^pmcarriage~(pmdrum_shaft|pmsetting_dial|pmlever)\d+$/,
+  /^pmcarriage~pmcounter_shaft$/, // the drive row's shafts in the carriage frame's bearing bar
+  /^pmlarge_gear_b~pmdrum_shaft4$/, // the large gears are fixed to their shafts
+  /^pmlarge_gear_[ac]~pmlever\d+$/,
   /^pmdrum_shaft(\d+)~pmdrum\1$/,
   /^pmsetting_dial(\d+)~pmsetting_(plate|rack)\1$/,
   /^pmcounter_pin~pmcounter_ring$/, // the pin sits in a hole of the ring

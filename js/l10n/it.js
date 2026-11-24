@@ -226,6 +226,8 @@ export default {
   "part.carriage": "Carrello",
   "part.drumShaft": "Albero del tamburo",
   "part.lever": "Albero della leva di riporto",
+  "part.largeGear": "Ruota grande della trasmissione della manovella",
+  "part.counterShaft": "Albero di comando del contatore",
   "part.zweihornAdd": "Leva di riporto, corno della somma",
   "part.zweihornSub": "Leva di riporto, corno della sottrazione",
   "part.settingStop": "Fermo della manopola di impostazione",

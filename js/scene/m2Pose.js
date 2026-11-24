@@ -19,6 +19,10 @@ export function m2NodeNames(R, C) {
     "pm.counter_ring": "pm.counter_ring",
     "pm.counter_pin": "pm.counter_pin",
     "pm.main_crank": "pm.main_crank",
+    "pm.large_gear_a": "pm.large_gear_a",
+    "pm.large_gear_b": "pm.large_gear_b",
+    "pm.large_gear_c": "pm.large_gear_c",
+    "pm.counter_shaft": "pm.counter_shaft",
   };
   for (let k = 0; k < R; k++) {
     names[`pi.sum_wheel.${k}`] = `pi.sum_wheel.${k}`;
@@ -47,6 +51,11 @@ export function m2NodeValues(m) {
     // built at black 0 by the stop; set in hole m it starts m holes anticlockwise of it
     "pm.counter_pin": p.counterRing + 36 * (m.pin ?? 0),
     "pm.main_crank": p.mainCrank,
+    // B is on the crank's drum shaft; A, C and the 17th shaft turn with the lever shafts
+    "pm.large_gear_b": p.mainCrank,
+    "pm.large_gear_a": -p.mainCrank,
+    "pm.large_gear_c": -p.mainCrank,
+    "pm.counter_shaft": -p.mainCrank,
   };
   p.register.forEach((r, k) => {
     out[`pi.sum_wheel.${k}`] = r.wheel;

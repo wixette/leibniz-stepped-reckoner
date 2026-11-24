@@ -226,6 +226,8 @@ export default {
   "part.carriage": "Carro",
   "part.drumShaft": "Eixo do tambor",
   "part.lever": "Eixo da alavanca de transporte",
+  "part.largeGear": "Engrenagem grande do acionamento da manivela",
+  "part.counterShaft": "Eixo de acionamento do contador",
   "part.zweihornAdd": "Alavanca de transporte, chifre da soma",
   "part.zweihornSub": "Alavanca de transporte, chifre da subtração",
   "part.settingStop": "Batente do botão de ajuste",

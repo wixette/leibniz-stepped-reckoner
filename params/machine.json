@@ -1,6 +1,6 @@
 {
   "_schema": "Every numeric entry is {v, unit, conf, src, note?}. conf: doc = documented in a source; est = photo-scaled estimate; design = our own choice where sources are silent. Units: mm and deg (see docs/conventions.md). Source tags: research/sources/bibliography.md. Photo scaling (the est values): the 37 mm digit pitch of BURKHARDT1897 was used as the ruler. NL183/465 and /466 are Lehmann's drawings of the Dresden replica (Deutsches Museum München); page = PDF page of the delivered scan. version is the parameter set's own (each .glb records it as params_version), not the release's.",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "fidelity_target": "B",
   "reference_machine": "The original in Hannover (GWLB; 8/16/1 digits) where Klaus Badur measured it (BADUR2026: result and setting discs, pentagons, revolution counter, carriage hood and frame, oak case; the Zweihorn angle); elsewhere N. J. Lehmann's Dresden replica (TU Dresden, 1988-90), after its workshop drawings (NL183/465), which copies the original; otherwise proportions read from photos (decision 0002, amending D1 in design/m4-notes.md).",
   "layout": {
@@ -626,7 +626,7 @@
         "unit": "count",
         "conf": "doc",
         "src": "NL183/465 p. 53, 64 (gears V and S, z 10, m 2)",
-        "note": "Equal drum and lever gears, module = centre distance / 10: 1.925 at our 19.25 mm (the replica's 18.9 mm comes with the lever 4.9 mm above the drum axis, phase 3 of design/m4-notes.md). Lehmann likewise takes the pitch diameter equal to the centre distance (\"d0 = a\")."
+        "note": "Equal drum and lever gears, module = centre distance / 10: 1.925 at our 19.25 mm (the replica's 18.9 mm comes with the lever 4.9 mm above the drum axis, phase 3 of design/m4-notes.md). Lehmann likewise takes the pitch diameter equal to the centre distance (\"d0 = a\"). Since 0.6.0 the row stands at the front (geometry.m2.drive_row)."
       },
       "drive_gear_tip_diameter": {
         "v": 22.9,
@@ -639,16 +639,6 @@
         "unit": "-",
         "conf": "design",
         "src": "tooth thickness at the pitch circle / half the pitch; with 10 teeth and a 22.9 tip, 1.0 leaves no backlash and 0.95 leaves 0.14 mm at the tightest point of a turn (2D sweep, 2026-10-29)"
-      },
-      "drum_gear_collar": {
-        "v": {
-          "diameter": 14.0,
-          "length": 5.0
-        },
-        "unit": "mm",
-        "conf": "doc",
-        "src": "NL183/465 p. 53, 64 (gear S: 7 wide plus a 5 mm collar, hub 14, on the 8 mm drum axle)",
-        "note": "In M2 it stops 0.5 mm short of the Zweihorn pins (y 91.5), so it is 4 mm long there."
       },
       "zweihorn_pin_path_radius": {
         "v": 17.0,
@@ -731,14 +721,51 @@
         "conf": "doc",
         "src": "STEIN16, TUD"
       },
-      "drive_gear_y": {
-        "v": [
-          80.0,
-          87.0
-        ],
+      "drive_row": {
+        "v": {
+          "drum_gear_width": 4.0,
+          "drum_gear_y_at_9": -100.5,
+          "long_gear_y": [
+            -100.8,
+            -67.9
+          ],
+          "drum_sleeve_radius": 4.5,
+          "shaft_front_y": -103.5,
+          "bearing_bar_y": [
+            -104.0,
+            -101.0
+          ],
+          "bearing_bar_z": [
+            25.375,
+            51.875
+          ],
+          "counter_shaft_back_y": -40.0
+        },
         "unit": "mm",
         "conf": "design",
-        "src": "as M1"
+        "src": "The 17-gear drive row at the front of the carriage (design/v1.3-notes.md, 2026-11-24): BADUR2026 sheet 9 (17 bearing holes in the carriage frame, half a place apart: 8 drum shafts, 8 carry-lever shafts, a 17th shaft half a place right of the units drum), Abb. II 9 in WALSDORF2014 (a long drive gear on the lever's shaft, the drum's gear beside the setting rack), BURKHARDT1897 (17 gears; the drums' gears slide along long 'drive cylinders'), NL183/466 PLAN p. 9 (Lange 1958, drawn from the original: upright gears meshing in the carriage's front trough). The gears, tooth for tooth, are the replica's (geometry.m1.drive_gear_*). Each drum's gear sits on a sleeve in front of the drum and slides with it (drum_gear_y_at_9: its front face at setting 9; 28.35 mm further back at 0) along the long gear on the lever shaft to its left; the 17th shaft has a long gear too. The bearing bar is the carriage frame's front wall (sheet 9: drum holes 12.5 above its lower edge, about 26.5 high); its thickness and y are design values.",
+        "note": "The y planes: front panel -112..-109, large gears -108.6..-104.6, bearing bar -104..-101, long gears -100.8..-67.9 (the setting racks start at -64.5 at setting 9), lead screw at -55 (moved from -77 so the drums' gears pass over it)."
+      },
+      "large_gears": {
+        "v": {
+          "teeth": 61,
+          "y": [
+            -108.6,
+            -104.6
+          ],
+          "lever_shafts": {
+            "A": 6,
+            "C": 1
+          },
+          "spokes": 3,
+          "rim_width": 5.0,
+          "hub_radius": 8.0,
+          "spoke_width": 7.0
+        },
+        "unit": "mm",
+        "conf": "doc",
+        "src": "Three large gears behind the Magna Rota, A, B, C (NL183/465 p. 58, 61, 62: z 61, m 1.5, 5 mm brass, three spokes; NL183/466 PLAN p. 9, Lange 1958: B-C 91.38 apart). B on the crank's axis (drum 4), A and C on the carry levers' shafts 2.5 places either side (A on lever 6, C on lever 1: A, B, C from left to right as Lange labels them; which way his drawing faces is not certain, and it does not matter for the motion): the centre distance sqrt(91.25^2 + dz^2) matches Lange's 91.38. A, B and C must have equal teeth: drums and levers both turn once per crank turn (design/v1.3-notes.md).",
+        "note": "Module = centre distance / teeth: with the model's lever 6.125 above the drum axis (geometry.m1.lever_axis_z) the centre distance is 91.455, m 1.4993; Lehmann's lever is 4.9 above (91.38). Thickness 4 here (5 on the replica) to fit between the front panel and the base board."
       },
       "muldenrad_y_planes": {
         "v": [
@@ -802,7 +829,7 @@
           "x_margin_right": 26.75,
           "x_margin_left": 50.75,
           "y": [
-            -109,
+            -104,
             79
           ],
           "z": [
@@ -812,7 +839,7 @@
         },
         "unit": "mm",
         "conf": "design",
-        "src": "the carriage frame, 333 long (BADUR2026): from the hood's left end, 50.75 left of knob 7, to 26.75 right of knob 0, just right of digit 0's setting pinion; slides on the base plate. Modelled as a plate; the frame's 25 mm height is not.",
+        "src": "the carriage frame, 333 long (BADUR2026): from the hood's left end, 50.75 left of knob 7, to 26.75 right of knob 0, just right of digit 0's setting pinion; slides on the base plate. Modelled as a plate; the frame's 25 mm height is not. Since 0.6.0 it starts at y -104, behind the large gears.",
         "note": "NL183/465 p. 47 puts the replica's carriage walls 38.25 and 37.25 mm from the end drums (48.75 and 26.75 from the end knobs, p. 27). The model's floor ends at the knobs as photographed (60 mm left of knob 7) on the left, and 4 mm short of the right side wall's lead-screw notch on the right."
       },
       "carriage_front_panel_y": {
@@ -835,19 +862,19 @@
       },
       "carriage_counter_section": {
         "v": {
-          "top_dx": 50.0,
+          "top_dx": 44.0,
           "top_z": 84.0,
           "step_dx": 112.0,
           "end_dx": 137.75,
+          "counter_dx": 82.25,
           "step_z": 30.0,
-          "dial_from_knob0": 73.0,
           "dial_radius": 34.75,
           "dial_inner_radius": 22.5
         },
         "unit": "mm",
         "conf": "design",
-        "src": "right part of the carriage (photo overlay 2026-10-18): from digit 0 + top_dx its top is 12 mm lower (cover at top_z); full height to digit 0 + step_dx, then only the part above step_z to digit 0 + end_dx, so it passes over the frame's right end at offset 0 (step_z clears the lead screw). The revolution-counter dial plate sits on the lower top, dial_from_knob0 right of knob 0 (NL183/465 p. 51, 52: 73 from the 8th setting station to the dial centre; the photo fit gave 79) 2026-11-24: the hood ends 137.75 right of knob 0 (444 long, BADUR2026); the dial is the original's revolution-counter ring, 69.5 outside and 45 inside (BADUR2026), still static (the counter is v1.3.0, decision 0002).",
-        "note": "The dial plate is static: the counter is not modelled, the Magna Rota counts the turns."
+        "src": "right part of the carriage (photo overlay 2026-10-18): from digit 0 + top_dx its top is 12 mm lower (cover at top_z); full height to digit 0 + step_dx, then only the part above step_z to digit 0 + end_dx, so it passes over the frame's right end at offset 0 (step_z clears the lead screw). The hood ends 137.75 right of knob 0 (444 long, BADUR2026). The revolution counter's centre is counter_dx right of the units drum: BADUR2026's plan view puts it 64 mm right of the 17th drive shaft, which is half a place (18.25) right of the units drum (design/v1.3-notes.md); the replica's was 96.4 (NL183/465 p. 51, 52: 73 from the 8th setting station). top_dx moved from 50 to 44 so the counter's black numbers clear the step.",
+        "note": "top_dx and step_dx are photo estimates; counter_dx is from Badur's plan view."
       },
       "knob_plate_z": {
         "v": 98.0,
@@ -857,12 +884,11 @@
       },
       "magna_rota_center": {
         "v": {
-          "x": -137.0,
-          "z": 35.5
+          "drum": 4
         },
-        "unit": "mm",
-        "conf": "design",
-        "src": "162 mm left of knob 0 and in the middle of the carriage front, as in the photos (photo overlay 2026-10-18)"
+        "unit": "index",
+        "conf": "doc",
+        "src": "The crank and the Magna Rota sit on drum 4's axis (counted from the units, 0-based): BADUR2026's plan view; his carriage frame's one large bore, 'Lagerbuchse B', about 145 mm from its end, drum 4 being at 142.5 (design/v1.3-notes.md). Before 0.6.0: x -137, z 35.5 from the photos (3.75 places)."
       },
       "magna_rota_radius": {
         "v": 58.25,
@@ -892,13 +918,13 @@
       },
       "lead_screw": {
         "v": {
-          "y": -77.0,
+          "y": -55.0,
           "z": 20.0,
           "radius": 6.0
         },
         "unit": "mm",
         "conf": "design",
-        "src": "fixed to the frame, behind the carriage front panel (clear of the Magna Rota and its crank); the carriage nut rides on it; 36.5 mm lead (frame.lead_screw_pitch)"
+        "src": "fixed to the frame, behind the carriage front panel (clear of the Magna Rota and its crank); the carriage nut rides on it; 36.5 mm lead (frame.lead_screw_pitch) Moved from y -77 to -55 in 0.6.0, behind the drive row's sliding gears (geometry.m2.drive_row)."
       },
       "frame_x": {
         "v": {
@@ -916,7 +942,7 @@
       "frame": {
         "v": {
           "y": [
-            -106.0,
+            -104.0,
             112.0
           ],
           "side_wall_low_z": 26.0,
@@ -926,7 +952,7 @@
         },
         "unit": "mm",
         "conf": "design",
-        "src": "base plate = the lower frame (frame_x), 629 long. The side walls are low (z <= side_wall_low_z) in front of side_wall_y_split, where the carriage's counter section passes over them (its underside is at z 30), and rise to side_wall_top_z behind it, under the register cover's skirt; the replica's walls likewise have a low front part and a tall rear block (NL183/465 p. 95). The lead screw runs in a notch in each wall's low part (the replica's screw passes through the walls). It starts screw_start_dx left of the base, outside the case's left wall, where the end crank is (photos). The end crank's arm sits 0.5 mm outside the case's left wall (screw_start_dx follows the 755 mm case)."
+        "src": "base plate = the lower frame (frame_x), 629 long. The side walls are low (z <= side_wall_low_z) in front of side_wall_y_split, where the carriage's counter section passes over them (its underside is at z 30), and rise to side_wall_top_z behind it, under the register cover's skirt; the replica's walls likewise have a low front part and a tall rear block (NL183/465 p. 95). The lead screw runs in a notch in each wall's low part (the replica's screw passes through the walls). It starts screw_start_dx left of the base, outside the case's left wall, where the end crank is (photos). The end crank's arm sits 0.5 mm outside the case's left wall (screw_start_dx follows the 755 mm case). Since 0.6.0 the base starts at y -104, behind the carriage's large gears, which hang below it."
       },
       "casing": {
         "v": {

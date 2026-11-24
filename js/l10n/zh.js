@@ -226,6 +226,8 @@ export default {
   "part.carriage": "滑架",
   "part.drumShaft": "步进轮轴",
   "part.lever": "进位杆轴",
+  "part.largeGear": "曲柄传动大齿轮",
+  "part.counterShaft": "转数计数器驱动轴",
   "part.zweihornAdd": "进位杆，加法角",
   "part.zweihornSub": "进位杆，减法角",
   "part.settingStop": "置数旋钮挡块",

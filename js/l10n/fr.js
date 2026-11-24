@@ -226,6 +226,8 @@ export default {
   "part.carriage": "Chariot",
   "part.drumShaft": "Arbre du cylindre",
   "part.lever": "Arbre du levier de retenue",
+  "part.largeGear": "Grande roue de l’entraînement de la manivelle",
+  "part.counterShaft": "Arbre d’entraînement du compteur",
   "part.zweihornAdd": "Levier de retenue, corne d’addition",
   "part.zweihornSub": "Levier de retenue, corne de soustraction",
   "part.settingStop": "Butée du bouton de réglage",

@@ -226,6 +226,8 @@ export default {
   "part.carriage": "キャリッジ",
   "part.drumShaft": "段付き歯車の軸",
   "part.lever": "繰り上がりレバーの軸",
+  "part.largeGear": "クランク駆動の大歯車",
+  "part.counterShaft": "回転数カウンターの駆動軸",
   "part.zweihornAdd": "繰り上がりレバー（足し算の角）",
   "part.zweihornSub": "繰り上がりレバー（引き算の角）",
   "part.settingStop": "置数つまみのストッパー",

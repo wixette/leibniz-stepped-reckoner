@@ -226,6 +226,8 @@ export default {
   "part.carriage": "캐리지",
   "part.drumShaft": "계단 바퀴 축",
   "part.lever": "받아올림 레버 축",
+  "part.largeGear": "크랭크 구동 대형 기어",
+  "part.counterShaft": "회전 계수기 구동축",
   "part.zweihornAdd": "받아올림 레버, 덧셈 뿔",
   "part.zweihornSub": "받아올림 레버, 뺄셈 뿔",
   "part.settingStop": "설정 손잡이 멈춤쇠",

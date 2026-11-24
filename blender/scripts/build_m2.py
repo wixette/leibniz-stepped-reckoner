@@ -13,6 +13,11 @@ Carriage pm.carriage (translate along +X), carriage digit j at x = -36.5 j (offs
   pm.carriage_panel  front panel (static; hideable for a cut-away view)
   pm.drum_shaft.j / pm.drum.j / pm.setting_rack.j / pm.setting_dial.j / pm.setting_plate.j / pm.setting_stop.j
   pm.lever.j / pm.zweihorn_add.j / pm.zweihorn_sub.j
+  The drive row (17 gears, at the front, in the carriage frame's bearing bar): each drum's gear
+  sits on a sleeve in front of the drum and slides with it along the long gear on the lever
+  shaft to its left; pm.counter_shaft, the 17th, half a place right of the units drum, will
+  drive the revolution counter (its train is not modelled yet).
+  pm.large_gear_a / _b / _c: B on drum 4's shaft (the crank's axis), A and C on levers 6 and 1
   pm.magna_rota (rotate about +Y, with the crank), pm.counter_plate (static), pm.counter_ring and
   pm.counter_pin (rotate about +Z), pm.counter_pin_park (static),
   pm.main_crank (rotate about +Y, 360 deg per turn; sits in the middle of the Magna Rota)
@@ -114,7 +119,8 @@ def build(p):
     fy0, fy1 = p.v(M2 + "fuenfhorn_y")
     fh_len, fh_r, fh_hub = p.v(M1 + "fuenfhorn_horn_length"), p.v(M1 + "fuenfhorn_horn_radius"), p.v(M1 + "fuenfhorn_hub_radius")
     wall0, wall1 = p.v(M2 + "rear_wall_y")
-    gy0, gy1 = p.v(M2 + "drive_gear_y")
+    dr = p.v(M2 + "drive_row")
+    gy0, gy1 = dr["long_gear_y"]
 
     # =========================================================== register (fixed)
     for k in range(R):
@@ -252,8 +258,17 @@ def build(p):
     xs, xr, zn = X[0] + cs_["step_dx"], X[0] + cs_["end_dx"], cs_["step_z"]
     mb = MeshBuilder()
     mb.prism(geom.rect(cx0, fl["y"][0], cx1, fl["y"][1]), "XY", fl["z"][0], fl["z"][1], "brass_satin")
-    # nut around the lead screw (four bars leave a square hole)
-    nx0, nx1, ny, nz, hole = X[0] - 30.0, X[0] - 6.0, ls["y"], ls["z"], ls["radius"] + 2.0
+    # the carriage frame's front wall: the bearing bar of the drive row's 17 shafts (and the
+    # crank's), standing on two end posts
+    by0, by1 = dr["bearing_bar_y"]
+    bz0, bz1 = dr["bearing_bar_z"]
+    # (from inside the hood's left end wall, not flush with it: a shared face would flicker)
+    mb.prism(geom.rect(cx0 + 3.5, bz0, cx1, bz1), "XZ", by0, by1, "brass_satin")
+    for ex0 in (cx0 + 3.5, cx1 - 4.0):
+        mb.prism(geom.rect(ex0, fl["z"][1], ex0 + 4.0, bz0), "XZ", by0, by1, "brass_satin")
+    # nut around the lead screw (four bars leave a square hole), under the units drum's sleeve,
+    # between the drive row and the setting knobs' posts
+    nx0, nx1, ny, nz, hole = X[0] - 9.0, X[0] + 19.0, ls["y"], ls["z"], ls["radius"] + 2.0
     for r0 in (geom.rect(ny - hole - 4, nz - hole - 4, ny + hole + 4, nz - hole),
                geom.rect(ny - hole - 4, nz + hole, ny + hole + 4, nz + hole + 4),
                geom.rect(ny - hole - 4, nz - hole, ny - hole, nz + hole),
@@ -279,8 +294,8 @@ def build(p):
     # front panel (hideable)
     pnl0, pnl1 = p.v(M2 + "carriage_front_panel_y")
     pz0, pz1 = p.v(M2 + "carriage_front_panel_z")
-    mrc = p.v(M2 + "magna_rota_center")
-    mx, mz = mrc["x"], mrc["z"]
+    crank_drum = p.v(M2 + "magna_rota_center")["drum"]
+    mx, mz = X[crank_drum], zd   # the crank turns drum 4 directly
     mb = MeshBuilder()
     # full height to the step (lower top from xt), then only the upper part (it passes over
     # the frame's right end)
@@ -298,7 +313,6 @@ def build(p):
     zg = p.v(M1 + "drive_gear_teeth")
     dg = geom.GearSpec(zg, cdl / zg, p.v(M1 + "drive_gear_thickness_factor"),
                        (p.v(M1 + "drive_gear_tip_diameter") - cdl) / 2.0 / (cdl / zg))  # pitch diameter = centre distance
-    collar = p.v(M1 + "drum_gear_collar")
     drum_first, lever_first = [0.0] * C, [0.0] * C
     drum_first[0] = ang(Lv[0][0] - D[0][0], Lv[0][1] - D[0][1])
     for j in range(C):
@@ -309,20 +323,28 @@ def build(p):
     first = p.v(G + "drum.rib_first_angle")
     rib_pitch = p.v("pars_mobilis.drum.rib_pitch")
     sq = 3.0
-    shaft_y0 = p.v(G + "setting.pinion_y") + 7.9
     za0, za1 = p.v(M2 + "zweihorn_add_arm_y")
     zs0, zs1 = p.v(M2 + "zweihorn_sub_arm_y")
     zpy0 = p.v(M2 + "zweihorn_pin_y0")
     zR, zpr, zaw = p.v(M1 + "zweihorn_pin_path_radius"), p.v(M1 + "zweihorn_pin_radius"), p.v(M1 + "zweihorn_arm_width")
+    # The drive row: the drum's gear (on a sleeve in front of the drum, sliding with it) has its
+    # front face at drum_gear_y_at_9 at setting 9 and is 28.35 mm further back at setting 0;
+    # the long gears on the lever shafts cover that travel.
+    dgw = dr["drum_gear_width"]
+    g_lo = dr["drum_gear_y_at_9"] - kin.drum_front_y(9)   # in the drum's frame (front face = 0)
+    sleeve_r, shaft_front = dr["drum_sleeve_radius"], dr["shaft_front_y"]
+    lg = p.v(M2 + "large_gears")
+    lgy0, lgy1 = lg["y"]
+    big_levers = {lg["lever_shafts"]["A"]: "a", lg["lever_shafts"]["C"]: "c"}
     for j in range(C):
         x = X[j]
         mb = MeshBuilder()
-        # The square shaft starts behind the setting pinion of digit j + 1 (10.6 mm to its
-        # left, y <= py + 7.6): it only has to carry the drum (front >= -18, flange -22).
-        mb.prism(geom.rect(-sq, -sq, sq, sq), "XZ", shaft_y0, gy1 - 0.5, "steel")  # ends inside the gear (no shared face)
-        mb.prism(geom.gear_outline(dg, drum_first[j]), "XZ", gy0, gy1, "brass_satin")
-        mb.prism(geom.circle(collar["diameter"] / 2.0, 32), "XZ", gy1, min(gy1 + collar["length"], zpy0 - 0.5), "brass_satin", smooth=True)
-        mb.prism(geom.circle(3.5, 24), "XZ", gy0 - 1.0, gy0, "brass_satin", smooth=True)
+        # Square shaft from the bearing bar to the rear bearing (y 74-78); the drum and its
+        # sleeve slide along it. The crank's drum shaft reaches forward through the large gear
+        # B and the front panel to the Magna Rota.
+        mb.prism(geom.rect(-sq, -sq, sq, sq), "XZ", shaft_front, 80.5, "steel")
+        if j == crank_drum:
+            mb.prism(geom.circle(sq, 24), "XZ", p.v(M2 + "magna_rota_plates")["y"][-1][1] + 0.1, shaft_front + 0.5, "steel", smooth=True)
         shaft = mb.build(f"pm.drum_shaft.{j}", col, (x, 0, zd))
         bl.set_motion(shaft, "rotate", (0, 1, 0), f"Drum shaft {j} with drive gear", f"Staffelwalzenwelle {j}")
         bl.parent(shaft, carriage)
@@ -340,6 +362,9 @@ def build(p):
         mb.prism(geom.circle(9.0, 40), "XZ", -1.0, 0.0, "brass_satin", smooth=True)
         boss = p.v(G + "drum.boss")
         mb.prism(geom.circle(boss["diameter"] / 2.0, 40), "XZ", L - 0.01, L + boss["length"], "brass_polished", smooth=True)
+        # the sleeve forward to the drum's gear in the drive row (it ends inside the flange)
+        mb.prism(geom.circle(sleeve_r, 32), "XZ", g_lo + dgw - 0.5, -3.5, "brass_satin", smooth=True)
+        mb.prism(geom.gear_outline(dg, drum_first[j]), "XZ", g_lo, g_lo + dgw, "brass_satin")
         drum = mb.build(f"pm.drum.{j}", col, (x, 0, zd))
         drum["core_radius_mm"], drum["rib_tip_radius_mm"] = drum_gear.rf, drum_gear.ra
         bl.set_motion(drum, "translate", (0, 1, 0), f"Stepped drum {j}", f"Staffelwalze {j}", unit="mm")
@@ -388,8 +413,10 @@ def build(p):
 
         lx, lz = Lv[j]
         mb = MeshBuilder()
-        mb.prism(geom.circle(1.5, 16), "XZ", gy0 - 0.5, wall0 - 0.3, "steel", smooth=True)
-        mb.prism(geom.gear_outline(dg, lever_first[j]), "XZ", gy0, gy1, "brass_satin")
+        # from the bearing bar (or the large gear A or C in front of it) to the rear wall
+        y_front = lgy0 + 0.2 if j in big_levers else shaft_front
+        mb.prism(geom.circle(1.5, 16), "XZ", y_front, wall0 - 0.3, "steel", smooth=True)
+        mb.prism(geom.gear_outline(dg, lever_first[j]), "XZ", gy0, gy1, "brass_satin")   # the long drive gear
         mb.prism(geom.circle(3.4, 24), "XZ", za0, zs1, "steel", smooth=True)
         lever = mb.build(f"pm.lever.{j}", col, (lx, 0, lz))
         bl.set_motion(lever, "rotate", (0, 1, 0), f"Carry lever shaft {j}", f"Zweihornwelle {j}")
@@ -402,6 +429,48 @@ def build(p):
             horn = mb.build(f"pm.zweihorn_{kind}.{j}", col, (lx, 0, lz))
             bl.set_motion(horn, "rotate", (0, 1, 0), f"{le} {j}", f"{ld} {j}")
             bl.parent(horn, carriage)
+
+    # The 17th shaft of the drive row, half a place right of the units drum at the levers'
+    # height: its long gear meshes the units drum's gear; it will drive the revolution counter.
+    P17 = (X[0] - dxL, zL)
+    mb = MeshBuilder()
+    mb.prism(geom.circle(1.5, 16), "XZ", shaft_front, dr["counter_shaft_back_y"], "steel", smooth=True)
+    mb.prism(geom.gear_outline(dg, mesh_phase(drum_first[0], zg, D[0], P17, zg)), "XZ", gy0, gy1, "brass_satin")
+    cshaft = mb.build("pm.counter_shaft", col, (P17[0], 0, P17[1]))
+    bl.set_motion(cshaft, "rotate", (0, 1, 0), "Counter drive shaft (the 17th of the drive row)",
+                  "Antriebswelle des Umdrehungszählers (die 17. der Antriebsreihe)")
+    bl.parent(cshaft, carriage)
+
+    # The three large gears behind the Magna Rota: B on the crank's drum shaft, A and C on two
+    # lever shafts 2.5 places either side; each with three spokes.
+    lc = Lv[lg["lever_shafts"]["C"]]
+    cdb = math.hypot(lc[0] - D[crank_drum][0], lc[1] - D[crank_drum][1])   # 91.455 (A is as far on the other side)
+    big = geom.GearSpec(lg["teeth"], cdb / lg["teeth"], 0.95)
+
+    def spoked_gear(first_deg):
+        m_ = MeshBuilder()
+        r1, r0 = big.rf - lg["rim_width"], lg["hub_radius"]
+        holes = []
+        for s in range(lg["spokes"]):
+            a0, a1 = 360.0 / lg["spokes"] * s, 360.0 / lg["spokes"] * (s + 1)
+            d1 = math.degrees(math.asin(lg["spoke_width"] / 2.0 / r1))
+            d0 = math.degrees(math.asin(min(0.95, lg["spoke_width"] / 2.0 / r0)))
+            outer = [(r1, a0 + d1 + (a1 - a0 - 2 * d1) * i / 24) for i in range(25)]
+            inner = [(r0 + 2.0, a1 - d0 - (a1 - a0 - 2 * d0) * i / 12) for i in range(13)]
+            holes.append([(r * math.cos(math.radians(a)), r * math.sin(math.radians(a))) for r, a in outer + inner])
+        m_.prism_holes(geom.gear_outline(big, first_deg, samples=4, root_samples=2), holes, "XZ", lgy0, lgy1, "brass_satin")
+        m_.prism(geom.circle(r0, 32), "XZ", lgy1, lgy1 + 0.3, "brass_polished", smooth=True)   # boss on the back
+        return m_
+
+    for key, centre, first_deg, sign_en, sign_de in (
+            ("b", D[crank_drum], 0.0, "on the crank's axis, turns drum 4", "auf der Kurbelachse, dreht Walze 4"),
+            ("a", Lv[lg["lever_shafts"]["A"]], mesh_phase(0.0, big.z, D[crank_drum], Lv[lg["lever_shafts"]["A"]], big.z),
+             "on carry lever shaft 6", "auf der Welle des Übertragshebels 6"),
+            ("c", Lv[lg["lever_shafts"]["C"]], mesh_phase(0.0, big.z, D[crank_drum], Lv[lg["lever_shafts"]["C"]], big.z),
+             "on carry lever shaft 1", "auf der Welle des Übertragshebels 1")):
+        g = spoked_gear(first_deg).build(f"pm.large_gear_{key}", col, (centre[0], 0, centre[1]))
+        bl.set_motion(g, "rotate", (0, 1, 0), f"Large gear {key.upper()} ({sign_en})", f"Großes Zahnrad {key.upper()} ({sign_de})")
+        bl.parent(g, carriage)
 
     # Magna Rota: three plates of the owner's drawing (design/drawings/magna-rota.svg), fixed to
     # the crank and turning with it: the pierced brass plate in front, two steel plates behind.
@@ -479,7 +548,7 @@ def build(p):
     mb.prism(geom.rect(cx0, pnl1, cx0 + 3.0, ky1), "XY", wz0, kz0, "brass_satin")       # left end
     mb.prism(geom.rect(xs - 3.0, pnl1, xr, ky1), "XY", zn, zn + 2.0, "brass_satin")       # underside of the right part
     mb.prism(geom.rect(xr - 3.0, pnl1, xr, ky1), "XY", zn + 2.0, zt - 2.0, "brass_satin") # right end
-    dx, dy, dz = X[0] + x_pl + pin_g.rp + cs_["dial_from_knob0"], py - 8.0, zt   # the revolution counter's centre
+    dx, dy, dz = X[0] + cs_["counter_dx"], py - 8.0, zt   # the revolution counter's centre (64 right of the 17th shaft)
     ccover = static(mb.build("pm.carriage_cover", col))
     bl.parent(ccover, carriage)
 

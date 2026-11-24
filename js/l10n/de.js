@@ -226,6 +226,8 @@ export default {
   "part.carriage": "Schlitten",
   "part.drumShaft": "Walzenwelle",
   "part.lever": "Welle des Übertragshebels",
+  "part.largeGear": "Großes Zahnrad des Kurbelantriebs",
+  "part.counterShaft": "Antriebswelle des Umdrehungszählers",
   "part.zweihornAdd": "Übertragshebel, Additionshorn",
   "part.zweihornSub": "Übertragshebel, Subtraktionshorn",
   "part.settingStop": "Anschlag des Stellknopfs",

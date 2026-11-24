@@ -24,7 +24,10 @@ MARGIN = 0.00005  # 0.05 mm
 DESIGNED = [
     r"^frame\.static~(pi\.sum_wheel|pi\.carry_store|pm\.drum_shaft|pm\.setting_dial|pm\.lever)\.\d+$",
     r"^frame\.lead_screw~frame\.static$",
-    r"^pm\.carriage~(pm\.drum_shaft|pm\.setting_dial)\.\d+$",
+    r"^pm\.carriage~(pm\.drum_shaft|pm\.setting_dial|pm\.lever)\.\d+$",
+    r"^pm\.carriage~pm\.counter_shaft$",  # the drive row's shafts in the carriage frame's bearing bar
+    r"^pm\.large_gear_b~pm\.drum_shaft\.4$",  # the large gears are fixed to their shafts
+    r"^pm\.large_gear_[ac]~pm\.lever\.\d+$",
     r"^pm\.drum_shaft\.(\d+)~pm\.drum\.\1$",
     r"^pm\.setting_dial\.(\d+)~pm\.setting_(plate|rack)\.\1$",
     r"^pm\.counter_pin~pm\.counter_ring$",  # the pin sits in a hole of the ring

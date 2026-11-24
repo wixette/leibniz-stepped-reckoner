@@ -51,6 +51,10 @@ const SINGLE = /** @type {const} */ ([
   ["pm.carriage_cover", "part.carriageCover"],
   ["pm.carriage_panel", "part.carriagePanel"],
   ["pm.main_crank", "part.mainCrank"],
+  ["pm.large_gear_a", "part.largeGear"],
+  ["pm.large_gear_b", "part.largeGear"],
+  ["pm.large_gear_c", "part.largeGear"],
+  ["pm.counter_shaft", "part.counterShaft"],
 ]);
 
 /** Every message key a part name can use (A3-1). */

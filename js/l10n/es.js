@@ -226,6 +226,8 @@ export default {
   "part.carriage": "Carro",
   "part.drumShaft": "Eje del tambor",
   "part.lever": "Eje de la palanca de acarreo",
+  "part.largeGear": "Rueda grande del accionamiento de la manivela",
+  "part.counterShaft": "Eje de accionamiento del contador",
   "part.zweihornAdd": "Palanca de acarreo, cuerno de suma",
   "part.zweihornSub": "Palanca de acarreo, cuerno de resta",
   "part.settingStop": "Tope de la perilla de ajuste",

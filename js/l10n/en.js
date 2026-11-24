@@ -228,6 +228,8 @@ export default {
   "part.carriage": "Carriage",
   "part.drumShaft": "Drum shaft",
   "part.lever": "Carry lever shaft",
+  "part.largeGear": "Large gear of the crank drive",
+  "part.counterShaft": "Drive shaft of the revolution counter",
   "part.zweihornAdd": "Carry lever, adding horn",
   "part.zweihornSub": "Carry lever, subtracting horn",
   "part.settingStop": "Setting stop",
