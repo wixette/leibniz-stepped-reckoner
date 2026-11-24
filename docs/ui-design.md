@@ -93,7 +93,7 @@ Starting the tutorial or a lesson enters **course mode**: the step player takes 
 ### U3 — Three dock tabs: Get started, Lessons, References
 
 - **Get started**: the tutorial in three short chapters: *What is it?* (the machine's story, with historical pictures), *What's inside?* (a tour of the parts in 3D, taking it apart), *Your first sum* (2 + 3, done by the reader).
-- **Lessons**: a path of six lessons, each building on the one before (U6), with progress ticks remembered in the browser.
+- **Lessons**: a path of seven lessons, each building on the one before (U6), with progress ticks remembered in the browser.
 - **References**: where to see the machine and read more, grouped, each link with one line on why it is worth a click. It opens with a short text on the original and its replicas, and which of them the model follows (decision 0002). It ends with the credits, which About's *References* button opens.
 
 Free play has no tab: its controls are the machine toolbar, under the machine (P2).
@@ -131,11 +131,12 @@ The first version used a brass-gold primary on warm neutrals to match the machin
 ### U6 — The learning path
 
 1. **Adding: the stepped drum** — one digit, then whole numbers at once.
-2. **The carry: 9999 + 1** — stored, then passed on (Lehmann's replica, in one turn); then the original in Hannover, whose levers all act at once, in three turns.
-3. **Subtracting: turn the other way** — 1000 − 1, borrowing as the mirror of carrying.
-4. **The carriage: places and × 10** — shifting multiplies the step by 10.
-5. **Multiplying: 1709 × 365** — with the Magna Rota's pin, in 14 turns.
-6. **Dividing: 623785 ÷ 1709** — subtracting until it goes below zero.
+2. **The carry: 9999 + 1** — stored, then passed on, in one turn (Lehmann's replica, the page's default).
+3. **Carries that wait: the original** — 9999 + 1 again as on the original in Hannover, whose levers all act at once: 9900, then two idle turns with 0, the learner turning them; ends with the toolbar's *Carry* box. (Split from lesson 2 in 1.2.0, which had grown to 15 steps that cannot be skipped.)
+4. **Subtracting: turn the other way** — 1000 − 1, borrowing as the mirror of carrying.
+5. **The carriage: places and × 10** — shifting multiplies the step by 10.
+6. **Multiplying: 1709 × 365** — with the Magna Rota's pin, in 14 turns.
+7. **Dividing: 623785 ÷ 1709** — subtracting until it goes below zero.
 
 Every lesson opens with what you will learn, has a task the reader does at least every few steps, and ends with a one-line recap and a *Next lesson* button. A task names the control to use, and that control is the only one not greyed.
 

@@ -62,9 +62,9 @@ When you want more, the panel on the right holds a five-minute **tutorial** (*Ge
 
 </details>
 
-## How it calculates, in six lessons
+## How it calculates, in seven lessons
 
-The **Lessons** tab teaches the machine in six short lessons, from adding to dividing. Each is a few steps in the panel: some show you something, and some are your turn (the control to use glows amber, and *Next* unlocks when you have done it). You can leave a lesson for free play at any time and pick it up later; finished lessons get a tick.
+The **Lessons** tab teaches the machine in seven short lessons, from adding to dividing. Each is a few steps in the panel: some show you something, and some are your turn (the control to use glows amber, and *Next* unlocks when you have done it). You can leave a lesson for free play at any time and pick it up later; finished lessons get a tick.
 
 ### 1. Adding: the stepped drum
 
@@ -76,21 +76,25 @@ Under each knob is a **stepped drum**, a cylinder with nine teeth of graded leng
 
 ### 2. The carry: 9999 + 1
 
-When a wheel passes from 9 to 0, its single tooth turns a **carry store**, and the store's **pentagon** tilts: the carry is stored, not yet added. At the end of the turn the **carry levers** sweep past the stores, units first, and pass each stored carry on to the next wheel. If that wheel passes 9 too, it stores its own carry just before its lever arrives, so 9999 + 1 becomes 10000 in a single turn. That is the carry of N. J. Lehmann's replica in Dresden, the page's default. The lesson then turns to the original in Hannover, whose levers all act at once: a carry made while carries are being passed on waits, its pentagon tilted, and 9999 + 1 shows 9900, then 0000, then 10000 as the crank is turned on with 0 on the knobs. The toolbar's *Carry* box switches between the two.
+When a wheel passes from 9 to 0, its single tooth turns a **carry store**, and the store's **pentagon** tilts: the carry is stored, not yet added. At the end of the turn the **carry levers** sweep past the stores, units first, and pass each stored carry on to the next wheel. If that wheel passes 9 too, it stores its own carry just before its lever arrives, so 9999 + 1 becomes 10000 in a single turn. That is the carry of N. J. Lehmann's replica in Dresden, the page's default.
 
 <img src="images/readme/lesson-carry.jpg" alt="Lesson 2 in the page: the Carry view, with the units' result wheel, its carry store and its tilted pentagon standing out, and the lesson's step in the panel on the right" width="640">
 
-### 3. Subtracting: turn the other way
+### 3. Carries that wait: the original
+
+The original in Hannover carries differently: all its carry levers act at the same moment. The lesson adds 9999 + 1 again, turn by turn. The carries the drums' teeth make are finished in the same turn, but a carry made by a carry misses its lever and waits, its pentagon tilted: 9999 + 1 first shows 9900. Turning on with 0 on the knobs finishes two waiting carries a turn, 0000 and then 10000, as the original's operators did. The toolbar's *Carry* box switches between the two ways of carrying.
+
+### 4. Subtracting: turn the other way
 
 Turning the crank backward subtracts, and a borrow is a carry in reverse. The machine has no minus sign: subtract more than there is, and the front wheels turn to 9s.
 
-### 4. The carriage: places and × 10
+### 5. The carriage: places and × 10
 
 The register at the back stays in place; the carriage at the front, with the knobs and drums, slides along it. One place to the left puts the knobs' units over the register's tens, so each turn adds ten times the number.
 
 <img src="images/readme/view-apart.jpg" alt="The machine taken apart: the cover plates and the row of result wheels lifted above the carriage, over the oak case" width="640">
 
-### 5. Multiplying: 1709 × 365
+### 6. Multiplying: 1709 × 365
 
 Multiplying is adding again and again, one digit of the multiplier at a time. Put the pin in the Magna Rota's hole for the digit, and the crank stops after exactly that many turns; then slide the carriage one place and do the next digit.
 
@@ -104,7 +108,7 @@ Fourteen turns instead of 365 additions.
 
 <img src="images/readme/view-magna.jpg" alt="The Magna Rota view: the big wheel with its black and red numbers, the pin in hole 5, the crank in its centre" width="640">
 
-### 6. Dividing: 623785 ÷ 1709
+### 7. Dividing: 623785 ÷ 1709
 
 Dividing is subtracting again and again. Subtract until the result goes below zero (its front wheels turn to 9s), add the divisor back once, and read that digit of the answer on the Magna Rota's red numbers; then slide the carriage one place right for the next digit.
 

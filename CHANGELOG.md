@@ -9,7 +9,7 @@ The model moves toward the original in Hannover. Klaus Badur, who measured the o
 **The carry of the original**
 - A new carry, *Original*, follows the original: all eight carry levers act at the same moment, each 90° across its two horns. A carry made while carries are being passed on waits, its pentagon tilted; each further turn with 0 on the knobs finishes two, and the next sum finishes them by itself. 9999 + 1 shows 9900, then 0000, then 10000, and the book's example 099 + 3 shows 002, then 102. The model gets there from the lever geometry alone.
 - It replaces the *historical* mode, whose levers came highest digit first, which no source supports ([decision 0001](design/decisions/0001-carry-interpretation.md), addenda of 2026-11-21 and 2026-11-24).
-- The carry lesson ends with the original's three turns and a task on the new *Carry* box, in all ten languages. The default carry is still Lehmann's, the one-turn carry.
+- A new lesson 3, *Carries that wait: the original*, adds 9999 + 1 again as on the original, turn by turn: the units' carry stored, 9900 with the tens' pentagon tilted, then two idle turns the learner makes, and a task on the new *Carry* box. Lesson 2 stays on Lehmann's one-turn carry, the default, and now says that a tilted pentagon means its wheel owes the next one a carry. All in ten languages; seven lessons now.
 
 **The machine**
 - The parts Badur measured have the original's sizes: result discs Ø35.5, setting discs Ø36, the carriage hood 444 mm long with its front 111 mm high, and the carriage frame 333 mm long.
