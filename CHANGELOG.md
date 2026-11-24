@@ -12,7 +12,8 @@ The model moves toward the original in Hannover. Klaus Badur, who measured the o
 - The carry lesson ends with the original's three turns and a task on the new *Carry* box, in all ten languages. The default carry is still Lehmann's, the one-turn carry.
 
 **The machine**
-- The parts Badur measured have the original's sizes: result discs Ø35.5, setting discs Ø36, the revolution counter's steel ring Ø69.5 / Ø45 with its ten holes, the carriage hood 444 mm long with its front 111 mm high, and the carriage frame 333 mm long.
+- The parts Badur measured have the original's sizes: result discs Ø35.5, setting discs Ø36, the carriage hood 444 mm long with its front 111 mm high, and the carriage frame 333 mm long.
+- The revolution-counter dial on the carriage is only resized: its steel ring is now the original's Ø69.5 outside and Ø45 inside, reaching the edge, round a smaller brass centre. It is still a static dial with ten dot marks and no digits; the working counter is for 1.3.0.
 - The pentagons are the original's, 40 mm across the corners (26 before), in two staggered rows behind the register's rear wall, so that neighbours do not touch. They stand level with the register's cover, which now ends just in front of them, and the oak case still hides them: turn *Show case* off to see them.
 - The oak case is the original's 755 mm long (806 before).
 
