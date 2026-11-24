@@ -94,7 +94,7 @@ Starting the tutorial or a lesson enters **course mode**: the step player takes 
 
 - **Get started**: the tutorial in three short chapters: *What is it?* (the machine's story, with historical pictures), *What's inside?* (a tour of the parts in 3D, taking it apart), *Your first sum* (2 + 3, done by the reader).
 - **Lessons**: a path of six lessons, each building on the one before (U6), with progress ticks remembered in the browser.
-- **References**: where to see the machine and read more, grouped, each link with one line on why it is worth a click. It opens with a short text on the original and its replicas, and which of them the model follows (decision 0002).
+- **References**: where to see the machine and read more, grouped, each link with one line on why it is worth a click. It opens with a short text on the original and its replicas, and which of them the model follows (decision 0002). It ends with the credits, which About's *References* button opens.
 
 Free play has no tab: its controls are the machine toolbar, under the machine (P2).
 
@@ -145,7 +145,7 @@ The locales of the 8800 simulator: English, Español, Français, Deutsch, Italia
 
 ### U8 — The top bar: logo, title, the mode, and three icons
 
-Logo and title on the left; on the right the dock toggle, the language menu and About. About is a dialog with a title band (its name, and an ✕ to close it, as a dialog's title bar has; Escape and a click on the dimmed backdrop close it too): logo, version, what the simulator is, credits (sources, photographers, libraries), licences one per line, and the link to the source. The developer pages are for developers and are not linked from the app (the README names them). It is the app's only dialog; another would take the same band.
+Logo and title on the left; on the right the dock toggle, the language menu and About. About is a dialog with a title band (its name, and an ✕ to close it, as a dialog's title bar has; Escape and a click on the dimmed backdrop close it too): logo, version, one line on what the simulator is, the link to the source and the licences one per line, then two buttons: *References* and *Close*. It is kept short, as in the 8800 simulator: the credits (how the model was made, the sources, photographers and libraries) are at the end of the References tab, and *References* closes About and opens that tab at them. The developer pages are for developers and are not linked from the app (the README names them). It is the app's only dialog; another would take the same band.
 
 ### U9 — The 3D stage behaves like a 3D viewer
 

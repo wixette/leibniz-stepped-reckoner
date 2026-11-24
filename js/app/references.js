@@ -1,5 +1,5 @@
-// The References tab (docs/ui-design.md, U3): where to see the machine and read more, in
-// groups, each link with one line on why it is worth a click. In each group the pages most
+// The References tab (docs/ui-design.md, U3): the original and its replicas; where to see the
+// machine and read more, in groups, each link with one line on why it is worth a click. In each group the pages most
 // readers can read come first (Wikipedia leads), the German ones last. Public URLs only; the
 // sources behind the model are in research/sources/bibliography.md.
 
@@ -80,5 +80,10 @@ export function referencesPanel() {
         }),
       ),
     ]),
+    // the credits and how the model was made, moved here from About (About's References
+    // button opens the tab at this heading)
+    el("h3", { id: "refs-credits", text: t("about.credits") }),
+    el("p", { text: t("about.reconstruction") }),
+    el("p", { text: t("about.credits.text") }),
   ]);
 }

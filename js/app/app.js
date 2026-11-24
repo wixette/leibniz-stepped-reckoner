@@ -674,7 +674,13 @@ export class App {
         LOCALES.map((l) => ({ label: LOCALE_NAMES[l], lang: l, checked: l === locale(), run: () => this.setLanguage(l) })),
       ),
     );
-    $("aboutBtn").addEventListener("click", () => showAbout());
+    $("aboutBtn").addEventListener("click", () =>
+      showAbout(() => {
+        this.openDock();
+        this.courseUI.selectTab("tab-refs");
+        document.getElementById("refs-credits")?.scrollIntoView({ block: "start" });
+      }),
+    );
   }
 
   /** Show or hide the case (the Views menu's switch). In an inside view the case is the reader's then. */

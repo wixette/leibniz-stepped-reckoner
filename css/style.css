@@ -718,6 +718,8 @@ dialog::backdrop { background: var(--md-scrim); }
 .dialog-body ul { margin: 0; padding-left: 18px; color: var(--md-on-surface-variant); }
 .dialog-body p { color: var(--md-on-surface-variant); margin: 0 0 10px; }
 .dialog-logo { width: 200px; height: auto; display: block; margin: 0 0 12px; }
+/* About's buttons (U8): References, where the credits are, and Close */
+.dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
 
 /* ---- self-test panel (?selftest) --------------------------------------------------------------------- */
 .selftest { margin: 12px 0; padding: 12px; border-radius: var(--radius-m); background: var(--md-surface-high); font-size: 12px; }
