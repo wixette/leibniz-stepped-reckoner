@@ -33,6 +33,7 @@ export default {
   "view.register": "결과",
   "view.knobs": "설정 손잡이",
   "view.front": "마그나 로타",
+  "view.counter": "회전 계수기",
   "view.drum": "계단 바퀴",
   "view.carry": "받아올림",
   "view.inside": "내부",

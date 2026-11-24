@@ -10,13 +10,13 @@ import { Machine } from "../sim/machine.js";
 /** @import { CarryMode } from "../sim/machine.js" */
 import { registerValue } from "../sim/operations.js";
 
-/** @typedef {"overview" | "apart" | "register" | "knobs" | "front" | "drum" | "carry"} ViewName */
+/** @typedef {"overview" | "apart" | "register" | "knobs" | "front" | "counter" | "drum" | "carry"} ViewName */
 
 /**
  * Every view, in the order of the Views menu (docs/ui-design.md, U15).
  * @type {readonly ViewName[]}
  */
-export const VIEWS = ["overview", "apart", "register", "knobs", "front", "drum", "carry"];
+export const VIEWS = ["overview", "apart", "register", "knobs", "front", "counter", "drum", "carry"];
 
 /**
  * The inside views (docs/ui-design.md, U11, U13): their subject sits inside the machine, so they

@@ -70,7 +70,8 @@ import * as M from "./kinematicsM1.js";
  * @property {number} carriageX mm along +X (negative = shifted left)
  * @property {number} endCrank deg
  * @property {number} mainCrank deg (the operator's crank, = theta)
- * @property {number} magnaRota deg (ring)
+ * @property {number} magnaRota deg (turns with the crank)
+ * @property {number} counterRing deg about the vertical (the revolution counter's ring, clockwise seen from above when adding)
  */
 
 export const DIGIT_PITCH = machine.layout.digit_pitch.v; // mm
@@ -452,7 +453,8 @@ export class Machine {
       carriageX: -DIGIT_PITCH * this.carriagePos,
       endCrank: 360 * this.carriagePos,
       mainCrank: th,
-      magnaRota: 36 * (this.ringTurns + th / 360),
+      magnaRota: th,
+      counterRing: -36 * (this.ringTurns + th / 360),
     };
   }
 

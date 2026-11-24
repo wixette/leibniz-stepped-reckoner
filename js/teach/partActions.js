@@ -88,15 +88,20 @@ export function intentAt(hit, point, m, dir = 1) {
       return { kind: "shiftTo", offset: Math.min(nearest(reads, point), m.maxOffset) };
     }
     if (n.name === gltfName("pm.main_crank")) return { kind: "turn", dir };
-    if (n.name === gltfName("pm.magna_pin")) return { kind: "pin", hole: null };
-    if (n.name === gltfName("pm.magna_rota")) {
-      // Holes, black digits and red digits sit on the same spokes: the nearest black digit
-      // around the ring's centre gives the hole.
-      const centre = new THREE.Vector3().setFromMatrixPosition(n.matrixWorld);
+    // The Magna Rota is fixed to the crank: clicking it turns the crank.
+    if (n.name === gltfName("pm.magna_rota")) return { kind: "turn", dir };
+    if (n.name === gltfName("pm.counter_pin") || n.name === gltfName("pm.counter_pin_park")) return { kind: "pin", hole: null };
+    if (n.name === gltfName("pm.counter_ring") || n.name === gltfName("pm.counter_plate")) {
+      // The ring's 10 holes line up with the black digits around it at rest (the ring turns
+      // by whole holes): the black digit nearest the click, round the counter's centre, gives
+      // the hole. The counter lies flat, so the angle is taken in the horizontal plane.
+      const plate = n.name === gltfName("pm.counter_plate") ? n : n.parent?.getObjectByName(gltfName("pm.counter_plate"));
+      if (!plate) return null;
+      const centre = new THREE.Vector3().setFromMatrixPosition(plate.matrixWorld);
       /** @param {THREE.Vector3} v */
-      const ang = (v) => Math.atan2(v.y - centre.y, v.x - centre.x);
+      const ang = (v) => Math.atan2(v.z - centre.z, v.x - centre.x);
       const a = ang(point);
-      const glyphs = anchors(n, "black_glyphs");
+      const glyphs = anchors(plate, "black_glyphs");
       let best = 0;
       glyphs.forEach((g, i) => {
         /** @param {THREE.Vector3} q */

@@ -35,6 +35,7 @@ export default {
   "view.register": "Result",
   "view.knobs": "Setting knobs",
   "view.front": "Magna Rota",
+  "view.counter": "Counter",
   "view.drum": "Stepped drum",
   "view.carry": "Carry",
   "view.inside": "Inside",

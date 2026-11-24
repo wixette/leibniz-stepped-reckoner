@@ -27,8 +27,8 @@ export const EXPLODE_TOL_RAD = 1e-6;
 const CASING = ["frame.case", "frame.base", "frame.register_cover", "pm.carriage_cover"];
 /** Parts that can be seen with the case on (through the windows, on top, at the front). */
 const EXTERIOR = [
-  "pi.window", "pi.sum_wheel.*", "pm.setting_dial.*", "pm.setting_plate.*", "pm.magna_rota", "pm.magna_pin",
-  "pm.magna_plate", "pm.main_crank", "pm.carriage", "pm.carriage_panel", "frame.lead_screw", ...CASING,
+  "pi.window", "pi.sum_wheel.*", "pm.setting_dial.*", "pm.setting_plate.*", "pm.magna_rota", "pm.counter_plate",
+  "pm.counter_ring", "pm.counter_pin", "pm.counter_pin_park", "pm.main_crank", "pm.carriage", "pm.carriage_panel", "frame.lead_screw", ...CASING,
 ];
 /** Part groups the exploded view must move. */
 const EXPLODED_GROUPS = ["frame.case", "frame.register_cover", "pm.carriage", "pm.magna_rota", "pi.carry_store.*", "pm.setting_dial.*"];
@@ -271,11 +271,11 @@ export function runM3Checks(root) {
     const knob = new THREE.Vector3().setFromMatrixPosition(findNodes(root, "pm.setting_dial.2")[0].matrixWorld);
     knob.y = glyph7.y + 0.006;
     expectThat("knob 2", down(knob), () => m.settings[2] === 8);
-    // a hole of the Magna Rota (here by its black digit) sets the pin
+    // a hole of the counter (here by its black digit) sets the pin
     pose();
-    const black4 = anchors(findNodes(root, "pm.magna_rota")[0], "black_glyphs")[4];
-    expectThat("Magna Rota, hole 4", front(black4), () => m.pin === 4);
-    expectThat("the pin", intentAt(findNodes(root, "pm.magna_pin")[0], new THREE.Vector3(), m), () => m.pin === null);
+    const black4 = anchors(findNodes(root, "pm.counter_plate")[0], "black_glyphs")[4];
+    expectThat("counter, hole 4", down(black4), () => m.pin === 4);
+    expectThat("the pin", intentAt(findNodes(root, "pm.counter_pin")[0], new THREE.Vector3(), m), () => m.pin === null);
     // the main crank turns once
     pose();
     const crank = findNodes(root, "pm.main_crank")[0];
@@ -326,7 +326,7 @@ export function runM3Checks(root) {
       ...context,
       ...(parts.includes("pi.window") ? ["pi.sum_wheel.*"] : []),
       ...parts.flatMap((n) => (n.startsWith("pm.setting_dial.") ? [n.replace("setting_dial", "setting_plate")] : [])),
-      ...(parts.includes("pm.magna_rota") ? ["pm.magna_plate"] : []),
+      ...(parts.some((n) => /^pm\.counter_(ring|pin)$/.test(n)) ? ["pm.counter_plate"] : []),
     ];
     let checked = 0;
     /**
@@ -516,11 +516,12 @@ export function runM3Checks(root) {
     }
     for (let k = 0; k < 16; k++) expectPart(`pi.carry_store.${k}`, null);
     expectPart("pm.magna_rota", null);
+    expectPart("pm.counter_ring", null);
     expectPart("pm.carriage", null);
     for (const lang of LOCALES) {
-      if (!partInfo(gltfName("pm.magna_rota"), m, lang)?.value?.includes("4")) bad.push(`${lang}: Magna Rota value is not its 4 turns`);
+      if (!partInfo(gltfName("pm.counter_ring"), m, lang)?.value?.includes("4")) bad.push(`${lang}: counter value is not its 4 turns`);
       if (!partInfo(gltfName("pm.carriage"), m, lang)?.value?.includes("2")) bad.push(`${lang}: carriage value is not its shift of 2`);
-      if (!partInfo(gltfName("pm.magna_pin"), m, lang)?.value?.includes("4")) bad.push(`${lang}: pin value is not hole 4`);
+      if (!partInfo(gltfName("pm.counter_pin"), m, lang)?.value?.includes("4")) bad.push(`${lang}: pin value is not hole 4`);
     }
     return { passed: bad.length === 0, detail: bad.join("; ") || `${n} labels: names in words, values match the machine` };
   });

@@ -33,6 +33,7 @@ export default {
   "view.register": "Resultado",
   "view.knobs": "Perillas de ajuste",
   "view.front": "Magna Rota",
+  "view.counter": "Contador",
   "view.drum": "Tambor escalonado",
   "view.carry": "Acarreo",
   "view.inside": "Por dentro",

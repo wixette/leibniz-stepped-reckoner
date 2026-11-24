@@ -99,7 +99,11 @@ export function viewSubjects(root) {
     apart: of({ x: 0.35, y: 0.5, z: 0.62 }, () => [root]),
     register: view({ x: 0, y: 1, z: 0.12 }, ["pi.window"]),
     knobs: view({ x: 0, y: 1.1, z: 0.8 }, ["pm.setting_dial.*", "pm.setting_plate.*"]),
-    front: view({ x: 0.12, y: 0.15, z: 1 }, ["pm.magna_rota", "pm.main_crank", "pm.magna_plate"]),
+    front: view({ x: 0.12, y: 0.15, z: 1 }, ["pm.magna_rota", "pm.main_crank"]),
+    // the revolution counter on the carriage's top right, seen from above and the front
+    // straight from the front (x 0): a sideways tilt turns the picture about the view axis, and
+    // a round dial in a turned box fills less of it (A3-14)
+    counter: view({ x: 0, y: 1, z: 0.35 }, ["pm.counter_ring", "pm.counter_plate"]),
     drum: {
       ...view({ x: 0.7, y: 0.55, z: 0.75 }, ["pm.drum.0", "pi.sum_wheel.0", "pm.setting_rack.0"]),
       inside: ["pm.drum.0", "pm.setting_rack.0", "pi.sum_wheel.0"],
@@ -123,7 +127,7 @@ const GLOW = new THREE.Color(0xffa31a);
 const READOUTS = [
   [/^pi\.window$/, () => ["pi.sum_wheel.*"]], // the digits are on the result wheels behind the windows
   [/^pm\.setting_dial\.(\d+|\*)$/, (m) => [`pm.setting_plate.${m[1]}`]], // a knob's digits are on its dial
-  [/^pm\.magna_rota$/, () => ["pm.magna_plate"]], // the red number is read at the stop on the plate
+  [/^pm\.counter_(ring|pin)$/, () => ["pm.counter_plate"]], // the numbers the pin points at are on the plate
 ];
 
 /**

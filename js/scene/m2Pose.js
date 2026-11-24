@@ -16,7 +16,8 @@ export function m2NodeNames(R, C) {
     "pm.carriage": "pm.carriage",
     "frame.lead_screw": "frame.lead_screw",
     "pm.magna_rota": "pm.magna_rota",
-    "pm.magna_pin": "pm.magna_pin",
+    "pm.counter_ring": "pm.counter_ring",
+    "pm.counter_pin": "pm.counter_pin",
     "pm.main_crank": "pm.main_crank",
   };
   for (let k = 0; k < R; k++) {
@@ -42,7 +43,9 @@ export function m2NodeValues(m) {
     "pm.carriage": p.carriageX,
     "frame.lead_screw": p.endCrank,
     "pm.magna_rota": p.magnaRota,
-    "pm.magna_pin": p.magnaRota - 36 * (m.pin ?? 0),
+    "pm.counter_ring": p.counterRing,
+    // built at black 0 by the stop; set in hole m it starts m holes anticlockwise of it
+    "pm.counter_pin": p.counterRing + 36 * (m.pin ?? 0),
     "pm.main_crank": p.mainCrank,
   };
   p.register.forEach((r, k) => {
@@ -62,7 +65,8 @@ export function m2NodeValues(m) {
 }
 
 /**
- * Poses the model from the machine state (and shows the pin only when it is inserted).
+ * Poses the model from the machine state (and shows the pin in its hole when it is set, in its
+ * parking place when it is out).
  * @param {Rig<string>} rig
  * @param {THREE.Object3D} root
  * @param {Machine} m
@@ -70,6 +74,8 @@ export function m2NodeValues(m) {
  */
 export function applyM2Pose(rig, root, m) {
   for (const [name, value] of Object.entries(m2NodeValues(m))) rig.set(name, value);
-  const pin = root.getObjectByName(gltfName("pm.magna_pin"));
+  const pin = root.getObjectByName(gltfName("pm.counter_pin"));
   if (pin) pin.visible = m.pin !== null;
+  const park = root.getObjectByName(gltfName("pm.counter_pin_park"));
+  if (park) park.visible = m.pin === null;
 }

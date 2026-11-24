@@ -33,6 +33,7 @@ export default {
   "view.register": "Résultat",
   "view.knobs": "Boutons de réglage",
   "view.front": "Magna Rota",
+  "view.counter": "Compteur",
   "view.drum": "Cylindre à cannelures",
   "view.carry": "Retenue",
   "view.inside": "À l’intérieur",

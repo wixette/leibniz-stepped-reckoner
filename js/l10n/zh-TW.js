@@ -33,6 +33,7 @@ export default {
   "view.register": "結果",
   "view.knobs": "設定旋鈕",
   "view.front": "大輪（Magna Rota）",
+  "view.counter": "轉數計數器",
   "view.drum": "步進輪",
   "view.carry": "進位",
   "view.inside": "內部",

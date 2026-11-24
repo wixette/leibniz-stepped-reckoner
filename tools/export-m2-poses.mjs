@@ -21,7 +21,7 @@ const SHIFT_STEP = Number(process.env.SHIFT_STEP ?? 1 / 32);
  * @property {string[]} hidden
  */
 /** @param {Machine} m */
-const hidden = (m) => (m.pin === null ? ["pm.magna_pin"] : []);
+const hidden = (m) => (m.pin === null ? ["pm.counter_pin"] : ["pm.counter_pin_park"]);
 
 /** @type {Pose[]} */
 const poses = [];

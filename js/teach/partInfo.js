@@ -50,7 +50,6 @@ const SINGLE = /** @type {const} */ ([
   ["pi.window", "part.windows"],
   ["pm.carriage_cover", "part.carriageCover"],
   ["pm.carriage_panel", "part.carriagePanel"],
-  ["pm.magna_plate", "part.magnaPlate"],
   ["pm.main_crank", "part.mainCrank"],
 ]);
 
@@ -102,12 +101,13 @@ export function partInfo(node, m, loc = locale()) {
   if ((k = index(node, "pm.setting_plate.")) !== null) return { name: named("part.plate", k), value: String(m.settings[k]) };
   if ((k = index(node, "pm.drum.")) !== null) return { name: named("part.drum", k), value: String(m.settings[k]) };
   if ((k = index(node, "pm.setting_rack.")) !== null) return { name: named("part.rack", k), value: String(m.settings[k]) };
-  if (node === gltfName("pm.magna_rota")) {
+  if (node === gltfName("pm.magna_rota")) return { name: t("part.magna", {}, loc), value: null };
+  if (node === gltfName("pm.counter_ring") || node === gltfName("pm.counter_plate")) {
     const turns = Math.trunc(m.ringTurns + m.theta / 360);
     const n = Math.abs(turns);
     return { name: t("part.magna", {}, loc), value: turns < 0 ? tn("value.back", n, {}, loc) : tn("value.turns", n, {}, loc), red: turns < 0 };
   }
-  if (node === gltfName("pm.magna_pin")) {
+  if (node === gltfName("pm.counter_pin") || node === gltfName("pm.counter_pin_park")) {
     return { name: t("part.pin", {}, loc), value: m.pin === null ? null : t("value.hole", { n: m.pin }, loc) };
   }
   if (node === gltfName("pm.carriage")) {

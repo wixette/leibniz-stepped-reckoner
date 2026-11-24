@@ -1,6 +1,6 @@
 {
   "_schema": "Every numeric entry is {v, unit, conf, src, note?}. conf: doc = documented in a source; est = photo-scaled estimate; design = our own choice where sources are silent. Units: mm and deg (see docs/conventions.md). Source tags: research/sources/bibliography.md. Photo scaling (the est values): the 37 mm digit pitch of BURKHARDT1897 was used as the ruler. NL183/465 and /466 are Lehmann's drawings of the Dresden replica (Deutsches Museum München); page = PDF page of the delivered scan. version is the parameter set's own (each .glb records it as params_version), not the release's.",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "fidelity_target": "B",
   "reference_machine": "The original in Hannover (GWLB; 8/16/1 digits) where Klaus Badur measured it (BADUR2026: result and setting discs, pentagons, revolution counter, carriage hood and frame, oak case; the Zweihorn angle); elsewhere N. J. Lehmann's Dresden replica (TU Dresden, 1988-90), after its workshop drawings (NL183/465), which copies the original; otherwise proportions read from photos (decision 0002, amending D1 in design/m4-notes.md).",
   "layout": {
@@ -192,16 +192,16 @@
     },
     "magna_rota": {
       "diameter": {
-        "v": 126,
+        "v": 116.5,
         "unit": "mm",
-        "conf": "est",
-        "src": "photo Nachbau 03 (front elevation); 128 in DD-TS, 127 in the 1690 photo, 124 in Nachbau 08"
+        "conf": "doc",
+        "src": "BADUR2026 (measured on the original); 126 estimated before from photos of the replica"
       },
       "holes": {
         "v": 10,
         "unit": "count",
         "conf": "doc",
-        "src": "LEUPOLD1727, WIKI"
+        "src": "LEUPOLD1727, WIKI: on the revolution counter (pars_mobilis.revolution_counter_dial), not on the Magna Rota, which is a pierced disc on the crank (photo of the original; WALSDORF2014; design/v1.3-notes.md)"
       },
       "handle_radius": {
         "v": 62,
@@ -213,7 +213,7 @@
         "v": "top, between 0 and 9",
         "unit": "-",
         "conf": "doc",
-        "src": "LEUPOLD1727"
+        "src": "LEUPOLD1727; on the original the stop is on the revolution counter (photo of the Dresden replica, Commons Die_Rechenmaschine_von_Leibniz_(Nachbau)_2001_06.jpg)"
       },
       "drum_ratio": {
         "v": 1.0,
@@ -865,37 +865,16 @@
         "src": "162 mm left of knob 0 and in the middle of the carriage front, as in the photos (photo overlay 2026-10-18)"
       },
       "magna_rota_radius": {
-        "v": 63.0,
+        "v": 58.25,
         "unit": "mm",
-        "conf": "design",
-        "src": "126 mm diameter, 5 mm more than the carriage front's height, as in the front elevation (pars_mobilis.magna_rota.diameter; photo overlay 2026-10-18)"
-      },
-      "magna_rota_ring_y": {
-        "v": [
-          -117.0,
-          -114.5
-        ],
-        "unit": "mm",
-        "conf": "design",
-        "src": "ring with 10 holes, turns 36 deg per crank turn"
-      },
-      "magna_rota_hole_radius": {
-        "v": 55.0,
-        "unit": "mm",
-        "conf": "design",
-        "src": "pin circle 55 (was 50): holes near the rim, digit rings inside, so the stop finger only spans the edge-to-hole band (digit_labels)."
-      },
-      "magna_rota_ring_hole_radius": {
-        "v": 6.0,
-        "unit": "mm",
-        "conf": "design",
-        "src": "the main crank shaft (r 3) passes through the ring"
+        "conf": "doc",
+        "src": "BADUR2026 (measured on the original): Ø116.5"
       },
       "magna_rota_gear_ratio": {
         "v": 10,
         "unit": "turns of crank per dial turn",
         "conf": "design",
-        "src": "one hole per operation (Leupold: the pin stops the dial after m operations)"
+        "src": "one hole of the revolution counter per crank turn (10 holes); the Magna Rota itself turns with the crank"
       },
       "main_crank": {
         "v": {
@@ -909,7 +888,7 @@
         },
         "unit": "mm",
         "conf": "design",
-        "src": "crank in the middle of the Magna Rota; arm in front of the pin heads; knob 60 mm out, near the ring's rim (front elevation about 65 mm), above the case floor"
+        "src": "crank in the middle of the Magna Rota; arm in front of the Magna Rota; knob 60 mm out, near the ring's rim (front elevation about 65 mm), above the case floor"
       },
       "lead_screw": {
         "v": {
@@ -1070,17 +1049,7 @@
             -40,
             0
           ],
-          "pm.magna_plate": [
-            0,
-            -80,
-            0
-          ],
           "pm.magna_rota": [
-            0,
-            -95,
-            0
-          ],
-          "pm.magna_pin": [
             0,
             -95,
             0
@@ -1104,6 +1073,26 @@
             0,
             0,
             45
+          ],
+          "pm.counter_plate": [
+            0,
+            0,
+            40
+          ],
+          "pm.counter_ring": [
+            0,
+            0,
+            55
+          ],
+          "pm.counter_pin": [
+            0,
+            0,
+            70
+          ],
+          "pm.counter_pin_park": [
+            0,
+            0,
+            40
           ]
         },
         "unit": "mm",
@@ -1127,6 +1116,87 @@
         "unit": "mm",
         "conf": "doc",
         "src": "BADUR2026 (measured on the original): pentagons 40 across the corners. Adjacent stores are only 36.5 apart, so the pentagons stand in two staggered rows, even digits in front, odd behind (Lange 1958 via NL183/466 PLAN p. 9: '15 pentagon plates in two staggered rows'; the GWLB CAD model shows the same). Behind the rear wall; their top edges (z 86.1) are level with the register cover (z 86-87.5), just behind its back edge, so the oak case hides them. On the original they appear to rise above the register (GWLB CAD model): their height there is not measured and is asked for v1.3.0 (decision 0002)."
+      },
+      "magna_rota_plates": {
+        "v": {
+          "drawing": "design/drawings/magna-rota.svg",
+          "ids": [
+            "MagnaRota_Plate1",
+            "MagnaRota_Plate2",
+            "MagnaRota_Plate3"
+          ],
+          "y": [
+            [
+              -117.5,
+              -116.0
+            ],
+            [
+              -116.0,
+              -115.0
+            ],
+            [
+              -115.0,
+              -112.6
+            ]
+          ],
+          "materials": [
+            "brass_satin",
+            "steel",
+            "steel"
+          ],
+          "tolerance": 0.08
+        },
+        "unit": "mm",
+        "conf": "design",
+        "src": "the Magna Rota: three plates of Ø116.5 (BADUR2026) fixed to the crank, front to back: the pierced brass plate (after Badur's saw template for Pos. 70 and the photo of the original), and two steel plates (his sheet 7; plate 3 is his Pos. 69, about 2.5 thick, fixed to a hub with three screws). The owner's drawing gives their outlines and holes; the thicknesses are by eye, and the order of the two steel plates is assumed (design/v1.3-notes.md). The front plate is satin brass, so its rim stands out from the polished front panel; its curves are flattened to within 0.08 mm."
+      },
+      "counter": {
+        "v": {
+          "ring_radius": [
+            22.5,
+            34.75
+          ],
+          "ring_z": [
+            0.2,
+            1.8
+          ],
+          "hole_path_radius": 28.625,
+          "hole_radius": 1.6,
+          "centre_z": [
+            0.0,
+            1.0
+          ],
+          "black_r": 37.5,
+          "red_r": 15.5,
+          "glyph_size": 4.5,
+          "pin_radius": 1.4,
+          "pin_head_radius": 2.8,
+          "pin_z": [
+            0.6,
+            9.0
+          ],
+          "pin_head_z": [
+            7.0,
+            9.0
+          ],
+          "stop": {
+            "finger_width": 4.0,
+            "finger_z": [
+              3.0,
+              5.5
+            ],
+            "post_r": [
+              36.0,
+              39.0
+            ],
+            "gap": 0.15
+          },
+          "spindle_radius": 3.0,
+          "park_r": 47.0
+        },
+        "unit": "mm",
+        "conf": "design",
+        "src": "the revolution counter on the carriage's lower right top, laid out like the Dresden replica's (Commons Die_Rechenmaschine_von_Leibniz_(Nachbau)_2001_06.jpg): a steel ring Ø69.5 / Ø45 (BADUR2026) with 10 holes turns 36 deg a crank turn, clockwise seen from above when adding; a fixed outer circle of black 0-9 on the plate, running anticlockwise from 0 at the stop; a fixed inner circle of red 0-9 on the brass centre, running clockwise; a stop bracket at the top between 0 and 9, over the ring into the pin's plane; a parking place for the pin at the bottom. The pin set at black m reaches the stop after m turns (LEUPOLD1727's procedure; WALSDORF2014: pin at 0, read the count). z from the cover's top; radii from the dial's centre."
       }
     }
   },

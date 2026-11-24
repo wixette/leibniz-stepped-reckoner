@@ -207,6 +207,43 @@ class MeshBuilder:
             c, d = b + n, a + n
             self._add([a, d, c, b] if flip else [a, b, c, d], mi, smooth)
 
+    def prism_holes(self, rim, holes, plane, t0, t1, mat, offset=(0.0, 0.0, 0.0)):
+        """Extrude a plate: the closed outline `rim` with the closed outlines `holes` cut out,
+        from t0 to t1 along the plane's normal axis. The faces are triangulated with Blender's
+        polygon filler, which takes the holes as loops inside the rim."""
+        from mathutils import Vector
+        from mathutils.geometry import tessellate_polygon
+
+        rim = rim if _signed_area(rim) > 0 else list(reversed(rim))
+        holes = [h if _signed_area(h) < 0 else list(reversed(h)) for h in holes]
+        loops = [rim] + holes
+        pts = [p for lp in loops for p in lp]
+        tris = tessellate_polygon([[Vector((u, w, 0.0)) for u, w in lp] for lp in loops])
+        mi = self._mat(mat)
+        n = len(pts)
+        base = len(self.verts)
+        ox, oy, oz = offset
+        for t in (t0, t1):
+            for u, w in pts:
+                x, y, z = _map(plane, u, w, t)
+                self.verts.append((x + ox, y + oy, z + oz))
+        flip = plane == "XZ"
+        for a, b, c in tris:
+            if _signed_area([pts[a], pts[b], pts[c]]) < 0:
+                b, c = c, b
+            top = [base + n + a, base + n + b, base + n + c]
+            bottom = [base + c, base + b, base + a]
+            self._add(list(reversed(top)) if flip else top, mi, False)
+            self._add(list(reversed(bottom)) if flip else bottom, mi, False)
+        start = 0
+        for lp in loops:
+            m = len(lp)
+            for i in range(m):
+                a, b = base + start + i, base + start + (i + 1) % m
+                c, d = b + n, a + n
+                self._add([a, d, c, b] if flip else [a, b, c, d], mi, False)
+            start += m
+
     def _add(self, face, mi, smooth):
         self.faces.append(face)
         self.mat_idx.append(mi)

@@ -474,7 +474,7 @@ const FUNCTION_COLOURS = [
   [/^pisum_wheel/, 0x2f9e5b],
   [/^picarry_store/, 0xe0782c],
   [/^pm(lever|zweihorn)/, 0xc2412d],
-  [/^(pmmagna|pmmain_crank|pmcarriage$|framelead_screw)/, 0xb8860b],
+  [/^(pmmagna|pmcounter|pmmain_crank|pmcarriage$|framelead_screw)/, 0xb8860b],
 ];
 const KEEP = new Set(["ink_black", "ink_red", "enamel_white"]);
 /** @type {Map<THREE.Mesh, THREE.Material | THREE.Material[]>} */
@@ -525,7 +525,7 @@ const STATIC_LABELS = {
   [gltfName("frame.static")]: "Frame",
   [gltfName("pi.window")]: "Reading windows (result register)",
   [gltfName("pm.carriage_panel")]: "Carriage front panel",
-  [gltfName("pm.magna_plate")]: "Magna Rota plate and stop finger",
+  [gltfName("pm.counter_plate")]: "Revolution counter: numbers and stop",
   [gltfName("frame.case")]: "Oak case",
   [gltfName("frame.base")]: "Oak base board and bearers",
   [gltfName("frame.register_cover")]: "Cover plate of the result register (windows show the result)",

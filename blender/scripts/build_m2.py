@@ -13,7 +13,8 @@ Carriage pm.carriage (translate along +X), carriage digit j at x = -36.5 j (offs
   pm.carriage_panel  front panel (static; hideable for a cut-away view)
   pm.drum_shaft.j / pm.drum.j / pm.setting_rack.j / pm.setting_dial.j / pm.setting_plate.j / pm.setting_stop.j
   pm.lever.j / pm.zweihorn_add.j / pm.zweihorn_sub.j
-  pm.magna_plate (static), pm.magna_rota (rotate about +Y), pm.magna_pin (rotate about +Y),
+  pm.magna_rota (rotate about +Y, with the crank), pm.counter_plate (static), pm.counter_ring and
+  pm.counter_pin (rotate about +Z), pm.counter_pin_park (static),
   pm.main_crank (rotate about +Y, 360 deg per turn; sits in the middle of the Magna Rota)
 Casing (all static; the page hides them together to show the mechanism):
   frame.base             oak base board and the two bearers under it (woodwork, hidden with the case)
@@ -402,51 +403,22 @@ def build(p):
             bl.set_motion(horn, "rotate", (0, 1, 0), f"{le} {j}", f"{ld} {j}")
             bl.parent(horn, carriage)
 
-    # Magna Rota: plate with the stop (static), ring + handle (turns), pin (turns, hole set at runtime)
+    # Magna Rota: three plates of the owner's drawing (design/drawings/magna-rota.svg), fixed to
+    # the crank and turning with it: the pierced brass plate in front, two steel plates behind.
+    from lib.svgplate import read_plate
+    mr_cfg = p.v(M2 + "magna_rota_plates")
     mrad = p.v(M2 + "magna_rota_radius")
-    ry0, ry1 = p.v(M2 + "magna_rota_ring_y")
-    hr = p.v(M2 + "magna_rota_hole_radius")
-    ring_hole = p.v(M2 + "magna_rota_ring_hole_radius")
+    drawing = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", mr_cfg["drawing"])
     mb = MeshBuilder()
-    mb.prism(geom.circle(mrad + 2.0, 72), "XZ", ry1 + 0.3, pnl0, "steel_dark", smooth=True)  # dark backing frames the ring
-    # Stop: the ring turns clockwise (seen from the front) when adding, so a pin travelling
-    # towards the top meets the finger just clockwise of 90 deg; at the stop the pin centre
-    # is exactly at the top (pin half-angle 2.7 deg + finger half-angle 3 deg).
-    stop_a = 90.0 - (math.degrees(1.8 / hr) + math.degrees(2.0 / hr) + math.degrees(0.15 / hr))  # 0.15 mm gap
-    sa = math.radians(stop_a)
-    mb.prism(geom.radial_bar(mrad + 0.5, mrad + 3.5, 4.0, stop_a), "XZ", ry0 - 5.6, ry1, "steel_dark")   # bridge over the ring
-    mb.prism(geom.radial_bar(hr - 2.5, mrad + 3.5, 4.0, stop_a), "XZ", ry0 - 5.6, ry0 - 3.0, "steel_dark")  # finger in the pin plane
-    mplate = static(mb.build("pm.magna_plate", col, (mx, 0, mz)))
-    bl.parent(mplate, carriage)
-    ring_glyph_black, ring_glyph_red = [], []
-    mb = MeshBuilder()
-    for half in (0.0, 180.0):
-        mb.prism(annulus_half(mrad, ring_hole, half), "XZ", ry0, ry1, "brass_polished", smooth=True)
-    for m in range(10):
-        a = math.radians(90.0 + 36.0 * m)
-        hx, hz = hr * math.cos(a), hr * math.sin(a)
-        mb.prism([(u + hx, w + hz) for u, w in geom.circle(2.4, 16)], "XZ", ry0 - 0.15, ry0, "ink_black", smooth=True)
-        for (rr, txt, mat, store) in ((hr + dl["magna_black_dr"], str(m), "ink_black", ring_glyph_black),
-                                      (hr + dl["magna_red_dr"], str((10 - m) % 10), "ink_red", ring_glyph_red)):
-            gx, gz = rr * math.cos(a), rr * math.sin(a)
-            store.append((gx, ry0 - 0.2, gz))
-            verts, faces = bl.glyph_mesh(txt, dl["magna_glyph_size"], 0.25)
-            # glyph faces the operator (-Y), upright along +Z
-            mb.add_mesh_data(verts, faces, bl.frame_matrix((gx, ry0 - 0.2, gz), (1, 0, 0), (0, 0, 1)), mat)
+    for pid, (y0, y1), mat in zip(mr_cfg["ids"], mr_cfg["y"], mr_cfg["materials"]):
+        rim, holes = read_plate(drawing, pid, 2.0 * mrad, mr_cfg["tolerance"])
+        # the drawing's x right and y up are the machine's x and z, seen from the front
+        mb.prism_holes(rim, holes, "XZ", y0, y1, mat)
     mrota = mb.build("pm.magna_rota", col, (mx, 0, mz))
-    bl.set_anchors(mrota, "black_glyphs", ring_glyph_black)
-    bl.set_anchors(mrota, "red_glyphs", ring_glyph_red)
-    bl.set_motion(mrota, "rotate", (0, 1, 0), "Magna Rota (multiplier dial and counter)", "Magna Rota (Multiplikator- und Umdrehungsscheibe)")
+    bl.set_motion(mrota, "rotate", (0, 1, 0), "Magna Rota (turns with the crank)", "Magna Rota (dreht sich mit der Kurbel)")
     bl.parent(mrota, carriage)
-    mb = MeshBuilder()
-    mb.prism([(u, w + hr) for u, w in geom.circle(1.8, 16)], "XZ", ry0 - 6.0, ry0 - 0.05, "steel", smooth=True)  # ends in the hole mark
-    mb.prism([(u, w + hr) for u, w in geom.circle(3.0, 16)], "XZ", ry0 - 8.0, ry0 - 6.0, "steel_dark", smooth=True)
-    mpin = mb.build("pm.magna_pin", col, (mx, 0, mz))
-    bl.set_motion(mpin, "rotate", (0, 1, 0), "Pin in the Magna Rota (sets the multiplier digit)", "Stift (Multiplikatorziffer)")
-    bl.parent(mpin, carriage)
-    bl.set_anchors(mplate, "stop_point", [(hr * math.cos(sa), ry0 - 4.5, hr * math.sin(sa))])
 
-    # main crank: shaft through the ring's centre hole, arm in front of the pin heads,
+    # main crank: shaft through the Magna Rota's centre hole, arm in front of it,
     # pointing down at rest; the knob stays above the case floor.
     ck = p.v(M2 + "main_crank")
     mb = MeshBuilder()
@@ -507,21 +479,65 @@ def build(p):
     mb.prism(geom.rect(cx0, pnl1, cx0 + 3.0, ky1), "XY", wz0, kz0, "brass_satin")       # left end
     mb.prism(geom.rect(xs - 3.0, pnl1, xr, ky1), "XY", zn, zn + 2.0, "brass_satin")       # underside of the right part
     mb.prism(geom.rect(xr - 3.0, pnl1, xr, ky1), "XY", zn + 2.0, zt - 2.0, "brass_satin") # right end
-    # revolution counter (static: its stepping and pin are v1.3.0; the Magna Rota counts turns):
-    # the original's steel ring, 69.5 outside and 45 inside, with its 10 holes, round a brass plate
-    dx, dy, dr, dz = X[0] + x_pl + pin_g.rp + cs_["dial_from_knob0"], py - 8.0, cs_["dial_radius"], zt
-    di = cs_["dial_inner_radius"]
-    mb.prism(geom.circle(di, 64), "XY", dz, dz + 1.0, "brass_satin", smooth=True, offset=(dx, dy, 0))
-    for a0 in (0.0, 180.0):
-        ring = [(u + dx, w + dy) for u, w in annulus_half(dr, di, a0)]
-        mb.prism(ring, "XY", dz, dz + 1.6, "steel", smooth=True)
-    for m in range(10):
-        a = math.radians(90.0 - 36.0 * m)
-        mb.prism([(u + dx + (dr + di) / 2.0 * math.cos(a), w + dy + (dr + di) / 2.0 * math.sin(a)) for u, w in geom.circle(1.6, 12)],
-                 "XY", dz + 1.6, dz + 1.8, "steel_dark", smooth=True)
-    mb.prism(geom.circle(3.0, 20), "XY", dz + 1.0, dz + 7.0, "steel", smooth=True, offset=(dx, dy, 0))
+    dx, dy, dz = X[0] + x_pl + pin_g.rp + cs_["dial_from_knob0"], py - 8.0, zt   # the revolution counter's centre
     ccover = static(mb.build("pm.carriage_cover", col))
     bl.parent(ccover, carriage)
+
+    # Revolution counter (decision in design/v1.3-notes.md), laid out like the Dresden replica's:
+    # a fixed plate with the black outer circle (anticlockwise from 0 at the stop) and the red
+    # inner circle on the brass centre (clockwise), the stop bracket at the top; the steel ring
+    # with 10 holes turns 36 deg a crank turn about the vertical, clockwise seen from above when
+    # adding; the pin sits in a hole and reaches the stop after m turns from black m.
+    ct = p.v(M2 + "counter")
+    r_in, r_out = ct["ring_radius"]
+    hp, gs = ct["hole_path_radius"], ct["glyph_size"]
+    st = ct["stop"]
+    stop_a = 90.0 - math.degrees((ct["pin_radius"] + st["finger_width"] / 2.0 + st["gap"]) / hp)
+    mb = MeshBuilder()
+    mb.prism(geom.circle(r_in - 0.3, 64), "XY", dz, dz + ct["centre_z"][1], "brass_satin", smooth=True)
+    mb.prism(geom.circle(ct["spindle_radius"], 24), "XY", dz + 0.3, dz + 6.0, "steel", smooth=True)  # from inside the brass, not on its face
+    mb.prism(geom.circle(ct["spindle_radius"] + 1.0, 24), "XY", dz + ct["centre_z"][1], dz + ct["centre_z"][1] + 1.0, "steel", smooth=True)
+    black, red = [], []
+    for k in range(10):
+        a = math.radians(90.0 + 36.0 * k)
+        for rr, txt, mat, z, store in ((ct["black_r"], str(k), "ink_black", dz + 0.05, black),
+                                       (ct["red_r"], str((10 - k) % 10), "ink_red", dz + ct["centre_z"][1] + 0.05, red)):
+            gx, gy = rr * math.cos(a), rr * math.sin(a)
+            store.append((gx, gy, z))
+            verts, faces = bl.glyph_mesh(txt, gs, 0.2)
+            # lying on the top, upright for the operator at the front
+            mb.add_mesh_data(verts, faces, bl.frame_matrix((gx, gy, z), (1, 0, 0), (0, 1, 0)), mat)
+    # the stop: a post outside the ring and a finger over it, in the pin's plane
+    mb.prism(geom.radial_bar(st["post_r"][0], st["post_r"][1], st["finger_width"], stop_a), "XY", dz, dz + st["finger_z"][1], "steel_dark")
+    mb.prism(geom.radial_bar(hp - 2.5, st["post_r"][1], st["finger_width"], stop_a), "XY", dz + st["finger_z"][0], dz + st["finger_z"][1], "steel_dark")
+    cplate = mb.build("pm.counter_plate", col, (dx, dy, 0))
+    bl.set_anchors(cplate, "black_glyphs", black)
+    bl.set_anchors(cplate, "red_glyphs", red)
+    sa = math.radians(stop_a)
+    bl.set_anchors(cplate, "stop_point", [(hp * math.cos(sa), hp * math.sin(sa), dz + sum(st["finger_z"]) / 2.0)])
+    bl.parent(cplate, carriage)
+
+    mb = MeshBuilder()
+    holes = [[(u + hp * math.cos(math.radians(90.0 + 36.0 * k)), w + hp * math.sin(math.radians(90.0 + 36.0 * k)))
+              for u, w in geom.circle(ct["hole_radius"], 20)] for k in range(10)]
+    mb.prism_holes(geom.circle(r_out, 96), [geom.circle(r_in, 96)] + holes, "XY", dz + ct["ring_z"][0], dz + ct["ring_z"][1], "steel")
+    cring = mb.build("pm.counter_ring", col, (dx, dy, 0))
+    bl.set_motion(cring, "rotate", (0, 0, 1), "Revolution counter: ring with 10 holes", "Umdrehungszähler: Ring mit 10 Löchern")
+    bl.parent(cring, carriage)
+
+    def pin_mesh(cx, cy):
+        m_ = MeshBuilder()
+        m_.prism(geom.circle(ct["pin_radius"], 16), "XY", dz + ct["pin_z"][0], dz + ct["pin_head_z"][0], "steel", smooth=True, offset=(cx, cy, 0))
+        m_.prism(geom.circle(ct["pin_head_radius"], 20), "XY", dz + ct["pin_head_z"][0], dz + ct["pin_head_z"][1], "brass_polished", smooth=True, offset=(cx, cy, 0))
+        return m_
+
+    cpin = pin_mesh(0.0, hp).build("pm.counter_pin", col, (dx, dy, 0))   # built at black 0, turned to its hole
+    bl.set_motion(cpin, "rotate", (0, 0, 1), "Pin of the revolution counter", "Stift des Umdrehungszählers")
+    bl.parent(cpin, carriage)
+    mb = pin_mesh(0.0, -ct["park_r"])
+    mb.prism([(u, w - ct["park_r"]) for u, w in geom.circle(ct["pin_radius"] + 1.2, 20)], "XY", dz, dz + ct["pin_z"][0], "brass_satin", smooth=True)
+    cpark = static(mb.build("pm.counter_pin_park", col, (dx, dy, 0)))   # where the pin waits, shown when it is out
+    bl.parent(cpark, carriage)
 
     # =========================================================== teaching extras (M3)
     labels = {
@@ -532,7 +548,8 @@ def build(p):
         "pi.window": ("Reading windows of the result register", "Ablesefenster des Resultatwerks"),
         "pm.carriage_panel": ("Front panel of the carriage", "Vorderwand des Schlittens"),
         "pm.carriage_cover": ("Cover plate of the carriage", "Deckplatte des Schlittens"),
-        "pm.magna_plate": ("Magna Rota plate and stop", "Grundplatte und Anschlag der Magna Rota"),
+        "pm.counter_plate": ("Revolution counter: numbers and stop", "Umdrehungszähler: Zahlen und Anschlag"),
+        "pm.counter_pin_park": ("Revolution counter: the pin, put away", "Umdrehungszähler: Stift in der Ablage"),
     }
     for j in range(C):
         labels[f"pm.setting_plate.{j}"] = (f"Setting dial {j} (digits 0-9)", f"Einstellscheibe {j} (Ziffern 0-9)")

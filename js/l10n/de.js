@@ -33,6 +33,7 @@ export default {
   "view.register": "Ergebnis",
   "view.knobs": "Stellknöpfe",
   "view.front": "Magna Rota",
+  "view.counter": "Umdrehungszähler",
   "view.drum": "Staffelwalze",
   "view.carry": "Zehnerübertrag",
   "view.inside": "Innen",

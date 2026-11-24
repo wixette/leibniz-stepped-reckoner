@@ -27,7 +27,8 @@ DESIGNED = [
     r"^pm\.carriage~(pm\.drum_shaft|pm\.setting_dial)\.\d+$",
     r"^pm\.drum_shaft\.(\d+)~pm\.drum\.\1$",
     r"^pm\.setting_dial\.(\d+)~pm\.setting_(plate|rack)\.\1$",
-    r"^pm\.magna_pin~pm\.magna_rota$",
+    r"^pm\.counter_pin~pm\.counter_ring$",  # the pin sits in a hole of the ring
+    r"^pm\.magna_rota~pm\.main_crank$",  # the Magna Rota is fixed to the crank
 ]
 _DESIGNED = [re.compile(r) for r in DESIGNED]
 

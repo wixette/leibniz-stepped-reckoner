@@ -6,6 +6,9 @@ What changed in each release. Versions follow `package.json` and are tagged `vX.
 
 **The machine**
 - The stepped drums have the original's sizes (Klaus Badur's measurements): 35 mm across the ribs on a 32.5 mm pitch circle, 28.5 mm long, the ribs stepped 3.15 mm a digit (Lehmann's replica: 36, 27.2 and 3.02). The setting knob's pinion is sized so that one division still moves the drum one rib.
+- The revolution counter on the carriage's top right works, as on the original: its steel ring with 10 holes turns one hole a turn, the pin sits in a hole and points at the black numbers around it (red, on the centre, when subtracting), and it stops the crank at the stop. The pin and its holes moved here from the Magna Rota, which follows Leupold's 1727 description rather than the surviving machine.
+- The Magna Rota is the original's: a pierced brass plate with two steel plates behind it, 116.5 mm across, fixed to the crank and turning with it. Its pattern is drawn from Klaus Badur's saw template and photographs of the original.
+- A *Counter* view.
 
 ## 1.2.0
 

@@ -33,6 +33,7 @@ export default {
   "view.register": "結果",
   "view.knobs": "置数つまみ",
   "view.front": "マグナ・ロータ",
+  "view.counter": "回転数カウンター",
   "view.drum": "段付き歯車",
   "view.carry": "繰り上がり",
   "view.inside": "内部",

@@ -107,16 +107,24 @@ function worldX(o) {
 }
 
 /**
- * Digit (0-9) of the ring glyph nearest the top of the Magna Rota (where the stop is).
+ * The black digit (0-9) the counter's pin points at: the fixed black number nearest the pin,
+ * round the counter's centre (the counter lies flat, so in the horizontal plane).
  * @param {Ctx} c
- * @param {"black_glyphs" | "red_glyphs"} key
  * @returns {number}
  */
-function ringDigit(c, key) {
-  const g = anchors(node(c.root, "pm.magna_rota"), key);
+function pinDigit(c) {
+  c.root.updateMatrixWorld(true);
+  const plate = node(c.root, "pm.counter_plate");
+  const centre = new THREE.Vector3().setFromMatrixPosition(plate.matrixWorld);
+  const pin = new THREE.Box3().setFromObject(node(c.root, "pm.counter_pin")).getCenter(new THREE.Vector3());
+  /** @param {THREE.Vector3} v */
+  const ang = (v) => Math.atan2(v.z - centre.z, v.x - centre.x);
+  const g = anchors(plate, "black_glyphs");
+  /** @param {THREE.Vector3} q */
+  const d = (q) => Math.abs(Math.atan2(Math.sin(ang(q) - ang(pin)), Math.cos(ang(q) - ang(pin))));
   let best = 0;
-  g.forEach((p, i) => (p.y > g[best].y ? (best = i) : 0));
-  return key === "black_glyphs" ? best : (10 - best) % 10;
+  g.forEach((q, i) => (d(q) < d(g[best]) ? (best = i) : 0));
+  return best;
 }
 
 /**
@@ -200,12 +208,12 @@ export function runM2Checks(root, opts = {}) {
       }
       if (anchors(part(c, "pm.setting_plate", j), "glyph_anchors").length !== 10) bad.push(`plate ${j} glyphs`);
     }
-    for (const n of ["pm.magna_rota", "pm.magna_pin", "pm.magna_plate", "pm.main_crank"]) if (!onCarriage(node(root, n))) bad.push(`${n} not on the carriage`);
+    for (const n of ["pm.magna_rota", "pm.counter_plate", "pm.counter_ring", "pm.counter_pin", "pm.counter_pin_park", "pm.main_crank"]) if (!onCarriage(node(root, n))) bad.push(`${n} not on the carriage`);
     if (onCarriage(node(root, "frame.lead_screw"))) bad.push("lead screw on the carriage");
-    if (anchors(node(root, "pm.magna_rota"), "black_glyphs").length !== 10) bad.push("ring black glyphs");
-    if (anchors(node(root, "pm.magna_rota"), "red_glyphs").length !== 10) bad.push("ring red glyphs");
-    if (anchors(node(root, "pm.magna_plate"), "stop_point").length !== 1) bad.push("stop point");
-    return { passed: bad.length === 0, detail: bad.join("; ") || `${R} register digits, ${C} carriage digits, Magna Rota, crank and lead screw present with anchors` };
+    if (anchors(node(root, "pm.counter_plate"), "black_glyphs").length !== 10) bad.push("counter black glyphs");
+    if (anchors(node(root, "pm.counter_plate"), "red_glyphs").length !== 10) bad.push("counter red glyphs");
+    if (anchors(node(root, "pm.counter_plate"), "stop_point").length !== 1) bad.push("stop point");
+    return { passed: bad.length === 0, detail: bad.join("; ") || `${R} register digits, ${C} carriage digits, Magna Rota, counter, crank and lead screw present with anchors` };
   });
 
   run("A2-2", "All 16 windows read 0–9; all 8 pointers aim at their digit (offsets 0 and 7)", () => {
@@ -254,22 +262,24 @@ export function runM2Checks(root, opts = {}) {
     return { passed: bad.length === 0, detail: bad.join("; ") || `aligned within ${fmt(worst, 4)} mm at offsets 0–${c.m.maxOffset}; no intersections at rest` };
   });
 
-  run("A2-4", "1709 × 365 with the Magna Rota reads 623785; the pin rests on the stop after each digit, and turned back clears the finger for 9 - m turns", () => {
+  run("A2-4", "1709 × 365 with the counter reads 623785; the pin set at black m rests on the stop after m turns, and turned back clears the finger for 9 - m turns", () => {
     /** @type {string[]} */
     const bad = [];
     state(c, { input: 1709 });
     [5, 6, 3].forEach((d, o) => {
       c.m.setOffset(o);
       c.m.setPin(d);
+      pose(c);
+      if (pinDigit(c) !== d) bad.push(`digit ${d}: the pin starts at black ${pinDigit(c)}`);
       const n = c.m.runToStop();
       pose(c);
-      const pin = node(root, "pm.magna_pin");
-      const plate = node(root, "pm.magna_plate");
+      const pin = node(root, "pm.counter_pin");
+      const plate = node(root, "pm.counter_plate");
       const gap = minDistance(pin, plate);
       if (n !== d) bad.push(`digit ${d}: ${n} turns`);
       if (gap > CONTACT_PIN_MM || intersects(pin, plate)) bad.push(`digit ${d}: pin–stop ${fmt(gap)} mm`);
       if (c.m.turn(1)) bad.push(`digit ${d}: crank turned past the stop`);
-      if (ringDigit(c, "black_glyphs") !== d) bad.push(`digit ${d}: ring shows ${ringDigit(c, "black_glyphs")}`);
+      if (pinDigit(c) !== 0) bad.push(`digit ${d}: at the stop the pin points at black ${pinDigit(c)}`);
     });
     c.m.setPin(null);
     c.m.setOffset(0);
@@ -281,8 +291,8 @@ export function runM2Checks(root, opts = {}) {
     const back = new Machine();
     back.setPin(3);
     const cb = { ...c, m: back };
-    const pin = node(root, "pm.magna_pin");
-    const plate = node(root, "pm.magna_plate");
+    const pin = node(root, "pm.counter_pin");
+    const plate = node(root, "pm.counter_plate");
     let turnsBack = 0;
     while (back.turn(-1)) {
       turnsBack++;
@@ -303,7 +313,7 @@ export function runM2Checks(root, opts = {}) {
     return { passed: bad.length === 0, detail: bad.join("; ") || `reads ${showNum(r)}; pin on the stop after 5, 6 and 3 turns; turned back, 6 clear turns from hole 3, the 7th meets the finger` };
   });
 
-  run("A2-5", "623785 ÷ 1709: quotient 3, 6, 5 read on the Magna Rota, remainder 0", () => {
+  run("A2-5", "623785 ÷ 1709: quotient 3, 6, 5 counted by the counter's ring, remainder 0", () => {
     state(c, { result: 623_785, input: 1709 });
     /** @type {number[]} */
     const q = [];
@@ -317,14 +327,14 @@ export function runM2Checks(root, opts = {}) {
           break;
         }
       }
-      pose(c);
-      q.push(ringDigit(c, "red_glyphs"));
+      // the pin is out, so the model shows no number: the ring's turns give the digit
+      q.push(-c.m.ringTurns);
     }
     c.m.setOffset(0);
     pose(c);
     const r = readAll(c);
     const ok = q.join("") === "365" && r.every((x) => x === 0);
-    return { passed: ok, detail: `quotient digits on the ring ${q.join(", ")}; remainder ${showNum(r)}` };
+    return { passed: ok, detail: `quotient digits counted ${q.join(", ")}; remainder ${showNum(r)}` };
   });
 
   run("A2-6", "Ripple 999999999 + 1: carry for digit 8 waits (no lever); after a shift and an idle turn reads 1000000000", () => {

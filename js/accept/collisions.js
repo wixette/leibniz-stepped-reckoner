@@ -48,7 +48,8 @@ const DESIGNED = [
   /^pmcarriage~(pmdrum_shaft|pmsetting_dial)\d+$/,
   /^pmdrum_shaft(\d+)~pmdrum\1$/,
   /^pmsetting_dial(\d+)~pmsetting_(plate|rack)\1$/,
-  /^pmmagna_pin~pmmagna_rota$/,
+  /^pmcounter_pin~pmcounter_ring$/, // the pin sits in a hole of the ring
+  /^pmmagna_rota~pmmain_crank$/, // the Magna Rota is fixed to the crank
 ];
 /**
  * @param {string} a
