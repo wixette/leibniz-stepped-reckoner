@@ -180,9 +180,21 @@ export const EXECUTION_TRAVEL = SPRING_START + SPRING_SNAP;
  * @returns {number}
  */
 export function leverWindow(i, mode) {
-  const order = mode === "ripple" ? i : 0;
-  return CARRY_WINDOW_START + order * PER_CARRY;
+  return mode === "ripple" ? CARRY_WINDOW_START + i * PER_CARRY : SIMULTANEOUS_WINDOW;
 }
+
+/**
+ * The original's Zweihorn angle, 90 deg at the outer edges of its two teeth (BADUR2026), between
+ *  the centres of our pins on their path.
+ */
+export const ORIGINAL_SPREAD = val(machine.pars_mobilis.zweihorn.spread_original_outer) - 2 * deg(Math.asin(PIN_R / PATH_R));
+
+/**
+ * |theta| of the 'simultaneous' (Original) carry's main horn pass. A lever's two horns pass its
+ *  store symmetrically about 360 + CONTACT_START_REL, the spread apart: the early pass comes before
+ *  the ribs, the main pass after them.
+ */
+export const SIMULTANEOUS_WINDOW = 360 + CONTACT_START_REL - ORIGINAL_SPREAD / 2;
 
 /** @param {number} a */
 const norm360 = (a) => ((a % 360) + 360) % 360;

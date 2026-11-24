@@ -273,6 +273,13 @@
         "unit": "deg",
         "conf": "doc",
         "src": "LUDWIG2006 (about 80 deg on all digits after the 1896 restoration)"
+      },
+      "spread_original_outer": {
+        "v": 90,
+        "unit": "deg",
+        "conf": "doc",
+        "src": "BADUR2026: on the original the angle of every Zweihorn, measured at the outer edges of its two switching teeth, is 90 deg; WALSDORF2014 ch. II: constant 90 deg Zweihorn angles and parallel carries",
+        "note": "Between the centres of our 1 mm pins on their 17 mm path this is 90 - 2 asin(1/17) = 83.3 deg, close to Burkhardt's ~80. It sets the 'simultaneous' (Original) carry's lever phase: the two horns pass their store 83.3 deg apart, centred on the lever's crossing of the store line, at 33.5 and 310.3 deg of the turn (kinematicsM1.js, decision 0001)."
       }
     }
   },
@@ -1273,11 +1280,11 @@
       "src": "after the Zweihorn releases, the detent spring completes the store to 72 deg within 2 deg of crank (LUDWIG2006: Rastfedern complete the carry)"
     },
     "simultaneous_phase": {
-      "v": "all levers at the carry window start",
+      "v": "every lever at one phase, set by the original's Zweihorn angle",
       "unit": "-",
       "conf": "doc",
-      "src": "BADUR2026: on the original every Zweihorn has the same angle between its horns and is mounted at the same angle to its drum, so all levers engage together and complete their stored carries at the same time",
-      "note": "Carry mode 'simultaneous' (decision 0001). With our lever geometry this makes every spread 119 deg; BURKHARDT1897 (via LUDWIG2006) gives about 80 deg, so the absolute phase is still our design. The same phase for all levers, not the spread, decides the behaviour: 9999 + 1 -> 9900 -> 0000 (thousands pentagon tilted) -> 10000, as GWLB describes."
+      "src": "BADUR2026: on the original every Zweihorn has the same angle between its horns and is mounted at the same angle to its drum, so all levers engage together and complete their stored carries at the same time; WALSDORF2014 ch. II: carries completed before and after the digit transfer",
+      "note": "Carry mode 'simultaneous' (decision 0001). The phase follows from pars_mobilis.zweihorn.spread_original_outer: the horns pass at 33.5 deg (before the ribs) and 310.3 deg (after them). 9999 + 1 -> 9900 -> 0000 (thousands pentagon tilted) -> 10000, and 099 + 3 -> 002 -> 102, as GWLB and WALSDORF2014 describe."
     },
     "spring_from_store": {
       "v": 45.0,
