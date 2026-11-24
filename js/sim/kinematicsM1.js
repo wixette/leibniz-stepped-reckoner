@@ -28,7 +28,6 @@ const rad = (d) => (d * Math.PI) / 180;
 /** @param {number} x */
 const clamp01 = (x) => Math.min(1, Math.max(0, x));
 
-export const DIGITS = val(M1.digits);
 export const CARRY_WINDOW_START = val(/** @type {Entry<number[]>} */ (T.carry_window))[0];
 export const PER_CARRY = val(T.per_carry_angle);
 export const SPRING_SNAP = val(T.spring_snap_deg);
@@ -165,7 +164,13 @@ export const TRANSFER_TRAVEL = (() => {
 export const EXECUTION_TRAVEL = SPRING_START + SPRING_SNAP;
 
 // --- lever phases per mode ---------------------------------------------------------------
-/** @typedef {"ripple" | "historical"} CarryMode */
+/**
+ * ripple: Lehmann's Dresden replica, levers staggered units first, so a chain of carries runs
+ *  through in one turn. simultaneous: the original in Hannover, every lever at the same phase
+ *  (K. Badur, measured on the original), so a carry made while carries are being passed on
+ *  waits for a later pass (decision 0001).
+ * @typedef {"ripple" | "simultaneous"} CarryMode
+ */
 
 /**
  * |theta| at which digit i's adding horn first touches its store (and the subtracting horn, mirrored).
@@ -173,10 +178,22 @@ export const EXECUTION_TRAVEL = SPRING_START + SPRING_SNAP;
  * @param {CarryMode} mode
  * @returns {number}
  */
-export function leverWindow(i, mode, n = DIGITS) {
-  const order = mode === "ripple" ? i : n - 1 - i;
-  return CARRY_WINDOW_START + order * PER_CARRY;
+export function leverWindow(i, mode) {
+  return mode === "ripple" ? CARRY_WINDOW_START + i * PER_CARRY : SIMULTANEOUS_WINDOW;
 }
+
+/**
+ * The original's Zweihorn angle, 90 deg at the outer edges of its two teeth (BADUR2026), between
+ *  the centres of our pins on their path.
+ */
+export const ORIGINAL_SPREAD = val(machine.pars_mobilis.zweihorn.spread_original_outer) - 2 * deg(Math.asin(PIN_R / PATH_R));
+
+/**
+ * |theta| of the 'simultaneous' (Original) carry's main horn pass. A lever's two horns pass its
+ *  store symmetrically about 360 + CONTACT_START_REL, the spread apart: the early pass comes before
+ *  the ribs, the main pass after them.
+ */
+export const SIMULTANEOUS_WINDOW = 360 + CONTACT_START_REL - ORIGINAL_SPREAD / 2;
 
 /** @param {number} a */
 const norm360 = (a) => ((a % 360) + 360) % 360;
@@ -186,8 +203,8 @@ const norm360 = (a) => ((a % 360) + 360) % 360;
  * @param {number} i
  * @param {CarryMode} mode
  */
-export function hornPhases(i, mode, n = DIGITS) {
-  const w = leverWindow(i, mode, n);
+export function hornPhases(i, mode) {
+  const w = leverWindow(i, mode);
   return { add: norm360(B_LF + CONTACT_START_REL - w), sub: norm360(B_LF - CONTACT_START_REL + w) };
 }
 
@@ -198,8 +215,8 @@ export function hornPhases(i, mode, n = DIGITS) {
  * @param {1 | -1} dir
  * @returns {number[]}
  */
-export function leverPasses(i, mode, dir, n = DIGITS) {
-  const ph = hornPhases(i, mode, n);
+export function leverPasses(i, mode, dir) {
+  const ph = hornPhases(i, mode);
   // Adding: horns move CCW (+theta) and first touch at B_LF + CONTACT_START_REL.
   // Subtracting: horns move CW and first touch at B_LF - CONTACT_START_REL.
   const target = dir > 0 ? B_LF + CONTACT_START_REL : B_LF - CONTACT_START_REL;

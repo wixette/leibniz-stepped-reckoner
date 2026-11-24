@@ -101,15 +101,15 @@ def build(p):
     planes = p.v(M2 + "muldenrad_y_planes")
     dl = p.v(M2 + "digit_labels")  # enlarged for teaching (see params: not a documented size)
     dy0, dy1 = dl["result_disc_y"]
-    rd = dl["result_disc_r"]                    # M2 only (M0/M1: geometry.result.disc_radius)
+    rd = dl["result_disc_r"]                    # the disc, without its rim
     rim_dr, rim_t = dl["result_rim"]
     re, rpin = p.v("geometry.result.einzahn_radius"), p.v("geometry.result.einzahn_pin_radius")
     psi = p.v("geometry.result.einzahn_angle")
     ey0, ey1 = p.v("geometry.result.einzahn_pin_y")
     hl, hw = p.v("geometry.carry_store.horn_length"), p.v("geometry.carry_store.horn_width")
     hy0, hy1 = p.v("geometry.carry_store.horn_y")
-    pr = p.v("geometry.carry_store.pentagon_circumradius")
-    pa, pb = p.v(M2 + "pentagon_y")
+    pent = p.v(M2 + "pentagon")  # the original's size, in two staggered rows (even digits in front)
+    pr = pent["circumradius"]
     fy0, fy1 = p.v(M2 + "fuenfhorn_y")
     fh_len, fh_r, fh_hub = p.v(M1 + "fuenfhorn_horn_length"), p.v(M1 + "fuenfhorn_horn_radius"), p.v(M1 + "fuenfhorn_hub_radius")
     wall0, wall1 = p.v(M2 + "rear_wall_y")
@@ -148,6 +148,7 @@ def build(p):
         bl.set_motion(wheel, "rotate", (0, 1, 0), f"Result wheel {k}", f"Zählrad {k}")
         bl.parent(wheel, root)
 
+        pa, pb = pent["y_rows"][k % 2]
         fx, fz = F[k]
         h_rest = ang(S[k][0] - fx, S[k][1] - fz)
         b_fl = ang(x + dxL - fx, zL - fz)
@@ -482,7 +483,7 @@ def build(p):
     # below stays readable from an angle (the window plate still frames it)
     mb = MeshBuilder()
     oy0, oy1 = dl["cover_opening_y"]
-    plate_with_hole_row(mb, ix0, cs["register_cover_y0"], ix1, iy1, oy0, oy1, [(x - dl["cover_opening_half_x"], x + dl["cover_opening_half_x"]) for x in X], cz0, cz1, "brass_polished")
+    plate_with_hole_row(mb, ix0, cs["register_cover_y0"], ix1, cs["register_cover_y1"], oy0, oy1, [(x - dl["cover_opening_half_x"], x + dl["cover_opening_half_x"]) for x in X], cz0, cz1, "brass_polished")
     # skirt along the front edge (above the frame's front bar, z <= 69, and every carriage part)
     y0 = cs["register_cover_y0"]
     mb.prism(geom.rect(ix0, y0, ix1, y0 + 2.0), "XY", cs["register_cover_skirt_z0"], cz0, "brass_satin")
@@ -504,15 +505,17 @@ def build(p):
     mb.prism(geom.rect(cx0, pnl1, cx0 + 3.0, ky1), "XY", wz0, kz0, "brass_satin")       # left end
     mb.prism(geom.rect(xs - 3.0, pnl1, xr, ky1), "XY", zn, zn + 2.0, "brass_satin")       # underside of the right part
     mb.prism(geom.rect(xr - 3.0, pnl1, xr, ky1), "XY", zn + 2.0, zt - 2.0, "brass_satin") # right end
-    # revolution-counter dial plate (static: the counter is not modelled; the Magna Rota counts turns)
+    # revolution counter (static: its stepping and pin are v1.3.0; the Magna Rota counts turns):
+    # the original's steel ring, 69.5 outside and 45 inside, with its 10 holes, round a brass plate
     dx, dy, dr, dz = X[0] + x_pl + pin_g.rp + cs_["dial_from_knob0"], py - 8.0, cs_["dial_radius"], zt
-    mb.prism(geom.circle(dr, 64), "XY", dz, dz + 1.0, "brass_satin", smooth=True, offset=(dx, dy, 0))
+    di = cs_["dial_inner_radius"]
+    mb.prism(geom.circle(di, 64), "XY", dz, dz + 1.0, "brass_satin", smooth=True, offset=(dx, dy, 0))
     for a0 in (0.0, 180.0):
-        ring = [(u + dx, w + dy) for u, w in annulus_half(dr - 6.0, dr - 13.0, a0)]
-        mb.prism(ring, "XY", dz + 1.0, dz + 1.6, "steel", smooth=True)
+        ring = [(u + dx, w + dy) for u, w in annulus_half(dr, di, a0)]
+        mb.prism(ring, "XY", dz, dz + 1.6, "steel", smooth=True)
     for m in range(10):
         a = math.radians(90.0 - 36.0 * m)
-        mb.prism([(u + dx + (dr - 9.5) * math.cos(a), w + dy + (dr - 9.5) * math.sin(a)) for u, w in geom.circle(1.4, 12)],
+        mb.prism([(u + dx + (dr + di) / 2.0 * math.cos(a), w + dy + (dr + di) / 2.0 * math.sin(a)) for u, w in geom.circle(1.6, 12)],
                  "XY", dz + 1.6, dz + 1.8, "steel_dark", smooth=True)
     mb.prism(geom.circle(3.0, 20), "XY", dz + 1.0, dz + 7.0, "steel", smooth=True, offset=(dx, dy, 0))
     ccover = static(mb.build("pm.carriage_cover", col))

@@ -19,6 +19,7 @@ import { wireDockHandle } from "./dockHandle.js";
 import { Sound } from "./sound.js";
 import { LESSONS } from "../teach/lessons.js";
 import { TUTORIAL } from "../teach/tutorial.js";
+/** @import { CarryMode } from "../sim/kinematicsM1.js" */
 
 /**
  * @template {HTMLElement} [T=HTMLElement]
@@ -69,7 +70,7 @@ export const group3 = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
  * @property {"tab-start" | "tab-lessons"} tab where its player lives
  */
 
-/** @typedef {Control | "reset"} StripControl */
+/** @typedef {Control | "reset" | "carry"} StripControl */
 
 export class App {
   machine = new Machine();
@@ -174,6 +175,7 @@ export class App {
     if (this.stage.apart && control !== "reset") return no("status.apart");
     if (control === "shift" && dir === 1 && m.offset >= m.maxOffset) return no("status.carriageEnd");
     if (control === "shift" && dir === -1 && m.offset <= 0) return no("status.carriageEnd");
+    if (control === "carry" && !m.atRest) return no("status.busy");
     if (control === "toStop" && m.pin === null) return no("status.noPin");
     if (control === "toStop" && m.blocked) return no("status.blockedPin");
     return { enabled: true, reason: null, wanted };
@@ -253,6 +255,17 @@ export class App {
   setPin(hole) {
     this.machine.setPin(hole);
     this.say(() => (hole === null ? t("status.pinOut") : t("status.pin", { n: hole })));
+    this.afterLearner();
+  }
+
+  /**
+   * Choose how the carry levers act (decision 0001): as on Lehmann's Dresden replica or as on the
+   *  original in Hannover. The Zweihörner turn to their new phases at once.
+   * @param {CarryMode} mode
+   */
+  setCarryMode(mode) {
+    if (!this.machine.setMode(mode)) return;
+    this.say(() => t(`status.carry.${mode}`));
     this.afterLearner();
   }
 
@@ -661,7 +674,13 @@ export class App {
         LOCALES.map((l) => ({ label: LOCALE_NAMES[l], lang: l, checked: l === locale(), run: () => this.setLanguage(l) })),
       ),
     );
-    $("aboutBtn").addEventListener("click", () => showAbout());
+    $("aboutBtn").addEventListener("click", () =>
+      showAbout(() => {
+        this.openDock();
+        this.courseUI.selectTab("tab-refs");
+        document.getElementById("refs-credits")?.scrollIntoView({ block: "start" });
+      }),
+    );
   }
 
   /** Show or hide the case (the Views menu's switch). In an inside view the case is the reader's then. */
@@ -836,6 +855,20 @@ export class App {
         ),
       ),
     );
+    const carryBtn = $("carryBtn");
+    carryBtn.addEventListener("click", () =>
+      this.use("carry", () =>
+        showMenu(
+          carryBtn,
+          /** @type {CarryMode[]} */ (["ripple", "simultaneous"]).map((mode) => ({
+            label: t(`strip.carry.${mode}`),
+            detail: t(`strip.carry.${mode}.detail`),
+            checked: this.machine.mode === mode,
+            run: () => this.use("carry", () => this.setCarryMode(mode)),
+          })),
+        ),
+      ),
+    );
   }
 
   /** @param {Locale} l */
@@ -896,6 +929,7 @@ export class App {
     show("pinBtn", "pin");
     show("toStopBtn", "toStop");
     show("resetBtn", "reset");
+    show("carryBtn", "carry");
     const input = /** @type {HTMLInputElement} */ ($("numInput"));
     const inputState = this.controlState("input");
     input.readOnly = !inputState.enabled;
@@ -905,6 +939,8 @@ export class App {
     $("pinValue").textContent = m.pin === null ? "–" : String(m.pin);
     // its name says the hole (U22); the tooltip keeps what the pin does
     $("pinBtn").setAttribute("aria-label", m.pin === null ? t("strip.pin.nameOut") : t("strip.pin.name", { n: m.pin }));
+    $("carryValue").textContent = t(`strip.carry.${m.mode}.short`);
+    $("carryBtn").setAttribute("aria-label", t("strip.carry.name", { mode: t(`strip.carry.${m.mode}`) }));
     // the view on show, on the Views menu's button
     const viewName = t(`view.${this.view}`);
     $("viewName").textContent = viewName;

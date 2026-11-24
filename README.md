@@ -43,7 +43,8 @@ When you want more, the panel on the right holds a five-minute **tutorial** (*Ge
 | **+** and **−** | Turn the crank once forward (adds the number on the knobs to the result) or backward (subtracts it). |
 | **Carriage** ‹ › | Slide the carriage one place left or right; the box shows its place. Each place to the left makes a turn count ten times as much. |
 | **Pin** and **Run to stop** | Put the Magna Rota's pin in a hole 1–9, or take it out; *Run to stop* turns the crank until the pin reaches the stop (hole 5: five turns). |
-| **Reset** | All wheels and knobs to 0, the carriage home, the pin out. |
+| **Carry** | How the carry levers act: *Lehmann*, as on N. J. Lehmann's replica in Dresden (a chain of carries runs on within one turn), or *Original*, as on the machine in Hannover (all levers at once, so a carry can wait, its pentagon tilted, for another turn with 0 on the knobs). |
+| **Reset** | All wheels and knobs to 0, the carriage home, the pin out (the carry stays as chosen). |
 | **Sound** | The machine's sounds on or off. |
 
 | To… | Mouse or trackpad | Touch screen | Keyboard (Tab to the 3D view first) |
@@ -61,9 +62,9 @@ When you want more, the panel on the right holds a five-minute **tutorial** (*Ge
 
 </details>
 
-## How it calculates, in six lessons
+## How it calculates, in seven lessons
 
-The **Lessons** tab teaches the machine in six short lessons, from adding to dividing. Each is a few steps in the panel: some show you something, and some are your turn (the control to use glows amber, and *Next* unlocks when you have done it). You can leave a lesson for free play at any time and pick it up later; finished lessons get a tick.
+The **Lessons** tab teaches the machine in seven short lessons, from adding to dividing. Each is a few steps in the panel: some show you something, and some are your turn (the control to use glows amber, and *Next* unlocks when you have done it). You can leave a lesson for free play at any time and pick it up later; finished lessons get a tick.
 
 ### 1. Adding: the stepped drum
 
@@ -75,21 +76,25 @@ Under each knob is a **stepped drum**, a cylinder with nine teeth of graded leng
 
 ### 2. The carry: 9999 + 1
 
-When a wheel passes from 9 to 0, its single tooth turns a **carry store**, and the store's **pentagon** tilts: the carry is stored, not yet added. At the end of the turn the **carry levers** sweep past the stores, units first, and pass each stored carry on to the next wheel. If that wheel passes 9 too, it stores its own carry just before its lever arrives, so 9999 + 1 becomes 10000 in a single turn.
+When a wheel passes from 9 to 0, its single tooth turns a **carry store**, and the store's **pentagon** tilts: the carry is stored, not yet added. At the end of the turn the **carry levers** sweep past the stores, units first, and pass each stored carry on to the next wheel. If that wheel passes 9 too, it stores its own carry just before its lever arrives, so 9999 + 1 becomes 10000 in a single turn. That is the carry of N. J. Lehmann's replica in Dresden, the page's default.
 
 <img src="images/readme/lesson-carry.jpg" alt="Lesson 2 in the page: the Carry view, with the units' result wheel, its carry store and its tilted pentagon standing out, and the lesson's step in the panel on the right" width="640">
 
-### 3. Subtracting: turn the other way
+### 3. Carries that wait: the original
+
+The original in Hannover carries differently: all its carry levers act at the same moment. The lesson adds 9999 + 1 again, turn by turn. The carries the drums' teeth make are finished in the same turn, but a carry made by a carry misses its lever and waits, its pentagon tilted: 9999 + 1 first shows 9900. Turning on with 0 on the knobs finishes two waiting carries a turn, 0000 and then 10000, as the original's operators did. The toolbar's *Carry* box switches between the two ways of carrying.
+
+### 4. Subtracting: turn the other way
 
 Turning the crank backward subtracts, and a borrow is a carry in reverse. The machine has no minus sign: subtract more than there is, and the front wheels turn to 9s.
 
-### 4. The carriage: places and × 10
+### 5. The carriage: places and × 10
 
 The register at the back stays in place; the carriage at the front, with the knobs and drums, slides along it. One place to the left puts the knobs' units over the register's tens, so each turn adds ten times the number.
 
 <img src="images/readme/view-apart.jpg" alt="The machine taken apart: the cover plates and the row of result wheels lifted above the carriage, over the oak case" width="640">
 
-### 5. Multiplying: 1709 × 365
+### 6. Multiplying: 1709 × 365
 
 Multiplying is adding again and again, one digit of the multiplier at a time. Put the pin in the Magna Rota's hole for the digit, and the crank stops after exactly that many turns; then slide the carriage one place and do the next digit.
 
@@ -103,7 +108,7 @@ Fourteen turns instead of 365 additions.
 
 <img src="images/readme/view-magna.jpg" alt="The Magna Rota view: the big wheel with its black and red numbers, the pin in hole 5, the crank in its centre" width="640">
 
-### 6. Dividing: 623785 ÷ 1709
+### 7. Dividing: 623785 ÷ 1709
 
 Dividing is subtracting again and again. Subtract until the result goes below zero (its front wheels turn to 9s), add the divisor back once, and read that digit of the answer on the Magna Rota's red numbers; then slide the carriage one place right for the next digit.
 
@@ -111,7 +116,7 @@ Dividing is subtracting again and again. Subtract until the result goes below ze
 
 Use **Reset** before each one.
 
-- **Eight carries in one turn.** Set 99999999 (the largest number the knobs hold) and press **+**. Then set 1, choose the *Carry* view, and press **+** again: every pentagon tilts, the carries run along, and the result is 100000000.
+- **Eight carries in one turn.** Set 99999999 (the largest number the knobs hold) and press **+**. Then set 1, choose the *Carry* view, and press **+** again: every pentagon tilts, the carries run along, and the result is 100000000. Choose *Original* in the *Carry* box and try it again: now the carries wait, and each further turn with 0 on the knobs finishes two of them.
 - **Times eleven without multiplying.** Set 12 and press **+**. Slide the carriage one place left (the carriage's left arrow) and press **+** again. 12 + 120 = 132 = 12 × 11.
 - **Times by the pin.** Set 25, put the pin in hole 4 and press *Run to stop*: 100. Watch the Magna Rota count the turns.
 - **Go below zero.** Set 1 and press **−**. What do the windows show, and why?
@@ -124,13 +129,13 @@ Use **Reset** before each one.
 - **The texts can be copied** into a worksheet: the lesson steps, the tutorial and the result can be selected like any text.
 - **Accessible:** every control can be reached with the keyboard and has a translated name for screen readers; animations follow the system's *reduce motion* setting.
 - **Slow computer?** The page lowers its rendering quality by itself if the 3D view is slow. To start in the lighter mode straight away, add `?quality=lite` to the address.
-- **Where to read more:** the *References* tab lists museums with replicas, the library that keeps the original, and articles on the machine and on teaching with it.
+- **Where to read more:** the *References* tab explains how the original and its replicas differ, and lists museums with replicas, the library that keeps the original, and articles on the machine and on teaching with it.
 
 ## How faithful is the model?
 
-The model is **kinematically faithful**: the mechanism and its angles follow the published sources (the timing of the drum's teeth, the stored carry and its pentagon, the staggered carry levers, the 36.5 mm step of the carriage). Where they exist, the dimensions follow N. J. Lehmann's workshop drawings of the replica at TU Dresden, kept in the Deutsches Museum's archive; the rest come from the published measurements and from photographs of the original and of that replica. Many small part sizes had to be estimated, and the digits are deliberately larger than on the original so that they can be read on a screen.
+The model is **kinematically faithful**: the mechanism and its angles follow the published sources (the timing of the drum's teeth, the stored carry and its pentagon, the carry levers, the 36.5 mm step of the carriage). The parts Klaus Badur measured on the original in Hannover have its sizes: the result and setting discs, the pentagons, the revolution counter, the carriage and the oak case. The other main parts follow N. J. Lehmann's workshop drawings of the replica at TU Dresden, kept in the Deutsches Museum's archive, and the rest come from published measurements and from photographs of the original and of that replica ([decision 0002](design/decisions/0002-original-replica-and-releases.md)). Many small part sizes had to be estimated, and the digits are deliberately larger than on the original so that they can be read on a screen.
 
-Where the sources disagree or say nothing, the choice is written down with its reason. The best-known example is the carry: historians read the original in two ways, and lesson 2 shows both ([decision 0001](design/decisions/0001-carry-interpretation.md)). Every dimension and angle, with its source and how sure we are of it, is in [params/machine.json](params/machine.json), and the research behind it is in [research/REPORT.md](research/REPORT.md).
+Where the sources disagree or say nothing, the choice is written down with its reason. The best-known example is the carry: N. J. Lehmann's replica in Dresden passes a chain of carries on within one turn, while on the original in Hannover all the carry levers act at once and a carry can wait for the next turn. Lessons 2 and 3 show both, and the toolbar's *Carry* box switches between them ([decision 0001](design/decisions/0001-carry-interpretation.md)). Every dimension and angle, with its source and how sure we are of it, is in [params/machine.json](params/machine.json), and the research behind it is in [research/REPORT.md](research/REPORT.md).
 
 ## Running it on your own computer
 
@@ -147,7 +152,7 @@ Then open <http://localhost:8000/>. (Opening `index.html` straight from disk doe
 
 ## For developers
 
-The code is plain JavaScript modules with JSDoc types, three.js is vendored, and the 3D model is built from [params/machine.json](params/machine.json) by headless Blender scripts. The developer pages at <http://localhost:8000/dev/> show each stage of the model on its own (one digit, the carry, the full machine), each with an acceptance self-test (`?selftest`).
+The code is plain JavaScript modules with JSDoc types, three.js is vendored, and the 3D model is built from [params/machine.json](params/machine.json) by headless Blender scripts. The developer page at <http://localhost:8000/dev/> shows the whole mechanism step by step, with an acceptance self-test (`?selftest`).
 
 ```
 pnpm install
@@ -166,6 +171,7 @@ The research and the model rely in particular on:
 - N. J. Lehmann's construction drawings of the TU Dresden replica: Deutsches Museum München, NL 183/465 and NL 183/466 PLAN (dimensions only; the drawings themselves are not reproduced)
 - E. Stein and F. O. Kopp (Leibniz Universität Hannover)
 - K. Badur and W. Rottstedt
+- Klaus Badur's measurements of the original, provided in agreement with the Gottfried Wilhelm Leibniz Bibliothek (November 2026), and his chapter in *Das letzte Original* (GWLB, 2014)
 - the Arithmeum Bonn
 - the Gottfried Wilhelm Leibniz Bibliothek
 

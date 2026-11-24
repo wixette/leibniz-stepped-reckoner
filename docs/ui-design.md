@@ -93,14 +93,14 @@ Starting the tutorial or a lesson enters **course mode**: the step player takes 
 ### U3 — Three dock tabs: Get started, Lessons, References
 
 - **Get started**: the tutorial in three short chapters: *What is it?* (the machine's story, with historical pictures), *What's inside?* (a tour of the parts in 3D, taking it apart), *Your first sum* (2 + 3, done by the reader).
-- **Lessons**: a path of six lessons, each building on the one before (U6), with progress ticks remembered in the browser.
-- **References**: where to see the machine and read more, grouped, each link with one line on why it is worth a click.
+- **Lessons**: a path of seven lessons, each building on the one before (U6), with progress ticks remembered in the browser.
+- **References**: where to see the machine and read more, grouped, each link with one line on why it is worth a click. It opens with a short text on the original and its replicas, and which of them the model follows (decision 0002). It ends with the credits, which About's *References* button opens.
 
 Free play has no tab: its controls are the machine toolbar, under the machine (P2).
 
 ### U4 — The machine's toolbar and the stage's own tools
 
-- **Machine toolbar** (floating at the stage's bottom, centred under the machine, U18): the number on the setting knobs, turn forward (+) and back (−) as one pair, carriage left and right with its place as another, boxed and named like the number box (U21), the Magna Rota's pin (a dropdown box, U22) with turn to the stop joined to it (U23), reset (U20), and the machine's sound on or off (U29). Icon plus short label where there is room, icons with tooltips where there is not (U18).
+- **Machine toolbar** (floating at the stage's bottom, centred under the machine, U18): the number on the setting knobs, turn forward (+) and back (−) as one pair, carriage left and right with its place as another, boxed and named like the number box (U21), the Magna Rota's pin (a dropdown box, U22) with turn to the stop joined to it (U23), how the carry levers act (a dropdown box, U30), reset (U20), and the machine's sound on or off (U29). Icon plus short label where there is room, icons with tooltips where there is not (U18).
 - **Readouts** sit on the stage's top edge: the result as on the machine, grouped in threes; the Magna Rota's turn count (red when subtracting); the carriage's place.
 - **View controls** float at the stage's top right (U15): a Reset view button (⌂), a − / + zoom pair (U24) and the Views menu, whose button names the view on show. The menu holds the seven views (two of them inside views, U11, and Taken apart) and a Show case switch. Opening the front, fading and taking apart follow the view (U14, U15). They change how the machine is *shown*, not its state, so they stay enabled in a lesson, except where a step depends on them.
 
@@ -131,11 +131,12 @@ The first version used a brass-gold primary on warm neutrals to match the machin
 ### U6 — The learning path
 
 1. **Adding: the stepped drum** — one digit, then whole numbers at once.
-2. **The carry: 9999 + 1** — stored, then passed on; the historical reading as an aside.
-3. **Subtracting: turn the other way** — 1000 − 1, borrowing as the mirror of carrying.
-4. **The carriage: places and × 10** — shifting multiplies the step by 10.
-5. **Multiplying: 1709 × 365** — with the Magna Rota's pin, in 14 turns.
-6. **Dividing: 623785 ÷ 1709** — subtracting until it goes below zero.
+2. **The carry: 9999 + 1** — stored, then passed on, in one turn (Lehmann's replica, the page's default).
+3. **Carries that wait: the original** — 9999 + 1 again as on the original in Hannover, whose levers all act at once: 9900, then two idle turns with 0, the learner turning them; ends with the toolbar's *Carry* box. (Split from lesson 2 in 1.2.0, which had grown to 15 steps that cannot be skipped.)
+4. **Subtracting: turn the other way** — 1000 − 1, borrowing as the mirror of carrying.
+5. **The carriage: places and × 10** — shifting multiplies the step by 10.
+6. **Multiplying: 1709 × 365** — with the Magna Rota's pin, in 14 turns.
+7. **Dividing: 623785 ÷ 1709** — subtracting until it goes below zero.
 
 Every lesson opens with what you will learn, has a task the reader does at least every few steps, and ends with a one-line recap and a *Next lesson* button. A task names the control to use, and that control is the only one not greyed.
 
@@ -145,7 +146,7 @@ The locales of the 8800 simulator: English, Español, Français, Deutsch, Italia
 
 ### U8 — The top bar: logo, title, the mode, and three icons
 
-Logo and title on the left; on the right the dock toggle, the language menu and About. About is a dialog with a title band (its name, and an ✕ to close it, as a dialog's title bar has; Escape and a click on the dimmed backdrop close it too): logo, version, what the simulator is, credits (sources, photographers, libraries), licences one per line, and the link to the source. The developer pages are for developers and are not linked from the app (the README names them). It is the app's only dialog; another would take the same band.
+Logo and title on the left; on the right the dock toggle, the language menu and About. About is a dialog with a title band (its name, and an ✕ to close it, as a dialog's title bar has; Escape and a click on the dimmed backdrop close it too): logo, version, one line on what the simulator is, the link to the source and the licences one per line, then two buttons: *References* and *Close*. It is kept short, as in the 8800 simulator: the credits (how the model was made, the sources, photographers and libraries) are at the end of the References tab, and *References* closes About and opens that tab at them. The developer pages are for developers and are not linked from the app (the README names them). It is the app's only dialog; another would take the same band.
 
 ### U9 — The 3D stage behaves like a 3D viewer
 
@@ -407,3 +408,13 @@ The machine is a mechanism of gears, racks and levers, and hearing it work tells
 - The link format (P8): which fields the first release promises (language, lesson and step, numbers on the machine).
 - A light theme.
 - A teacher's view (all lessons unlocked, notes per lesson).
+
+### U30 — The carry is a dropdown box in the toolbar
+
+The machine can carry two ways (decision 0001): like N. J. Lehmann's Dresden replica, whose levers come one after another, so a chain of carries runs on within one turn; or like the original in Hannover, whose levers all act at once, so a carry made while carries are being passed on waits, its pentagon tilted, for another turn. The reader chooses in free play.
+
+- **It is a setting, so it is a box (U22's rule):** "Carry" on its border, a short word inside (*Lehmann*, *Original*), and a ▾. Its menu names the two machines on one line each and says what each does on a second, smaller line; the current one is ticked. Its accessible name says the setting ("Carry: The original (Hannover)"), its tooltip what it chooses.
+- **It sits after the pin, before Reset,** and the two stay together where the toolbar wraps: on a phone they make the last row (number, crank and sound; carriage and pin; carry and reset). The word inside is short so the box stays narrow (80–100 px); its minimum width keeps the longest name on its border (Japanese 繰り上がり) inside it. Reset's label goes below a 940 px stage and the separators below 820 px, so a 1280 px laptop with the dock and a 768 px tablet still have one row. A phone has three rows (it had two from 390 px): the toolbar's boxes are wider than two rows of a phone hold, and the carry's name should stay readable rather than become an icon.
+- **Only at rest, only in free play.** It changes the levers' phases, so it waits for the crank to stop; a lesson sets its own carry with each step's reset, so in a lesson the box is greyed like every control the step does not ask for. Reset keeps the choice; leaving a lesson keeps the machine as the lesson left it, the carry included, as for everything else.
+- The status line says what the choice means, and the Zweihörner turn to their new phases at once, visible in the Carry view.
+

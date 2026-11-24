@@ -135,6 +135,32 @@ Two-phase carry example from [LUDWIG2006]: **448 + 254**. Phase 1 gives the colu
 | Arithmeum replica (2008) H × W × D | 14 × 90 × 30 cm, 23 kg | ARITH-REPLICA |
 | Science Museum 1937 working model (scaled) | 190 × 217 × 440 mm | SMG |
 
+## 10. The original as measured and described by K. Badur (2026)
+
+Two sources, facts only. **BADUR2026**: Klaus Badur's letters of 21 and 23 November 2026, written in agreement with the GWLB; he measured the original before building his replica. **WALSDORF2014, ch. II**: draft pages (13 April 2013) of his chapter of *Das letzte Original*, which he sent with the second letter. The book's text and figures are copyrighted and are not in the repository.
+
+**Measured on the original** (BADUR2026; mm): digit pitch 36.5; stepped drum Ø35 over the teeth, 28.5 long, pitch circle Ø32.5, teeth stepped 3.15 per digit; receiving gear 10 teeth; result digit discs Ø35.5; pentagons Ø40 over the corners; setting discs Ø36; Magna Rota Ø116.5; revolution counter ring Ø69.5 outside, Ø45 inside; carriage frame (without the counter) 333 long, 25 high; carriage hood (with the counter) 444 long, front 111 high; wooden case 755 long.
+
+**The carry** (BADUR2026; WALSDORF2014):
+- Every Zweihorn has the same angle, **90° at the outer edges of its two teeth**, and every lever is mounted at the same angle to its drum: all levers engage at once and complete their stored carries together ("parallel" carries).
+- A **direct** carry (made by the drum's teeth, as 9 + 3) is completed in the same turn; up to 8 in one turn.
+- An **indirect** carry (made by another carry, as in 099 + 3) cannot be completed in that turn: its Zweihorn has already passed. Its pentagon stands tilted; 099 + 3 shows **002**.
+- To finish, set all 8 inputs to 0 and turn the crank on, the same way, idle: **two carries are completed in each idle turn**. 099 + 3 needs one idle turn to show 102.
+- In a series of additions or subtractions only the last needs idle turns: waiting carries are completed automatically **before and after the digit transfer** of the next turn, without clashing with it.
+- More than 8 carries: after the 8th, shift the carriage left over the waiting ones before carries 9–15 are done. Only the original's dimensions leave room for this; on the known altered machines the Zweihörner and front Fünfhörner are too close. With constant 90° angles the design could have any number of places.
+- The older reading that carries had to be finished by turning each pentagon by hand through **54°** (Wagner's suggestion to Leibniz, which Leibniz rejected) led to the claim that the machine did not work.
+- Lehmann (Dresden) and Stein and Kopp (Hannover) changed the Zweihorn angles to make the carries serial: up to 8 indirect carries in a little more than one turn, at the cost of a more complicated machine that is more critical to adjust.
+- The carry parts need accuracies of a few hundredths of a millimetre.
+
+**The other parts** (WALSDORF2014):
+- The drum's teeth work over **202.5°** of its turn; the rest is free and used for the carries, which must not overlap the digit transfer (they would jam).
+- One turn **"links herum"** (to the left) adds, **"rechts herum"** subtracts; the four operating sections say so each time. (Whether seen from the front is asked of Badur; decision 0002, v1.3.0.)
+- **Revolution counter:** a steel ring with 10 holes, stepped once per crank turn; a plug-in pin shows the number of additions or subtractions against two number circles, the **outer for + (multiplication), the inner for − (division)**. For each multiplier digit, plug the pin in front of the 0 of the outer circle and turn until the counter shows the digit. (Whether it also stops the crank, as Leupold's Magna Rota pin does, is asked of Badur; v1.3.0.)
+- **Carriage:** shifted by the tabulator crank through the lead screw, at most 7 places (position 1 to 8); a detent lever with a leaf spring locates it. Unused guides on the left side wall suggest it was first to be locked by a vertical wedge through holes in the lead screw.
+- **Home position before a calculation:** every pentagon with its top edge horizontal; the crank handle locked at the bottom; results and the 8 inputs at 0; the carriage at a position.
+- Worked examples: 099 + 3 (above) and **1968 ÷ 24 = 82** (carriage one place left; 8 turns back reduce 196 to 4, leaving 48; carriage right, 2 turns back; quotient read on the counter).
+- History: Leibniz is said to have spent up to 24,000 Taler on the machine; two early designs for direct multiplication date from about 1672; at Helmstedt the work went through the mathematician Wagner.
+
 ---
 
-**Source key:** BURKHARDT1897, JORDAN1897, LEUPOLD (1727, via Jordan), LUDWIG2006, LEHMANN1993, STEIN16 (Stein 2016 slide excerpt with Kopp drawings), ARITH (Arithmeum exhibit text), ARITH-REPLICA, TUD (TU Dresden replica page), WIKI (en.wikipedia Stepped reckoner), MYTIME (my-time-machines.net), SOLCOVA (CTU Prague slides), SMG (Science Museum Group), LEIBNIZCENTRAL. Full citations are in [bibliography.md](bibliography.md).
+**Source key:** BADUR2026, WALSDORF2014, BURKHARDT1897, JORDAN1897, LEUPOLD (1727, via Jordan), LUDWIG2006, LEHMANN1993, STEIN16 (Stein 2016 slide excerpt with Kopp drawings), ARITH (Arithmeum exhibit text), ARITH-REPLICA, TUD (TU Dresden replica page), WIKI (en.wikipedia Stepped reckoner), MYTIME (my-time-machines.net), SOLCOVA (CTU Prague slides), SMG (Science Museum Group), LEIBNIZCENTRAL. Full citations are in [bibliography.md](bibliography.md).

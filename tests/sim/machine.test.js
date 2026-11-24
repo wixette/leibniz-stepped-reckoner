@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { DIGIT_PITCH, Machine } from "../../js/sim/machine.js";
 import { divide, multiply, registerValue } from "../../js/sim/operations.js";
+import * as M from "../../js/sim/kinematicsM1.js";
 
 describe("Machine (16-digit register, 8-digit carriage)", () => {
   it("1709 × 365 = 623785 with the Magna Rota pin stopping the crank", () => {
@@ -61,7 +62,7 @@ describe("Machine (16-digit register, 8-digit carriage)", () => {
     let seed = 3;
     /** @param {number} n */
     const rnd = (n) => ((seed = (seed * 1103515245 + 12345) % 2 ** 31), Math.floor((seed / 2 ** 31) * n));
-    for (const mode of /** @type {const} */ (["ripple", "historical"])) {
+    for (const mode of /** @type {const} */ (["ripple", "simultaneous"])) {
       const pairs = [[99_999_999, 99_999_999], ...Array.from({ length: 10 }, () => [10_000_000 + rnd(90_000_000), 10_000_000 + rnd(90_000_000)])];
       for (const [a, b] of pairs) {
         const m = new Machine();
@@ -151,18 +152,66 @@ describe("Machine (16-digit register, 8-digit carriage)", () => {
     assert.equal(m.startBlock(1), "shifting");
   });
 
-  it("historical mode defers secondary carries to the next turn", () => {
+  it("simultaneous mode (the original) moves a waiting chain on two places per idle turn", () => {
     const m = new Machine();
-    m.setMode("historical");
+    m.setMode("simultaneous");
     m.setResult(9999);
     m.setNumber(1);
     m.turn(1);
     assert.equal(m.shownNumber(), 9900);
-    assert.equal(m.pending[1], 1);
+    assert.deepEqual(m.pending.slice(0, 5), [0, 1, 0, 0, 0]);
     m.setNumber(0);
-    m.turn(1); // the early horn passes finish the chain (units first)
+    m.turn(1); // early pass: hundreds; main pass: thousands; the ten-thousands carry waits
+    assert.equal(m.shownNumber(), 0);
+    assert.deepEqual(m.pending.slice(0, 5), [0, 0, 0, 1, 0]);
+    m.turn(1);
     assert.equal(m.shownNumber(), 10000);
     assert.equal(m.pending.every((p) => p === 0), true);
+  });
+
+  it("simultaneous mode: the book's 099 + 3 shows 002, then 102 after one idle turn (WALSDORF2014)", () => {
+    const m = new Machine();
+    m.setMode("simultaneous");
+    m.setResult(99);
+    m.setNumber(3);
+    m.turn(1);
+    assert.equal(m.shownNumber(), 2);
+    assert.deepEqual(m.pending.slice(0, 3), [0, 1, 0]);
+    m.setNumber(0);
+    m.turn(1);
+    assert.equal(m.shownNumber(), 102);
+    assert.equal(m.pending.every((p) => p === 0), true);
+  });
+
+  it("simultaneous mode: a following sum finishes a waiting carry by itself (WALSDORF2014)", () => {
+    const m = new Machine();
+    m.setMode("simultaneous");
+    m.setResult(999);
+    m.setNumber(1);
+    m.turn(1);
+    assert.equal(m.shownNumber(), 900);
+    m.setNumber(5);
+    assert.equal(m.turn(1), true);
+    assert.equal(m.shownNumber(), 1005);
+    assert.equal(m.pending.every((p) => p === 0), true);
+  });
+
+  it("simultaneous mode: the horns are the original's 90 deg apart at their outer edges, and pass outside the ribs", () => {
+    const outer = M.ORIGINAL_SPREAD + 2 * (Math.asin(1 / 17) * 180) / Math.PI;
+    assert.ok(Math.abs(outer - 90) < 1e-9, `${outer}`);
+    for (const dir of /** @type {const} */ ([1, -1])) {
+      const [early, main] = M.leverPasses(0, "simultaneous", dir);
+      assert.ok(early + M.EXECUTION_TRAVEL < 78.75, `early pass ${early} done before the ribs`);
+      assert.ok(main > 281.25 && main + M.EXECUTION_TRAVEL < 360, `main pass ${main} after the ribs`);
+    }
+  });
+
+  it("simultaneous mode: every lever has the same phase and spread", () => {
+    const ph = Array.from({ length: 8 }, (_, j) => M.hornPhases(j, "simultaneous"));
+    for (const p of ph) {
+      assert.equal(p.add, ph[0].add);
+      assert.equal(p.sub, ph[0].sub);
+    }
   });
 
   it("ripple mode finishes an 8-digit carry chain inside one turn", () => {
@@ -206,7 +255,7 @@ describe("Machine (16-digit register, 8-digit carriage)", () => {
     let seed = 7;
     /** @param {number} n */
     const rnd = (n) => ((seed = (seed * 1103515245 + 12345) % 2 ** 31), Math.floor((seed / 2 ** 31) * n));
-    for (const mode of /** @type {const} */ (["ripple", "historical"])) {
+    for (const mode of /** @type {const} */ (["ripple", "simultaneous"])) {
       for (let trial = 0; trial < 20; trial++) {
         const m = new Machine();
         m.setMode(mode);

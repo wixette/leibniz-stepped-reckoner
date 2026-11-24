@@ -2,6 +2,34 @@
 
 What changed in each release. Versions follow `package.json` and are tagged `vX.Y.Z` ([docs/development.md](docs/development.md), *Versions and releases*). The design decisions cited (U1, U2, …) are in [docs/ui-design.md](docs/ui-design.md).
 
+## 1.2.0
+
+The model moves toward the original in Hannover. Klaus Badur, who measured the original before building his replica, sent its dimensions and the angle of its carry levers, in agreement with the Gottfried Wilhelm Leibniz Library, and pages of his chapter in *Das letzte Original* on how it carries. The page now follows the original where he measured it and N. J. Lehmann's drawings of the Dresden replica elsewhere, and it can carry either way ([decision 0002](design/decisions/0002-original-replica-and-releases.md)).
+
+**The carry of the original**
+- A new carry, *Original*, follows the original: all eight carry levers act at the same moment, each 90° across its two horns. A carry made while carries are being passed on waits, its pentagon tilted; each further turn with 0 on the knobs finishes two, and the next sum finishes them by itself. 9999 + 1 shows 9900, then 0000, then 10000, and the book's example 099 + 3 shows 002, then 102. The model gets there from the lever geometry alone.
+- It replaces the *historical* mode, whose levers came highest digit first, which no source supports ([decision 0001](design/decisions/0001-carry-interpretation.md), addenda of 2026-11-21 and 2026-11-24).
+- A new lesson 3, *Carries that wait: the original*, adds 9999 + 1 again as on the original, turn by turn: the units' carry stored, 9900 with the tens' pentagon tilted, then two idle turns the learner makes, and a task on the new *Carry* box. Lesson 2 stays on Lehmann's one-turn carry, the default, and now says that a tilted pentagon means its wheel owes the next one a carry. All in ten languages; seven lessons now.
+
+**The machine**
+- The parts Badur measured have the original's sizes: result discs Ø35.5, setting discs Ø36, the carriage hood 444 mm long with its front 111 mm high, and the carriage frame 333 mm long.
+- The revolution-counter dial on the carriage is only resized: its steel ring is now the original's Ø69.5 outside and Ø45 inside, reaching the edge, round a smaller brass centre. It is still a static dial with ten dot marks and no digits; the working counter is for 1.3.0.
+- The pentagons are the original's, 40 mm across the corners (26 before), in two staggered rows behind the register's rear wall, so that neighbours do not touch. They stand level with the register's cover, which now ends just in front of them, and the oak case still hides them: turn *Show case* off to see them.
+- The oak case is the original's 755 mm long (806 before).
+
+**The page**
+- A *Carry* box in the toolbar chooses between the two in free play: *Lehmann* or *Original* (U30). It sits before Reset, and the two keep together where the toolbar wraps.
+- The toolbar drops Reset's label and its separators on narrower stages than before, so it stays one row on a 1280 px laptop with the panel open and on a 768 px tablet (two rows there before). A phone now has three rows of controls.
+- The References tab opens with *The original and its replicas*: how the original carries, what Lehmann, Stein and Kopp, and Badur and Rottstedt did with it, and which of them the model follows.
+- The About box is short again, as in the 8800 simulator: the version, what the page is, the source and the licences, with a *References* button. The credits moved to the end of the References tab, which that button opens, as a short list (the research, the original's dimensions, the Dresden replica's, the photographs); they and the tutorial say which sizes are the original's and which Lehmann's, and credit Badur's measurements as he approved.
+
+**Developers**
+- The developer pages of the first two milestones (one digit, `dev/01-digit-slice/`, and the three-digit carry slice, `dev/02-carry-slice/`) are removed, with their models, Blender scripts, simulations and checks: their part sizes no longer matched the machine. Their carry tests now run on a 3-digit `Machine` (`tests/sim/smallMachine.test.js`); `dev/03-full-machine/` stays. `pnpm build:model` and `pnpm check:model` now build and check the full machine only.
+
+**Research**
+- Badur's measurements and the facts of his chapter (how the original carries, its counter, its carriage, how it is operated) are in the research notes, as facts only ([notes-mechanism.md](research/sources/notes-mechanism.md) §10); the book's text and figures are not in the repository.
+- Left for 1.3.0, waiting for Badur's answers or too large for this release: the crank's direction, the revolution counter and the Magna Rota, the stepped drums at the original's sizes, and the large gears behind the Magna Rota (decision 0002).
+
 ## 1.1.1
 
 The README is rewritten for newcomers; the simulator itself is unchanged.

@@ -30,7 +30,7 @@ import { fileURLToPath } from "node:url";
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 
 /** The pages that load modules. */
-export const PAGES = ["index.html", "dev/01-digit-slice/index.html", "dev/02-carry-slice/index.html", "dev/03-full-machine/index.html"];
+export const PAGES = ["index.html", "dev/03-full-machine/index.html"];
 
 /**
  * Files under a folder of the repository with one of the given endings, relative to the

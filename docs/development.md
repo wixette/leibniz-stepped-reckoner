@@ -11,7 +11,7 @@ python3 -m http.server 8000
 ```
 
 - <http://localhost:8000/> is the simulator (`index.html`).
-- <http://localhost:8000/dev/> lists the developer pages, one per milestone of the model (`dev/01-digit-slice/`, `dev/02-carry-slice/`, `dev/03-full-machine/`). They are not linked from the simulator.
+- <http://localhost:8000/dev/> lists the developer page, `dev/03-full-machine/`: the whole mechanism step by step, with worked examples. It is not linked from the simulator. (The pages of the earlier milestones, one digit and a three-digit carry slice, were removed in 1.2.0; their notes are in `design/`.)
 
 Pages cannot be opened from `file://`, because browsers do not load modules from there.
 
@@ -93,7 +93,7 @@ A CDN must count the query string in its cache key (most do unless told not to).
 | `index.html`, `css/`, `js/` | The simulator's main page and its code: `js/app/` (the page: stage, machine strip, dock, course player), `js/ui/` (components), `js/l10n/` (one file per language), `js/sim/` (the machine), `js/scene/` (three.js), `js/teach/` (tutorial, lessons, part names), `js/accept/` (acceptance checks), `js/tools/` (scenarios for the pose exports) |
 | `audio/` | The machine's sounds |
 | `images/` | The logo, the icons (`pnpm icons`), the tutorial's pictures and the README's screenshots |
-| `dev/` | Developer pages, one per milestone |
+| `dev/` | The developer page of the full machine |
 | `vendor/` | three.js, three-mesh-bvh, the Roboto Flex font and the Material Symbols icons, copied from npm (`pnpm vendor`) |
 | `tests/` | `node --test` tests |
 | `tools/` | Reference check, vendoring, version stamps, icons, screenshots, videos and pose export scripts |

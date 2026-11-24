@@ -369,17 +369,26 @@ a { color: var(--md-primary); }
 .btn .sym { font-size: 22px; font-weight: 600; line-height: 1; min-width: 0.6em; text-align: center; }
 .strip .sep { width: 1px; height: 28px; background: var(--md-outline-variant); margin: 0 4px; }
 /* the toolbar fits the stage's own width (U18): labels go as room runs out, short ones last */
-@container stage (max-width: 700px) {
+/* the carry's box and Reset stay together where the toolbar wraps (on a phone, the last row) */
+.strip-tail { display: contents; }
+@container stage (max-width: 940px) {
   .strip #resetBtn .txt { display: none; }
   .strip #resetBtn { padding: 0 10px; }
 }
-@container stage (max-width: 760px) {
+@container stage (max-width: 820px) {
   .strip { gap: 8px 4px; }
   .strip .sep { display: none; }
+  .strip .btn.has-icon { padding: 0 10px; }
+}
+@container stage (max-width: 720px) {
+  .strip .strip-tail { display: inline-flex; gap: 4px; }
 }
 @container stage (max-width: 640px) {
-  /* two rows on a phone: the number, the crank and the sound; then the carriage, the pin, reset */
-  .strip #carriageGroup, .strip .split, .strip #resetBtn { order: 1; }
+  .strip .strip-tail { order: 2; }
+  /* rows on a phone: the number, the crank and the sound; the carriage and the pin; the carry and
+     reset (the last two share the second row where it is wide enough) */
+  .strip #carriageGroup, .strip .split { order: 1; }
+  .strip .value-field { min-width: 64px; }
   .strip .btn .txt { display: none; }
   .strip .btn.has-icon { padding: 0 10px; }
   .strip .sep { display: none; }
@@ -562,6 +571,8 @@ body.resizing-rows, body.resizing-rows * { cursor: row-resize !important; }
 .lesson-item small { color: var(--md-on-surface-variant); font-size: 12px; white-space: nowrap; }
 
 .ref-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 2px; }
+/* the credits at the end of the References tab: one line each for the research, the two sets of dimensions and the photographs */
+.credit-list { margin: 0 0 12px; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; color: var(--md-on-surface-variant); }
 .ref-list a {
   display: grid;
   grid-template-columns: 1fr 18px;
@@ -709,6 +720,8 @@ dialog::backdrop { background: var(--md-scrim); }
 .dialog-body ul { margin: 0; padding-left: 18px; color: var(--md-on-surface-variant); }
 .dialog-body p { color: var(--md-on-surface-variant); margin: 0 0 10px; }
 .dialog-logo { width: 200px; height: auto; display: block; margin: 0 0 12px; }
+/* About's buttons (U8): References, where the credits are, and Close */
+.dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
 
 /* ---- self-test panel (?selftest) --------------------------------------------------------------------- */
 .selftest { margin: 12px 0; padding: 12px; border-radius: var(--radius-m); background: var(--md-surface-high); font-size: 12px; }
@@ -754,3 +767,11 @@ dialog::backdrop { background: var(--md-scrim); }
 /* the machine's sound, on or off (U29): quiet, at the toolbar's end */
 .strip .sound-btn { width: 36px; color: var(--md-on-surface-variant); }
 .strip .sound-btn[aria-pressed="true"] { color: var(--md-outline); }
+
+/* How the carry levers act (decision 0001): a setting, boxed and named like the pin's hole. Its
+   value is a short word; the menu says what each choice does. */
+.carry-field { min-width: 80px; padding: 0 4px 0 10px; gap: 2px; } /* wide enough for its name on the border (繰り上がり) */
+.carry-field .select-value { font-size: 15px; white-space: nowrap; }
+.menu .has-detail { height: auto; min-height: 40px; padding-top: 8px; padding-bottom: 8px; }
+.menu .two-line { display: flex; flex-direction: column; gap: 2px; }
+.menu .two-line small { font-size: 12px; font-weight: 400; color: var(--md-on-surface-variant); max-width: 34ch; white-space: normal; }

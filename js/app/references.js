@@ -1,5 +1,5 @@
-// The References tab (docs/ui-design.md, U3): where to see the machine and read more, in
-// groups, each link with one line on why it is worth a click. In each group the pages most
+// The References tab (docs/ui-design.md, U3): the original and its replicas; where to see the
+// machine and read more, in groups, each link with one line on why it is worth a click. In each group the pages most
 // readers can read come first (Wikipedia leads), the German ones last. Public URLs only; the
 // sources behind the model are in research/sources/bibliography.md.
 
@@ -60,6 +60,9 @@ export function referencesPanel() {
   return el("div", {}, [
     el("h2", { text: t("tab.refs") }),
     el("p", { class: "lead", text: t("refs.lead") }),
+    // the original and its replicas, and which one this model follows (decision 0002)
+    el("h3", { text: t("refs.replicas.title") }),
+    ...[1, 2, 3, 4].map((i) => el("p", { text: t(`refs.replicas.p${i}`) })),
     ...REFERENCES.flatMap(({ group, items }) => [
       el("h3", { text: t(group) }),
       el(
@@ -77,5 +80,10 @@ export function referencesPanel() {
         }),
       ),
     ]),
+    // the credits and how the model was made, moved here from About (About's References
+    // button opens the tab at this heading)
+    el("h3", { id: "refs-credits", text: t("about.credits") }),
+    el("p", { text: t("about.reconstruction") }),
+    el("ul", { class: "credit-list" }, ["research", "original", "replica", "photos"].map((k) => el("li", { text: t(`about.credits.${k}`) }))),
   ]);
 }

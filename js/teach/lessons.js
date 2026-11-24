@@ -158,22 +158,101 @@ const carry = {
         controls: ["input", "add"],
       },
     },
+    { view: "register", highlight: ["pi.window"], text: "l.carry.recap", expect: (m) => m.shownNumber() === 100 && allLevel(m) },
+  ],
+  finalCheck: (m) => m.shownNumber() === 100 && allLevel(m),
+};
+
+// ---------------------------------------------------------------------------------------------
+/**
+ * The original's carry (decisions 0001, 0002): all levers at once, so a carry made by a carry
+ * waits, and idle turns with 0 on the knobs finish it, two places a turn.
+ * @type {Lesson}
+ */
+const carryOriginal = {
+  id: "carryOriginal",
+  title: "l.orig.title",
+  summary: "l.orig.summary",
+  steps: [
+    // The original (decision 0001): the same sum again, step by step, the learner turning the idle turns.
     {
-      do: [{ reset: { mode: "historical", result: 9999, input: 1 } }, { turn: 1 }],
+      do: [{ reset: { mode: "simultaneous", result: 9999 } }],
+      view: "register",
+      highlight: ["pi.window"],
+      text: "l.carry.origIntro",
+      expect: (m) => m.mode === "simultaneous" && m.shownNumber() === 9999,
+    },
+    { view: "knobs", highlight: ["pm.setting_dial.0"], text: "l.carry.set1", task: setInput(1, 10) },
+    {
+      do: [{ theta: 285 }],
       view: "carry",
-      highlight: ["pi.carry_store.1"],
-      text: "l.carry.historical",
+      highlight: ["pi.sum_wheel.0", "pi.carry_store.0"],
+      text: "l.carry.origStored",
+      expect: (m) => m.carryStates()[0] === "stored" && m.shownDigits()[0] === 0,
+    },
+    {
+      do: [{ theta: 360 }],
+      highlight: ["pi.carry_store.1", "pm.zweihorn_add.0", "pm.zweihorn_add.1"],
+      context: [0, 1, 2, 3, 4].flatMap((k) => [`pi.carry_store.${k}`, `pi.sum_wheel.${k}`]),
+      text: "l.carry.origWaits",
       expect: (m) => m.shownNumber() === 9900 && m.pending[1] === 1,
     },
     {
-      do: [{ input: 0 }, { turn: 1 }],
+      view: "carry",
+      highlight: ["pi.carry_store.1"],
+      text: "l.carry.origIdleTask",
+      task: {
+        check: (m) => m.shownNumber() === 0 && m.pending[3] === 1,
+        solve: (m) => {
+          m.setNumber(0);
+          m.turn(1);
+        },
+        wrong: (m) => {
+          m.turn(1); // 1 still on the knobs
+        },
+        controls: ["input", "add"],
+      },
+    },
+    {
+      view: "carry",
+      highlight: ["pi.carry_store.3"],
+      context: [0, 1, 2, 3, 4].flatMap((k) => [`pi.carry_store.${k}`, `pi.sum_wheel.${k}`]),
+      text: "l.carry.origTwo",
+      expect: (m) => m.shownNumber() === 0 && m.pending[3] === 1,
+    },
+    {
+      view: "carry",
+      highlight: ["pi.carry_store.3"],
+      text: "l.carry.origDoneTask",
+      task: {
+        check: (m) => m.shownNumber() === 10000 && allLevel(m),
+        solve: (m) => {
+          m.turn(1);
+        },
+        wrong: (m) => {
+          m.turn(-1);
+        },
+        controls: ["add"],
+      },
+    },
+    { view: "register", highlight: ["pi.window"], text: "l.carry.origRecap", expect: (m) => m.shownNumber() === 10000 && allLevel(m) },
+    {
+      // the toolbar's Carry box (U30): back to the default, Lehmann's carry
       view: "register",
-      highlight: ["pi.window"],
-      text: "l.carry.historicalDone",
-      expect: (m) => m.shownNumber() === 10000 && allLevel(m),
+      text: "l.carry.switch",
+      task: {
+        check: (m) => m.mode === "ripple",
+        solve: (m) => {
+          m.setMode("ripple");
+        },
+        wrong: (m) => {
+          m.setMode("simultaneous");
+        },
+        controls: ["carry"],
+      },
     },
   ],
-  finalCheck: (m) => m.shownNumber() === 10000 && allLevel(m),
+  finalCheck: (m) => m.shownNumber() === 10000 && allLevel(m) && m.mode === "ripple",
 };
 
 // ---------------------------------------------------------------------------------------------
@@ -365,4 +444,4 @@ const divide = {
 };
 
 /** The learning path, in order. */
-export const LESSONS = [add, carry, subtract, carriage, multiply, divide];
+export const LESSONS = [add, carry, carryOriginal, subtract, carriage, multiply, divide];

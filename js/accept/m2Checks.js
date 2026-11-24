@@ -11,10 +11,8 @@ import { Machine } from "../sim/machine.js";
 import { registerValue } from "../sim/operations.js";
 import { M2_SCENARIOS, walkM2 } from "../tools/m2Scenarios.js";
 import { CollisionSweep } from "./collisions.js";
-import { anchors, coplanarOverlaps, fmt, intersects, minDistance, nearestIndex, node, rayHits, result, topEdgeTilt } from "./harness.js";
+import { anchors, ANGLE_TOL_DEG, CONTACT_PIN_MM, coplanarOverlaps, fmt, intersects, minDistance, nearestIndex, node, rayHits, result, topEdgeTilt } from "./harness.js";
 /** @import { CheckResult } from "./harness.js" */
-import { ANGLE_TOL_DEG, CONTACT_PIN_MM } from "./m0Checks.js";
-import { readWindowM1 } from "./m1Checks.js";
 
 export const MAX_TRIANGLES = 300_000;
 export const MAX_BYTES = 15 * 1024 * 1024;
@@ -57,8 +55,42 @@ function state(c, o) {
  * @param {number} i
  */
 const part = (c, base, i) => node(c.root, `${base}.${i}`);
+/**
+ * Digit shown in window i (ray cast straight down through its opening); null if unreadable.
+ * @param {THREE.Object3D} root
+ * @param {number} i
+ * @returns {number | null}
+ */
+export function readWindow(root, i) {
+  const window = node(root, "pi.window");
+  const wheel = node(root, `pi.sum_wheel.${i}`);
+  const read = anchors(window, "read_points")[i];
+  const [hx, hz] = (/** @type {{ read_half_size_mm: number[] }} */ (window.userData)).read_half_size_mm.map((v) => v / 1000);
+  const glyphs = anchors(wheel, "glyph_anchors");
+  const targets = [wheel, window, node(root, `pi.carry_store.${i}`), node(root, "frame.static")];
+  /** @type {Set<number>} */
+  const seen = new Set();
+  let blocked = 0;
+  for (let a = -8; a <= 8; a++) {
+    for (let b = -5; b <= 5; b++) {
+      const o = read.clone().add(new THREE.Vector3((a / 8) * hx, 0, (b / 5) * hz));
+      const [first] = rayHits(targets, o, new THREE.Vector3(0, -1, 0));
+      if (!first) continue;
+      /** @type {THREE.Object3D | null} */
+      let owner = first.mesh;
+      while (owner && owner !== wheel) owner = owner.parent;
+      if (!owner) {
+        blocked++;
+        continue;
+      }
+      if (first.material === "ink_black") seen.add(nearestIndex(glyphs, first.point));
+    }
+  }
+  return seen.size === 1 && blocked === 0 ? [...seen][0] : null;
+}
+
 /** @param {Ctx} c */
-const readAll = (c) => Array.from({ length: c.R }, (_, i) => readWindowM1(c.root, i));
+const readAll = (c) => Array.from({ length: c.R }, (_, i) => readWindow(c.root, i));
 /** @param {(number | null)[]} d */
 const showNum = (d) => d.map((x) => (x === null ? "?" : String(x))).reverse().join("");
 /** @param {Ctx} c */
@@ -315,19 +347,27 @@ export function runM2Checks(root, opts = {}) {
     return { passed: ok, detail: `turn 1: ${showNum(r1)}, store 8 tilt ${fmt(t1[8], 1)}°; after shift + idle turn: ${showNum(r2)}, max tilt ${fmt(Math.max(...t2), 1)}°` };
   });
 
-  run("A2-7", "Historical 9999 + 1 reads 9900 (tens pentagon tilted), then 10000 after an idle turn", () => {
-    state(c, { mode: "historical", result: 9999, input: 1 });
-    c.m.turn(1);
-    pose(c);
-    const r1 = showNum(readAll(c)).slice(-5);
-    const t1 = tilts(c);
-    c.m.setNumber(0);
-    c.m.turn(1);
-    pose(c);
-    const r2 = showNum(readAll(c)).slice(-5);
-    const t2 = tilts(c);
-    const ok = r1 === "09900" && Math.abs(t1[1] - K.STORE_STEP) < ANGLE_TOL_DEG && r2 === "10000" && t2.every((x) => x < ANGLE_TOL_DEG);
-    return { passed: ok, detail: `turn 1: ${r1} (tens tilt ${fmt(t1[1], 1)}°); idle turn: ${r2}` };
+  run("A2-7", "Simultaneous (the original) 9999 + 1 reads 9900, then 0000 with the ten-thousands pentagon tilted, then 10000", () => {
+    state(c, { mode: "simultaneous", result: 9999, input: 1 });
+    /** @type {string[]} */
+    const r = [];
+    /** @type {number[][]} */
+    const t = [];
+    for (const input of [1, 0, 0]) {
+      c.m.setNumber(input);
+      c.m.turn(1);
+      pose(c);
+      r.push(showNum(readAll(c)).slice(-5));
+      t.push(tilts(c));
+    }
+    const tilted = (/** @type {number[]} */ ts, /** @type {number} */ k) =>
+      ts.every((x, i) => (i === k ? Math.abs(x - K.STORE_STEP) < ANGLE_TOL_DEG : x < ANGLE_TOL_DEG));
+    const ok =
+      r[0] === "09900" && tilted(t[0], 1) && r[1] === "00000" && tilted(t[1], 3) && r[2] === "10000" && t[2].every((x) => x < ANGLE_TOL_DEG);
+    return {
+      passed: ok,
+      detail: `turn 1: ${r[0]} (tens tilt ${fmt(t[0][1], 1)}°); idle turn: ${r[1]} (thousands tilt ${fmt(t[1][3], 1)}°); idle turn: ${r[2]}`,
+    };
   });
 
   run("A2-11", "A turn that would store a second carry above the carriage is refused; after a shift it completes", () => {
