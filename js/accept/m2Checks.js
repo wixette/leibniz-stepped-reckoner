@@ -11,10 +11,8 @@ import { Machine } from "../sim/machine.js";
 import { registerValue } from "../sim/operations.js";
 import { M2_SCENARIOS, walkM2 } from "../tools/m2Scenarios.js";
 import { CollisionSweep } from "./collisions.js";
-import { anchors, coplanarOverlaps, fmt, intersects, minDistance, nearestIndex, node, rayHits, result, topEdgeTilt } from "./harness.js";
+import { anchors, ANGLE_TOL_DEG, CONTACT_PIN_MM, coplanarOverlaps, fmt, intersects, minDistance, nearestIndex, node, rayHits, result, topEdgeTilt } from "./harness.js";
 /** @import { CheckResult } from "./harness.js" */
-import { ANGLE_TOL_DEG, CONTACT_PIN_MM } from "./m0Checks.js";
-import { readWindowM1 } from "./m1Checks.js";
 
 export const MAX_TRIANGLES = 300_000;
 export const MAX_BYTES = 15 * 1024 * 1024;
@@ -57,8 +55,42 @@ function state(c, o) {
  * @param {number} i
  */
 const part = (c, base, i) => node(c.root, `${base}.${i}`);
+/**
+ * Digit shown in window i (ray cast straight down through its opening); null if unreadable.
+ * @param {THREE.Object3D} root
+ * @param {number} i
+ * @returns {number | null}
+ */
+export function readWindow(root, i) {
+  const window = node(root, "pi.window");
+  const wheel = node(root, `pi.sum_wheel.${i}`);
+  const read = anchors(window, "read_points")[i];
+  const [hx, hz] = (/** @type {{ read_half_size_mm: number[] }} */ (window.userData)).read_half_size_mm.map((v) => v / 1000);
+  const glyphs = anchors(wheel, "glyph_anchors");
+  const targets = [wheel, window, node(root, `pi.carry_store.${i}`), node(root, "frame.static")];
+  /** @type {Set<number>} */
+  const seen = new Set();
+  let blocked = 0;
+  for (let a = -8; a <= 8; a++) {
+    for (let b = -5; b <= 5; b++) {
+      const o = read.clone().add(new THREE.Vector3((a / 8) * hx, 0, (b / 5) * hz));
+      const [first] = rayHits(targets, o, new THREE.Vector3(0, -1, 0));
+      if (!first) continue;
+      /** @type {THREE.Object3D | null} */
+      let owner = first.mesh;
+      while (owner && owner !== wheel) owner = owner.parent;
+      if (!owner) {
+        blocked++;
+        continue;
+      }
+      if (first.material === "ink_black") seen.add(nearestIndex(glyphs, first.point));
+    }
+  }
+  return seen.size === 1 && blocked === 0 ? [...seen][0] : null;
+}
+
 /** @param {Ctx} c */
-const readAll = (c) => Array.from({ length: c.R }, (_, i) => readWindowM1(c.root, i));
+const readAll = (c) => Array.from({ length: c.R }, (_, i) => readWindow(c.root, i));
 /** @param {(number | null)[]} d */
 const showNum = (d) => d.map((x) => (x === null ? "?" : String(x))).reverse().join("");
 /** @param {Ctx} c */

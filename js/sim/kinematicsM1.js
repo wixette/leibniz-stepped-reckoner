@@ -28,7 +28,6 @@ const rad = (d) => (d * Math.PI) / 180;
 /** @param {number} x */
 const clamp01 = (x) => Math.min(1, Math.max(0, x));
 
-export const DIGITS = val(M1.digits);
 export const CARRY_WINDOW_START = val(/** @type {Entry<number[]>} */ (T.carry_window))[0];
 export const PER_CARRY = val(T.per_carry_angle);
 export const SPRING_SNAP = val(T.spring_snap_deg);

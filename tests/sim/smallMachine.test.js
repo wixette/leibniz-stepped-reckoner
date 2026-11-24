@@ -1,9 +1,12 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { CarrySlice } from "../../js/sim/carrySlice.js";
+import { Machine } from "../../js/sim/machine.js";
+
+/** A 3-digit machine: every register digit has its own drum and lever (the old M1 slice). */
+const small = () => new Machine(3, 3);
 
 /**
- * @param {CarrySlice} m
+ * @param {Machine} m
  * @param {number} x
  */
 function add(m, x) {
@@ -11,9 +14,9 @@ function add(m, x) {
   m.turn(1);
 }
 
-describe("CarrySlice arithmetic (ripple)", () => {
+describe("3-digit machine arithmetic (ripple)", () => {
   it("adds multi-digit numbers with carries", () => {
-    const m = new CarrySlice();
+    const m = small();
     add(m, 456);
     add(m, 278);
     assert.equal(m.shownNumber(), 734);
@@ -22,7 +25,7 @@ describe("CarrySlice arithmetic (ripple)", () => {
   });
 
   it("999 + 1 ripples to 000 with one carry out in one turn", () => {
-    const m = new CarrySlice();
+    const m = small();
     m.setResult(999);
     add(m, 1);
     assert.equal(m.shownNumber(), 0);
@@ -32,7 +35,7 @@ describe("CarrySlice arithmetic (ripple)", () => {
   });
 
   it("000 - 1 ripples to 999 with one borrow out", () => {
-    const m = new CarrySlice();
+    const m = small();
     m.setNumber(1);
     m.turn(-1);
     assert.equal(m.shownNumber(), 999);
@@ -44,7 +47,7 @@ describe("CarrySlice arithmetic (ripple)", () => {
     let seed = 7;
     const rnd = () => ((seed = (seed * 1103515245 + 12345) % 2 ** 31), seed / 2 ** 31);
     for (let k = 0; k < 300; k++) {
-      const m = new CarrySlice();
+      const m = small();
       const a = Math.floor(rnd() * 1000);
       const b = Math.floor(rnd() * 1000);
       m.setResult(a);
@@ -58,9 +61,9 @@ describe("CarrySlice arithmetic (ripple)", () => {
   });
 });
 
-describe("CarrySlice simultaneous mode (decision 0001)", () => {
+describe("3-digit machine simultaneous mode (decision 0001)", () => {
   it("999 + 1: 900 after the first turn (tens carry waits), 000 + carry after an idle turn", () => {
-    const m = new CarrySlice();
+    const m = small();
     m.setMode("simultaneous");
     m.setResult(999);
     add(m, 1);
@@ -74,7 +77,7 @@ describe("CarrySlice simultaneous mode (decision 0001)", () => {
   });
 
   it("executes a pending carry at the start of a turn and a new carry of the same digit later", () => {
-    const m = new CarrySlice();
+    const m = small();
     m.setMode("simultaneous");
     m.setResult(999);
     add(m, 1); // 900, tens carry pending
@@ -86,7 +89,7 @@ describe("CarrySlice simultaneous mode (decision 0001)", () => {
 
   it("ends with the same number as ripple mode once idle turns finish the carries", () => {
     for (const [a, b] of [[999, 1], [909, 91], [990, 10], [555, 445]]) {
-      const m = new CarrySlice();
+      const m = small();
       m.setMode("simultaneous");
       m.setResult(a);
       add(m, b);
@@ -96,9 +99,9 @@ describe("CarrySlice simultaneous mode (decision 0001)", () => {
   });
 });
 
-describe("CarrySlice operating rules", () => {
+describe("3-digit machine operating rules", () => {
   it("refuses settings and mode changes mid-turn and resets fully", () => {
-    const m = new CarrySlice();
+    const m = small();
     m.setNumber(123);
     m.setTheta(100);
     assert.equal(m.setSetting(0, 5), false);
@@ -108,7 +111,7 @@ describe("CarrySlice operating rules", () => {
   });
 
   it("shows a tilted store while a carry is stored and level again after execution", () => {
-    const m = new CarrySlice();
+    const m = small();
     m.setResult(9);
     m.setNumber(1);
     m.setTheta(281); // ribs done, units carry stored, lever not yet arrived

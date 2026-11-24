@@ -15,18 +15,6 @@ import * as THREE from "three";
  * @property {string} labelDe
  */
 
-/** Node names the M0 page relies on. Renaming one in Blender is an API change. */
-export const M0_NODES = /** @type {const} */ ({
-  drumShaft: "pm.drum_shaft.0",
-  drum: "pm.drum.0",
-  rack: "pm.setting_rack.0",
-  dial: "pm.setting_dial.0",
-  wheel: "pi.sum_wheel.0",
-  store: "pi.carry_store.0",
-});
-
-/** @typedef {keyof typeof M0_NODES} M0Key */
-
 /**
  * three.js strips reserved characters (including ".") from glTF node names on load.
  * @param {string} name

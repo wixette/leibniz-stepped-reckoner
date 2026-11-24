@@ -1,7 +1,6 @@
 // "What just happened" for the Step control: compares observable state before and
 // after a step. Pure logic (no DOM, no three.js), shared by the pages and the tests.
 
-/** @import { DigitSlice } from "./digitSlice.js" */
 /** @import { Machine } from "./machine.js" */
 
 /** @typedef {"idle" | "stored" | "executing"} CarryState */
@@ -16,22 +15,11 @@
  */
 
 /**
- * @param {DigitSlice} m
- * @returns {Snapshot}
- */
-export function snapshotM0(m) {
-  const ph = m.carryPhase;
-  /** @type {CarryState} */
-  const state = ph === "stored" ? "stored" : ph === "executing" ? "executing" : "idle";
-  return { digits: [m.shownDigit], states: [state], carryOut: m.carryOutLive, turns: m.turns, theta: m.theta };
-}
-
-/**
- * Snapshot of a CarrySlice (M1) or the full Machine (M2).
+ * Snapshot of the machine.
  * @param {Machine} m
  * @returns {Snapshot}
  */
-export function snapshotM1(m) {
+export function snapshot(m) {
   return { digits: m.shownDigits(), states: m.carryStates(), carryOut: m.carryOutLive(), turns: m.turns, theta: m.theta };
 }
 

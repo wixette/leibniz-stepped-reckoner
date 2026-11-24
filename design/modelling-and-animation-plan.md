@@ -162,12 +162,12 @@ These must be planned now, because they change how the meshes are cut.
 
 M0 and M1 also prove the pipeline (params → Blender → glTF → three.js), which the later milestones reuse.
 
-**Each model milestone has a permanent experiment page** in `dev/NN-name/`, linked from `dev/index.html`. M3 is the site's main page instead (`index.html`):
+**Each model milestone had an experiment page** in `dev/NN-name/`, linked from `dev/index.html`. M3 is the site's main page instead (`index.html`). **Since 1.2.0 only the M2 page remains:** the M0 and M1 pages, their models and their checks were removed, so that no outdated model stays in the repository (their sizes no longer matched the full machine); their notes stay below and in m0-notes.md and m1-notes.md as history.
 
 | Milestone | Page |
 |---|---|
-| M0 | `01-digit-slice` |
-| M1 | `02-carry-slice` |
+| M0 | `01-digit-slice` (removed in 1.2.0) |
+| M1 | `02-carry-slice` (removed in 1.2.0) |
 | M2 | `03-full-machine` |
 | M3 | `index.html` (the main page) |
 

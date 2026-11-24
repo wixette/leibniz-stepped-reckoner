@@ -1,5 +1,7 @@
 # M0 notes: one-digit slice
 
+> **Removed in 1.2.0.** This milestone's page, model and checks are no longer in the repository; these notes are kept as history. The kinematics it checked (`js/sim/kinematics.js`) are still tested by `tests/sim/kinematics.test.js` against the Blender fixture.
+
 - **Status:** done 2026-10-17. Exit criteria met (see below).
 - **Plan:** [modelling-and-animation-plan.md](modelling-and-animation-plan.md) §10
 

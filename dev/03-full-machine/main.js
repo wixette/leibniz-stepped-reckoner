@@ -7,7 +7,7 @@ import { Viewer } from "../../js/scene/viewer.js";
 import * as K from "../../js/sim/kinematics.js";
 import { DIGIT_PITCH, Machine } from "../../js/sim/machine.js";
 /** @import { CarryMode } from "../../js/sim/machine.js" */
-import { describeStep, snapshotM1 } from "../../js/sim/narrate.js";
+import { describeStep, snapshot } from "../../js/sim/narrate.js";
 /** @import { Snapshot } from "../../js/sim/narrate.js" */
 import { registerValue } from "../../js/sim/operations.js";
 
@@ -140,7 +140,7 @@ viewer.addFrameCallback((dt) => {
       stepping = null;
     }
     if (done && stepping) {
-      lastStep = describeStep(stepping.before, snapshotM1(machine), stepping.dir, { ribs: [K.RIB_START, K.ribWindowStart(9)], completed });
+      lastStep = describeStep(stepping.before, snapshot(machine), stepping.dir, { ribs: [K.RIB_START, K.ribWindowStart(9)], completed });
       stepping = null;
     }
   }
@@ -398,7 +398,7 @@ function step(dir) {
   if (machine.theta === 0 && !machine.canStart(dir)) return;
   const t = Math.abs(machine.theta);
   const next = machine.stepStops(dir).find((a) => a > t + 1e-6) ?? 360;
-  stepping = { before: snapshotM1(machine), dir };
+  stepping = { before: snapshot(machine), dir };
   lastStep = null;
   start({ theta: dir * next });
 }

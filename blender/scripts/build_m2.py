@@ -101,7 +101,7 @@ def build(p):
     planes = p.v(M2 + "muldenrad_y_planes")
     dl = p.v(M2 + "digit_labels")  # enlarged for teaching (see params: not a documented size)
     dy0, dy1 = dl["result_disc_y"]
-    rd = dl["result_disc_r"]                    # M2 only (M0/M1: geometry.result.disc_radius)
+    rd = dl["result_disc_r"]                    # the disc, without its rim
     rim_dr, rim_t = dl["result_rim"]
     re, rpin = p.v("geometry.result.einzahn_radius"), p.v("geometry.result.einzahn_pin_radius")
     psi = p.v("geometry.result.einzahn_angle")

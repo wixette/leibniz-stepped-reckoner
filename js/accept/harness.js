@@ -221,6 +221,11 @@ export function result(id, title, passed, detail) {
 /** @param {number} x */
 export const fmt = (x, d = 3) => (Number.isFinite(x) ? x.toFixed(d) : String(x));
 
+/** Pin-on-horn contact is solved analytically; allow tessellation error only (mm). */
+export const CONTACT_PIN_MM = 0.3;
+/** Tolerance for an angle read from the model (deg). */
+export const ANGLE_TOL_DEG = 1;
+
 /**
  * Clip a convex polygon by a convex counter-clockwise polygon (Sutherland-Hodgman).
  * @param {number[][]} subj

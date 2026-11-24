@@ -323,7 +323,7 @@
       "unit": "mm",
       "conf": "doc",
       "src": "BADUR2026 (measured on the original)",
-      "note": "The full machine (geometry.m2.digit_labels); the dev slices M0/M1 keep geometry.result.disc_radius 15."
+      "note": "The full machine (geometry.m2.digit_labels: a 17.35 disc with its 0.4 rim)."
     },
     "einzahn_store_rotation": {
       "v": 18,
@@ -354,7 +354,7 @@
       "unit": "mm",
       "conf": "doc",
       "src": "BADUR2026 (measured on the original): across the corners (circumradius 20)",
-      "note": "geometry.m2.pentagon; the dev slices M0/M1 keep geometry.carry_store.pentagon_circumradius 13."
+      "note": "geometry.m2.pentagon."
     },
     "carry_stores": {
       "v": 15,
@@ -509,7 +509,7 @@
         "v": 20,
         "unit": "mm",
         "conf": "design",
-        "src": "slice layout"
+        "src": "layout of one digit along Y (front to back), shared by every digit"
       }
     },
     "setting": {
@@ -530,7 +530,7 @@
         "v": -30,
         "unit": "mm",
         "conf": "design",
-        "src": "slice layout"
+        "src": "layout of one digit along Y (front to back), shared by every digit"
       },
       "rack_pitch_line_x": {
         "v": 16.9,
@@ -540,21 +540,6 @@
       }
     },
     "result": {
-      "disc_radius": {
-        "v": 15,
-        "unit": "mm",
-        "conf": "est",
-        "src": "~ result_disc_diameter 30"
-      },
-      "disc_y": {
-        "v": [
-          62,
-          70
-        ],
-        "unit": "mm",
-        "conf": "design",
-        "src": "behind the drum's travel range"
-      },
       "einzahn_radius": {
         "v": 10,
         "unit": "mm",
@@ -580,7 +565,7 @@
         ],
         "unit": "mm",
         "conf": "design",
-        "src": "slice layout"
+        "src": "layout of one digit along Y (front to back), shared by every digit"
       }
     },
     "carry_store": {
@@ -612,22 +597,7 @@
         ],
         "unit": "mm",
         "conf": "design",
-        "src": "slice layout"
-      },
-      "pentagon_circumradius": {
-        "v": 13,
-        "unit": "mm",
-        "conf": "design",
-        "src": "clears the result shaft (centre distance 19.45 mm)"
-      },
-      "pentagon_y": {
-        "v": [
-          101,
-          103
-        ],
-        "unit": "mm",
-        "conf": "design",
-        "src": "behind the rear bracket, at the machine's back edge as on the original (BURKHARDT1897: 'hinten aufgesetzte Fünfeckscheiben')"
+        "src": "layout of one digit along Y (front to back), shared by every digit"
       },
       "horn_length": {
         "v": 5.925,
@@ -637,13 +607,7 @@
       }
     },
     "m1": {
-      "_note": "M1 three-digit slice: carry execution (Zweihorn -> Fünfhorn), carry transfer (Muldenrad teeth -> star on the next result shaft) and the drive chain. Digit i sits at x = -digit_pitch * i. Values solved numerically (design/m1-notes.md).",
-      "digits": {
-        "v": 3,
-        "unit": "count",
-        "conf": "design",
-        "src": "M1 scope"
-      },
+      "_note": "The carry parts of every digit, shared by the full machine (build_m2.py and kinematicsM1.js read them under this M1 prefix, after the milestone that introduced them): carry execution (Zweihorn -> Fünfhorn), carry transfer (Muldenrad teeth -> star on the next result shaft) and the drive chain. Digit i sits at x = -digit_pitch * i. Values solved numerically (design/m1-notes.md). The full machine's planes along Y are in geometry.m2.",
       "lever_axis_dx": {
         "v": -18.25,
         "unit": "mm",
@@ -686,15 +650,6 @@
         "src": "NL183/465 p. 53, 64 (gear S: 7 wide plus a 5 mm collar, hub 14, on the 8 mm drum axle)",
         "note": "In M2 it stops 0.5 mm short of the Zweihorn pins (y 91.5), so it is 4 mm long there."
       },
-      "drive_gear_y": {
-        "v": [
-          80.0,
-          87.0
-        ],
-        "unit": "mm",
-        "conf": "design",
-        "src": "behind the Einzahn pins (<= 79); 7 wide as gear S (NL183/465 p. 53). The replica's lever-side gear V is 37.5 long; here the lever shaft carries the horns there, so it is 7 wide too."
-      },
       "zweihorn_pin_path_radius": {
         "v": 17.0,
         "unit": "mm",
@@ -712,24 +667,6 @@
         "unit": "mm",
         "conf": "design",
         "src": "visual"
-      },
-      "zweihorn_arm_y": {
-        "v": [
-          97.3,
-          98.5
-        ],
-        "unit": "mm",
-        "conf": "design",
-        "src": "arm plane between the Fünfhorn plane and the rear wall"
-      },
-      "zweihorn_pin_y": {
-        "v": [
-          93.5,
-          97.3
-        ],
-        "unit": "mm",
-        "conf": "design",
-        "src": "pin reaches into the Fünfhorn plane"
       },
       "fuenfhorn_horn_length": {
         "v": 7.5,
@@ -749,21 +686,6 @@
         "conf": "design",
         "src": "Zweihorn solve"
       },
-      "fuenfhorn_y": {
-        "v": [
-          94.0,
-          97.0
-        ],
-        "unit": "mm",
-        "conf": "design",
-        "src": "plane C"
-      },
-      "fuenfhorn_rest": {
-        "v": "bisected by the line store-axis -> lever-axis (horns at +-36 deg)",
-        "unit": "-",
-        "conf": "design",
-        "src": "so the lever pin passes between two horns at rest and catches a horn turned 18 deg"
-      },
       "muldenrad_module": {
         "v": 1.34422,
         "unit": "mm",
@@ -776,83 +698,17 @@
         "conf": "design",
         "src": "see module"
       },
-      "muldenrad_teeth": {
-        "v": 5,
-        "unit": "count",
-        "conf": "design",
-        "src": "one per Fünfhorn pitch (72 deg)"
-      },
       "muldenrad_crossing_store_angle": {
         "v": 36,
         "unit": "deg",
         "conf": "design",
         "src": "teeth cross the line to the next result shaft at store 36 (+72k), symmetric for carry (+) and borrow (-); stub teeth keep contact within store 27..45"
       },
-      "muldenrad_y_planes": {
-        "v": [
-          [
-            85.0,
-            88.0
-          ],
-          [
-            89.5,
-            92.5
-          ]
-        ],
-        "unit": "mm",
-        "conf": "design",
-        "src": "alternate by digit parity so a Muldenrad never meets its own digit's star"
-      },
       "star_teeth": {
         "v": 10,
         "unit": "count",
         "conf": "design",
         "src": "one tooth per digit step"
-      },
-      "rear_wall_y": {
-        "v": [
-          99.0,
-          102.0
-        ],
-        "unit": "mm",
-        "conf": "design",
-        "src": "full-width rear wall; shafts end in it"
-      },
-      "pentagon_y": {
-        "v": [
-          104.0,
-          106.0
-        ],
-        "unit": "mm",
-        "conf": "design",
-        "src": "behind the rear wall"
-      },
-      "store_shaft_y": {
-        "v": [
-          73.8,
-          107.0
-        ],
-        "unit": "mm",
-        "conf": "design",
-        "src": "store shaft spans the Einzahn plane to the pentagon"
-      },
-      "result_shaft_y": {
-        "v": [
-          6.0,
-          102.0
-        ],
-        "unit": "mm",
-        "conf": "design",
-        "src": "result shafts end in the rear wall"
-      },
-      "window_y": {
-        "v": [
-          58.0,
-          73.0
-        ],
-        "unit": "mm",
-        "conf": "design",
-        "src": "clear of the store shafts (>= 73.8)"
       },
       "transfer_tooth_addendum": {
         "v": 0.5,

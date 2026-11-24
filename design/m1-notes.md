@@ -1,5 +1,7 @@
 # M1 notes: three-digit carry slice
 
+> **Removed in 1.2.0.** This milestone's page, model and checks are no longer in the repository; these notes are kept as history. Its tests of the carry live on as `tests/sim/smallMachine.test.js` (a 3-digit `Machine`).
+
 - **Status:** done 2026-10-17. The acceptance spec passes (A1-1…A1-6 in `pnpm test`; A1-7 = the M0 spec, also in `pnpm test`).
 - **Plan:** [modelling-and-animation-plan.md](modelling-and-animation-plan.md) §10, §10.1
 - **Page:** `dev/02-carry-slice/` (add `?selftest` to run A1 in the browser)

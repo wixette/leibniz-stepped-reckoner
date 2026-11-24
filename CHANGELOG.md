@@ -22,6 +22,9 @@ The model moves toward the original in Hannover. Klaus Badur, who measured the o
 - The References tab opens with *The original and its replicas*: how the original carries, what Lehmann, Stein and Kopp, and Badur and Rottstedt did with it, and which of them the model follows.
 - The About box is short again, as in the 8800 simulator: the version, what the page is, the source and the licences, with a *References* button. The credits moved to the end of the References tab, which that button opens, as a short list (the research, the original's dimensions, the Dresden replica's, the photographs); they and the tutorial say which sizes are the original's and which Lehmann's, and credit Badur's measurements as he approved.
 
+**Developers**
+- The developer pages of the first two milestones (one digit, `dev/01-digit-slice/`, and the three-digit carry slice, `dev/02-carry-slice/`) are removed, with their models, Blender scripts, simulations and checks: their part sizes no longer matched the machine. Their carry tests now run on a 3-digit `Machine` (`tests/sim/smallMachine.test.js`); `dev/03-full-machine/` stays. `pnpm build:model` and `pnpm check:model` now build and check the full machine only.
+
 **Research**
 - Badur's measurements and the facts of his chapter (how the original carries, its counter, its carriage, how it is operated) are in the research notes, as facts only ([notes-mechanism.md](research/sources/notes-mechanism.md) §10); the book's text and figures are not in the repository.
 - Left for 1.3.0, waiting for Badur's answers or too large for this release: the crank's direction, the revolution counter and the Magna Rota, the stepped drums at the original's sizes, and the large gears behind the Magna Rota (decision 0002).
