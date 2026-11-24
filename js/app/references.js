@@ -84,6 +84,6 @@ export function referencesPanel() {
     // button opens the tab at this heading)
     el("h3", { id: "refs-credits", text: t("about.credits") }),
     el("p", { text: t("about.reconstruction") }),
-    el("p", { text: t("about.credits.text") }),
+    el("ul", { class: "credit-list" }, ["research", "original", "replica", "photos"].map((k) => el("li", { text: t(`about.credits.${k}`) }))),
   ]);
 }

@@ -571,6 +571,8 @@ body.resizing-rows, body.resizing-rows * { cursor: row-resize !important; }
 .lesson-item small { color: var(--md-on-surface-variant); font-size: 12px; white-space: nowrap; }
 
 .ref-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 2px; }
+/* the credits at the end of the References tab: one line each for the research, the two sets of dimensions and the photographs */
+.credit-list { margin: 0 0 12px; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; color: var(--md-on-surface-variant); }
 .ref-list a {
   display: grid;
   grid-template-columns: 1fr 18px;
