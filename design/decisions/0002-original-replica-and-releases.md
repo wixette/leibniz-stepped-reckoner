@@ -2,7 +2,7 @@
 
 - **Status:** accepted 2026-11-24 by the project owner
 - **Date:** 2026-11-24
-- **Context:** Klaus Badur's letter (BADUR2026: dimensions measured on the original, the Zweihorn angle, the approved credit wording) and the draft pages of *Das letzte Original* he sent (WALSDORF2014, chapter II; facts only, see `research/sources/notes-mechanism.md` §8). Decision 0001 and its addenda.
+- **Context:** Klaus Badur's letter (BADUR2026: dimensions measured on the original, the Zweihorn angle, the approved credit wording) and the draft pages of *Das letzte Original* he sent (WALSDORF2014, chapter II; facts only, see `research/sources/notes-mechanism.md` §10). Decision 0001 and its addenda.
 
 ## The question
 
