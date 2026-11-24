@@ -31,7 +31,7 @@ Until v1.1 the model followed N. J. Lehmann's Dresden replica (decision D1 in `d
 - A3 the facts from *Das letzte Original* in the research notes;
 - A4 the dimension policy above (this record; `reference_machine`; the About text);
 - A5 the visible parts at the original's measured sizes (result discs, setting dials, revolution-counter dial, carriage hood);
-- A6 the pentagons at the original's size, in two staggered rows;
+- A6 the pentagons at the original's size, in two staggered rows (at Lehmann's height: how high they stand on the original is v1.3.0);
 - A7 the oak case at the original's length, if it fits the mechanism;
 - the carry lesson pointing to the *Carry* switch; the *original and its replicas* section in the Reference tab;
 - a check of the README and every user-visible text for consistency; then version, changelog, screenshots. No pull request or merge without the owner's review.
@@ -42,4 +42,5 @@ Until v1.1 the model followed N. J. Lehmann's Dresden replica (decision D1 in `d
 - C1 the stepped drums at the original's sizes (Ø35, 28.5 long, 3.15 mm per digit), with the setting pinion and rack;
 - C2 the large gears behind the Magna Rota (three in a row, the middle one on the crank's shaft);
 - C3 the counter's drive gears and the carriage's detent lever;
+- the pentagons' height: in the GWLB CAD model they rise above the register, while ours sit on the carry stores' shafts at Lehmann's height (top edge level with the register cover); to be asked of Badur before changing;
 - reconsider the default carry.

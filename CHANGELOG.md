@@ -13,7 +13,7 @@ The model moves toward the original in Hannover. Klaus Badur, who measured the o
 
 **The machine**
 - The parts Badur measured have the original's sizes: result discs Ø35.5, setting discs Ø36, the revolution counter's steel ring Ø69.5 / Ø45 with its ten holes, the carriage hood 444 mm long with its front 111 mm high, and the carriage frame 333 mm long.
-- The pentagons are the original's, 40 mm across the corners, in two staggered rows behind the register, where they stand open as on the original (they were 26 mm, under the register's cover).
+- The pentagons are the original's, 40 mm across the corners (26 before), in two staggered rows behind the register's rear wall, so that neighbours do not touch. They stand level with the register's cover, which now ends just in front of them, and the oak case still hides them: turn *Show case* off to see them.
 - The oak case is the original's 755 mm long (806 before).
 
 **The page**
