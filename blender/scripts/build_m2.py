@@ -338,21 +338,21 @@ def build(p):
     for j in range(C):
         x = X[j]
         mb = MeshBuilder()
-        # Square shaft from the bearing bar to the rear bearing (y 74-78); the drum and its
-        # sleeve slide along it. The crank's drum shaft reaches forward through the large gear
-        # B and the front panel to the Magna Rota.
-        mb.prism(geom.rect(-sq, -sq, sq, sq), "XZ", shaft_front, 80.5, "steel")
-        if j == crank_drum:
-            mb.prism(geom.circle(sq, 24), "XZ", p.v(M2 + "magna_rota_plates")["y"][-1][1] + 0.1, shaft_front + 0.5, "steel", smooth=True)
+        # The drum axis, a round shaft (Abb. II 9) from the bearing bar to the rear bearing
+        # (y 74-78); the drum and the axis's head slide along it, and the drum is turned by its
+        # own gear in the drive row. The crank's drum shaft reaches forward through the large
+        # gear B and the front panel to the Magna Rota.
+        y_front = p.v(M2 + "magna_rota_plates")["y"][-1][1] + 0.1 if j == crank_drum else shaft_front
+        mb.prism(geom.circle(sq, 32), "XZ", y_front, 80.5, "steel", smooth=True)
         shaft = mb.build(f"pm.drum_shaft.{j}", col, (x, 0, zd))
         bl.set_motion(shaft, "rotate", (0, 1, 0), f"Drum shaft {j} with drive gear", f"Staffelwalzenwelle {j}")
         bl.parent(shaft, carriage)
 
         mb = MeshBuilder()
         mb.prism(geom.circle(drum_gear.rf, 64), "XZ", 0, L, "brass_polished", smooth=True)
-        # the square bore ends inside the front flange and the boss, not 0.01 mm from the core's
-        # end faces, where the two would flicker (A2-14)
-        mb.prism(geom.circle(sq + 0.4, 4, 45), "XZ", -0.5, L + 0.5, "steel_dark")
+        # the bore ends inside the front flange and the boss, not 0.01 mm from the core's end
+        # faces, where the two would flicker (A2-14)
+        mb.prism(geom.circle(sq + 0.4, 32), "XZ", -0.5, L + 0.5, "steel_dark", smooth=True)
         for kk in range(1, 10):
             tooth = geom.tooth_polygon(drum_gear, first + (kk - 1) * rib_pitch, root_r=drum_gear.rf - 0.3)
             mb.prism(tooth, "XZ", L - kk * step, L, "brass_polished")
@@ -363,7 +363,7 @@ def build(p):
         mb.prism(geom.circle(boss["diameter"] / 2.0, 40), "XZ", L - 0.01, L + boss["length"], "brass_polished", smooth=True)
         # the sleeve forward to the drum's gear in the drive row (it ends inside the flange)
         mb.prism(geom.circle(sleeve_r, 32), "XZ", g_lo + dgw - 0.5, -3.5, "brass_satin", smooth=True)
-        mb.prism(geom.gear_outline(dg, drum_first[j]), "XZ", g_lo, g_lo + dgw, "brass_satin")
+        mb.prism(geom.gear_outline(dg, drum_first[j]), "XZ", g_lo, g_lo + dgw, "steel_dark")
         drum = mb.build(f"pm.drum.{j}", col, (x, 0, zd))
         drum["core_radius_mm"], drum["rib_tip_radius_mm"] = drum_gear.rf, drum_gear.ra
         bl.set_motion(drum, "translate", (0, 1, 0), f"Stepped drum {j}", f"Staffelwalze {j}", unit="mm")
@@ -371,7 +371,7 @@ def build(p):
 
         # The head of the drum axis (Abb. II 9 'v'): a sleeve sliding with the drum, in front of
         # its gear, with an upright wall whose top carries the rack teeth (pointing right, to
-        # the knob's pinion). It slides along the square shaft and does not turn.
+        # the knob's pinion). It slides along the drum axis and does not turn.
         mb = MeshBuilder()
         rack_c = kin.rack_centres()
         v_lo, v_hi = min(rack_c) - kin.rack_pitch / 2.0 - 1.5, g_lo - sh["gap_to_drum_gear"]
@@ -420,7 +420,7 @@ def build(p):
         # from the bearing bar (or the large gear A or C in front of it) to the rear wall
         y_front = lgy0 + 0.2 if j in big_levers else shaft_front
         mb.prism(geom.circle(1.5, 16), "XZ", y_front, wall0 - 0.3, "steel", smooth=True)
-        mb.prism(geom.gear_outline(dg, lever_first[j]), "XZ", gy0, gy1, "brass_satin")   # the long drive gear
+        mb.prism(geom.gear_outline(dg, lever_first[j]), "XZ", gy0, gy1, "steel_dark")   # the long drive gear
         mb.prism(geom.circle(3.4, 24), "XZ", za0, zs1, "steel", smooth=True)
         lever = mb.build(f"pm.lever.{j}", col, (lx, 0, lz))
         bl.set_motion(lever, "rotate", (0, 1, 0), f"Carry lever shaft {j}", f"Zweihornwelle {j}")
@@ -439,7 +439,7 @@ def build(p):
     P17 = (X[0] - dxL, zL)
     mb = MeshBuilder()
     mb.prism(geom.circle(1.5, 16), "XZ", shaft_front, dr["counter_shaft_back_y"], "steel", smooth=True)
-    mb.prism(geom.gear_outline(dg, mesh_phase(drum_first[0], zg, D[0], P17, zg)), "XZ", gy0, gy1, "brass_satin")
+    mb.prism(geom.gear_outline(dg, mesh_phase(drum_first[0], zg, D[0], P17, zg)), "XZ", gy0, gy1, "steel_dark")
     cshaft = mb.build("pm.counter_shaft", col, (P17[0], 0, P17[1]))
     bl.set_motion(cshaft, "rotate", (0, 1, 0), "Counter drive shaft (the 17th of the drive row)",
                   "Antriebswelle des Umdrehungszählers (die 17. der Antriebsreihe)")
