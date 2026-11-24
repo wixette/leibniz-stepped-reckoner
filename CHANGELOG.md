@@ -2,6 +2,11 @@
 
 What changed in each release. Versions follow `package.json` and are tagged `vX.Y.Z` ([docs/development.md](docs/development.md), *Versions and releases*). The design decisions cited (U1, U2, …) are in [docs/ui-design.md](docs/ui-design.md).
 
+## 1.3.0 (unreleased)
+
+**The machine**
+- The stepped drums have the original's sizes (Klaus Badur's measurements): 35 mm across the ribs on a 32.5 mm pitch circle, 28.5 mm long, the ribs stepped 3.15 mm a digit (Lehmann's replica: 36, 27.2 and 3.02). The setting knob's pinion is sized so that one division still moves the drum one rib.
+
 ## 1.2.0
 
 The model moves toward the original in Hannover. Klaus Badur, who measured the original before building his replica, sent its dimensions and the angle of its carry levers, in agreement with the Gottfried Wilhelm Leibniz Library, and pages of his chapter in *Das letzte Original* on how it carries. The page now follows the original where he measured it and N. J. Lehmann's drawings of the Dresden replica elsewhere, and it can carry either way ([decision 0002](design/decisions/0002-original-replica-and-releases.md)).

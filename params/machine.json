@@ -1,6 +1,6 @@
 {
   "_schema": "Every numeric entry is {v, unit, conf, src, note?}. conf: doc = documented in a source; est = photo-scaled estimate; design = our own choice where sources are silent. Units: mm and deg (see docs/conventions.md). Source tags: research/sources/bibliography.md. Photo scaling (the est values): the 37 mm digit pitch of BURKHARDT1897 was used as the ruler. NL183/465 and /466 are Lehmann's drawings of the Dresden replica (Deutsches Museum München); page = PDF page of the delivered scan. version is the parameter set's own (each .glb records it as params_version), not the release's.",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "fidelity_target": "B",
   "reference_machine": "The original in Hannover (GWLB; 8/16/1 digits) where Klaus Badur measured it (BADUR2026: result and setting discs, pentagons, revolution counter, carriage hood and frame, oak case; the Zweihorn angle); elsewhere N. J. Lehmann's Dresden replica (TU Dresden, 1988-90), after its workshop drawings (NL183/465), which copies the original; otherwise proportions read from photos (decision 0002, amending D1 in design/m4-notes.md).",
   "layout": {
@@ -123,29 +123,29 @@
         "src": "LUDWIG2006 (9/16 of circumference)"
       },
       "core_diameter": {
-        "v": 27.33,
+        "v": 27.76,
         "unit": "mm",
-        "conf": "doc",
-        "src": "NL183/465 p. 55, 56 (root of m 2, z 16: d0 32 - 2 x 7/6 m)"
+        "conf": "design",
+        "src": "root of m 2.03125, z 16 with the replica's dedendum 7/6 m (not measured on the original)"
       },
       "outer_diameter": {
-        "v": 36,
+        "v": 35,
         "unit": "mm",
         "conf": "doc",
-        "src": "NL183/465 p. 55, 63 (tip diameter dk 36)"
+        "src": "BADUR2026 (measured on the original): over the teeth; pitch circle 32.5"
       },
       "length": {
-        "v": 27.2,
+        "v": 28.5,
         "unit": "mm",
         "conf": "doc",
-        "src": "NL183/465 p. 55, 63, 64 (toothed length)",
+        "src": "BADUR2026 (measured on the original)",
         "note": "The rib for digit 1 has the full length; the length steps down for higher digits. A 14 mm boss 5 mm long follows the full-length end (geometry.drum.boss)."
       },
       "rib_length_step": {
-        "v": 3.02,
+        "v": 3.15,
         "unit": "mm",
         "conf": "doc",
-        "src": "NL183/465 p. 63 (milling dimensions 3.02, 6.04 ... 27.18)",
+        "src": "BADUR2026 (measured on the original)",
         "note": "This is also the axial travel of the drum per setting digit (p. 57: 39.25 mm pinion circumference / 13)."
       },
       "axial_setting": {
@@ -394,10 +394,10 @@
     "_note": "DESIGN values that make the parts mesh and stay clear of each other. They are derived from the documented angles and the photo estimates above; where they differ from an estimate, the geometry wins and the estimate stays for reference. All in mm/deg. Frame: shafts along +Y (toward the back), +Z up; slice origin at the base centre.",
     "drum": {
       "module": {
-        "v": 2,
+        "v": 2.03125,
         "unit": "mm",
         "conf": "doc",
-        "src": "NL183/465 p. 55, 64 (Staffelwalze: m 2, z 16)"
+        "src": "BADUR2026 (measured on the original): pitch circle 32.5 over the 16 virtual teeth (rib pitch 22.5 deg); NL183/465 p. 55, 64 gives m 2 for the replica"
       },
       "virtual_teeth": {
         "v": 16,
@@ -406,16 +406,16 @@
         "src": "NL183/465 p. 55, 64; rib pitch 22.5 deg = 360/16 (BURKHARDT1897)"
       },
       "length": {
-        "v": 27.2,
+        "v": 28.5,
         "unit": "mm",
         "conf": "doc",
-        "src": "NL183/465 p. 55, 63"
+        "src": "BADUR2026 (measured on the original): toothed length; 27.2 on the replica (NL183/465 p. 55, 63)"
       },
       "rib_length_step": {
-        "v": 3.02,
+        "v": 3.15,
         "unit": "mm",
         "conf": "doc",
-        "src": "NL183/465 p. 63",
+        "src": "BADUR2026 (measured on the original); his drawing gives the ribs as 3.2, 6.3, 9.5 ... 25.2, 28.5 long: 3.15 a digit, the longest 0.15 over. 3.02 on the replica (NL183/465 p. 63)",
         "note": "rib k spans the last k x step of the drum; the gear plane sits at L - (9.5 - s) x step"
       },
       "rib_thickness_factor": {
@@ -437,16 +437,16 @@
         "src": "result shaft height (64.375) - centre distance 26.5: lowering the drum keeps the register, its windows and covers where they were"
       },
       "tooth_addendum": {
-        "v": 1.0,
+        "v": 0.6154,
         "unit": "module",
         "conf": "doc",
-        "src": "NL183/465 p. 55, 63 (tip diameter 36 = m (z + 2))"
+        "src": "BADUR2026 (measured on the original): tip diameter 35 = m (z + 2 x addendum); 1.0 for the replica (Ø36)"
       },
       "tooth_dedendum": {
         "v": 1.1667,
         "unit": "module",
-        "conf": "doc",
-        "src": "NL183/465 p. 56 (hf = 7/6 m)"
+        "conf": "design",
+        "src": "NL183/465 p. 56 (hf = 7/6 m); the original's root is not measured, so the replica's ratio is kept"
       },
       "boss": {
         "v": {
@@ -520,10 +520,10 @@
         "src": "NL183/465 p. 58, 66 (part O)"
       },
       "pinion_module": {
-        "v": 1.25,
+        "v": 1.30348,
         "unit": "mm",
-        "conf": "doc",
-        "src": "NL183/465 p. 58, 66",
+        "conf": "design",
+        "src": "one dial division (360/13 deg) moves the drum one rib step (3.15, BADUR2026): pitch radius 3.15 / 0.4833 rad = 6.517, z 10. The replica's m 1.25 (NL183/465 p. 58, 66) gave its 3.02",
         "note": "pitch circumference 39.25; a 27.7 deg division moves the rack 3.02 mm"
       },
       "pinion_y": {

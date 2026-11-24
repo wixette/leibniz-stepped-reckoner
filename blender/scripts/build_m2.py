@@ -328,7 +328,9 @@ def build(p):
 
         mb = MeshBuilder()
         mb.prism(geom.circle(drum_gear.rf, 64), "XZ", 0, L, "brass_polished", smooth=True)
-        mb.prism(geom.circle(sq + 0.4, 4, 45), "XZ", -0.01, L + 0.01, "steel_dark")
+        # the square bore ends inside the front flange and the boss, not 0.01 mm from the core's
+        # end faces, where the two would flicker (A2-14)
+        mb.prism(geom.circle(sq + 0.4, 4, 45), "XZ", -0.5, L + 0.5, "steel_dark")
         for kk in range(1, 10):
             tooth = geom.tooth_polygon(drum_gear, first + (kk - 1) * rib_pitch, root_r=drum_gear.rf - 0.3)
             mb.prism(tooth, "XZ", L - kk * step, L, "brass_polished")
