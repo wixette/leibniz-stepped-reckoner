@@ -1,6 +1,6 @@
 {
   "_schema": "Every numeric entry is {v, unit, conf, src, note?}. conf: doc = documented in a source; est = photo-scaled estimate; design = our own choice where sources are silent. Units: mm and deg (see docs/conventions.md). Source tags: research/sources/bibliography.md. Photo scaling (the est values): the 37 mm digit pitch of BURKHARDT1897 was used as the ruler. NL183/465 and /466 are Lehmann's drawings of the Dresden replica (Deutsches Museum München); page = PDF page of the delivered scan. version is the parameter set's own (each .glb records it as params_version), not the release's.",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "fidelity_target": "B",
   "reference_machine": "The original in Hannover (GWLB; 8/16/1 digits) where Klaus Badur measured it (BADUR2026: result and setting discs, pentagons, revolution counter, carriage hood and frame, oak case; the Zweihorn angle); elsewhere N. J. Lehmann's Dresden replica (TU Dresden, 1988-90), after its workshop drawings (NL183/465), which copies the original; otherwise proportions read from photos (decision 0002, amending D1 in design/m4-notes.md).",
   "layout": {
@@ -527,16 +527,16 @@
         "note": "pitch circumference 39.25; a 27.7 deg division moves the rack 3.02 mm"
       },
       "pinion_y": {
-        "v": -30,
+        "v": -52.5,
         "unit": "mm",
-        "conf": "design",
-        "src": "layout of one digit along Y (front to back), shared by every digit"
+        "conf": "doc",
+        "src": "BADUR2026 assembly drawing (plan view): the setting knobs stand on the same front-to-back line as the revolution counter's centre, roughly 60 mm behind the hood's front edge. The value puts the pinion just in front of the drive row's long gears (rack teeth stay in mesh over settings 0-9 with 1.5 pitches to spare, kinematics.rack_centres). Before 0.7.0: -30 (design)."
       },
       "rack_pitch_line_x": {
-        "v": 16.9,
+        "v": 2.183,
         "unit": "mm",
-        "conf": "design",
-        "src": "the rack of digit i + 1 stays outside drum i's 18 mm rib-tip circle (16.9 + 1.25 - 36.5 = -18.35)"
+        "conf": "doc",
+        "src": "The knob's spindle (and its pinion) stands 8.7 mm right of the drum axis (BADUR2026 assembly drawing, plan view: measured at three knobs against the 64 mm dimension and the 17th shaft's 18.25); pitch line = 8.7 - pinion pitch radius 6.517. The rack teeth are cut along the top of an upright wall on the drum axis's head (Abb. II 9 'v' in WALSDORF2014; NL183/466 PLAN p. 9). Before 0.7.0: 16.9, a rack beside the drum."
       }
     },
     "result": {
@@ -724,10 +724,10 @@
       "drive_row": {
         "v": {
           "drum_gear_width": 4.0,
-          "drum_gear_y_at_9": -100.5,
+          "drum_gear_y_at_9": -43.95,
           "long_gear_y": [
-            -100.8,
-            -67.9
+            -44.2,
+            -11.4
           ],
           "drum_sleeve_radius": 4.5,
           "shaft_front_y": -103.5,
@@ -739,12 +739,30 @@
             25.375,
             51.875
           ],
-          "counter_shaft_back_y": -40.0
+          "counter_shaft_back_y": -11.9,
+          "bearing_bar_x_margins": [
+            33.0,
+            44.5
+          ]
         },
         "unit": "mm",
         "conf": "design",
-        "src": "The 17-gear drive row at the front of the carriage (design/v1.3-notes.md, 2026-11-24): BADUR2026 sheet 9 (17 bearing holes in the carriage frame, half a place apart: 8 drum shafts, 8 carry-lever shafts, a 17th shaft half a place right of the units drum), Abb. II 9 in WALSDORF2014 (a long drive gear on the lever's shaft, the drum's gear beside the setting rack), BURKHARDT1897 (17 gears; the drums' gears slide along long 'drive cylinders'), NL183/466 PLAN p. 9 (Lange 1958, drawn from the original: upright gears meshing in the carriage's front trough). The gears, tooth for tooth, are the replica's (geometry.m1.drive_gear_*). Each drum's gear sits on a sleeve in front of the drum and slides with it (drum_gear_y_at_9: its front face at setting 9; 28.35 mm further back at 0) along the long gear on the lever shaft to its left; the 17th shaft has a long gear too. The bearing bar is the carriage frame's front wall (sheet 9: drum holes 12.5 above its lower edge, about 26.5 high); its thickness and y are design values.",
-        "note": "The y planes: front panel -112..-109, large gears -108.6..-104.6, bearing bar -104..-101, long gears -100.8..-67.9 (the setting racks start at -64.5 at setting 9), lead screw at -55 (moved from -77 so the drums' gears pass over it)."
+        "src": "The 17-gear drive row at the front of the carriage (design/v1.3-notes.md, 2026-11-24): BADUR2026 sheet 9 (17 bearing holes in the carriage frame, half a place apart: 8 drum shafts, 8 carry-lever shafts, a 17th shaft half a place right of the units drum), Abb. II 9 in WALSDORF2014 (a long drive gear on the lever's shaft, the drum's gear beside the setting rack), BURKHARDT1897 (17 gears; the drums' gears slide along long 'drive cylinders'), NL183/466 PLAN p. 9 (Lange 1958, drawn from the original: upright gears meshing in the carriage's front trough). The gears, tooth for tooth, are the replica's (geometry.m1.drive_gear_*). Each drum's gear sits on a sleeve in front of the drum and slides with it (drum_gear_y_at_9: its front face at setting 9; 28.35 mm further back at 0) along the long gear on the lever shaft to its left; the 17th shaft has a long gear too. The bearing bar is the carriage frame's front wall (sheet 9, 333 long: drum 7's hole 33 from its left end, the units drum's 288.5, so it reaches 44.5 right of the units drum; drum holes 12.5 above its lower edge, about 26.5 high); its thickness and y are design values. Front to back (Abb. II 9, Lange 1958, the Dresden replica photo): large gears, the drum axes' heads with the setting racks and the knobs' pinions, the drive row, the drums: the long gears end just in front of the drums.",
+        "note": "The y planes: front panel -112..-109, large gears -108.6..-104.6, bearing bar -104..-101, setting heads (sliding) -89.9..-44.3 at setting 9, the knobs' pinions at -52.5, long gears -44.2..-11.4 (the drums' front flanges reach -10.9 at setting 9)."
+      },
+      "setting_head": {
+        "v": {
+          "sleeve_radius": 5.5,
+          "wall_x0": -2.0,
+          "teeth_z": [
+            56.5,
+            61.5
+          ],
+          "gap_to_drum_gear": 0.3
+        },
+        "unit": "mm",
+        "conf": "design",
+        "src": "The head of each drum axis (Abb. II 9 'v', WALSDORF2014; Lange's cut-away, NL183/466 PLAN p. 9): a brass sleeve on the front of the axis, sliding with the drum, with an upright wall whose top carries the rack teeth, pointing right; the knob's pinion lies flat beside the top of the wall. Its teeth sit above the lever shafts (z 42.5-45.5) and the long gears (tips to 55.5). Sizes are design values."
       },
       "large_gears": {
         "v": {
@@ -918,13 +936,13 @@
       },
       "lead_screw": {
         "v": {
-          "y": -55.0,
+          "y": -77.0,
           "z": 20.0,
           "radius": 6.0
         },
         "unit": "mm",
         "conf": "design",
-        "src": "fixed to the frame, behind the carriage front panel (clear of the Magna Rota and its crank); the carriage nut rides on it; 36.5 mm lead (frame.lead_screw_pitch) Moved from y -77 to -55 in 0.6.0, behind the drive row's sliding gears (geometry.m2.drive_row)."
+        "src": "fixed to the frame, behind the carriage front panel (clear of the Magna Rota and its crank); the carriage nut rides on it; 36.5 mm lead (frame.lead_screw_pitch)"
       },
       "frame_x": {
         "v": {
@@ -945,14 +963,14 @@
             -104.0,
             112.0
           ],
-          "side_wall_low_z": 26.0,
+          "side_wall_low_z": 24.5,
           "side_wall_y_split": 10.0,
           "side_wall_top_z": 70.0,
           "screw_start_dx": -14.5
         },
         "unit": "mm",
         "conf": "design",
-        "src": "base plate = the lower frame (frame_x), 629 long. The side walls are low (z <= side_wall_low_z) in front of side_wall_y_split, where the carriage's counter section passes over them (its underside is at z 30), and rise to side_wall_top_z behind it, under the register cover's skirt; the replica's walls likewise have a low front part and a tall rear block (NL183/465 p. 95). The lead screw runs in a notch in each wall's low part (the replica's screw passes through the walls). It starts screw_start_dx left of the base, outside the case's left wall, where the end crank is (photos). The end crank's arm sits 0.5 mm outside the case's left wall (screw_start_dx follows the 755 mm case). Since 0.6.0 the base starts at y -104, behind the carriage's large gears, which hang below it."
+        "src": "base plate = the lower frame (frame_x), 629 long. The side walls are low (z <= side_wall_low_z) in front of side_wall_y_split, where the carriage's counter section passes over them (its underside is at z 30), and rise to side_wall_top_z behind it, under the register cover's skirt; the replica's walls likewise have a low front part and a tall rear block (NL183/465 p. 95). The lead screw runs in a notch in each wall's low part (the replica's screw passes through the walls). It starts screw_start_dx left of the base, outside the case's left wall, where the end crank is (photos). The end crank's arm sits 0.5 mm outside the case's left wall (screw_start_dx follows the 755 mm case). Since 0.6.0 the base starts at y -104, behind the carriage's large gears, which hang below it. side_wall_low_z lowered from 26 to 24.5 in 0.7.0, under the carriage frame's bearing bar (z 25.375)."
       },
       "casing": {
         "v": {

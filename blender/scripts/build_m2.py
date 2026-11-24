@@ -13,9 +13,10 @@ Carriage pm.carriage (translate along +X), carriage digit j at x = -36.5 j (offs
   pm.carriage_panel  front panel (static; hideable for a cut-away view)
   pm.drum_shaft.j / pm.drum.j / pm.setting_rack.j / pm.setting_dial.j / pm.setting_plate.j / pm.setting_stop.j
   pm.lever.j / pm.zweihorn_add.j / pm.zweihorn_sub.j
-  The drive row (17 gears, at the front, in the carriage frame's bearing bar): each drum's gear
-  sits on a sleeve in front of the drum and slides with it along the long gear on the lever
-  shaft to its left; pm.counter_shaft, the 17th, half a place right of the units drum, will
+  Front to back (Abb. II 9): large gears, the bearing bar, the drum axes' heads (pm.setting_rack.j:
+  a sleeve with the rack teeth on an upright wall, meshing the knob's pinion), the drive row
+  (17 gears: each drum's gear slides with the drum along the long gear on the lever shaft to
+  its left), the drums; pm.counter_shaft, the 17th, half a place right of the units drum, will
   drive the revolution counter (its train is not modelled yet).
   pm.large_gear_a / _b / _c: B on drum 4's shaft (the crank's axis), A and C on levers 6 and 1
   pm.magna_rota (rotate about +Y, with the crank), pm.counter_plate (static), pm.counter_ring and
@@ -258,17 +259,17 @@ def build(p):
     xs, xr, zn = X[0] + cs_["step_dx"], X[0] + cs_["end_dx"], cs_["step_z"]
     mb = MeshBuilder()
     mb.prism(geom.rect(cx0, fl["y"][0], cx1, fl["y"][1]), "XY", fl["z"][0], fl["z"][1], "brass_satin")
-    # the carriage frame's front wall: the bearing bar of the drive row's 17 shafts (and the
-    # crank's), standing on two end posts
+    # the carriage frame's front wall (Badur's sheet 9, 333 long): the bearing bar of the drive
+    # row's 17 shafts and the crank's, standing on a post at its left end over the floor (its
+    # right end passes over the frame's right side wall)
     by0, by1 = dr["bearing_bar_y"]
     bz0, bz1 = dr["bearing_bar_z"]
-    # (from inside the hood's left end wall, not flush with it: a shared face would flicker)
-    mb.prism(geom.rect(cx0 + 3.5, bz0, cx1, bz1), "XZ", by0, by1, "brass_satin")
-    for ex0 in (cx0 + 3.5, cx1 - 4.0):
-        mb.prism(geom.rect(ex0, fl["z"][1], ex0 + 4.0, bz0), "XZ", by0, by1, "brass_satin")
-    # nut around the lead screw (four bars leave a square hole), under the units drum's sleeve,
-    # between the drive row and the setting knobs' posts
-    nx0, nx1, ny, nz, hole = X[0] - 9.0, X[0] + 19.0, ls["y"], ls["z"], ls["radius"] + 2.0
+    bx0, bx1 = X[C - 1] - dr["bearing_bar_x_margins"][0], X[0] + dr["bearing_bar_x_margins"][1]
+    mb.prism(geom.rect(bx0, bz0, bx1, bz1), "XZ", by0, by1, "brass_satin")
+    mb.prism(geom.rect(bx0, fl["z"][1], bx0 + 4.0, bz0), "XZ", by0, by1, "brass_satin")
+    # nut around the lead screw (four bars leave a square hole), between the units drum's and
+    # the tens drum's setting heads
+    nx0, nx1, ny, nz, hole = X[0] - 30.0, X[0] - 6.0, ls["y"], ls["z"], ls["radius"] + 2.0
     for r0 in (geom.rect(ny - hole - 4, nz - hole - 4, ny + hole + 4, nz - hole),
                geom.rect(ny - hole - 4, nz + hole, ny + hole + 4, nz + hole + 4),
                geom.rect(ny - hole - 4, nz - hole, ny - hole, nz + hole),
@@ -284,9 +285,6 @@ def build(p):
         x = X[j]
         mb.prism(geom.rect(x - 4, 74.0, x + 4, 78.0), "XY", fl["z"][1], zd, "brass_satin")
         mb.prism(geom.circle(5, 24), "XZ", 74.0, 78.0, "brass_satin", smooth=True, offset=(x, 0, zd))
-        px = x + x_pl + pin_g.rp
-        mb.prism(geom.circle(4.5, 24), "XY", fl["z"][1], 8.0, "brass_satin", smooth=True, offset=(px, py, 0))
-        mb.prism(geom.rect(px - 2.0, py - 16.0, px + 2.0, py - 12.0), "XY", fl["z"][1], z_plate, "brass_satin")
     carriage = mb.build("pm.carriage", col)
     bl.set_motion(carriage, "translate", (1, 0, 0), "Carriage (pars mobilis)", "Schlitten (pars mobilis)", unit="mm")
     bl.parent(carriage, root)
@@ -333,6 +331,7 @@ def build(p):
     dgw = dr["drum_gear_width"]
     g_lo = dr["drum_gear_y_at_9"] - kin.drum_front_y(9)   # in the drum's frame (front face = 0)
     sleeve_r, shaft_front = dr["drum_sleeve_radius"], dr["shaft_front_y"]
+    sh = p.v(M2 + "setting_head")
     lg = p.v(M2 + "large_gears")
     lgy0, lgy1 = lg["y"]
     big_levers = {lg["lever_shafts"]["A"]: "a", lg["lever_shafts"]["C"]: "c"}
@@ -370,20 +369,25 @@ def build(p):
         bl.set_motion(drum, "translate", (0, 1, 0), f"Stepped drum {j}", f"Staffelwalze {j}", unit="mm")
         bl.parent(drum, shaft)
 
+        # The head of the drum axis (Abb. II 9 'v'): a sleeve sliding with the drum, in front of
+        # its gear, with an upright wall whose top carries the rack teeth (pointing right, to
+        # the knob's pinion). It slides along the square shaft and does not turn.
         mb = MeshBuilder()
         rack_c = kin.rack_centres()
-        for poly in geom.rack_teeth(x_pl, pm_, rack_c, back_u=x_pl - 5.0):
-            mb.prism(poly, "XY", -4.0, 4.0, "steel")
-        mb.prism(geom.rect(x_pl - 5.0, max(rack_c), x_pl - 1.8, -1.3), "XY", -4.0, 4.0, "steel")  # bar to the fork
-        mb.prism(geom.rect(7.2, -2.7, x_pl - 4.0, -1.3), "XY", -2.5, 2.5, "steel")
+        v_lo, v_hi = min(rack_c) - kin.rack_pitch / 2.0 - 1.5, g_lo - sh["gap_to_drum_gear"]
+        tz0, tz1 = sh["teeth_z"][0] - zd, sh["teeth_z"][1] - zd
+        mb.prism(geom.circle(sh["sleeve_radius"], 32), "XZ", v_lo, v_hi, "brass_satin", smooth=True)
+        mb.prism(geom.rect(sh["wall_x0"], 0.0, x_pl - 1.25 * pm_ - 0.2, tz1), "XZ", v_lo, v_hi, "brass_satin")
+        for poly in geom.rack_teeth(x_pl, pm_, rack_c, back_u=sh["wall_x0"]):
+            mb.prism(poly, "XY", tz0, tz1, "brass_satin")
         rack = mb.build(f"pm.setting_rack.{j}", col, (x, 0, zd))
         bl.set_motion(rack, "translate", (0, 1, 0), f"Setting rack {j}", f"Einstellzahnstange {j}", unit="mm")
         bl.parent(rack, carriage)
 
         px = x + x_pl + pin_g.rp
         mb = MeshBuilder()
-        mb.prism(geom.gear_outline(pin_g, 0.0), "XY", zd - 4.0, zd + 4.0, "brass_polished")
-        mb.prism(geom.circle(1.5, 16), "XY", 8.0, z_plate + 10.0, "steel", smooth=True)
+        mb.prism(geom.gear_outline(pin_g, 0.0), "XY", sh["teeth_z"][0], sh["teeth_z"][1], "steel_dark")
+        mb.prism(geom.circle(1.5, 16), "XY", sh["teeth_z"][0] + 0.5, z_plate + 10.0, "steel", smooth=True)
         mb.prism(geom.circle(5.0, 32), "XY", z_plate + 2.0, z_plate + 4.0, "brass_satin", smooth=True)
         mb.prism(geom.radial_bar(0, dl["pointer_r"], 2.2, -90.0), "XY", z_plate + 2.05, z_plate + 3.2, "steel_dark")  # not flush with the hub
         mb.prism(geom.rect(-1.5, -4.0, 1.5, 4.0), "XY", z_plate + 4.0, z_plate + 12.0, "brass_polished")
@@ -548,7 +552,7 @@ def build(p):
     mb.prism(geom.rect(cx0, pnl1, cx0 + 3.0, ky1), "XY", wz0, kz0, "brass_satin")       # left end
     mb.prism(geom.rect(xs - 3.0, pnl1, xr, ky1), "XY", zn, zn + 2.0, "brass_satin")       # underside of the right part
     mb.prism(geom.rect(xr - 3.0, pnl1, xr, ky1), "XY", zn + 2.0, zt - 2.0, "brass_satin") # right end
-    dx, dy, dz = X[0] + cs_["counter_dx"], py - 8.0, zt   # the revolution counter's centre (64 right of the 17th shaft)
+    dx, dy, dz = X[0] + cs_["counter_dx"], py, zt   # the revolution counter's centre: 64 right of the 17th shaft, in line with the knobs (Badur)
     ccover = static(mb.build("pm.carriage_cover", col))
     bl.parent(ccover, carriage)
 

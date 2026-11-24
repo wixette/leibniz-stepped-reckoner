@@ -50,6 +50,7 @@ const DESIGNED = [
   /^pmlarge_gear_b~pmdrum_shaft4$/, // the large gears are fixed to their shafts
   /^pmlarge_gear_[ac]~pmlever\d+$/,
   /^pmdrum_shaft(\d+)~pmdrum\1$/,
+  /^pmdrum_shaft(\d+)~pmsetting_rack\1$/, // the drum axis's head slides on its shaft
   /^pmsetting_dial(\d+)~pmsetting_(plate|rack)\1$/,
   /^pmcounter_pin~pmcounter_ring$/, // the pin sits in a hole of the ring
   /^pmmagna_rota~pmmain_crank$/, // the Magna Rota is fixed to the crank
