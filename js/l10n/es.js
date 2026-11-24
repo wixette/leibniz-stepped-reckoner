@@ -313,7 +313,7 @@ export default {
   "l.carry.summary": "Qué pasa cuando una rueda pasa de 9 a 0, y cómo sigue el acarreo.",
   "l.orig.title": "Acarreos que esperan: el original",
   "l.orig.summary": "Cómo lleva el original de Hannover: todas sus palancas a la vez, así que algunos acarreos esperan otra vuelta.",
-  "l.carry.intro": "En esta lección: el acarreo (lo que «se lleva»). El registro muestra 9999. ¿Qué pasa si sumamos 1? Aquí la máquina lleva como la réplica de N. J. Lehmann en Dresde (la casilla Acarreo de la barra de herramientas muestra Lehmann); la próxima lección muestra cómo lleva el original de Hannover.",
+  "l.carry.intro": "En esta lección: el acarreo (lo que «se lleva»). Aquí la máquina lleva como la réplica de N. J. Lehmann en Dresde (la casilla Acarreo de la barra de herramientas muestra Lehmann); la próxima lección muestra cómo lleva el original de Hannover. El registro muestra 9999. ¿Qué pasa si sumamos 1?",
   "l.carry.set1": "Ajusta 1 en las perillas.",
   "l.carry.pentagonUnits": "Pentágono de las unidades",
   "l.carry.stores": "Detrás de cada rueda de resultado hay una memoria de acarreo con un pentágono. Un pentágono derecho significa: no hay nada que llevar. Uno inclinado significa: esta rueda le debe un acarreo a la siguiente.",

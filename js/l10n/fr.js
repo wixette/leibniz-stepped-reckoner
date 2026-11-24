@@ -313,7 +313,7 @@ export default {
   "l.carry.summary": "Ce qui se passe quand une roue passe de 9 à 0, et comment la retenue se propage.",
   "l.orig.title": "Des retenues qui attendent : l’original",
   "l.orig.summary": "Comment l’original de Hanovre fait ses retenues : tous ses leviers à la fois, si bien que certaines retenues attendent un autre tour.",
-  "l.carry.intro": "Dans cette leçon : la retenue. Le totalisateur affiche 9999. Que se passe-t-il si l’on ajoute 1 ? Ici, la machine fait ses retenues comme la réplique de N. J. Lehmann à Dresde (la case Retenue de la barre d’outils indique Lehmann) ; la leçon suivante montre comment fait l’original de Hanovre.",
+  "l.carry.intro": "Dans cette leçon : la retenue. Ici, la machine fait ses retenues comme la réplique de N. J. Lehmann à Dresde (la case Retenue de la barre d’outils indique Lehmann) ; la leçon suivante montre comment fait l’original de Hanovre. Le totalisateur affiche 9999. Que se passe-t-il si l’on ajoute 1 ?",
   "l.carry.set1": "Réglez 1 sur les boutons.",
   "l.carry.pentagonUnits": "Pentagone des unités",
   "l.carry.stores": "Derrière chaque roue de résultat se trouve une mémoire de retenue avec un pentagone. Un pentagone à plat signifie : rien à retenir. Un pentagone basculé signifie : cette roue doit une retenue à la suivante.",

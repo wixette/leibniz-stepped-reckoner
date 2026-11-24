@@ -313,7 +313,7 @@ export default {
   "l.carry.summary": "Che cosa succede quando una ruota passa da 9 a 0, e come il riporto prosegue.",
   "l.orig.title": "Riporti che aspettano: l’originale",
   "l.orig.summary": "Come riporta l’originale di Hannover: tutte le leve insieme, così alcuni riporti aspettano un altro giro.",
-  "l.carry.intro": "In questa lezione: il riporto. Il totalizzatore mostra 9999. Che cosa succede se sommiamo 1? Qui la macchina riporta come la replica di N. J. Lehmann a Dresda (la casella Riporto nella barra degli strumenti mostra Lehmann); la prossima lezione mostra come riporta l’originale di Hannover.",
+  "l.carry.intro": "In questa lezione: il riporto. Qui la macchina riporta come la replica di N. J. Lehmann a Dresda (la casella Riporto nella barra degli strumenti mostra Lehmann); la prossima lezione mostra come riporta l’originale di Hannover. Il totalizzatore mostra 9999. Che cosa succede se sommiamo 1?",
   "l.carry.set1": "Imposta 1 sulle manopole.",
   "l.carry.pentagonUnits": "Pentagono delle unità",
   "l.carry.stores": "Dietro ogni ruota del risultato c’è una memoria del riporto con un pentagono. Un pentagono dritto significa: niente da riportare. Uno inclinato significa: questa ruota deve un riporto alla successiva.",

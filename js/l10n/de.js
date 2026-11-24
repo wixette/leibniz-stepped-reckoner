@@ -313,7 +313,7 @@ export default {
   "l.carry.summary": "Was passiert, wenn ein Rad von 9 auf 0 springt, und wie der Übertrag weiterläuft.",
   "l.orig.title": "Überträge, die warten: das Original",
   "l.orig.summary": "Wie das Original in Hannover überträgt: alle Hebel zugleich, sodass manche Überträge auf eine weitere Umdrehung warten.",
-  "l.carry.intro": "In dieser Lektion: der Zehnerübertrag. Im Resultatwerk steht 9999. Was passiert, wenn wir 1 addieren? Die Maschine überträgt hier wie N. J. Lehmanns Nachbau in Dresden (das Feld „Übertrag“ in der Werkzeugleiste zeigt „Lehmann“); die nächste Lektion zeigt, wie das Original in Hannover überträgt.",
+  "l.carry.intro": "In dieser Lektion: der Zehnerübertrag. Die Maschine überträgt hier wie N. J. Lehmanns Nachbau in Dresden (das Feld „Übertrag“ in der Werkzeugleiste zeigt „Lehmann“); die nächste Lektion zeigt, wie das Original in Hannover überträgt. Im Resultatwerk steht 9999. Was passiert, wenn wir 1 addieren?",
   "l.carry.set1": "Stelle 1 an den Knöpfen ein.",
   "l.carry.pentagonUnits": "Fünfeck der Einer",
   "l.carry.stores": "Hinter jedem Zählrad sitzt ein Übertragsspeicher mit einem Fünfeck. Liegt das Fünfeck gerade, gibt es nichts zu übertragen. Ein gekipptes heißt: Dieses Rad schuldet dem nächsten einen Übertrag.",

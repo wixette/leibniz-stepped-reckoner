@@ -313,7 +313,7 @@ export default {
   "l.carry.summary": "O que acontece quando uma roda passa de 9 para 0, e como o “vai um” segue adiante.",
   "l.orig.title": "Transportes que esperam: o original",
   "l.orig.summary": "Como o original de Hannover transporta: todas as alavancas juntas, então alguns transportes esperam outra volta.",
-  "l.carry.intro": "Nesta lição: o transporte, o “vai um”. O registrador mostra 9999. O que acontece se somarmos 1? Aqui a máquina transporta como a réplica de N. J. Lehmann em Dresden (a caixa Transporte na barra de ferramentas mostra Lehmann); a próxima lição mostra como transporta o original de Hannover.",
+  "l.carry.intro": "Nesta lição: o transporte, o “vai um”. Aqui a máquina transporta como a réplica de N. J. Lehmann em Dresden (a caixa Transporte na barra de ferramentas mostra Lehmann); a próxima lição mostra como transporta o original de Hannover. O registrador mostra 9999. O que acontece se somarmos 1?",
   "l.carry.set1": "Ajuste 1 nos botões.",
   "l.carry.pentagonUnits": "Pentágono das unidades",
   "l.carry.stores": "Atrás de cada roda de resultado há uma memória de transporte com um pentágono. Um pentágono reto significa: nada a transportar. Um inclinado significa: esta roda deve um transporte à seguinte.",

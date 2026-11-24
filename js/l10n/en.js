@@ -315,7 +315,7 @@ export default {
   "l.carry.summary": "What happens when a wheel passes from 9 to 0, and how the carry runs on.",
   "l.orig.title": "Carries that wait: the original",
   "l.orig.summary": "How the original in Hannover carries: all its levers at once, so some carries wait for another turn.",
-  "l.carry.intro": "In this lesson: the carry. The register shows 9999. What happens when we add 1? The machine carries here as N. J. Lehmann's replica in Dresden does (the toolbar's Carry box shows Lehmann); the next lesson shows how the original in Hannover carries.",
+  "l.carry.intro": "In this lesson: the carry. The machine carries here as N. J. Lehmann's replica in Dresden does (the toolbar's Carry box shows Lehmann); the next lesson shows how the original in Hannover carries. The register shows 9999. What happens when we add 1?",
   "l.carry.set1": "Set 1 on the knobs.",
   "l.carry.pentagonUnits": "Pentagon of the units",
   "l.carry.stores": "Behind each result wheel is a carry store with a pentagon. A level pentagon means: nothing to carry. A tilted one means: this wheel owes the next wheel a carry.",
