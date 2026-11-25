@@ -17,6 +17,12 @@ import { partInfo, partName } from "../teach/partInfo.js";
 
 /** Parts hidden by "Case" (the oak case, base and the brass cover plates). */
 const CASING = ["frame.case", "frame.base", "frame.register_cover", "pm.carriage_cover"];
+/**
+ * The structure that goes with the case (U32): the frame, the carriage's front panel, its own floor,
+ * bearing bar and post (the carriage node's own mesh, not the parts riding on it), the counter drive's
+ * bracket. The working springs are nodes of their own and stay.
+ */
+const STRUCTURE = ["frame.static", "pm.carriage_panel", "pm.counter_frame"];
 const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 export class Stage {
@@ -218,8 +224,28 @@ export class Stage {
     if (!this.root) return;
     for (const n of CASING) for (const o of findNodes(this.root, n)) o.visible = this.casing;
     for (const o of findNodes(this.root, "pm.carriage_panel")) o.visible = !this.cutaway;
+    this.highlighter?.setConcealed(this.casing ? new Set() : this.structure());
     this.viewer.invalidate();
     this.refreshHover();
+  }
+
+  /**
+   * The meshes of the frame and the carriage's structure (STRUCTURE, and the carriage node's own
+   * mesh without the parts riding on it).
+   * @private
+   * @returns {Set<THREE.Object3D>}
+   */
+  structure() {
+    /** @type {Set<THREE.Object3D>} */
+    const out = new Set();
+    if (!this.root) return out;
+    for (const n of STRUCTURE) for (const o of findNodes(this.root, n)) o.traverse((x) => (/** @type {THREE.Mesh} */ (x)).isMesh && out.add(x));
+    for (const c of findNodes(this.root, "pm.carriage")) {
+      if ((/** @type {THREE.Mesh} */ (c)).isMesh) out.add(c);
+      // a carriage drawn as several meshes: its own are the unnamed primitives beside the parts
+      else for (const x of c.children) if ((/** @type {THREE.Mesh} */ (x)).isMesh && x.name.startsWith(c.name + "_")) out.add(x);
+    }
+    return out;
   }
 
   /** Every kind of part in its own colour (the Views menu's "Colour by part"). */

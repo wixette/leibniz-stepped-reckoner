@@ -281,11 +281,16 @@ def build(p):
     # the register frame's bar (BADUR2026 Zaehlwerkrahmen): the shafts pass through it, the
     # springs' studs stand in it
     mb.prism(geom.rect(in_x0, fb["z"][0], in_x1, fb["z"][1]), "XZ", fb["y"][0], fb["y"][1], "brass_satin")
+    frame = static(mb.build("frame.static", col))
+    bl.parent(frame, root)
+    # the springs on their studs: working parts, a node apart from the frame (the page hides the
+    # frame with the case and leaves them)
+    mb = MeshBuilder()
     for fxk, fzk in F:
         mb.prism([(u + fxk, w + fzk) for u, w in leaf], "XZ", da + 0.5, db - 0.5, "steel")
         mb.prism([(u + fxk + 8.6, w + fzk + 12.4) for u, w in geom.circle(1.0, 16)], "XZ", da - 0.3, fb["y"][0] + 0.6, "brass_satin", smooth=True)
-    frame = static(mb.build("frame.static", col))
-    bl.parent(frame, root)
+    springs = static(mb.build("frame.springs", col))
+    bl.parent(springs, root)
 
     # woodwork under the mechanism: the oak base board, and two oak bearers that lift it
     # off the case floor (so the carriage front hangs below the base). A separate node so
@@ -376,11 +381,14 @@ def build(p):
     mrad_ = p.v(M2 + "magna_rota_radius")
     py0, py1 = p.v(M2 + "magna_rota_plates")["y"][-1]
     tip = mrad_ + 0.15
+    panel = static(mb.build("pm.carriage_panel", col))
+    bl.parent(panel, carriage)
+    mb = MeshBuilder()
     leaf = [(66.6, 7.4), (65.8, 8.6), (tip + 1.2, 1.0), (tip, 0.0), (tip + 1.2, -0.4)]
     mb.prism([(mx + u, mz + w) for u, w in leaf], "XZ", py0 + 0.2, py1 - 0.2, "steel")
     mb.prism([(mx + 66.2 + u, mz + 8.0 + w) for u, w in geom.circle(1.3, 16)], "XZ", py0 + 0.1, pnl0 + 0.5, "brass_satin", smooth=True)
-    panel = static(mb.build("pm.carriage_panel", col))
-    bl.parent(panel, carriage)
+    mdet = static(mb.build("pm.magna_rota_detent", col))
+    bl.parent(mdet, carriage)
 
     # drive chain phases
     Lv = [(X[j] + dxL, zL) for j in range(C)]
@@ -794,9 +802,12 @@ def build(p):
     ka2 = ka - math.radians(4.0)
     side = (klx - cdx + (ra + 0.6) * math.cos(ka2), kz + (ra + 0.6) * math.sin(ka2))
     leaf = [tip, side, (side[0] + 1.5, ztop - 0.05), (tip[0], ztop - 0.05)]
-    mb.prism(leaf, "XZ", ky[0] - cdy + 0.2, ky[1] - cdy - 0.2, "steel")
     ctrain = static(mb.build("pm.counter_frame", col, (cdx, cdy, 0)))
     bl.parent(ctrain, carriage)
+    mb = MeshBuilder()
+    mb.prism(leaf, "XZ", ky[0] - cdy + 0.2, ky[1] - cdy - 0.2, "steel")
+    cleaf = static(mb.build("pm.counter_leaf", col, (cdx, cdy, 0)))
+    bl.parent(cleaf, carriage)
 
     # =========================================================== teaching extras (M3)
     labels = {

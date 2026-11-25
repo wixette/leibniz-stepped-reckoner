@@ -56,7 +56,7 @@ When you want more, the panel on the right holds a five-minute **tutorial** (*Ge
 
 **Clicking the machine:** click a knob to step its digit, or a digit on its dial to set it; click the crank to turn it forward, Shift-click to turn it back, or drag either crank round its axle; click a hole of the Magna Rota to put the pin in; click a result wheel to move the carriage under it.
 
-**The Views menu:** *Whole machine*, *Taken apart*, *Result*, *Setting knobs*, *Magna Rota*, and the two inside views, *Stepped drum* and *Carry*, which hide the case and fade the parts around the ones they show while the machine keeps working. *Show case* puts the oak case on or off. Taken apart, the machine cannot calculate; choose another view to put it back together.
+**The Views menu:** *Whole machine*, *Taken apart*, *Result*, *Setting knobs*, *Magna Rota*, and the two inside views, *Stepped drum* and *Carry*, which hide the case and fade the parts around the ones they show while the machine keeps working. *Show case and frame* puts the oak case, the frame and the carriage's front panel and floor on or off: off, only the working parts are left. *Colour by part* gives every kind of part a colour of its own. Taken apart, the machine cannot calculate; choose another view to put it back together.
 
 **Around the machine:** readouts at the top left (*Result*, the *Turns* the Magna Rota has counted, red when backward, and the *Carriage*'s place); the top bar with the mode (*Free play*, or the lesson and its step), the panel button, the language menu and *About*; and a status line at the bottom that says what just happened, or why a control cannot be used right now.
 

@@ -102,7 +102,7 @@ Free play has no tab: its controls are the machine toolbar, under the machine (P
 
 - **Machine toolbar** (floating at the stage's bottom, centred under the machine, U18): the number on the setting knobs, turn forward (+) and back (−) as one pair, carriage left and right with its place as another, boxed and named like the number box (U21), the Magna Rota's pin (a dropdown box, U22) with turn to the stop joined to it (U23), how the carry levers act (a dropdown box, U30), reset (U20), and the machine's sound on or off (U29). Icon plus short label where there is room, icons with tooltips where there is not (U18).
 - **Readouts** sit on the stage's top edge: the result as on the machine, grouped in threes; the Magna Rota's turn count (red when subtracting); the carriage's place.
-- **View controls** float at the stage's top right (U15): a Reset view button (⌂), a − / + zoom pair (U24) and the Views menu, whose button names the view on show. The menu holds the seven views (two of them inside views, U11, and Taken apart) and a Show case switch. Opening the front, fading and taking apart follow the view (U14, U15). They change how the machine is *shown*, not its state, so they stay enabled in a lesson, except where a step depends on them.
+- **View controls** float at the stage's top right (U15): a Reset view button (⌂), a − / + zoom pair (U24) and the Views menu, whose button names the view on show. The menu holds the seven views (two of them inside views, U11, and Taken apart) and two switches, Show case and frame (U32) and Colour by part (U31). Opening the front, fading and taking apart follow the view (U14, U15). They change how the machine is *shown*, not its state, so they stay enabled in a lesson, except where a step depends on them.
 
 ### U5 — A dark Material 3 theme for a classroom: blue, with one colour per meaning
 
@@ -230,7 +230,8 @@ Taking apart is a way of looking at the machine, like the close-ups: it has its 
       Stepped drum
       Carry
       ─────────────
-      ☑ Show case
+      ☑ Show case and frame
+      ☐ Colour by part
 ```
 
 - **The button names the view on show** (the current one is ticked in the menu), since no pressed chip shows the state any more. On a phone it shrinks to its icons.
@@ -426,3 +427,11 @@ Inside the machine most moving parts are brass, as they are on the original, and
 - **Any time, in free play and in lessons.** It changes only the colours: highlighting, fading and the half-transparent pentagons of the inside views work on top of it, and a highlighted part glows in its own colour rather than amber, so its colour still says what it is.
 - **The numbers stay readable:** the digits and the white bands they are printed on keep their colours.
 - The status line says what the colours are for, and to hover over a part for its name.
+
+### U32 — Show case and frame
+
+With the case off the reader wants the mechanism, and since v1.3.0 much of it stands behind structure: the three large gears behind the carriage's front panel, the drive row behind its bearing bar, the counter's train under the hood. The switch (formerly *Show case*) therefore hides the structure with the case: the frame (side walls, rear wall, the bars), the oak base, the covers, the carriage's front panel, its floor and bearing bar, and the counter drive's bracket. What works stays, with its shafts left floating: every moving part, the lead screw, and the springs (the carry stores' detent springs, the Magna Rota's detent, the counter's star-wheel leaf), which are nodes of their own for that reason.
+
+- The carriage's own floor and bearing bar are in the node that carries everything riding on it, so the page does not hide that node: it draws its own meshes with an invisible material (js/app/stage.js `structure()`, the Highlighter's `setConcealed`); clicks and hover labels pass through them.
+- The inside views, which hide the case, now drop the frame too.
+

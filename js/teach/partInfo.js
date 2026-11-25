@@ -61,6 +61,9 @@ const SINGLE = /** @type {const} */ ([
   ["pm.counter_l", "part.counterCrownWheel"],
   ["pm.counter_n", "part.counterGearN"],
   ["pm.counter_frame", "part.counterFrame"],
+  ["pm.counter_leaf", "part.counterLeaf"],
+  ["frame.springs", "part.detentSprings"],
+  ["pm.magna_rota_detent", "part.magnaDetent"],
 ]);
 
 /** Every message key a part name can use (A3-1). */

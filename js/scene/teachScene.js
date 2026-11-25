@@ -260,6 +260,29 @@ export class Highlighter {
   last = [[], false, [], []];
 
   /**
+   * The meshes drawn invisible: the frame and the carriage's structure while the case is off.
+   * @private
+   * @type {Set<THREE.Object3D>}
+   */
+  concealed = new Set();
+
+  /**
+   * The invisible stand-ins, one per material.
+   * @private
+   * @type {Map<THREE.Material, THREE.Material>}
+   */
+  unseen = new Map();
+
+  /**
+   * Draw these meshes invisible (clicks and hover labels pass through them), keeping the highlight.
+   * @param {Set<THREE.Object3D>} meshes
+   */
+  setConcealed(meshes) {
+    this.concealed = meshes;
+    this.set(...this.last);
+  }
+
+  /**
    * Switch "Colour by part" on or off, keeping the highlight and the fading.
    * @param {boolean} on
    */
@@ -276,6 +299,15 @@ export class Highlighter {
    * @returns {THREE.Material}
    */
   base(mesh, m) {
+    if (this.concealed.has(mesh)) {
+      let u = this.unseen.get(m);
+      if (!u) {
+        u = m.clone();
+        u.visible = false;
+        this.unseen.set(m, u);
+      }
+      return u;
+    }
     const hex = this.partColour.get(mesh);
     if (!this.colours || hex === undefined || KEEP_COLOUR.has(m.name)) return m;
     const byHex = this.coloured.get(m) ?? new Map();
@@ -310,6 +342,7 @@ export class Highlighter {
   set(patterns, fade, context = [], veil = []) {
     this.last = [patterns, fade, context, veil];
     this.faded.clear();
+    for (const m of this.concealed) this.faded.add(m);
     const lit = this.meshes(patterns);
     const kept = this.meshes([...patterns, ...readouts(patterns), ...context]);
     const veiled = (/** @type {THREE.Material} */ m) => fade && veil.includes(m.name);
