@@ -78,6 +78,7 @@ export const PART_KEYS = [
   "part.rack",
   "part.magna",
   "part.pin",
+  "part.counter",
   "part.carriage",
 ];
 
@@ -118,7 +119,7 @@ export function partInfo(node, m, loc = locale()) {
   if (node === gltfName("pm.counter_ring") || node === gltfName("pm.counter_plate")) {
     const turns = Math.trunc(m.ringTurns + m.theta / 360);
     const n = Math.abs(turns);
-    return { name: t("part.magna", {}, loc), value: turns < 0 ? tn("value.back", n, {}, loc) : tn("value.turns", n, {}, loc), red: turns < 0 };
+    return { name: t("part.counter", {}, loc), value: turns < 0 ? tn("value.back", n, {}, loc) : tn("value.turns", n, {}, loc), red: turns < 0 };
   }
   if (node === gltfName("pm.counter_pin") || node === gltfName("pm.counter_pin_park")) {
     return { name: t("part.pin", {}, loc), value: m.pin === null ? null : t("value.hole", { n: m.pin }, loc) };

@@ -78,6 +78,22 @@ def static(obj):
     return obj
 
 
+def lathe(mb, profile, mat, origin=(0.0, 0.0, 0.0), n=40):
+    """A turned part about the vertical: profile [(r, z), ...] from the axis round to the axis
+    again (r 0 at both ends), revolved n times; z absolute, origin (x, y) its axis."""
+    ox, oy, oz = origin
+    rings = []
+    for r, z in profile:
+        rings.append([(ox + r * math.cos(2 * math.pi * k / n), oy + r * math.sin(2 * math.pi * k / n), oz + z) for k in range(n)])
+    verts = [v for ring in rings for v in ring]
+    faces = []
+    for i in range(len(rings) - 1):
+        for k in range(n):
+            a, b = i * n + k, i * n + (k + 1) % n
+            faces.append((a, b, b + n, a + n))
+    mb.add_mesh_data(verts, faces, bl.frame_matrix((0, 0, 0), (1, 0, 0), (0, 1, 0)), mat)
+
+
 def build(p):
     bl.reset_scene()
     col = bpy.context.scene.collection
@@ -687,7 +703,10 @@ def build(p):
     st = ct["stop"]
     # the ring turns anticlockwise when adding (Badur): the pin arrives from the right, so the
     # finger stands just left of the top
-    stop_a = 90.0 + math.degrees((ct["pin_radius"] + st["finger_width"] / 2.0 + st["gap"]) / hp)
+    # the stop: a tapered strip, its width where the pin's circle crosses it sets where the pin stops
+    (sr0, sr1), (sw0, sw1) = st["strip_r"], st["strip_width"]
+    w_hp = sw0 + (sw1 - sw0) * (hp - sr0) / (sr1 - sr0)
+    stop_a = 90.0 + math.degrees((ct["pin_radius"] + w_hp / 2.0 + st["gap"]) / hp)
     mb = MeshBuilder()
     # the dial plate: the ring of the carriage's top that carries the outer numbers, flush with it
     # (the top has a hole for it), from the drive sleeve's hole to just beyond the numbers
@@ -701,8 +720,19 @@ def build(p):
         dial.append((max(rdp * math.cos(a), u_cut), rdp * math.sin(a)))
     mb.prism_holes(dial, [geom.circle(sleeve_hole, 64)], "XY", dz - 2.0, dz, "brass_polished")
     mb.prism(geom.circle(r_in - 0.3, 64), "XY", dz, dz + ct["centre_z"][1], "brass_satin", smooth=True)
-    mb.prism(geom.circle(ct["spindle_radius"], 24), "XY", dz + 0.3, dz + 6.0, "steel", smooth=True)  # from inside the brass, not on its face
-    mb.prism(geom.circle(ct["spindle_radius"] + 1.0, 24), "XY", dz + ct["centre_z"][1], dz + ct["centre_z"][1] + 1.0, "steel", smooth=True)
+    # the centre: a turned steel tower of five rings with a small ball on top (photos of the
+    # original and the replica, Brandt's Abb. II 5), standing on the brass centre
+    zc = dz + ct["centre_z"][1] - 0.3            # its foot just inside the brass, not on its face
+    tower = [(0.0, zc), (6.0, zc), (6.0, zc + 0.8)]
+    for i_, (ra_, rb_) in enumerate(((5.2, 5.5), (4.3, 4.6), (3.4, 3.7), (2.6, 2.9), (1.8, 2.1))):
+        z0_ = zc + 0.8 + 1.0 * i_
+        tower += [(ra_, z0_ + 0.2), (rb_, z0_ + 0.55), (ra_ - 0.3, z0_ + 1.0)]
+    tower += [(1.0, zc + 5.9), (0.9, zc + 6.4)]
+    for k_ in range(9):                            # the ball, r 1.5
+        a_ = math.radians(-60.0 + 150.0 * k_ / 8)
+        tower.append((1.5 * math.cos(a_), zc + 7.65 + 1.5 * math.sin(a_)))
+    tower.append((0.0, zc + 9.15))
+    lathe(mb, tower, "steel")
     black, red = [], []
     # as on the original (Badur's photo): the centre's numbers run clockwise from 0 at the stop
     # and count additions (black), the outer circle's anticlockwise and count subtractions (red)
@@ -716,8 +746,22 @@ def build(p):
             # lying on the top, upright for the operator at the front
             mb.add_mesh_data(verts, faces, bl.frame_matrix((gx, gy, z), (1, 0, 0), (0, 1, 0)), mat)
     # the stop: a post outside the ring and a finger over it, in the pin's plane
-    mb.prism(geom.radial_bar(st["post_r"][0], st["post_r"][1], st["finger_width"], stop_a), "XY", dz, dz + st["finger_z"][1], "steel_dark")
-    mb.prism(geom.radial_bar(hp - 2.5, st["post_r"][1], st["finger_width"], stop_a), "XY", dz + st["finger_z"][0], dz + st["finger_z"][1], "steel_dark")
+    # the stop: a tapered steel strip raised over the ring in the pin's neck's plane, its wide end
+    # on two screws on the plate beyond the ring, its tip on a screw on the brass centre by the tower
+    ua = math.radians(stop_a)
+    u_, n_ = (math.cos(ua), math.sin(ua)), (-math.sin(ua), math.cos(ua))
+    at_ = lambda r, t: (u_[0] * r + n_[0] * t, u_[1] * r + n_[1] * t)
+    strip = [at_(sr0, -sw0 / 2), at_(sr1, -sw1 / 2), at_(sr1, sw1 / 2), at_(sr0, sw0 / 2)]
+    fz0, fz1 = st["finger_z"]
+    mb.prism(strip, "XY", dz + fz0, dz + fz1, "steel")
+    leg_o = [at_(sr1 - 2.2, -sw1 / 2), at_(sr1, -sw1 / 2), at_(sr1, sw1 / 2), at_(sr1 - 2.2, sw1 / 2)]
+    mb.prism(leg_o, "XY", dz - 0.5, dz + fz0 + 0.1, "steel")                     # down to the plate (into it)
+    wi = sw0 + (sw1 - sw0) * 2.2 / (sr1 - sr0)
+    leg_i = [at_(sr0, -sw0 / 2), at_(sr0 + 2.2, -wi / 2), at_(sr0 + 2.2, wi / 2), at_(sr0, sw0 / 2)]
+    mb.prism(leg_i, "XY", dz + ct["centre_z"][1] - 0.5, dz + fz0 + 0.1, "steel")   # down to the brass centre
+    for r_, t_ in ((sr1 - 1.2, -sw1 / 4), (sr1 - 1.2, sw1 / 4), (sr0 + 1.2, 0.0)):  # the screws' heads
+        cx_, cy_ = at_(r_, t_)
+        mb.prism([(cx_ + q[0], cy_ + q[1]) for q in geom.circle(1.0, 16)], "XY", dz + fz1 - 0.1, dz + fz1 + 0.5, "steel_dark", smooth=True)
     cplate = mb.build("pm.counter_plate", col, (dx, dy, 0))
     bl.set_anchors(cplate, "black_glyphs", black)
     bl.set_anchors(cplate, "red_glyphs", red)
@@ -734,16 +778,27 @@ def build(p):
     bl.parent(cring, carriage)
 
     def pin_mesh(cx, cy):
+        # the pin: its stem in the hole, a flat cone on the ring, a neck and a big round head
+        # (photos of the original and Brandt's Abb. II 5)
         m_ = MeshBuilder()
-        m_.prism(geom.circle(ct["pin_radius"], 16), "XY", dz + ct["pin_z"][0], dz + ct["pin_head_z"][0], "steel", smooth=True, offset=(cx, cy, 0))
-        m_.prism(geom.circle(ct["pin_head_radius"], 20), "XY", dz + ct["pin_head_z"][0], dz + ct["pin_head_z"][1], "brass_polished", smooth=True, offset=(cx, cy, 0))
+        sk, hd = ct["pin_skirt"], ct["pin_head"]
+        pr_ = ct["pin_radius"]
+        prof = [(0.0, dz + ct["pin_z"][0]), (pr_, dz + ct["pin_z"][0]), (pr_, dz + sk["z"][0]),
+                (sk["radius"][0], dz + sk["z"][0]), (sk["radius"][0], dz + sk["z"][0] + 0.25), (sk["radius"][1], dz + sk["z"][1]),
+                (pr_ - 0.1, dz + sk["z"][1] + 0.3)]
+        rh_, hz_ = hd["radius"], dz + hd["centre_z"]
+        for k_ in range(13):
+            a_ = math.radians(-70.0 + 160.0 * k_ / 12)
+            prof.append((rh_ * math.cos(a_), hz_ + rh_ * math.sin(a_)))
+        prof.append((0.0, hz_ + rh_))
+        lathe(m_, prof, "brass_polished", (cx, cy, 0.0))
         return m_
 
     cpin = pin_mesh(0.0, hp).build("pm.counter_pin", col, (dx, dy, 0))   # built at black 0, turned to its hole
     bl.set_motion(cpin, "rotate", (0, 0, 1), "Pin of the revolution counter", "Stift des Umdrehungszählers")
     bl.parent(cpin, carriage)
     mb = pin_mesh(0.0, -ct["park_r"])
-    mb.prism([(u, w - ct["park_r"]) for u, w in geom.circle(ct["pin_radius"] + 1.2, 20)], "XY", dz, dz + ct["pin_z"][0], "brass_satin", smooth=True)
+    mb.prism([(u, w - ct["park_r"]) for u, w in geom.circle(ct["pin_radius"] + 1.2, 20)], "XY", dz, dz + ct["pin_skirt"]["z"][0] - 0.05, "brass_satin", smooth=True)
     cpark = static(mb.build("pm.counter_pin_park", col, (dx, dy, 0)))   # where the pin waits, shown when it is out
     bl.parent(cpark, carriage)
 
