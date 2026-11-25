@@ -1143,18 +1143,18 @@
           "circumradius": 21.029,
           "y_rows": [
             [
-              73.0,
-              75.0
+              86.35,
+              87.85
             ],
             [
-              78.0,
-              80.0
+              96.85,
+              98.35
             ]
           ]
         },
         "unit": "mm",
         "conf": "doc",
-        "src": "BADUR2026 (measured on the original): pentagons 40 across the two side corners (BADUR2026 Pos. 22, \"Fuenfeck\", 1.5 thick), circumradius 21.03. Adjacent stores are only 36.5 apart, so the pentagons stand in two staggered rows, even digits in front, odd behind (Lange 1958 via NL183/466 PLAN p. 9: '15 pentagon plates in two staggered rows'; the GWLB CAD model shows the same). Behind the rear wall; their top edges (z 86.1) are level with the register cover (z 86-87.5), just behind its back edge, so the oak case hides them. On the original they appear to rise above the register (GWLB CAD model): their height there is not measured and is asked for v1.3.0 (decision 0002)."
+        "src": "BADUR2026 (measured on the original): pentagons 40 across the two side corners (BADUR2026 Pos. 22, \"Fuenfeck\", 1.5 thick), circumradius 21.03. Adjacent stores are only 36.5 apart, so the pentagons stand in two staggered rows, even digits in front, odd behind (Lange 1958 via NL183/466 PLAN p. 9: '15 pentagon plates in two staggered rows'; the GWLB CAD model shows the same). Behind the rear wall; their top edges (z 86.1) are level with the register cover (z 86-87.5), just behind its back edge, so the oak case hides them. On the original they appear to rise above the register (GWLB CAD model): their height there is not measured and is asked for v1.3.0 (decision 0002). 2026-11-25: placed as on Badur's assembly drawing (plan view, scaled by the 36.5 digit pitch): the two rows 10.5 apart, as his two intermediate shafts' lengths differ (Pos. 23/24: 82.5 and 93 from the front end to the pentagon's shoulder), the front row about 17.6 and the back row about 28.1 behind the middle of the rear wall the shafts come through; 1.5 thick (Pos. 22). The TSD photographs of Lehmann's replica show the same: the shafts stand well out of the rear wall, the two rows clearly apart."
       },
       "magna_rota_plates": {
         "v": {
