@@ -4,6 +4,7 @@
 // the page and the tests (A3-11, A3-15) share it.
 
 import * as THREE from "three";
+import { CRANK_FORWARD } from "../scene/m2Pose.js";
 import { anchors, gltfName } from "../scene/rig.js";
 /** @import { Machine } from "../sim/machine.js" */
 import { t } from "../l10n/l10n.js";
@@ -132,8 +133,8 @@ export function crankAt(hit) {
  * Dragging a crank round its axle (U16). The grabbed point moves on a circle round the axle, in
  * the plane through it across the axle; the pointer's ray meets that plane, and the angle it
  * sweeps there, signed by the crank's axis, is how far the reader has turned it. Positive is the
- * crank's forward way: the rig turns it about its axis (glTF extras) by +angle as the machine
- * adds, or as the carriage goes left.
+ * crank's forward way, the way it turns as the machine adds or the carriage goes left: the rig
+ * turns it about its axis (glTF extras) by CRANK_FORWARD[crank] x angle (js/scene/m2Pose.js).
  */
 export class CrankDrag {
   /** Turned angle so far (radians; + forward). */
@@ -146,6 +147,8 @@ export class CrankDrag {
    */
   constructor(node, grab, ray) {
     const ex = /** @type {{ axis?: number[] }} */ (node.userData);
+    /** @private */
+    this.forward = node.name === gltfName("pm.main_crank") ? CRANK_FORWARD["pm.main_crank"] : CRANK_FORWARD["frame.lead_screw"];
     node.updateWorldMatrix(true, false);
     /** The axle's direction (world). */
     this.axis = new THREE.Vector3().fromArray(ex.axis ?? [0, 0, 1]).applyQuaternion(node.getWorldQuaternion(new THREE.Quaternion())).normalize();
@@ -179,7 +182,7 @@ export class CrankDrag {
     const v = this.radial(ray);
     if (!v || v.lengthSq() < 1e-12) return this.angle;
     const cross = new THREE.Vector3().crossVectors(this.last, v).dot(this.axis);
-    this.angle += Math.atan2(cross, this.last.dot(v));
+    this.angle += this.forward * Math.atan2(cross, this.last.dot(v));
     this.last = v;
     return this.angle;
   }

@@ -179,7 +179,7 @@ export class App {
     if (!this.stage.root) return no("status.notReady");
     if (allowed && !allowed.has(control)) return no(this.course?.playing ? "course.watching" : "status.notNow");
     if (this.busy) return no("status.busy");
-    if (this.stage.apart && control !== "reset") return no("status.apart");
+    if (this.stage.apart) return no("status.apart"); // Reset too: choose another view to put it together
     if (control === "shift" && dir === 1 && m.offset >= m.maxOffset) return no("status.carriageEnd");
     if (control === "shift" && dir === -1 && m.offset <= 0) return no("status.carriageEnd");
     if (control === "carry" && !m.atRest) return no("status.busy");
@@ -942,6 +942,9 @@ export class App {
     show("subBtn", "sub");
     show("leftBtn", "shift", 1);
     show("rightBtn", "shift", -1);
+    // the carriage's place box greys when neither arrow can be used (taken apart, busy, a lesson)
+    const shiftOff = !this.controlState("shift", 1).enabled && !this.controlState("shift", -1).enabled;
+    /** @type {HTMLElement} */ ($("placeStrip").parentElement).setAttribute("aria-disabled", String(shiftOff));
     show("pinBtn", "pin");
     show("toStopBtn", "toStop");
     show("resetBtn", "reset");

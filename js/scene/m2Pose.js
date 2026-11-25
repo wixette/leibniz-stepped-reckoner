@@ -39,6 +39,15 @@ export function m2NodeNames(R, C) {
 }
 
 /**
+ * Which way the rig turns each crank as the machine goes forward (adds, or shifts the carriage
+ * left): the main crank's angle is negated (adding turns it anticlockwise from the front, see
+ * m2NodeValues), the end crank's is not. Dragging a crank (js/teach/partActions.js) reads its
+ * turn with this sign; tests/scene and A3-15 check it against m2NodeValues.
+ * @type {Record<string, 1 | -1>}
+ */
+export const CRANK_FORWARD = { "pm.main_crank": -1, "frame.lead_screw": 1 };
+
+/**
  * @param {Machine} m
  * @returns {Record<string, number>}
  */

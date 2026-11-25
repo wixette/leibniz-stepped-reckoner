@@ -4,7 +4,7 @@
 // view are the same code the main page runs.
 
 import * as THREE from "three";
-import { applyM2Pose, m2NodeNames } from "../scene/m2Pose.js";
+import { applyM2Pose, CRANK_FORWARD, m2NodeNames, m2NodeValues } from "../scene/m2Pose.js";
 import { gltfName, Rig } from "../scene/rig.js";
 import { centreOnFreeArea, frame } from "../scene/framing.js";
 import { Exploder, Highlighter, findNodes, isShown, viewSubjects } from "../scene/teachScene.js";
@@ -469,10 +469,11 @@ export function runM3Checks(root) {
           rig.set(key, 0);
           const start = at();
           const drag = new CrankDrag(node, start, ray(start));
-          // the rig turns the crank by +deg as the machine does when it adds (or shifts left)
-          rig.set(key, deg / 2);
+          // the rig turns the crank as the machine does when it adds (or shifts left): by
+          // CRANK_FORWARD x deg, the sign m2NodeValues gives it (checked below)
+          rig.set(key, (CRANK_FORWARD[key] * deg) / 2);
           drag.move(ray(at()));
-          rig.set(key, deg);
+          rig.set(key, CRANK_FORWARD[key] * deg);
           const got = THREE.MathUtils.radToDeg(drag.move(ray(at())));
           n++;
           if (Math.abs(got - deg) > 2) bad.push(`${key} turned ${deg}° from (${dir.x}, ${dir.y}, ${dir.z}) reads as ${got.toFixed(1)}°`);
@@ -480,6 +481,14 @@ export function runM3Checks(root) {
       }
       rig.set(key, 0);
     }
+    // the signs are the pose's: a forward turn and a shift to the left as the rig shows them
+    const fm = new Machine();
+    fm.setNumber(1);
+    fm.setTheta(30);
+    if (Math.sign(m2NodeValues(fm)["pm.main_crank"]) !== CRANK_FORWARD["pm.main_crank"]) bad.push("main crank: CRANK_FORWARD disagrees with m2NodeValues");
+    const sm = new Machine();
+    sm.setCarriagePos(0.25);
+    if (Math.sign(m2NodeValues(sm)["frame.lead_screw"]) !== CRANK_FORWARD["frame.lead_screw"]) bad.push("end crank: CRANK_FORWARD disagrees with m2NodeValues");
     applyM2Pose(rig, root, m);
     return { passed: bad.length === 0, detail: bad.join("; ") || `${n} drags of the two cranks, both ways, from two views, read as turned` };
   });

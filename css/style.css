@@ -433,6 +433,7 @@ a { color: var(--md-primary); }
 /* the carriage's place: a value in its box, like the pin's hole (U21) */
 .value-field { justify-content: center; min-width: 76px; padding: 0 12px; }
 .carriage-place { min-width: 2ch; text-align: center; font-size: 18px; font-weight: 560; }
+.value-field[aria-disabled="true"] .carriage-place, .value-field[aria-disabled="true"] .field-label { color: color-mix(in srgb, var(--md-on-surface) 38%, transparent); }
 /* The pin's hole: a dropdown, boxed and named like the other settings (U22). What is set is a
    box with its name on the border; what is done is a button. */
 .select-field { align-items: center; justify-content: space-between; gap: 6px; min-width: 78px; padding: 0 6px 0 14px; color: var(--md-on-surface); font: inherit; cursor: pointer; }
