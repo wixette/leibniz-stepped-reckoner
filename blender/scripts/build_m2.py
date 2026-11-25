@@ -129,6 +129,10 @@ def build(p):
         dish = dl["result_dish"]
         r_out = rd + rim_dr
         mb.prism_holes(geom.circle(r_out, 96), [geom.circle(dish["recess_r"], 96)], "XZ", dy0, dy1, "brass_polished")
+        # a white band round the rim, the digits on it (black on white reads best, as in v1.2.0),
+        # a thin gold ring left at each edge
+        band = dish["band_edge"]
+        mb.prism_holes(geom.circle(r_out + 0.06, 96), [geom.circle(r_out - 0.5, 96)], "XZ", dy0 + band, dy1 - band, "enamel_white")
         mb.prism(geom.circle(dish["recess_r"] + 0.05, 96), "XZ", dy1 - dish["face"], dy1 - 0.05, "brass_satin", smooth=True)
         mb.prism(geom.circle(dish["hub_r"], 32), "XZ", dy0 + 0.5, dy1 - dish["face"], "brass_satin", smooth=True)
         glyphs = []
