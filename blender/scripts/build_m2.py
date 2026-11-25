@@ -292,8 +292,9 @@ def build(p):
     z_plate = p.v(M2 + "knob_plate_z")
     for j in range(C):
         x = X[j]
-        mb.prism(geom.rect(x - 4, 74.0, x + 4, 78.0), "XY", fl["z"][1], zd, "brass_satin")
-        mb.prism(geom.circle(5, 24), "XZ", 74.0, 78.0, "brass_satin", smooth=True, offset=(x, 0, zd))
+        rb0, rb1 = p.v(M2 + "carriage_rear")["bearing_y"]
+        mb.prism(geom.rect(x - 4, rb0, x + 4, rb1), "XY", fl["z"][1], zd, "brass_satin")
+        mb.prism(geom.circle(5, 24), "XZ", rb0, rb1, "brass_satin", smooth=True, offset=(x, 0, zd))
     carriage = mb.build("pm.carriage", col)
     bl.set_motion(carriage, "translate", (1, 0, 0), "Carriage (pars mobilis)", "Schlitten (pars mobilis)", unit="mm")
     bl.parent(carriage, root)
@@ -358,7 +359,7 @@ def build(p):
         # own gear in the drive row. The crank's drum shaft reaches forward through the large
         # gear B and the front panel to the Magna Rota.
         y_front = p.v(M2 + "magna_rota_plates")["y"][-1][1] + 0.1 if j == crank_drum else shaft_front
-        mb.prism(geom.circle(sq, 32), "XZ", y_front, 80.5, "steel", smooth=True)
+        mb.prism(geom.circle(sq, 32), "XZ", y_front, p.v(M2 + "carriage_rear")["drum_shaft_back"], "steel", smooth=True)
         shaft = mb.build(f"pm.drum_shaft.{j}", col, (x, 0, zd))
         bl.set_motion(shaft, "rotate", (0, 1, 0), f"Drum shaft {j} with drive gear", f"Staffelwalzenwelle {j}")
         bl.parent(shaft, carriage)
