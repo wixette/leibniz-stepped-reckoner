@@ -105,7 +105,7 @@ export function viewSubjects(root) {
     // a round dial in a turned box fills less of it (A3-14)
     counter: view({ x: 0, y: 1, z: 0.35 }, ["pm.counter_ring", "pm.counter_plate"]),
     drum: {
-      ...view({ x: 0.7, y: 0.55, z: 0.75 }, ["pm.drum.0", "pi.sum_wheel.0", "pm.setting_rack.0"]),
+      ...view({ x: 0.95, y: 0.35, z: 0.3 }, ["pm.drum.0", "pi.sum_wheel.0", "pm.setting_rack.0"]),
       inside: ["pm.drum.0", "pm.setting_rack.0", "pi.sum_wheel.0"],
     },
     carry: {

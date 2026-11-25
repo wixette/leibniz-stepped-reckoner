@@ -38,7 +38,9 @@ class Kin:
     # --- input side -------------------------------------------------------
     def drum_front_y(self, s):
         """Drum front face position (along +Y) for setting s (may be fractional)."""
-        return self.y_gear - self.L + (9.5 - s) * self.step
+        # the ribs start at the drum's front face (Abb. II 1): s of them lie under the receiving
+        # gear when it stands (9.5 - s) steps behind the front, so the drum moves back as s rises
+        return self.y_gear - (9.5 - s) * self.step
 
     def rib_window_index(self, k, theta):
         """Window (0..8) in which rib k (1..9) passes the receiving gear.
@@ -110,7 +112,8 @@ class Kin:
     # --- setting dial -----------------------------------------------------
     def dial_angle(self, s):
         """Rotation of the setting knob/pinion about Blender +Z (deg): one division per digit."""
-        return self.dial_step * s
+        # clockwise seen from above: the pinion, right of its rack, then moves the drum back
+        return -self.dial_step * s
 
     def rack_centres(self, margin=1.5):
         """Rack tooth centres (y, measured from the drum's front face) that stay in mesh with the
@@ -119,8 +122,9 @@ class Kin:
         At setting 0 a pinion tooth points at the rack, so a gap of the rack faces the pinion."""
         p = self.rack_pitch
         at0 = self.pinion_y - self.drum_front_y(0)                # the pinion, seen from the drum front at 0
-        lo = at0 - margin * p
-        hi = self.pinion_y - self.drum_front_y(9) + margin * p   # ... and at 9
+        at9 = self.pinion_y - self.drum_front_y(9)                # ... and at 9
+        lo = min(at0, at9) - margin * p
+        hi = max(at0, at9) + margin * p
         first = lo + ((at0 + p / 2.0 - lo) % p)                   # centres half a pitch off the pinion at 0
         out = []
         c = first

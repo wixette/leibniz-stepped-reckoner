@@ -28,7 +28,6 @@ export const RIB_START = val(T.rest_free_arc_before_ribs); // 78.75
 export const CARRY_WINDOW_START = val(/** @type {Entry<number[]>} */ (T.carry_window))[0]; // 281.25
 export const PER_CARRY = val(T.per_carry_angle); // 9.8
 const STEP = val(G.drum.rib_length_step);
-const L = val(G.drum.length);
 const Y_GEAR = val(G.receiving_gear.y);
 export const SUM_STEP = val(machine.pars_immobilis.sum_wheel_step); // 36
 export const STORE_STEP = val(machine.pars_immobilis.einzahn_store_rotation); // 18
@@ -45,7 +44,9 @@ const clamp01 = (x) => Math.min(1, Math.max(0, x));
  * @returns {number}
  */
 export function drumFrontY(s) {
-  return Y_GEAR - L + (9.5 - s) * STEP;
+  // the ribs start at the drum's front face (Abb. II 1): s of them lie under the receiving gear
+  // when it stands (9.5 - s) steps behind the front, so the drum moves back as s rises
+  return Y_GEAR - (9.5 - s) * STEP;
 }
 
 /**
@@ -54,7 +55,8 @@ export function drumFrontY(s) {
  * @returns {number}
  */
 export function dialAngle(s) {
-  return DIAL_STEP * s;
+  // clockwise seen from above: the pinion, right of its rack, then moves the drum back
+  return -DIAL_STEP * s;
 }
 
 /**

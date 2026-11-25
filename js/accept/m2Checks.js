@@ -434,6 +434,8 @@ export function runM2Checks(root, opts = {}) {
     // Look down through each cover opening from above: the first part hit must be the
     // result wheel, showing a digit (no casing part in the way), at both carriage ends.
     const blockers = [...parts, node(root, "pi.window"), node(root, "frame.static")];
+    // the corners of each window's reading area (the window plate's own read_half_size)
+    const [rx, rz] = (/** @type {{ read_half_size_mm: number[] }} */ (node(root, "pi.window").userData)).read_half_size_mm.map((v) => v / 1000);
     for (const offset of [0, c.m.maxOffset]) {
       state(c, { offset, result: 0 });
       c.m.digits.fill(7);
@@ -441,7 +443,7 @@ export function runM2Checks(root, opts = {}) {
       for (let k = 0; k < R; k++) {
         const wheel = part(c, "pi.sum_wheel", k);
         const glyphs = anchors(wheel, "glyph_anchors");
-        for (const [dx, dz] of [[0, 0], [-0.003, -0.0015], [0.003, 0.0015]]) {
+        for (const [dx, dz] of [[0, 0], [-rx, -rz], [rx, rz]]) {
           const o = openings[k].clone().add(new THREE.Vector3(dx, 0.01, dz));
           const [first] = rayHits([...blockers, wheel], o, new THREE.Vector3(0, -1, 0));
           /** @type {THREE.Object3D | null} */

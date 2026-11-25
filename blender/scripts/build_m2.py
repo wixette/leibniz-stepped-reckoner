@@ -121,17 +121,21 @@ def build(p):
     for k in range(R):
         x = X[k]
         mb = MeshBuilder()
-        mb.prism(geom.circle(1.5, 16), "XZ", 6.0, wall0 + 1.5, "steel", smooth=True)
+        mb.prism(geom.circle(1.5, 16), "XZ", dy0 - rim_t - 0.5, wall0 + 1.5, "steel", smooth=True)   # the disc at its front end
         mb.prism(geom.gear_outline(rg, 18.0), "XZ", y_gear - g_th / 2, y_gear + g_th / 2, "brass_polished")
         mb.prism(geom.circle(3.0, 24), "XZ", y_gear - g_th / 2 - 2, y_gear + g_th / 2 + 2, "brass_satin", smooth=True)
-        mb.prism(geom.circle(rd, 72), "XZ", dy0, dy1, "enamel_white", smooth=True)
-        mb.prism(geom.circle(rd + rim_dr, 72), "XZ", dy0 - rim_t, dy0, "brass_polished", smooth=True)
-        mb.prism(geom.circle(rd + rim_dr, 72), "XZ", dy1, dy1 + rim_t, "brass_polished", smooth=True)
+        # the result disc, a dish (BADUR2026 Pos. 32): the rim ring (digits on its outer face),
+        # open to the front round the hub, a thin face plate at its back
+        dish = dl["result_dish"]
+        r_out = rd + rim_dr
+        mb.prism_holes(geom.circle(r_out, 96), [geom.circle(dish["recess_r"], 96)], "XZ", dy0, dy1, "brass_polished")
+        mb.prism(geom.circle(dish["recess_r"] + 0.05, 96), "XZ", dy1 - dish["face"], dy1 - 0.05, "brass_satin", smooth=True)
+        mb.prism(geom.circle(dish["hub_r"], 32), "XZ", dy0 + 0.5, dy1 - dish["face"], "brass_satin", smooth=True)
         glyphs = []
         for d in range(10):
             a = math.radians(90.0 - 36.0 * d)
             nrm, tan = (math.cos(a), 0.0, math.sin(a)), (math.sin(a), 0.0, -math.cos(a))
-            o = (nrm[0] * (rd + 0.12), (dy0 + dy1) / 2.0, nrm[2] * (rd + 0.12))
+            o = (nrm[0] * (r_out + 0.12), (dy0 + dy1) / 2.0, nrm[2] * (r_out + 0.12))
             glyphs.append(o)
             verts, faces = bl.glyph_mesh(str(d), dl["result_glyph_size"], 0.25)
             mb.add_mesh_data(verts, faces, bl.frame_matrix(o, tan, (0, 1, 0)), "ink_black")
@@ -366,7 +370,7 @@ def build(p):
         mb.prism(geom.circle(sq + 0.4, 32), "XZ", -0.5, L + 0.5, "steel_dark", smooth=True)
         for kk in range(1, 10):
             tooth = geom.tooth_polygon(drum_gear, first + (kk - 1) * rib_pitch, root_r=drum_gear.rf - 0.3)
-            mb.prism(tooth, "XZ", L - kk * step, L, "brass_polished")
+            mb.prism(tooth, "XZ", 0.0, kk * step, "brass_polished")   # all ribs start at the front face (Abb. II 1)
         mb.prism(geom.circle(9.0, 40), "XZ", -4.0, -3.0, "brass_satin", smooth=True)
         mb.prism(geom.circle(7.0, 40), "XZ", -3.0, -1.0, "brass_satin", smooth=True)
         mb.prism(geom.circle(9.0, 40), "XZ", -1.0, 0.0, "brass_satin", smooth=True)
@@ -411,7 +415,7 @@ def build(p):
         mb.prism(geom.circle(dl["setting_plate_r"], 48), "XY", z_plate, z_plate + 2.0, "brass_satin", smooth=True)
         pg = []
         for s in range(10):
-            a = math.radians(-90.0 + kin.dial_step * s)
+            a = math.radians(-90.0 - kin.dial_step * s)   # clockwise, as the knob turns
             gx, gy = dl["setting_glyph_r"] * math.cos(a), dl["setting_glyph_r"] * math.sin(a)
             pg.append((gx, gy, z_plate + 2.25))
             verts, faces = bl.glyph_mesh(str(s), dl["setting_glyph_size"], 0.3)
@@ -421,8 +425,8 @@ def build(p):
         bl.parent(plate, carriage)
         # stop: a lug in the pointer's plane, filling the blank sector between 9 and 0 (NL183/465 p. 38)
         mb = MeshBuilder()
-        a9 = -90.0 + kin.dial_step * 9
-        mb.prism(geom.stop_lug(5.6, dl["pointer_r"] - 1.0, a9, 270.0, 1.1 + 0.15), "XY", z_plate + 2.0, z_plate + 3.4, "steel")
+        # the blank sector runs anticlockwise from 0 (at 270 deg) to 9 (270 + 360 - 9 divisions)
+        mb.prism(geom.stop_lug(5.6, dl["pointer_r"] - 1.0, 270.0, 270.0 + 360.0 - kin.dial_step * 9, 1.1 + 0.15), "XY", z_plate + 2.0, z_plate + 3.4, "steel")
         stop = static(mb.build(f"pm.setting_stop.{j}", col, (px, py, 0)))
         bl.parent(stop, carriage)
 
@@ -542,7 +546,7 @@ def build(p):
     plate_with_hole_row(mb, ix0, cs["register_cover_y0"], ix1, cs["register_cover_y1"], oy0, oy1, [(x - dl["cover_opening_half_x"], x + dl["cover_opening_half_x"]) for x in X], cz0, cz1, "brass_polished")
     # skirt along the front edge (above the frame's front bar, z <= 69, and every carriage part)
     y0 = cs["register_cover_y0"]
-    mb.prism(geom.rect(ix0, y0, ix1, y0 + 2.0), "XY", cs["register_cover_skirt_z0"], cz0, "brass_satin")
+    mb.prism(geom.rect(ix0, y0, ix1, y0 + 1.2), "XY", cs["register_cover_skirt_z0"], cz0, "brass_satin")
     rcover = static(mb.build("frame.register_cover", col))
     bl.set_anchors(rcover, "opening_centres", [(x, (oy0 + oy1) / 2.0, cz1) for x in X])
     bl.parent(rcover, root)
@@ -561,7 +565,7 @@ def build(p):
     mb.prism(geom.rect(cx0, pnl1, cx0 + 3.0, ky1), "XY", wz0, kz0, "brass_satin")       # left end
     mb.prism(geom.rect(xs - 3.0, pnl1, xr, ky1), "XY", zn, zn + 2.0, "brass_satin")       # underside of the right part
     mb.prism(geom.rect(xr - 3.0, pnl1, xr, ky1), "XY", zn + 2.0, zt - 2.0, "brass_satin") # right end
-    dx, dy, dz = X[0] + cs_["counter_dx"], py, zt   # the revolution counter's centre: 64 right of the 17th shaft, in line with the knobs (Badur)
+    dx, dy, dz = X[0] + cs_["counter_dx"], py + cs_["counter_dy"], zt   # the revolution counter's centre: 64 right of the 17th shaft, in line with the knobs (Badur)
     ccover = static(mb.build("pm.carriage_cover", col))
     bl.parent(ccover, carriage)
 
