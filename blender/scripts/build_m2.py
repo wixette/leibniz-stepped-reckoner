@@ -703,10 +703,15 @@ def build(p):
     st = ct["stop"]
     # the ring turns anticlockwise when adding (Badur): the pin arrives from the right, so the
     # finger stands just left of the top
-    # the stop: a tapered strip, its width where the pin's circle crosses it sets where the pin stops
-    (sr0, sr1), (sw0, sw1) = st["strip_r"], st["strip_width"]
-    w_hp = sw0 + (sw1 - sw0) * (hp - sr0) / (sr1 - sr0)
-    stop_a = 90.0 + math.degrees((ct["pin_radius"] + w_hp / 2.0 + st["gap"]) / hp)
+    # the stop stands at the top, centred, half a step from the holes and the numbers on both sides
+    # (photos of the original and the replica); a wedge as wide, where the holes' circle crosses it,
+    # as the gap between two holes less the pin and the gap: the pin in the hole beside it rests on it
+    sr0, sr1 = st["strip_r"]
+    stop_a = 90.0
+    # it stands at the height of the pin's head, its sides pointing at the centre, each the head's
+    # radius and the gap from a pin in the hole beside it: the pin's head rests against it
+    side = math.radians(18.0) - math.asin((ct["pin_head"]["radius"] + st["gap"]) / hp)
+    half_hp = hp * math.tan(side)                           # half its width at the holes' circle
     mb = MeshBuilder()
     # the dial plate: the ring of the carriage's top that carries the outer numbers, flush with it
     # (the top has a hole for it), from the drive sleeve's hole to just beyond the numbers
@@ -723,22 +728,27 @@ def build(p):
     # the centre: a turned steel tower of five rings with a small ball on top (photos of the
     # original and the replica, Brandt's Abb. II 5), standing on the brass centre
     zc = dz + ct["centre_z"][1] - 0.3            # its foot just inside the brass, not on its face
-    tower = [(0.0, zc), (6.0, zc), (6.0, zc + 0.8)]
-    for i_, (ra_, rb_) in enumerate(((5.2, 5.5), (4.3, 4.6), (3.4, 3.7), (2.6, 2.9), (1.8, 2.1))):
-        z0_ = zc + 0.8 + 1.0 * i_
-        tower += [(ra_, z0_ + 0.2), (rb_, z0_ + 0.55), (ra_ - 0.3, z0_ + 1.0)]
-    tower += [(1.0, zc + 5.9), (0.9, zc + 6.4)]
-    for k_ in range(9):                            # the ball, r 1.5
+    tower = [(0.0, zc), (6.2, zc), (6.2, zc + 1.2), (5.7, zc + 1.25)]     # the base disc
+    # five rounded rings on a cone, each a bulge running into the next (Brandt's Abb. II 5)
+    z_lo, z_hi, n_r = zc + 1.2, zc + 9.6, 5
+    env = lambda z: 5.7 + (1.9 - 5.7) * (z - z_lo) / (z_hi - z_lo)          # the cone through the bulges
+    for i_ in range(n_r):
+        for q_ in range(1, 11):
+            t_ = q_ / 10.0
+            z_ = z_lo + (z_hi - z_lo) * (i_ + t_) / n_r
+            tower.append((env(z_) - 0.7 * (1.0 - math.sin(math.pi * t_)), z_))
+    tower += [(0.75, z_hi + 0.35), (0.7, z_hi + 0.7)]                        # the neck
+    for k_ in range(9):                                                      # the small knob, r 1.05
         a_ = math.radians(-60.0 + 150.0 * k_ / 8)
-        tower.append((1.5 * math.cos(a_), zc + 7.65 + 1.5 * math.sin(a_)))
-    tower.append((0.0, zc + 9.15))
+        tower.append((1.05 * math.cos(a_), z_hi + 1.6 + 1.05 * math.sin(a_)))
+    tower.append((0.0, z_hi + 2.65))
     lathe(mb, tower, "steel")
     black, red = [], []
     # as on the original (Badur's photo): the centre's numbers run clockwise from 0 at the stop
     # and count additions (black), the outer circle's anticlockwise and count subtractions (red)
     for k in range(10):
-        for rr, a_deg, txt, mat, z, store in ((ct["red_r"], 90.0 - 36.0 * k, str(k), "ink_black", dz + ct["centre_z"][1] + 0.05, black),
-                                              (ct["black_r"], 90.0 + 36.0 * k, str(k), "ink_red", dz + 0.05, red)):
+        for rr, a_deg, txt, mat, z, store in ((ct["red_r"], 72.0 - 36.0 * k, str(k), "ink_black", dz + ct["centre_z"][1] + 0.05, black),
+                                              (ct["black_r"], 108.0 + 36.0 * k, str(k), "ink_red", dz + 0.05, red)):
             a = math.radians(a_deg)
             gx, gy = rr * math.cos(a), rr * math.sin(a)
             store.append((gx, gy, z))
@@ -751,13 +761,16 @@ def build(p):
     ua = math.radians(stop_a)
     u_, n_ = (math.cos(ua), math.sin(ua)), (-math.sin(ua), math.cos(ua))
     at_ = lambda r, t: (u_[0] * r + n_[0] * t, u_[1] * r + n_[1] * t)
-    strip = [at_(sr0, -sw0 / 2), at_(sr1, -sw1 / 2), at_(sr1, sw1 / 2), at_(sr0, sw0 / 2)]
+    wr = lambda r: half_hp * r / hp                       # the wedge's half width: its sides point at the centre
+    r_tip = st["tip_width"] / 2.0 * hp / half_hp           # where the wedge narrows to the tip's width
+    tw = st["tip_width"] / 2.0
+    strip = [at_(sr0, -tw), at_(r_tip, -tw), at_(sr1, -wr(sr1)), at_(sr1, wr(sr1)), at_(r_tip, tw), at_(sr0, tw)]
+    sw1 = 2.0 * wr(sr1)
     fz0, fz1 = st["finger_z"]
     mb.prism(strip, "XY", dz + fz0, dz + fz1, "steel")
-    leg_o = [at_(sr1 - 2.2, -sw1 / 2), at_(sr1, -sw1 / 2), at_(sr1, sw1 / 2), at_(sr1 - 2.2, sw1 / 2)]
+    leg_o = [at_(sr1 - 2.2, -wr(sr1 - 2.2)), at_(sr1, -wr(sr1)), at_(sr1, wr(sr1)), at_(sr1 - 2.2, wr(sr1 - 2.2))]
     mb.prism(leg_o, "XY", dz - 0.5, dz + fz0 + 0.1, "steel")                     # down to the plate (into it)
-    wi = sw0 + (sw1 - sw0) * 2.2 / (sr1 - sr0)
-    leg_i = [at_(sr0, -sw0 / 2), at_(sr0 + 2.2, -wi / 2), at_(sr0 + 2.2, wi / 2), at_(sr0, sw0 / 2)]
+    leg_i = [at_(sr0, -tw), at_(sr0 + 2.2, -tw), at_(sr0 + 2.2, tw), at_(sr0, tw)]
     mb.prism(leg_i, "XY", dz + ct["centre_z"][1] - 0.5, dz + fz0 + 0.1, "steel")   # down to the brass centre
     for r_, t_ in ((sr1 - 1.2, -sw1 / 4), (sr1 - 1.2, sw1 / 4), (sr0 + 1.2, 0.0)):  # the screws' heads
         cx_, cy_ = at_(r_, t_)
@@ -770,7 +783,7 @@ def build(p):
     bl.parent(cplate, carriage)
 
     mb = MeshBuilder()
-    holes = [[(u + hp * math.cos(math.radians(90.0 + 36.0 * k)), w + hp * math.sin(math.radians(90.0 + 36.0 * k)))
+    holes = [[(u + hp * math.cos(math.radians(72.0 + 36.0 * k)), w + hp * math.sin(math.radians(72.0 + 36.0 * k)))
               for u, w in geom.circle(ct["hole_radius"], 20)] for k in range(10)]
     mb.prism_holes(geom.circle(r_out, 96), [geom.circle(r_in, 96)] + holes, "XY", dz + ct["ring_z"][0], dz + ct["ring_z"][1], "steel")
     cring = mb.build("pm.counter_ring", col, (dx, dy, 0))
@@ -794,7 +807,8 @@ def build(p):
         lathe(m_, prof, "brass_polished", (cx, cy, 0.0))
         return m_
 
-    cpin = pin_mesh(0.0, hp).build("pm.counter_pin", col, (dx, dy, 0))   # built at black 0, turned to its hole
+    a0 = math.radians(72.0)                                # the hole of black (inner) 0, right of the stop
+    cpin = pin_mesh(hp * math.cos(a0), hp * math.sin(a0)).build("pm.counter_pin", col, (dx, dy, 0))   # built at black 0, turned to its hole
     bl.set_motion(cpin, "rotate", (0, 0, 1), "Pin of the revolution counter", "Stift des Umdrehungszählers")
     bl.parent(cpin, carriage)
     mb = pin_mesh(0.0, -ct["park_r"])

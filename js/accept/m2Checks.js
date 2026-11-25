@@ -262,7 +262,7 @@ export function runM2Checks(root, opts = {}) {
     return { passed: bad.length === 0, detail: bad.join("; ") || `aligned within ${fmt(worst, 4)} mm at offsets 0–${c.m.maxOffset}; no intersections at rest` };
   });
 
-  run("A2-4", "1709 × 365 with the counter reads 623785; the pin set at black m rests on the stop after m turns, and turned back clears the finger for 9 - m turns", () => {
+  run("A2-4", "1709 × 365 with the counter reads 623785; the pin set at black m rests against the stop after m turns, and turned back clears it for 9 - m turns", () => {
     /** @type {string[]} */
     const bad = [];
     state(c, { input: 1709 });
@@ -275,11 +275,21 @@ export function runM2Checks(root, opts = {}) {
       pose(c);
       const pin = node(root, "pm.counter_pin");
       const plate = node(root, "pm.counter_plate");
-      const gap = minDistance(pin, plate);
       if (n !== d) bad.push(`digit ${d}: ${n} turns`);
+      const gap = minDistance(pin, plate);
       if (gap > CONTACT_PIN_MM || intersects(pin, plate)) bad.push(`digit ${d}: pin–stop ${fmt(gap)} mm`);
       if (c.m.turn(1)) bad.push(`digit ${d}: crank turned past the stop`);
       if (pinDigit(c) !== 0) bad.push(`digit ${d}: at the stop the pin points at black ${pinDigit(c)}`);
+      // the refused turn, followed by hand: as the ring steps, the pin meets the stop part-way
+      let meets = false;
+      for (let deg = 10; deg < 360 && !meets; deg += 5) {
+        /** @type {{ _theta: number }} */ (/** @type {unknown} */ (c.m))._theta = deg;
+        pose(c);
+        meets = intersects(pin, plate);
+      }
+      /** @type {{ _theta: number }} */ (/** @type {unknown} */ (c.m))._theta = 0;
+      pose(c);
+      if (!meets) bad.push(`digit ${d}: a further turn would not meet the stop`);
     });
     c.m.setPin(null);
     c.m.setOffset(0);
@@ -310,7 +320,7 @@ export function runM2Checks(root, opts = {}) {
     pose(c);
     if (turnsBack !== 6) bad.push(`pin 3: ${turnsBack} turns back (want 6)`);
     if (!jam) bad.push("pin 3: the refused turn back would not meet the finger");
-    return { passed: bad.length === 0, detail: bad.join("; ") || `reads ${showNum(r)}; pin on the stop after 5, 6 and 3 turns; turned back, 6 clear turns from hole 3, the 7th meets the finger` };
+    return { passed: bad.length === 0, detail: bad.join("; ") || `reads ${showNum(r)}; pin against the stop after 5, 6 and 3 turns, a further turn meets it; turned back, 6 clear turns from hole 3, the 7th meets it` };
   });
 
   run("A2-5", "623785 ÷ 1709: quotient 3, 6, 5 counted by the counter's ring, remainder 0", () => {
