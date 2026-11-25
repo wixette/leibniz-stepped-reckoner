@@ -158,7 +158,7 @@ def build(p):
         qa, qb = pair[k % 2]
         hub = cg["five_horn"]["hub_radius"]
         mb.prism(carry.five_horn(p, cg["p_phase"]), "XZ", qa, qb, "brass_polished")
-        mb.prism(geom.circle(hub, 32), "XZ", qa - 1.0, qb + 1.0, "brass_satin", smooth=True)
+        mb.prism(geom.circle(hub, 32), "XZ", qa - 0.8, qb + 1.0, "brass_satin", smooth=True)
         da, db = cp["detent"]
         mb.prism(carry.detent_wheel(p, 90.0), "XZ", da, db, "brass_satin")
         sa, sb = cp["s"]
@@ -214,9 +214,13 @@ def build(p):
     tip_z = det["radius"] + det["spring_gap"]
     leaf = [(8.2, 11.9), (8.2, 12.9), (0.7, 11.9), (0.0, tip_z), (0.9, 11.3)]
     da, db = cp["detent"]
+    fb = cp["frame_bar"]
+    # the register frame's bar (BADUR2026 Zaehlwerkrahmen): the shafts pass through it, the
+    # springs' studs stand in it
+    mb.prism(geom.rect(in_x0, fb["z"][0], in_x1, fb["z"][1]), "XZ", fb["y"][0], fb["y"][1], "brass_satin")
     for fxk, fzk in F:
         mb.prism([(u + fxk, w + fzk) for u, w in leaf], "XZ", da + 0.5, db - 0.5, "steel")
-        mb.prism([(u + fxk + 8.6, w + fzk + 12.4) for u, w in geom.circle(1.0, 16)], "XZ", da - 0.5, db + 0.5, "brass_satin", smooth=True)
+        mb.prism([(u + fxk + 8.6, w + fzk + 12.4) for u, w in geom.circle(1.0, 16)], "XZ", da - 0.3, fb["y"][0] + 0.6, "brass_satin", smooth=True)
     frame = static(mb.build("frame.static", col))
     bl.parent(frame, root)
 
