@@ -671,9 +671,13 @@ def build(p):
     # the dial reaches past this top's left edge (xt), so the top is one outline with a round bite
     # out of that edge rather than a plate with a hole
     rh = p.v(M2 + "counter")["dial_plate_radius"] + 0.05
+    ctp = p.v(M2 + "counter")
+    pa0 = math.radians(ctp["park_deg"])
+    # the hole the put-away pin stands in
+    park_hole = [(u + cdx + ctp["park_r"] * math.cos(pa0), w + cdy + ctp["park_r"] * math.sin(pa0)) for u, w in geom.circle(ctp["hole_radius"], 20)]
     if cdx - rh > xt:
         # the dial lies inside this top: a round hole for it
-        mb.prism_holes(geom.rect(xt, ky0, xr, ky1), [[(u + cdx, w + cdy) for u, w in geom.circle(rh, 96)]], "XY", zt - 2.0, zt, "brass_polished")
+        mb.prism_holes(geom.rect(xt, ky0, xr, ky1), [[(u + cdx, w + cdy) for u, w in geom.circle(rh, 96)], park_hole], "XY", zt - 2.0, zt, "brass_polished")
     else:
         # the dial reaches past the top's left edge: one outline with a round bite out of it
         hy = math.sqrt(rh * rh - (cdx - xt) ** 2)
@@ -681,7 +685,7 @@ def build(p):
         n_arc = 120
         sweep = 360.0 - 2.0 * (180.0 - a1)                    # the arc inside the plate, clockwise
         arc = [(cdx + rh * math.cos(math.radians(a1 - sweep * i / n_arc)), cdy + rh * math.sin(math.radians(a1 - sweep * i / n_arc))) for i in range(n_arc + 1)]
-        mb.prism_holes([(xt, ky0), (xr, ky0), (xr, ky1), (xt, ky1)] + arc, [], "XY", zt - 2.0, zt, "brass_polished")
+        mb.prism_holes([(xt, ky0), (xr, ky0), (xr, ky1), (xt, ky1)] + arc, [park_hole], "XY", zt - 2.0, zt, "brass_polished")
     # the walls start behind the front panel: sharing its front face made them flicker (z-fighting)
     mb.prism(geom.rect(xt - 3.0, pnl1, xt, ky1), "XY", zt, kz0, "brass_satin")            # riser between them
     wz0 = cs["carriage_wall_z0"]
@@ -790,8 +794,8 @@ def build(p):
     bl.set_motion(cring, "rotate", (0, 0, 1), "Revolution counter: ring with 10 holes", "Umdrehungszähler: Ring mit 10 Löchern")
     bl.parent(cring, carriage)
 
-    def pin_mesh(cx, cy):
-        # the pin: its stem in the hole, a slim collar resting on the ring, a neck and a big round head
+    def pin_mesh(cx, cy, dz_off=0.0):
+        # the pin: its stem in the hole, a flat cone resting on the ring, a neck and a big round head
         # (photos of the original and Brandt's Abb. II 5)
         m_ = MeshBuilder()
         sk, hd = ct["pin_skirt"], ct["pin_head"]
@@ -804,7 +808,7 @@ def build(p):
             a_ = math.radians(-70.0 + 160.0 * k_ / 12)
             prof.append((rh_ * math.cos(a_), hz_ + rh_ * math.sin(a_)))
         prof.append((0.0, hz_ + rh_))
-        lathe(m_, prof, "brass_polished", (cx, cy, 0.0))
+        lathe(m_, prof, "brass_polished", (cx, cy, dz_off))
         return m_
 
     a0 = math.radians(72.0)                                # the hole of black (inner) 0, right of the stop
@@ -813,10 +817,8 @@ def build(p):
     bl.parent(cpin, carriage)
     pa_ = math.radians(ct["park_deg"])
     px_, py_ = ct["park_r"] * math.cos(pa_), ct["park_r"] * math.sin(pa_)
-    mb = pin_mesh(px_, py_)
-    # its socket on the top: a short tube the stem goes into, the collar resting on it
-    mb.prism_holes([(u + px_, w + py_) for u, w in geom.circle(ct["pin_skirt"]["radius"][0], 24)],
-                   [[(u + px_, w + py_) for u, w in geom.circle(ct["hole_radius"], 20)]], "XY", dz, dz + ct["pin_skirt"]["z"][0] - 0.05, "brass_satin")
+    # put away it stands on the top itself, its cone on the top and its stem in a hole of the top
+    mb = pin_mesh(px_, py_, -(ct["pin_skirt"]["z"][0] - 0.05))
     cpark = static(mb.build("pm.counter_pin_park", col, (dx, dy, 0)))   # where the pin waits, shown when it is out
     bl.parent(cpark, carriage)
 
