@@ -168,7 +168,7 @@ def build(p):
         da, db = cp["detent"]
         mb.prism(carry.detent_wheel(p, 90.0), "XZ", da, db, "brass_satin")
         sa, sb = cp["s"]
-        mb.prism(geom.regular_polygon(pr, 5, 54.0), "XZ", pa, pb, "steel")
+        mb.prism(geom.regular_polygon(pr, 5, 54.0), "XZ", pa, pb, "steel_pentagon")
         store = mb.build(f"pi.carry_store.{k}", col, (fx, 0, fz))
         bl.set_anchors(store, "pentagon_corners", [(u, pb, w) for u, w in geom.regular_polygon(pr, 5, 54.0)])
         bl.set_motion(store, "rotate", (0, 1, 0), f"Carry store {k}", f"Übertragsspeicher {k}")

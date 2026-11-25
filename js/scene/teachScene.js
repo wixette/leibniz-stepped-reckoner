@@ -72,6 +72,8 @@ export function partCorners(objects) {
  *   the parts are now (views of carriage parts follow the carriage)
  * @property {string[]} [inside] for a view of parts inside the machine (U11): the parts it
  *   highlights while the case is hidden, the front open and the other parts faded
+ * @property {string[]} [veil] materials an inside view draws half-transparent wherever they are,
+ *   so that the parts behind them show
  */
 
 /**
@@ -112,6 +114,9 @@ export function viewSubjects(root) {
     },
     carry: {
       dirRipple: { x: -0.3, y: -0.15, z: -0.95 },
+      // the pentagons only show a stored carry (their tilt still shows through); s' and the
+      // ripple horns work right in front of them
+      veil: ["steel_pentagon"],
       ...view({ x: -0.15, y: 0.9, z: -0.75 }, ["pi.carry_store.0", "pi.carry_store.1", "pi.carry_store.2", "pi.carry_store.3", "pi.sum_wheel.0", "pi.sum_wheel.1", "pi.sum_wheel.2", "pi.sum_wheel.3"]),
       inside: [0, 1, 2, 3].flatMap((k) => [`pi.carry_store.${k}`, `pi.five_horn_s.${k}`, `pi.five_horn_sr.${k}`, `pi.sum_wheel.${k}`,
         `pm.zweihorn_add.${k}`, `pm.zweihorn_sub.${k}`, `pm.zweihorn_r_add.${k}`, `pm.zweihorn_r_sub.${k}`]),
@@ -191,26 +196,31 @@ export class Highlighter {
    * @param {string[]} patterns the parts to highlight
    * @param {boolean} fade
    * @param {string[]} [context] parts fading keeps as they are (not highlighted)
+   * @param {string[]} [veil] materials drawn half-transparent while fading (an inside view's)
    * @returns {void}
    */
-  set(patterns, fade, context = []) {
+  set(patterns, fade, context = [], veil = []) {
     this.faded.clear();
     const lit = this.meshes(patterns);
     const kept = this.meshes([...patterns, ...readouts(patterns), ...context]);
+    const veiled = (/** @type {THREE.Material} */ m) => fade && veil.includes(m.name);
     for (const [mesh, orig] of this.originals) {
       const on = lit.has(mesh);
       const dim = fade && lit.size > 0 && !kept.has(mesh);
-      if (!on && !dim) {
+      const thin = (Array.isArray(orig) ? orig : [orig]).some(veiled);
+      if (!on && !dim && !thin) {
         mesh.material = orig;
         continue;
       }
       if (dim) this.faded.add(mesh);
-      const look = `${on ? "lit" : ""} ${dim ? "dim" : ""}`;
       /**
        * @param {THREE.Material} m
        * @returns {THREE.Material}
        */
       const edit = (m) => {
+        const half = !dim && veiled(m);
+        const look = `${on ? "lit" : ""} ${dim ? "dim" : ""} ${half ? "veil" : ""}`;
+        if (!on && !dim && !half) return m;
         const byLook = this.clones.get(m) ?? new Map();
         this.clones.set(m, byLook);
         const made = byLook.get(look);
@@ -223,9 +233,9 @@ export class Highlighter {
           c.emissive = GLOW.clone();
           c.emissiveIntensity = 0.45;
         }
-        if (dim) {
+        if (dim || half) {
           c.transparent = true;
-          c.opacity = 0.15;
+          c.opacity = dim ? 0.15 : 0.4;
           c.depthWrite = false;
         }
         byLook.set(look, c);

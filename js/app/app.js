@@ -413,7 +413,7 @@ export class App {
       this.stage.casing = false;
       this.stage.cutaway = true;
       this.stage.applyToggles();
-      this.stage.highlight(subject.parts, true, subject.context);
+      this.stage.highlight(subject.parts, true, subject.context, view);
       this.say(() => t("status.inside"));
     }
     if (view === APART_VIEW) this.say(() => t("status.apart"));
@@ -480,7 +480,7 @@ export class App {
     this.stage.cutaway = p.cutaway;
     this.stage.setExplode(p.explode);
     this.stage.applyToggles();
-    this.stage.highlight(p.highlight, this.inside !== null, p.context);
+    this.stage.highlight(p.highlight, this.inside !== null, p.context, this.inside ? p.view : undefined);
     this.stage.setCallouts(p.callouts.map((x) => ({ node: x.node, text: () => t(x.text), value: x.value })));
     if (fly || p.view !== this.lastView) this.stage.fly(p.view);
     this.lastView = p.view;

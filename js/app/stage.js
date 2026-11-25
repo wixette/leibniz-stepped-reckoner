@@ -226,9 +226,10 @@ export class Stage {
    * @param {string[]} names
    * @param {boolean} fade
    * @param {string[]} [context]
+   * @param {ViewName} [view] the inside view on show, whose veiled materials go half-transparent
    */
-  highlight(names, fade, context) {
-    this.highlighter?.set(names, fade, context);
+  highlight(names, fade, context, view) {
+    this.highlighter?.set(names, fade, context, (view && this.views?.[view].veil) || []);
     this.viewer.invalidate();
   }
 
