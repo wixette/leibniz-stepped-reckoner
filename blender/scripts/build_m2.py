@@ -820,6 +820,7 @@ def build(p):
     # put away it stands on the top itself, its cone on the top and its stem in a hole of the top
     mb = pin_mesh(px_, py_, -(ct["pin_skirt"]["z"][0] - 0.05))
     cpark = static(mb.build("pm.counter_pin_park", col, (dx, dy, 0)))   # where the pin waits, shown when it is out
+    bl.set_anchors(cpark, "hole", [(px_, py_, dz)])                    # its hole in the top (a click there puts the pin away)
     bl.parent(cpark, carriage)
 
     # The counter's train (BADUR2026 sheet 8, Burkhardt 1897; lib/counter_train.py): the 17th

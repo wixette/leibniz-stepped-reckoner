@@ -92,6 +92,11 @@ export function intentAt(hit, point, m, dir = 1) {
     // The Magna Rota is fixed to the crank: clicking it turns the crank.
     if (n.name === gltfName("pm.magna_rota")) return { kind: "turn", dir };
     if (n.name === gltfName("pm.counter_pin") || n.name === gltfName("pm.counter_pin_park")) return { kind: "pin", hole: null };
+    // the pin's hole in the carriage's top: a click there puts the pin away
+    if (n.name === gltfName("pm.carriage_cover") && m.pin !== null) {
+      const park = n.parent?.getObjectByName(gltfName("pm.counter_pin_park"));
+      if (park && anchors(park, "hole")[0].distanceTo(point) < PARK_HOLE_REACH) return { kind: "pin", hole: null };
+    }
     if (n.name === gltfName("pm.counter_ring") || n.name === gltfName("pm.counter_plate")) {
       // The ring's 10 holes line up with the black digits around it at rest (the ring turns
       // by whole holes): the black digit nearest the click, round the counter's centre, gives
@@ -187,6 +192,9 @@ export class CrankDrag {
     return this.angle;
   }
 }
+
+/** How near the put-away pin's hole a click on the carriage's top puts the pin there (m): 5 mm. */
+const PARK_HOLE_REACH = 0.005;
 
 /** How far a crank must be dragged round to commit a full turn (or a shift): about 30°. */
 export const CRANK_COMMIT = THREE.MathUtils.degToRad(30);
