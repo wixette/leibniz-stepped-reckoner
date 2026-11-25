@@ -112,11 +112,23 @@ export const APART_VIEW = /** @type {const} */ ("apart");
  */
 
 /**
+ * A lesson names the original's carry parts (s, the Zweihorn's horns); with the ripple set
+ * fitted, the same roles are played by its parts (s', the long horns), which the page shows.
+ * @param {string} name node name or "prefix.*" pattern
+ * @param {"ripple" | "simultaneous"} mode
+ */
+export const fittedCarryPart = (name, mode) =>
+  mode === "ripple"
+    ? name.replace(/^pm\.zweihorn_(add|sub)\./, "pm.zweihorn_r_$1.").replace(/^pi\.five_horn_s\./, "pi.five_horn_sr.")
+    : name;
+
+/**
  * @param {Lesson} lesson
  * @param {number} i
+ * @param {"ripple" | "simultaneous"} [mode] the carry set fitted (lessons run with the ripple set)
  * @returns {Presentation}
  */
-export function presentation(lesson, i) {
+export function presentation(lesson, i, mode = "ripple") {
   /** @type {Presentation} */
   const p = { view: "overview", casing: true, cutaway: false, explode: 0, fade: false, highlight: [], context: [], callouts: [] };
   lesson.steps.slice(0, i + 1).forEach((s) => {
@@ -128,9 +140,9 @@ export function presentation(lesson, i) {
   p.fade = inside;
   p.explode = p.view === APART_VIEW ? 1 : 0;
   const s = lesson.steps[i];
-  p.highlight = s.highlight ?? [];
-  p.context = s.context ?? [];
-  p.callouts = s.callouts ?? [];
+  p.highlight = (s.highlight ?? []).map((n) => fittedCarryPart(n, mode));
+  p.context = (s.context ?? []).map((n) => fittedCarryPart(n, mode));
+  p.callouts = (s.callouts ?? []).map((c) => ({ ...c, node: fittedCarryPart(c.node, mode) }));
   return p;
 }
 
@@ -151,7 +163,7 @@ export const matches = (pattern, name) =>
 export function applyAction(m, a) {
   if ("reset" in a) {
     m.reset();
-    m.setMode(a.reset.mode ?? "ripple"); // the lessons still teach Lehmann's carry: reworked with the texts (v1.3 notes)
+    m.setMode(a.reset.mode ?? "ripple"); // the default, as in free play: the ripple carry
     m.setResult(a.reset.result ?? 0);
     m.setNumber(a.reset.input ?? 0);
     return true;

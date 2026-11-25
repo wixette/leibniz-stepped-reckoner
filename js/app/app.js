@@ -74,10 +74,11 @@ export const group3 = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 
 export class App {
   machine = (() => {
-    // the model's carry parts are the original's: free play uses its carry (v1.3 notes; the
-    // Carry switch is hidden until Lehmann's carry has parts of its own)
+    // free play starts with the ripple carry (a modern pair of carry parts of our design, a chain
+    // of carries in one turn), the friendlier for newcomers; the Carry switch fits the original's
+    // carry instead (design/v1.3-notes.md)
     const m = new Machine();
-    m.setMode("simultaneous");
+    m.setMode("ripple");
     return m;
   })();
   /** @type {Course | null} */
@@ -265,12 +266,13 @@ export class App {
   }
 
   /**
-   * Choose how the carry levers act (decision 0001): as on Lehmann's Dresden replica or as on the
-   *  original in Hannover. The Zweihörner turn to their new phases at once.
+   * Choose the carry (decision 0001, design/v1.3-notes.md): the ripple carry (our modern pair of
+   *  carry parts, levers staggered units first) or the original's (all levers at once).
    * @param {CarryMode} mode
    */
   setCarryMode(mode) {
     if (!this.machine.setMode(mode)) return;
+    if (this.stage.fitted === "carry") this.stage.fly("carry"); // the two sets stand apart
     this.say(() => t(`status.carry.${mode}`));
     this.afterLearner();
   }
@@ -284,8 +286,7 @@ export class App {
 
   reset() {
     this.animator.stop();
-    this.machine.reset();
-    this.machine.setMode("simultaneous");
+    this.machine.reset(); // the carry stays as chosen (U30)
     // the wheels and knobs going back to zero: a quick ratchet, not a tick per knob
     this.sound.resync(this.machine);
     for (let k = 0; k < 3; k++) this.sound.play("step", { delay: k * 0.07 });
@@ -432,7 +433,7 @@ export class App {
   insideSubject(view) {
     const c = this.course;
     if (c && !c.finished) {
-      const p = presentation(c.lesson, c.i);
+      const p = presentation(c.lesson, c.i, this.machine.mode);
       if (p.view === view && p.highlight.length > 0) return { parts: p.highlight, context: p.context };
     }
     const parts = this.stage.views?.[view].inside;
@@ -459,7 +460,7 @@ export class App {
   subject() {
     const c = this.course;
     if (!c || c.finished) return { parts: [], context: [] };
-    const p = presentation(c.lesson, c.i);
+    const p = presentation(c.lesson, c.i, this.machine.mode);
     return { parts: p.highlight, context: p.context };
   }
 
@@ -473,7 +474,7 @@ export class App {
   showPresentation(fly = false) {
     const c = this.course;
     if (!c) return;
-    const p = presentation(c.lesson, c.i);
+    const p = presentation(c.lesson, c.i, this.machine.mode);
     this.inside = INSIDE_VIEWS.has(p.view) && p.highlight.length > 0 ? { view: p.view, parts: p.highlight, context: p.context, casing: true } : null;
     this.stage.casing = p.casing;
     this.stage.cutaway = p.cutaway;

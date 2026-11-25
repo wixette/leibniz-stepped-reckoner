@@ -1,6 +1,6 @@
 # 0001: Which carry behaviour does the simulator show?
 
-- **Status:** accepted 2026-10-17 by the project owner: `ripple` is the default mode, `historical` is the second mode. **Amended 2026-11-21:** `historical` is replaced by `simultaneous`, the original's own carry (addendum at the end).
+- **Status:** accepted 2026-10-17 by the project owner: `ripple` is the default mode, `historical` is the second mode. **Amended 2026-11-21:** `historical` is replaced by `simultaneous`, the original's own carry. **Amended 2026-11-25:** `ripple` is carried by a modern pair of carry parts of our design and named *Ripple*, no longer *Lehmann* (addenda at the end).
 - **Date:** 2026-10-17
 - **Context documents:** `research/sources/notes-mechanism.md` §5, `research/sources/notes-history-and-reconstructions.md`
 
@@ -88,3 +88,14 @@ This is GWLB's sequence, including "only two carries at once": each lever passes
 3. The carry lesson ends with the original's three turns, and names Lehmann's replica as the source of the one-turn carry shown first.
 
 **Still open (closed 2026-11-24).** With our lever geometry the equal spread was 119°, not Burkhardt's 80°. Badur has since given the original's angle: **90° at the outer edges of the Zweihorn's two teeth**, on every lever (BADUR2026; *Das letzte Original*: "constant 90° Zweihorn angles and parallel carries"). Between the centres of our pins that is 83.3°, which fixes the lever phase: the two horns pass their store at **33.5°** (before the ribs) and **310.3°** (after them), symmetric about the lever's crossing of the store line. The behaviour is unchanged, and the book's own example now checks too: **099 + 3 shows 002**, the hundreds pentagon tilted, **then 102** after one idle turn; and a following sum finishes a waiting carry by itself, "before and after the digit transfer" (WALSDORF2014, ch. II). The phase is computed from `pars_mobilis.zweihorn.spread_original_outer` in `kinematicsM1.js`.
+
+## Addendum (2026-11-25): the ripple carry is a set of parts of our own; named *Ripple*
+
+**Why.** In v1.3.0 the carry is built from Klaus Badur's drawings of the original's parts (the Einzahn, the five-horns p and s, the ten-wheel, the detent wheel, the Zweihorn). With those parts a carry stage takes about 27° of crank and the resting horns block shifts over waiting stores, so a ripple carry cannot run on them in one turn (design/v1.3-notes.md, investigation of 2026-11-25). N. J. Lehmann's replica gets its ripple carry from re-dimensioned parts and its own timing (levers split around the crank's rest; a long chain finishes early in the next turn), so calling our mode "Lehmann" would no longer be accurate.
+
+**What the model does.** `ripple` now exchanges two parts in each digit for a pair of our design, a long thin Zweihorn and a small five-horned star s' on the store's shaft, behind the drum axes (where the long horns turn clear of them); every other carry part stays the original's. The levers are staggered units first, about 6° apart, and a chain of eight carries finishes within one turn; a horn that arrives while its store is still being stored catches it from behind. `simultaneous` is the original's carry, unchanged.
+
+**Decision (project owner, 2026-11-25).**
+1. The mode is shown as **"Ripple"** (its common name; in other languages the usual term, e.g. *Retenue en cascade*, 行波进位), described everywhere as modern parts of our design, not historical.
+2. **`ripple` stays the default** in free play and in the carry lesson: it is the friendlier for newcomers. The original's carry is one switch away and has its own lesson.
+3. Reset keeps the chosen carry (U30).

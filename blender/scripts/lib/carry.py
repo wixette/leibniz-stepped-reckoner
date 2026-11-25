@@ -112,11 +112,12 @@ def einzahn(p, tooth_deg):
     return out
 
 
-def zweihorn_horn(p):
+def zweihorn_horn(p, key="zweihorn"):
     """One horn of the Zweihorn along +u, from the lever's hub (hub_radius) to the tip
     (tip_radius, BADUR2026 Pos. 21: 25.2 across): straight flanks narrowing to the tip
-    width, the tip rounded with small corner radii (Detail F)."""
-    z = p.v("geometry.carry")["zweihorn"]
+    width, the tip rounded with small corner radii (Detail F). key "ripple_zweihorn": the
+    ripple set's longer horn (our design, design/v1.3-notes.md)."""
+    z = p.v("geometry.carry")[key]
     r0, r1, rt = z["hub_radius"], z["neck_radius"], z["tip_radius"]
     w0, w1, wt = z["root_half_width"], z["neck_half_width"], z["tip_half_width"]
     cr = z["tip_corner_radius"]
@@ -130,6 +131,55 @@ def zweihorn_horn(p):
         pts.append((rt - cr + cr * math.cos(t), wt - cr + cr * math.sin(t)))
     pts += [(rt - cr, wt), (r1, w1), (r0, w0)]
     return pts
+
+
+def ripple_star(p, phase_deg):
+    """The ripple set's front five-horn s' (our design, in the original's style): five horns
+    tapering from a broad root to a rounded tip, joined by concave hollows whose bottom lies on
+    hollow_radius; the Zweihorn strikes them near the hub, so the store turns fast."""
+    r = p.v("geometry.carry")["ripple_star"]
+    rt, wt, cr = r["tip_radius"], r["tip_half_width"], r["tip_corner_radius"]
+    rr, wr, hb = r["root_radius"], r["root_half_width"], r["hollow_radius"]
+    out = []
+    for k in range(5):
+        c = math.radians(phase_deg + 72.0 * k)
+        ux, uw = math.cos(c), math.sin(c)
+        nx, nw = -uw, ux
+
+        def at(rad, off):
+            return (ux * rad + nx * off, uw * rad + nw * off)
+
+        horn = [at(rr, -wr), at(rt - cr, -wt)]
+        for i in range(1, 5):
+            t = -math.pi / 2 + (math.pi / 2) * i / 4
+            horn.append(at(rt - cr + cr * math.cos(t), -wt + cr + cr * math.sin(t)))
+        for i in range(0, 4):
+            t = (math.pi / 2) * i / 4
+            horn.append(at(rt - cr + cr * math.cos(t), wt - cr + cr * math.sin(t)))
+        horn += [at(rt - cr, wt), at(rr, wr)]
+        out += horn
+        # the hollow to the next horn: an arc through this horn's left root, the bottom of the
+        # hollow on the bisector, and the next horn's right root
+        p0 = at(rr, wr)
+        c1 = c + math.radians(72.0)
+        p2 = (math.cos(c1) * rr - math.sin(c1) * -wr, math.sin(c1) * rr + math.cos(c1) * -wr)
+        mid = c + math.radians(36.0)
+        p1 = (hb * math.cos(mid), hb * math.sin(mid))
+        ax, ay = p0; bx, by = p1; qx, qy = p2
+        d = 2 * (ax * (by - qy) + bx * (qy - ay) + qx * (ay - by))
+        ox = ((ax * ax + ay * ay) * (by - qy) + (bx * bx + by * by) * (qy - ay) + (qx * qx + qy * qy) * (ay - by)) / d
+        oy = ((ax * ax + ay * ay) * (qx - bx) + (bx * bx + by * by) * (ax - qx) + (qx * qx + qy * qy) * (bx - ax)) / d
+        R = math.hypot(ax - ox, ay - oy)
+        t0, t1 = math.atan2(ay - oy, ax - ox), math.atan2(qy - oy, qx - ox)
+        tm = math.atan2(by - oy, bx - ox)
+        # go from t0 to t1 through tm
+        span = (t1 - t0) % (2 * math.pi)
+        if ((tm - t0) % (2 * math.pi)) > span:
+            span -= 2 * math.pi
+        for i in range(1, 10):
+            t = t0 + span * i / 10
+            out.append((ox + R * math.cos(t), oy + R * math.sin(t)))
+    return out
 
 
 def horn_tip_half_angle(p):

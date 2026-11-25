@@ -51,6 +51,7 @@ const DESIGNED = [
   /^pmlarge_gear_[ac]~pmlever\d+$/,
   /^pmdrum_shaft(\d+)~pmdrum\1$/,
   /^pmdrum_shaft(\d+)~pmsetting_rack\1$/, // the drum axis's head slides on its shaft
+  /^picarry_store(\d+)~pifive_horn_sr?\1$/, // the front five-horn sits on the intermediate shaft
   /^pmsetting_dial(\d+)~pmsetting_(plate|rack)\1$/,
   /^pmcounter_pin~pmcounter_ring$/, // the pin sits in a hole of the ring
   /^pmmagna_rota~pmmain_crank$/, // the Magna Rota is fixed to the crank

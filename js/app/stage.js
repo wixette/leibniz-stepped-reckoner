@@ -134,7 +134,8 @@ export class Stage {
     if (ex && factor !== this.explodeTarget) ex.apply(factor);
     const w = this.host.clientWidth;
     const h = this.host.clientHeight;
-    return frame(this.viewer.camera, points, v.dir, w, h, this.insets(), 0.9);
+    const dir = this.machine.mode === "ripple" && v.dirRipple ? v.dirRipple : v.dir;
+    return frame(this.viewer.camera, points, dir, w, h, this.insets(), 0.9);
   }
 
   /** The canvas changed size (or the bands did): centre on the free area, refit a fitted view. */

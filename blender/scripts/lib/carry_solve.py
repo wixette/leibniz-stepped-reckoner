@@ -72,7 +72,8 @@ def clearance(A, B, near=None):
 
 
 class Carry:
-    def __init__(self, p):
+    def __init__(self, p, ripple=False):
+        """ripple: the ripple set (s' and its long Zweihorn) instead of the original's s and Zweihorn."""
         self.p = p
         c = p.v("geometry.carry")
         self.c = c
@@ -84,6 +85,9 @@ class Carry:
         self.ez = carry.einzahn(p, self.ez_local)
         self.tw = carry.ten_wheel(p, c["ten_wheel"]["first_tooth"])
         self.horn = carry.zweihorn_horn(p)
+        if ripple:
+            self.fh_s = carry.ripple_star(p, self.s_phase)
+            self.horn = carry.zweihorn_horn(p, "ripple_zweihorn")
         self.detent_point = 9.0   # between the notches at 0 and 18 (BADUR2026 Pos. 20)
 
     # --- placed outlines --------------------------------------------------------------
@@ -167,3 +171,37 @@ class Carry:
         while last > 0 and tab[last] == tab[last - 1]:
             last -= 1
         return start, tab[:last + 1]
+
+    def catch_table(self, start, store0, step=0.05, lead=8.0):
+        """The horn catching a store that is still being stored (turning from 0 towards 18 under
+        the Einzahn and the detent spring) shortly before its own contact start `start` (from
+        zweihorn_table): it meets the five-horn from behind and pushes it on to 18. Returns
+        (alpha_first_contact, [store...]) every `step` deg up to `start`, for a store waiting at
+        store0 (< 18) when the horn comes; a store further on is held at least there."""
+        store, first, tab = store0, None, []
+        a = start - lead
+        while a <= start + 1e-9:
+            h = self.horn_at(a)
+            near = (h[len(h) // 2], 9.0)
+            if clearance(h, self.s_at(store), near) < CONTACT_MARGIN:
+                if first is None:
+                    first = a
+                lo, hi = store, store + 4.0
+                while clearance(h, self.s_at(hi), near) < CONTACT_MARGIN:
+                    hi += 4.0
+                for _ in range(40):
+                    mid = (lo + hi) / 2.0
+                    if clearance(h, self.s_at(mid), near) >= CONTACT_MARGIN:
+                        hi = mid
+                    else:
+                        lo = mid
+                # a store still behind the horn's pushing face: never pushed backwards
+                if hi - store > 6.0:
+                    raise ValueError(f"the horn meets a store at {store:.2f} from the wrong side at {a:.2f}")
+                store = hi
+            if first is not None:
+                tab.append(min(store, 18.0))
+            a += step
+        if first is None:
+            raise ValueError(f"the horn never meets a store waiting at {store0}")
+        return first, tab

@@ -168,13 +168,29 @@ def build(p):
         da, db = cp["detent"]
         mb.prism(carry.detent_wheel(p, 90.0), "XZ", da, db, "brass_satin")
         sa, sb = cp["s"]
-        mb.prism(carry.five_horn(p, cg["s_phase"]), "XZ", sa, sb, "brass_polished")
-        mb.prism(geom.circle(hub, 32), "XZ", sb, sb + 1.0, "brass_satin", smooth=True)
         mb.prism(geom.regular_polygon(pr, 5, 54.0), "XZ", pa, pb, "steel")
         store = mb.build(f"pi.carry_store.{k}", col, (fx, 0, fz))
         bl.set_anchors(store, "pentagon_corners", [(u, pb, w) for u, w in geom.regular_polygon(pr, 5, 54.0)])
         bl.set_motion(store, "rotate", (0, 1, 0), f"Carry store {k}", f"Übertragsspeicher {k}")
         bl.parent(store, root)
+        # the five-horn struck by the Zweihorn, exchangeable with the carry set (one of the two is
+        # shown, js/scene/m2Pose.js): the original's s (Badur), or the ripple set's star s' (our design)
+        mb = MeshBuilder()
+        mb.prism(carry.five_horn(p, cg["s_phase"]), "XZ", sa, sb, "brass_polished")
+        mb.prism(geom.circle(hub, 32), "XZ", sb, sb + 1.0, "brass_satin", smooth=True)
+        s_node = mb.build(f"pi.five_horn_s.{k}", col, (fx, 0, fz))
+        bl.set_motion(s_node, "rotate", (0, 1, 0), f"Front five-horn {k} (the original's)", f"Vorderes Fünfhorn {k} (Original)")
+        bl.parent(s_node, root)
+        # the ripple set's s' stands behind the drum axes' rear end, between the frame bar and
+        # the rear wall (geometry.m2.carry_planes.ripple_s), where its long Zweihorn turns clear
+        # of the drum axes; a collar fixes it to the shaft
+        ra, rb = cp["ripple_s"]
+        mb = MeshBuilder()
+        mb.prism(carry.ripple_star(p, cg["s_phase"]), "XZ", ra, rb, "steel")
+        mb.prism(geom.circle(2.4, 24), "XZ", rb, rb + 0.5, "brass_satin", smooth=True)
+        s_node = mb.build(f"pi.five_horn_sr.{k}", col, (fx, 0, fz))
+        bl.set_motion(s_node, "rotate", (0, 1, 0), f"Front five-horn {k} (ripple set)", f"Vorderes Fünfhorn {k} (Staffelsatz)")
+        bl.parent(s_node, root)
 
     # window plate (hung from the rear wall at both ends), between the frame's side walls
     fx_ = p.v(M2 + "frame_x")
@@ -354,6 +370,9 @@ def build(p):
     # pointing the other way (local 180 deg): the model mirrors the solve about the vertical
     # through the lever (m2Pose.js negates the horns' angles)
     horn_outline = [(-u, -w) for u, w in horn_outline]
+    # the ripple set's Zweihorn, built the same way (its hub radius and root width are the same)
+    horn_r = carry.zweihorn_horn(p, "ripple_zweihorn")
+    horn_outline_r = [(-u, -w) for u, w in hub_arc + horn_r[1:-1]]
     lever_r = cp["lever_shaft_radius"]
     # The drive row: the drum's gear (on a sleeve in front of the drum, sliding with it) has its
     # front face at drum_gear_y_at_9 at setting 9 and is 28.35 mm further back at setting 0;
@@ -455,12 +474,18 @@ def build(p):
         lever = mb.build(f"pm.lever.{j}", col, (lx, 0, lz))
         bl.set_motion(lever, "rotate", (0, 1, 0), f"Carry lever shaft {j}", f"Zweihornwelle {j}")
         bl.parent(lever, carriage)
-        for kind, (ay0, ay1), le, ld in (("add", (za0, za1), "Zweihorn: adding horn", "Zweihorn: Additionshorn"),
-                                         ("sub", (zs0, zs1), "Zweihorn: subtracting horn", "Zweihorn: Subtraktionshorn")):
+        for kind, (ay0, ay1), (ry0, ry1), le, ld in (
+                ("add", (za0, za1), cp["ripple_zweihorn_add"], "Zweihorn: adding horn", "Zweihorn: Additionshorn"),
+                ("sub", (zs0, zs1), cp["ripple_zweihorn_sub"], "Zweihorn: subtracting horn", "Zweihorn: Subtraktionshorn")):
             mb = MeshBuilder()
             mb.prism_holes(horn_outline, [geom.circle(lever_r + 0.15, 16)], "XZ", ay0, ay1, "steel_dark")
             horn = mb.build(f"pm.zweihorn_{kind}.{j}", col, (lx, 0, lz))
             bl.set_motion(horn, "rotate", (0, 1, 0), f"{le} {j}", f"{ld} {j}")
+            bl.parent(horn, carriage)
+            mb = MeshBuilder()
+            mb.prism_holes(horn_outline_r, [geom.circle(lever_r + 0.15, 16)], "XZ", ry0, ry1, "steel_dark")
+            horn = mb.build(f"pm.zweihorn_r_{kind}.{j}", col, (lx, 0, lz))
+            bl.set_motion(horn, "rotate", (0, 1, 0), f"{le} {j} (ripple set)", f"{ld} {j} (Staffelsatz)")
             bl.parent(horn, carriage)
 
     # The 17th shaft of the drive row, half a place right of the units drum at the levers'

@@ -65,6 +65,8 @@ export function partCorners(objects) {
  * towards the camera). js/scene/framing.js fits the parts into the free part of the canvas.
  * @typedef {object} ViewSubject
  * @property {THREE.Vector3Like} dir
+ * @property {THREE.Vector3Like} [dirRipple] where it looks from with the ripple carry set fitted
+ *   (its parts stand behind the drums, under the pentagons: seen from behind and a little below)
  * @property {() => THREE.Object3D[]} objects the parts it frames
  * @property {() => THREE.Vector3[]} points the corners of each part's own bounding box, where
  *   the parts are now (views of carriage parts follow the carriage)
@@ -109,8 +111,10 @@ export function viewSubjects(root) {
       inside: ["pm.drum.0", "pm.setting_rack.0", "pi.sum_wheel.0"],
     },
     carry: {
+      dirRipple: { x: -0.3, y: -0.15, z: -0.95 },
       ...view({ x: -0.15, y: 0.9, z: -0.75 }, ["pi.carry_store.0", "pi.carry_store.1", "pi.carry_store.2", "pi.carry_store.3", "pi.sum_wheel.0", "pi.sum_wheel.1", "pi.sum_wheel.2", "pi.sum_wheel.3"]),
-      inside: [0, 1, 2, 3].flatMap((k) => [`pi.carry_store.${k}`, `pi.sum_wheel.${k}`, `pm.zweihorn_add.${k}`, `pm.zweihorn_sub.${k}`]),
+      inside: [0, 1, 2, 3].flatMap((k) => [`pi.carry_store.${k}`, `pi.five_horn_s.${k}`, `pi.five_horn_sr.${k}`, `pi.sum_wheel.${k}`,
+        `pm.zweihorn_add.${k}`, `pm.zweihorn_sub.${k}`, `pm.zweihorn_r_add.${k}`, `pm.zweihorn_r_sub.${k}`]),
     },
   };
 }

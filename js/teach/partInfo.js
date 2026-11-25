@@ -39,6 +39,10 @@ const PLACED = /** @type {const} */ ([
   ["pm.lever.", "part.lever"],
   ["pm.zweihorn_add.", "part.zweihornAdd"],
   ["pm.zweihorn_sub.", "part.zweihornSub"],
+  ["pm.zweihorn_r_add.", "part.zweihornAddRipple"],
+  ["pm.zweihorn_r_sub.", "part.zweihornSubRipple"],
+  ["pi.five_horn_s.", "part.store"],
+  ["pi.five_horn_sr.", "part.rippleStar"],
   ["pm.setting_stop.", "part.settingStop"],
 ]);
 const SINGLE = /** @type {const} */ ([

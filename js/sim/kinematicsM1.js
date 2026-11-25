@@ -46,44 +46,82 @@ export const B_LF = deg(Math.atan2(F.z - L.z, F.x - L.x)); // lever axis -> stor
 /** Store angle at which a five-horn p's horn crosses the line to the next result shaft. */
 const CROSS = val(G.carry).transfer_crossing; // 36
 
-// --- Zweihorn push table (adding; subtraction is the mirror image) ----------------------
-const Z = tables.zweihorn;
-const TABLE_STEP = Z.step; // deg of lever travel
-
-/** Lever angle (deg) between first contact and the crossing of the store->lever line (negative). */
-export const CONTACT_START_REL = Z.contact_start_rel;
-/** Lever travel (deg) from first contact to where the horn alone would release the store. */
-export const RELEASE_TRAVEL = (Z.store.length - 1) * TABLE_STEP;
-export const RELEASE_STORE = Z.store[Z.store.length - 1];
-
-/** @param {number} t */
-const pushed = (t) => {
-  const x = t / TABLE_STEP;
-  const i = Math.min(Math.floor(x), Z.store.length - 2);
-  const f = x - i;
-  return Z.store[i] * (1 - f) + Z.store[i + 1] * f;
-};
+// --- Zweihorn push tables (adding; subtraction is the mirror image) ---------------------
+// One per carry set: the original's (Badur) for the simultaneous carry, the ripple set (our
+// design: a long thin Zweihorn and a small five-horned star s') for the ripple carry.
 
 /**
- * ripple: Lehmann's Dresden replica, levers staggered units first, so a chain of carries runs
- *  through in one turn. simultaneous: the original in Hannover, every lever at the same phase
- *  (K. Badur, measured on the original), so a carry made while carries are being passed on
- *  waits for a later pass (decision 0001).
+ * simultaneous: the original in Hannover, every lever at the same phase (K. Badur, measured on
+ *  the original), so a carry made while carries are being passed on waits for a later pass
+ *  (decision 0001). ripple: the ripple set's levers staggered units first, so a chain of carries
+ *  runs through in one turn (design/v1.3-notes.md).
  * @typedef {"ripple" | "simultaneous"} CarryMode
  */
 
+/** @type {Record<CarryMode, { step: number; contact_start_rel: number; store: number[]; catch?: { from_store: number; start: number; store: number[] } }>} */
+const TABLES = { simultaneous: tables.zweihorn, ripple: tables.zweihorn_ripple };
+
 /**
- * Lever travel (deg) after first contact from which the detent spring completes the store.
- *  The original (simultaneous): the horn pushes the store past the detent's point (SPRING_FROM).
- *  Lehmann (ripple): with the original's parts a carry takes ~26 deg of crank to reach the next
- *  wheel, too slow for a chain of eight in one turn (Lehmann re-dimensioned his Zweihoerner); here
- *  the spring completes the store as soon as the horn touches it (design/v1.3-notes.md).
+ * Lever angle (deg) between first contact and the crossing of the store->lever line (negative).
+ * @param {CarryMode} [mode]
+ */
+export function contactStartRel(mode = "simultaneous") {
+  return TABLES[mode].contact_start_rel;
+}
+/** The original set's, for the simultaneous carry. */
+export const CONTACT_START_REL = contactStartRel("simultaneous");
+
+/**
+ * Store angle (adding sense) pushed by the horn after t deg of lever travel since first contact.
+ * @param {number} t
+ * @param {CarryMode} mode
+ */
+const pushed = (t, mode) => {
+  const Z = TABLES[mode];
+  const x = t / Z.step;
+  const i = Math.max(0, Math.min(Math.floor(x), Z.store.length - 2));
+  const f = Math.min(1, x - i);
+  return Z.store[i] * (1 - f) + Z.store[i + 1] * f;
+};
+/**
+ * A horn that arrives while its store is still being stored (turning 0..18 under the Einzahn and
+ * the detent spring) meets the five-horn from behind and pushes it on to 18: the least store
+ * angle (adding sense) the horn allows t deg before its first contact with a store at 18
+ * (t < 0), or null outside that lead-in. Only the ripple set's levers follow closely enough.
+ * @param {number} t
+ * @param {CarryMode} mode
+ * @returns {number | null}
+ */
+export function catchCurve(t, mode) {
+  const c = TABLES[mode].catch;
+  if (!c || t >= 0 || t < c.start) return null;
+  const x = (t - c.start) / TABLES[mode].step;
+  const i = Math.max(0, Math.min(Math.floor(x), c.store.length - 2));
+  const f = Math.min(1, x - i);
+  return c.store[i] * (1 - f) + c.store[i + 1] * f;
+}
+/**
+ * The least store angle the catch applies to (a store further back is not yet in the horn's way).
+ * @param {CarryMode} mode
+ */
+export function catchFrom(mode) {
+  const c = TABLES[mode].catch;
+  return c ? c.from_store : Infinity;
+}
+
+/** @param {CarryMode} mode */
+const releaseTravel = (mode) => (TABLES[mode].store.length - 1) * TABLES[mode].step;
+/** @param {CarryMode} mode */
+const releaseStore = (mode) => TABLES[mode].store[TABLES[mode].store.length - 1];
+
+/**
+ * Lever travel (deg) after first contact until the horn has pushed the store past the detent
+ * wheel's point (SPRING_FROM), from where its spring completes the step.
  * @param {CarryMode} mode
  */
 function springStart(mode) {
-  if (mode === "ripple") return 0;
-  for (let t = 0; t <= RELEASE_TRAVEL; t += 0.01) if (pushed(t) >= SPRING_FROM) return t;
-  return RELEASE_TRAVEL;
+  for (let t = 0; t <= releaseTravel(mode); t += 0.01) if (pushed(t, mode) >= SPRING_FROM) return t;
+  return releaseTravel(mode);
 }
 const SPRING = { ripple: springStart("ripple"), simultaneous: springStart("simultaneous") };
 
@@ -96,11 +134,11 @@ const SPRING = { ripple: springStart("ripple"), simultaneous: springStart("simul
 export function executionCurve(t, mode = "simultaneous") {
   if (t <= 0) return STORE_STEP;
   const s0 = SPRING[mode];
-  if (t <= s0) return pushed(t);
-  const from = s0 === 0 ? STORE_STEP : pushed(s0);
+  if (t <= s0) return pushed(t, mode);
+  const from = pushed(s0, mode);
   const u = clamp01((t - s0) / SPRING_SNAP);
   const e = u * u * (3 - 2 * u);
-  return Math.max(t <= RELEASE_TRAVEL ? pushed(t) : RELEASE_STORE, from + (STORE_PITCH - from) * e);
+  return Math.max(t <= releaseTravel(mode) ? pushed(t, mode) : releaseStore(mode), from + (STORE_PITCH - from) * e);
 }
 
 /**
@@ -120,6 +158,15 @@ export function transferProgress(storeAbs) {
 export function transferTravel(mode = "simultaneous") {
   return TRANSFER[mode];
 }
+/**
+ * Lever travel (deg) after first contact until the store has reached angle a (adding sense).
+ * @param {CarryMode} mode
+ * @param {number} a
+ */
+function travelTo(mode, a) {
+  for (let t = 0; t <= executionTravel(mode); t += 0.01) if (executionCurve(t, mode) >= a) return t;
+  return executionTravel(mode);
+}
 /** @param {CarryMode} mode */
 function findTransfer(mode) {
   for (let t = 0; t <= executionTravel(mode); t += 0.01) {
@@ -137,6 +184,14 @@ export function executionTravel(mode = "simultaneous") {
 }
 const TRANSFER = { ripple: findTransfer("ripple"), simultaneous: findTransfer("simultaneous") };
 
+/**
+ * The ripple set's lever timing: the first lever touches its store so that the next wheel starts
+ * to turn at the carry window's start (after the ribs), and each lever follows the one below once
+ * that one's transfer is done (its own store then stored), plus a small margin.
+ */
+export const RIPPLE_FIRST = CARRY_WINDOW_START - travelTo("ripple", CROSS - 9);
+export const RIPPLE_STAGGER = TRANSFER.ripple + val(G.carry).ripple_stage_margin;
+
 // --- lever phases per mode ---------------------------------------------------------------
 
 /**
@@ -146,7 +201,7 @@ const TRANSFER = { ripple: findTransfer("ripple"), simultaneous: findTransfer("s
  * @returns {number}
  */
 export function leverWindow(i, mode) {
-  return mode === "ripple" ? CARRY_WINDOW_START + i * PER_CARRY : SIMULTANEOUS_WINDOW;
+  return mode === "ripple" ? RIPPLE_FIRST + i * RIPPLE_STAGGER : SIMULTANEOUS_WINDOW;
 }
 
 /**
@@ -172,7 +227,8 @@ const norm360 = (a) => ((a % 360) + 360) % 360;
  */
 export function hornPhases(i, mode) {
   const w = leverWindow(i, mode);
-  return { add: norm360(B_LF + CONTACT_START_REL - w), sub: norm360(B_LF - CONTACT_START_REL + w) };
+  const c = contactStartRel(mode);
+  return { add: norm360(B_LF + c - w), sub: norm360(B_LF - c + w) };
 }
 
 /**
@@ -186,7 +242,8 @@ export function leverPasses(i, mode, dir) {
   const ph = hornPhases(i, mode);
   // Adding: horns move CCW (+theta) and first touch at B_LF + CONTACT_START_REL.
   // Subtracting: horns move CW and first touch at B_LF - CONTACT_START_REL.
-  const target = dir > 0 ? B_LF + CONTACT_START_REL : B_LF - CONTACT_START_REL;
+  const c = contactStartRel(mode);
+  const target = dir > 0 ? B_LF + c : B_LF - c;
   return [ph.add, ph.sub]
     .map((p) => norm360(dir > 0 ? target - p : p - target))
     .map((t) => (t === 0 ? 360 : t))

@@ -1,6 +1,6 @@
 {
   "_schema": "Every numeric entry is {v, unit, conf, src, note?}. conf: doc = documented in a source; est = photo-scaled estimate; design = our own choice where sources are silent. Units: mm and deg (see docs/conventions.md). Source tags: research/sources/bibliography.md. Photo scaling (the est values): the 37 mm digit pitch of BURKHARDT1897 was used as the ruler. NL183/465 and /466 are Lehmann's drawings of the Dresden replica (Deutsches Museum München); page = PDF page of the delivered scan. version is the parameter set's own (each .glb records it as params_version), not the release's.",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "fidelity_target": "B",
   "reference_machine": "The original in Hannover (GWLB; 8/16/1 digits) where Klaus Badur measured it (BADUR2026: result and setting discs, pentagons, revolution counter, carriage hood and frame, oak case; the Zweihorn angle); elsewhere N. J. Lehmann's Dresden replica (TU Dresden, 1988-90), after its workshop drawings (NL183/465), which copies the original; otherwise proportions read from photos (decision 0002, amending D1 in design/m4-notes.md).",
   "layout": {
@@ -598,11 +598,30 @@
         },
         "p_phase": 0.0,
         "s_phase": 18.0,
-        "transfer_crossing": 36.0
+        "transfer_crossing": 36.0,
+        "ripple_star": {
+          "tip_radius": 4.8,
+          "tip_half_width": 0.2,
+          "tip_corner_radius": 0.08,
+          "root_radius": 2.6,
+          "root_half_width": 1.2,
+          "hollow_radius": 2.1
+        },
+        "ripple_zweihorn": {
+          "hub_radius": 4.5,
+          "neck_radius": 11.0,
+          "tip_radius": 17.65,
+          "root_half_width": 2.0,
+          "neck_half_width": 0.9,
+          "tip_half_width": 0.2,
+          "tip_corner_radius": 0.08,
+          "thickness": 1.8
+        },
+        "ripple_stage_margin": 0.2
       },
       "unit": "mm",
       "conf": "doc",
-      "src": "BADUR2026, part drawings 'Einzelteile 3' (Pos. 17 Zahnrad B, the small ten-wheel: z 10; Pos. 18 Ein-Horn: z 1 of 10; Pos. 19 5-Horn: z 5 of 20, tip 24.5, hollows R 6.5, 2 thick; Pos. 20 Rastrad: 21 across, notches 18 deg apart, middle 2.4 and outer 2.9 deep, points 0.1; Pos. 21 2-Horn: 25.2 across the horns, tips shaped like the five-horn's teeth with R 0.2 corners, hub R 4.5, 2 thick), all m 1.25, alpha 20 deg, profile shift about -0.25 mm; Detail E: centre distance five-horn to ten-wheel 18.25. 'Einzelteile 2' (register frame): result and intermediate shafts alternate every 18.25 at one height. Assembly drawing, section L-M: the Zweihorn's axis 21.6 below the five-horn's (the lever 4.9 above the drum axis, as on sheet 9), and section N-O (ten-wheel, five-horn, detent wheel and spring, Einzahn). Design values: join_radius (where a horn's tooth flank meets its hollow), the ten-wheel's and the five-horn's tooth thickness factors (backlash), the Einzahn's ring radius, the Zweihorn horn's neck and root widths, the horns' thickness (two horns in two planes, see geometry.m2.carry_planes). Phases: p_phase 0 (at rest a horn of p points at its own result shaft), s_phase 18 (s's hollow faces the Zweihorn, as in section L-M), the Einzahn's tooth at 198 deg in its wheel's frame (18 deg past the line to its store at digit 0, 18 deg before it at digit 9), the ten-wheel's first tooth at 0; transfer_crossing 36: a horn of p crosses the line to the next result shaft at store 36 deg, turning the ten-wheel 36 deg while the store turns 27..45. These are design values chosen so that every part clears every other in every state (2D check and the collision sweep): Badur's section N-O draws the Einzahn on the line at digit 0, which leaves a stored horn in the tooth's path when the wheel turns on. Deviation: the Zweihorn's horns reach 11.8 (Ø23.6, not Badur's 25.2) with tips 1.6 wide, so that they pass 0.25 mm under a stored five-horn when the carriage shifts with a carry waiting (the original shifts over waiting carries, decision 0002); with our approximated horn outline the full 12.6 would touch it.",
+      "src": "BADUR2026, part drawings 'Einzelteile 3' (Pos. 17 Zahnrad B, the small ten-wheel: z 10; Pos. 18 Ein-Horn: z 1 of 10; Pos. 19 5-Horn: z 5 of 20, tip 24.5, hollows R 6.5, 2 thick; Pos. 20 Rastrad: 21 across, notches 18 deg apart, middle 2.4 and outer 2.9 deep, points 0.1; Pos. 21 2-Horn: 25.2 across the horns, tips shaped like the five-horn's teeth with R 0.2 corners, hub R 4.5, 2 thick), all m 1.25, alpha 20 deg, profile shift about -0.25 mm; Detail E: centre distance five-horn to ten-wheel 18.25. 'Einzelteile 2' (register frame): result and intermediate shafts alternate every 18.25 at one height. Assembly drawing, section L-M: the Zweihorn's axis 21.6 below the five-horn's (the lever 4.9 above the drum axis, as on sheet 9), and section N-O (ten-wheel, five-horn, detent wheel and spring, Einzahn). Design values: join_radius (where a horn's tooth flank meets its hollow), the ten-wheel's and the five-horn's tooth thickness factors (backlash), the Einzahn's ring radius, the Zweihorn horn's neck and root widths, the horns' thickness (two horns in two planes, see geometry.m2.carry_planes). Phases: p_phase 0 (at rest a horn of p points at its own result shaft), s_phase 18 (s's hollow faces the Zweihorn, as in section L-M), the Einzahn's tooth at 198 deg in its wheel's frame (18 deg past the line to its store at digit 0, 18 deg before it at digit 9), the ten-wheel's first tooth at 0; transfer_crossing 36: a horn of p crosses the line to the next result shaft at store 36 deg, turning the ten-wheel 36 deg while the store turns 27..45. These are design values chosen so that every part clears every other in every state (2D check and the collision sweep): Badur's section N-O draws the Einzahn on the line at digit 0, which leaves a stored horn in the tooth's path when the wheel turns on. Deviation: the Zweihorn's horns reach 11.8 (Ø23.6, not Badur's 25.2) with tips 1.6 wide, so that they pass 0.25 mm under a stored five-horn when the carriage shifts with a carry waiting (the original shifts over waiting carries, decision 0002); with our approximated horn outline the full 12.6 would touch it. The ripple set (our design, 2026-11-25, design/v1.3-notes.md): for the ripple carry the Zweihorn and the front five-horn s are exchanged for a long thin Zweihorn (reach 17.65, tip 0.4 wide) and a small five-horned star s' (horns 4.8 long, tapering from 2.4 at the root to a 0.4 tooth tip, R hollows between them), on the same shafts but behind the drum axes' rear end (geometry.m2.carry_planes.ripple_*): at the front the long horn would pass 1.25 mm from each drum axis. The horn strikes s' near its hub, so a carry stage (first touch to the next wheel's step done) takes 5.8 deg of crank instead of 27; eight levers staggered by that plus ripple_stage_margin (7.3 deg) fit between the ribs and the end of the turn. The margin (1.5 deg, unit deg) lets the Einzahn and the detent spring bring the next store to 18 before the next lever's horn comes near: a store still turning (0..18) lies in that horn's path, and with 0.2 deg the horn met it 0.2 mm deep (collision sweep); 1.5 leaves 0.17 mm (2D check against the simulated store). A horn passes a resting s' with 0.19 mm, and every lever's resting horns clear resting and waiting stores when the carriage shifts (2D study).",
       "note": "Replaces the M1 carry of our own solving (capsule horns, Einzahn pin, Zweihorn pins; 2026-10, design/m1-notes.md) in params 0.8.0."
     },
     "m1": {
@@ -726,12 +745,24 @@
             -16.33,
             -14.53
           ],
+          "ripple_s": [
+            58.0,
+            62.0
+          ],
+          "ripple_zweihorn_add": [
+            58.1,
+            59.9
+          ],
+          "ripple_zweihorn_sub": [
+            60.1,
+            61.9
+          ],
           "store_shaft_front": -18.3,
           "lever_shaft_radius": 1.2,
           "frame_bar": {
             "y": [
-              57.0,
-              60.0
+              55.3,
+              57.5
             ],
             "z": [
               50.0,
@@ -741,7 +772,7 @@
         },
         "unit": "mm",
         "conf": "design",
-        "src": "Planes along Y (front to back) of the carry, behind the result discs (to 73.7): the five-horn p of store k with the Einzahn of wheel k and the ten-wheel of wheel k+1 in pair[k % 2] (the three meshing parts in one plane, neighbours alternating, as the replica's Muldenrad planes did); the detent wheel; the five-horn s with the Zweihorn's two horns, each in its own plane so the carry switch can turn them apart (the original's Zweihorn is one 2 mm part). Abb. II 9 (WALSDORF2014) draws s and the Zweihorn at the front, in front of the drums: in our layout the Zweihorn's 25.2 sweep would reach the drum's axis there (18.9 from the lever), so they stand behind the drum axes' rear end (80.5), as all the carry parts did before. The lever shaft is 1.2 in radius where it passes the drums' rib tips (0.2 mm). 2026-11-25: the two pair planes spread to 6 mm apart (Abb. II 9 draws o and r well apart on a shaft), and a bar of the register frame (BADUR2026 'Einzelteile 2', Zaehlwerkrahmen Pos. 3: one hole per shaft, 18.25 apart, and small holes for studs) between the detent wheels and s, through which the result and intermediate shafts pass and which carries the detent springs' studs; its section here (3 thick, 28 high) is a design value. 2026-11-25: s and the Zweihorn moved to the front, just behind the result discs and in front of the drums at their most forward (setting 0), as Abb. II 9 draws them; the intermediate shaft runs from s to the pentagon. 2026-11-25: the register made about as deep as the carriage (the TSD photo of Lehmann's replica, Brandt's Abb. II 5), the two depths 14 mm apart as Abb. II 9 spaces o and r, over the drums (p clears a drum's rib tips by 2.4 mm across the digit, the Einzahn and ten-wheel by 2.2)."
+        "src": "Planes along Y (front to back) of the carry, behind the result discs (to 73.7): the five-horn p of store k with the Einzahn of wheel k and the ten-wheel of wheel k+1 in pair[k % 2] (the three meshing parts in one plane, neighbours alternating, as the replica's Muldenrad planes did); the detent wheel; the five-horn s with the Zweihorn's two horns, each in its own plane so the carry switch can turn them apart (the original's Zweihorn is one 2 mm part). Abb. II 9 (WALSDORF2014) draws s and the Zweihorn at the front, in front of the drums: in our layout the Zweihorn's 25.2 sweep would reach the drum's axis there (18.9 from the lever), so they stand behind the drum axes' rear end (80.5), as all the carry parts did before. The lever shaft is 1.2 in radius where it passes the drums' rib tips (0.2 mm). 2026-11-25: the two pair planes spread to 6 mm apart (Abb. II 9 draws o and r well apart on a shaft), and a bar of the register frame (BADUR2026 'Einzelteile 2', Zaehlwerkrahmen Pos. 3: one hole per shaft, 18.25 apart, and small holes for studs) between the detent wheels and s, through which the result and intermediate shafts pass and which carries the detent springs' studs; its section here (3 thick, 28 high) is a design value. 2026-11-25: s and the Zweihorn moved to the front, just behind the result discs and in front of the drums at their most forward (setting 0), as Abb. II 9 draws them; the intermediate shaft runs from s to the pentagon. 2026-11-25: the register made about as deep as the carriage (the TSD photo of Lehmann's replica, Brandt's Abb. II 5), the two depths 14 mm apart as Abb. II 9 spaces o and r, over the drums (p clears a drum's rib tips by 2.4 mm across the digit, the Einzahn and ten-wheel by 2.2). 2026-11-25: the ripple set (our design, design/v1.3-notes.md) stands behind the drum axes' rear end (57.5), where its long Zweihorn (17.65) turns clear of them: at the front it would pass 1.25 mm from each drum axis, through the sleeve and the shaft. The frame bar moved forward for it from 57-60 to 55.3-57.5 (0.3 behind the detent wheels, 7 above the carriage's rear bearings, which reach z 42.9)."
       },
       "large_gears": {
         "v": {
@@ -1023,6 +1054,16 @@
             70
           ],
           "pi.carry_store.*": [
+            0,
+            50,
+            30
+          ],
+          "pi.five_horn_s.*": [
+            0,
+            50,
+            30
+          ],
+          "pi.five_horn_sr.*": [
             0,
             50,
             30

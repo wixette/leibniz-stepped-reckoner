@@ -8,13 +8,15 @@
 //                a Zweihorn horn executes it when it passes the store - but only stores
 //                under the carriage have a lever. A carry stored above the top lever stays
 //                stored (pentagon tilted) until the carriage is shifted over it.
-// Ripple mode (Lehmann's Dresden replica) staggers the levers units-first, so a secondary
-// carry is stored before the next lever arrives. Simultaneous mode (the original, all levers
+// Ripple mode (the ripple carry set, our design: a long Zweihorn and a small star s' behind the
+// drums) staggers the levers units-first, so a secondary carry is stored, or caught on its way,
+// before the next lever arrives. Simultaneous mode (the original, all levers
 // at one phase) leaves it stored for the next horn pass: each lever passes its store twice a
 // turn (both horns), so a waiting chain moves on two places per idle turn (decision 0001).
-// Magna Rota: geared 10:1 to the crank; its ring with 10 holes doubles as the
-// revolution counter (black numbers count additions, red ones subtractions). A pin in
-// hole m stops the crank after m forward turns (Leupold) - multiplication. Turned back, the
+// Revolution counter (on the carriage, as on the original; the Magna Rota is the crank's
+// disc): its ring with 10 holes turns one hole a turn (the centre's numbers count additions,
+// the outer ones subtractions). A pin in hole m stops the crank after m forward turns -
+// multiplication. Turned back, the
 // pin goes round the other way and meets the stop finger's far face: the finger's width
 // (about 0.22 of a crank turn) leaves 9 - m whole backward turns, and the next would jam
 // part-way, so it is refused. (The sources describe no one-way catch; the model measures
@@ -40,6 +42,7 @@ import * as M from "./kinematicsM1.js";
  * @typedef {object} Exec
  * @property {number} start |theta| of first contact
  * @property {1 | -1} sign
+ * @property {number} origin store angle at first contact less one carry (the store's rest)
  */
 /**
  * @typedef {object} DigitTrace
@@ -388,6 +391,12 @@ export class Machine {
         let a = K.storeAngle(p, v(t));
         for (const e of executions) {
           if (t >= e.start) a += e.sign * (M.executionCurve(t - e.start, this.mode) - K.STORE_STEP);
+          else {
+            // a horn arriving while its store is still being stored catches it from behind
+            const c = M.catchCurve(t - e.start, this.mode);
+            const rel = e.sign * (a - e.origin);
+            if (c !== null && rel >= M.catchFrom(this.mode) && rel < c) a = e.origin + e.sign * c;
+          }
         }
         return a;
       };
@@ -396,7 +405,7 @@ export class Machine {
         for (const start of M.leverPasses(j, this.mode, dir)) {
           const r = dir * store(start);
           const inPitch = ((r % K.STORE_PITCH) + K.STORE_PITCH) % K.STORE_PITCH;
-          if (Math.abs(inPitch - K.STORE_STEP) < 1e-6) executions.push({ start, sign: dir });
+          if (Math.abs(inPitch - K.STORE_STEP) < 1e-6) executions.push({ start, sign: dir, origin: store(start) - dir * K.STORE_STEP });
         }
       }
       /** @type {DigitTrace} */

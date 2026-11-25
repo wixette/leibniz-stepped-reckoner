@@ -237,7 +237,7 @@ const carryOriginal = {
     },
     { view: "register", highlight: ["pi.window"], text: "l.carry.origRecap", expect: (m) => m.shownNumber() === 10000 && allLevel(m) },
     {
-      // the toolbar's Carry box (U30): back to the default, Lehmann's carry
+      // the toolbar's Carry box (U30): back to the default, the ripple carry
       view: "register",
       text: "l.carry.switch",
       task: {

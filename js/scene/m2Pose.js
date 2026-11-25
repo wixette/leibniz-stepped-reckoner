@@ -25,11 +25,10 @@ export function m2NodeNames(R, C) {
     "pm.counter_shaft": "pm.counter_shaft",
   };
   for (let k = 0; k < R; k++) {
-    names[`pi.sum_wheel.${k}`] = `pi.sum_wheel.${k}`;
-    names[`pi.carry_store.${k}`] = `pi.carry_store.${k}`;
+    for (const base of ["pi.sum_wheel", "pi.carry_store", "pi.five_horn_s", "pi.five_horn_sr"]) names[`${base}.${k}`] = `${base}.${k}`;
   }
   for (let j = 0; j < C; j++) {
-    for (const base of ["pm.drum_shaft", "pm.drum", "pm.setting_rack", "pm.setting_dial", "pm.lever", "pm.zweihorn_add", "pm.zweihorn_sub"]) {
+    for (const base of ["pm.drum_shaft", "pm.drum", "pm.setting_rack", "pm.setting_dial", "pm.lever", "pm.zweihorn_add", "pm.zweihorn_sub", "pm.zweihorn_r_add", "pm.zweihorn_r_sub"]) {
       names[`${base}.${j}`] = `${base}.${j}`;
     }
   }
@@ -65,6 +64,8 @@ export function m2NodeValues(m) {
   p.register.forEach((r, k) => {
     out[`pi.sum_wheel.${k}`] = -r.wheel;
     out[`pi.carry_store.${k}`] = -r.store;
+    out[`pi.five_horn_s.${k}`] = -r.store;
+    out[`pi.five_horn_sr.${k}`] = -r.store;
   });
   p.carriage.forEach((c, j) => {
     out[`pm.drum_shaft.${j}`] = -c.drumShaft;
@@ -74,7 +75,27 @@ export function m2NodeValues(m) {
     out[`pm.lever.${j}`] = -c.lever;
     out[`pm.zweihorn_add.${j}`] = -c.hornAdd;
     out[`pm.zweihorn_sub.${j}`] = -c.hornSub;
+    // the carry sets are exchanged with the mode: the shown set's horns take the levers' phases
+    out[`pm.zweihorn_r_add.${j}`] = -c.hornAdd;
+    out[`pm.zweihorn_r_sub.${j}`] = -c.hornSub;
   });
+  return out;
+}
+
+/**
+ * The parts of the carry set not fitted in the machine's mode (Blender names): the original's
+ * Zweihorn and front five-horn s for the simultaneous carry, the ripple set's for the ripple carry.
+ * @param {Machine} m
+ * @returns {string[]}
+ */
+export function unfittedCarrySet(m) {
+  const ripple = m.mode === "ripple";
+  /** @type {string[]} */
+  const out = [];
+  for (let k = 0; k < m.registerDigits; k++) out.push(ripple ? `pi.five_horn_s.${k}` : `pi.five_horn_sr.${k}`);
+  for (let j = 0; j < m.carriageDigits; j++) {
+    for (const kind of ["add", "sub"]) out.push(ripple ? `pm.zweihorn_${kind}.${j}` : `pm.zweihorn_r_${kind}.${j}`);
+  }
   return out;
 }
 
@@ -88,6 +109,19 @@ export function m2NodeValues(m) {
  */
 export function applyM2Pose(rig, root, m) {
   for (const [name, value] of Object.entries(m2NodeValues(m))) rig.set(name, value);
+  const off = new Set(unfittedCarrySet(m).map(gltfName));
+  for (let k = 0; k < m.registerDigits; k++) {
+    for (const n of [`pi.five_horn_s.${k}`, `pi.five_horn_sr.${k}`]) {
+      const o = root.getObjectByName(gltfName(n));
+      if (o) o.visible = !off.has(gltfName(n));
+    }
+  }
+  for (let j = 0; j < m.carriageDigits; j++) {
+    for (const n of [`pm.zweihorn_add.${j}`, `pm.zweihorn_sub.${j}`, `pm.zweihorn_r_add.${j}`, `pm.zweihorn_r_sub.${j}`]) {
+      const o = root.getObjectByName(gltfName(n));
+      if (o) o.visible = !off.has(gltfName(n));
+    }
+  }
   const pin = root.getObjectByName(gltfName("pm.counter_pin"));
   if (pin) pin.visible = m.pin !== null;
   const park = root.getObjectByName(gltfName("pm.counter_pin_park"));

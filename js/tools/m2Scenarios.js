@@ -58,6 +58,44 @@ export const M2_SCENARIOS = [
     ops: [{ shift: 7 }, { input: 1 }, { turn: -1 }, { shift: 0 }],
   },
   {
+    label: "ripple 1709 × 365 with the counter",
+    mode: "ripple",
+    result: 0,
+    ops: [
+      { input: 1709 },
+      { pin: 5 }, { turn: 1, times: 5 },
+      { shift: 1 }, { pin: 6 }, { turn: 1, times: 6 },
+      { shift: 2 }, { pin: 3 }, { turn: 1, times: 3 },
+      { pin: null }, { shift: 0 },
+    ],
+  },
+  {
+    label: "ripple 999999999 + 1, shift, idle turn",
+    mode: "ripple",
+    result: 999_999_999,
+    ops: [{ input: 1 }, { turn: 1 }, { input: 0 }, { shift: 7 }, { shift: 1 }, { turn: 1 }],
+  },
+  {
+    label: "ripple 99999999 + 99999999 (every rib, every lever)",
+    mode: "ripple",
+    result: 99_999_999,
+    ops: [{ input: 99_999_999 }, { turn: 1 }],
+  },
+  {
+    label: "ripple 0 − 1 at offset 7 (borrow out of the top)",
+    mode: "ripple",
+    result: 0,
+    ops: [{ shift: 7 }, { input: 1 }, { turn: -1 }, { shift: 0 }],
+  },
+  {
+    // the carriage at its last place (offset 7): lever 7's long horn turns nearest the frame's
+    // left side wall
+    label: "ripple 99999999 + 1 at offset 7 (the far end, a carry through every lever)",
+    mode: "ripple",
+    result: 0,
+    ops: [{ shift: 7 }, { input: 99_999_999 }, { turn: 1 }, { input: 1 }, { turn: 1 }, { turn: -1 }, { shift: 0 }],
+  },
+  {
     label: "simultaneous 9999 + 1 (+2 idle)",
     mode: "simultaneous",
     result: 9999,

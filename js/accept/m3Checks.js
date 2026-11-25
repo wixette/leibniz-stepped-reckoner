@@ -190,7 +190,7 @@ export function runM3Checks(root) {
       l.steps.forEach((_, i) => {
         replayTo(l, i + 1, m);
         applyM2Pose(rig, root, m);
-        const p = presentation(l, i);
+        const p = presentation(l, i, m.mode);
         set(CASING, p.casing);
         set(["pm.carriage_panel"], !p.cutaway);
         for (const n of [...p.highlight, ...p.callouts.map((c) => c.node)]) {
@@ -379,12 +379,17 @@ export function runM3Checks(root) {
     const insets = { top: 80, right: 8, bottom: 8, left: 8 };
     const v = new THREE.Vector3();
     let worst = 1;
+    // every view, and the carry view also from where it looks with the ripple set fitted
+    const cases = VIEWS.flatMap((n) => {
+      const d = views[n].dirRipple;
+      return [{ name: n, label: n, dir: views[n].dir }, ...(d ? [{ name: n, label: `${n} (ripple set)`, dir: d }] : [])];
+    });
     for (const [w, h] of [[900, 600], [700, 900]]) {
-      for (const name of VIEWS) {
+      for (const { name, label, dir } of cases) {
         ex.apply(name === "apart" ? 1 : 0);
         const cam = new THREE.PerspectiveCamera(35, w / h, 0.002, 10);
         centreOnFreeArea(cam, w, h, insets);
-        const f = frame(cam, views[name].points(), views[name].dir, w, h, insets, 0.9);
+        const f = frame(cam, views[name].points(), dir, w, h, insets, 0.9);
         cam.position.copy(f.position);
         cam.lookAt(f.target);
         cam.updateMatrixWorld(true);
@@ -413,12 +418,12 @@ export function runM3Checks(root) {
         const fill = Math.max((r - l) / fw, (b - t) / fh);
         const off = Math.max(Math.abs((l + r) / 2 - (insets.left + fw / 2)) / fw, Math.abs((t + b) / 2 - (insets.top + fh / 2)) / fh);
         worst = Math.min(worst, fill);
-        if (fill < 0.8 || fill > 0.905) bad.push(`${name} at ${w}×${h}: fills ${fill.toFixed(2)}`);
-        if (off > 0.03) bad.push(`${name} at ${w}×${h}: ${(off * 100).toFixed(1)}% off-centre`);
+        if (fill < 0.8 || fill > 0.905) bad.push(`${label} at ${w}×${h}: fills ${fill.toFixed(2)}`);
+        if (off > 0.03) bad.push(`${label} at ${w}×${h}: ${(off * 100).toFixed(1)}% off-centre`);
       }
     }
     ex.apply(0);
-    return { passed: bad.length === 0, detail: bad.join("; ") || `${VIEWS.length} views at two canvas shapes; the least filled fills ${worst.toFixed(2)}` };
+    return { passed: bad.length === 0, detail: bad.join("; ") || `${cases.length} views at two canvas shapes; the least filled fills ${worst.toFixed(2)}` };
   });
 
   run("A3-15", "Dragging a crank round reads as the way the machine turns it: forward adds (or shifts left), backward the other way", () => {

@@ -5,7 +5,7 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { m2NodeValues } from "../js/scene/m2Pose.js";
+import { m2NodeValues, unfittedCarrySet } from "../js/scene/m2Pose.js";
 import * as K from "../js/sim/kinematics.js";
 import { Machine } from "../js/sim/machine.js";
 import { M2_SCENARIOS, walkM2 } from "../js/tools/m2Scenarios.js";
@@ -21,7 +21,7 @@ const SHIFT_STEP = Number(process.env.SHIFT_STEP ?? 1 / 32);
  * @property {string[]} hidden
  */
 /** @param {Machine} m */
-const hidden = (m) => (m.pin === null ? ["pm.counter_pin"] : ["pm.counter_pin_park"]);
+const hidden = (m) => [m.pin === null ? "pm.counter_pin" : "pm.counter_pin_park", ...unfittedCarrySet(m)];
 
 /** @type {Pose[]} */
 const poses = [];

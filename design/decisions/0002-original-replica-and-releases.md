@@ -20,7 +20,7 @@ Until v1.1 the model followed N. J. Lehmann's Dresden replica (decision D1 in `d
 ## Decision
 
 1. **One model, of the original.** Where Klaus Badur measured the original, the parts follow his measurements; where he did not, Lehmann's workshop drawings (NL 183/465) still fill in; other sizes stay estimated. This amends D1. A second set of models for the replica would double the upkeep for differences a user would hardly see.
-2. **The carry is the one difference users experience, and it stays switchable** (the toolbar's *Carry* box, U30): *Lehmann* (ripple) and *Original* (simultaneous). **Lehmann stays the default** in free play for v1.2.0: a newcomer who tries 9999 + 1 should not first meet a result that looks wrong. The carry lesson teaches both and points to the switch. The default is reconsidered in v1.3.0.
+2. **The carry is the one difference users experience, and it stays switchable** (the toolbar's *Carry* box, U30): *Lehmann* (ripple) and *Original* (simultaneous). **Lehmann stays the default** in free play for v1.2.0: a newcomer who tries 9999 + 1 should not first meet a result that looks wrong. The carry lesson teaches both and points to the switch. The default is reconsidered in v1.3.0. (2026-11-25: the ripple carry stays the default, now with a pair of carry parts of our design, shown as *Ripple*: decision 0001, last addendum.)
 3. **The Reference tab explains the original and its replicas** (Lehmann, Stein and Kopp, Badur and Rottstedt) and how this simulator relates to them.
 
 ## Releases

@@ -131,7 +131,7 @@ The first version used a brass-gold primary on warm neutrals to match the machin
 ### U6 — The learning path
 
 1. **Adding: the stepped drum** — one digit, then whole numbers at once.
-2. **The carry: 9999 + 1** — stored, then passed on, in one turn (Lehmann's replica, the page's default).
+2. **The carry: 9999 + 1** — stored, then passed on, in one turn (the ripple carry, the page's default: a modern pair of carry parts of our design, design/v1.3-notes.md).
 3. **Carries that wait: the original** — 9999 + 1 again as on the original in Hannover, whose levers all act at once: 9900, then two idle turns with 0, the learner turning them; ends with the toolbar's *Carry* box. (Split from lesson 2 in 1.2.0, which had grown to 15 steps that cannot be skipped.)
 4. **Subtracting: turn the other way** — 1000 − 1, borrowing as the mirror of carrying.
 5. **The carriage: places and × 10** — shifting multiplies the step by 10.
@@ -411,10 +411,10 @@ The machine is a mechanism of gears, racks and levers, and hearing it work tells
 
 ### U30 — The carry is a dropdown box in the toolbar
 
-The machine can carry two ways (decision 0001): like N. J. Lehmann's Dresden replica, whose levers come one after another, so a chain of carries runs on within one turn; or like the original in Hannover, whose levers all act at once, so a carry made while carries are being passed on waits, its pentagon tilted, for another turn. The reader chooses in free play.
+The machine can carry two ways (decision 0001): with the ripple carry, the default, whose levers come one after another, units first, so a chain of carries runs through within one turn (a modern pair of carry parts of our design in place of two of the original's in each digit, design/v1.3-notes.md: not historical, and not Lehmann's); or like the original in Hannover, whose levers all act at once, so a carry made while carries are being passed on waits, its pentagon tilted, for another turn. The reader chooses in free play.
 
-- **It is a setting, so it is a box (U22's rule):** "Carry" on its border, a short word inside (*Lehmann*, *Original*), and a ▾. Its menu names the two machines on one line each and says what each does on a second, smaller line; the current one is ticked. Its accessible name says the setting ("Carry: The original (Hannover)"), its tooltip what it chooses.
+- **It is a setting, so it is a box (U22's rule):** "Carry" on its border, a short word inside (*Ripple*, *Original*), and a ▾. Its menu names the two carries on one line each and says what each does on a second, smaller line; the current one is ticked. Its accessible name says the setting ("Carry: The original (Hannover)"), its tooltip what it chooses.
 - **It sits after the pin, before Reset,** and the two stay together where the toolbar wraps: on a phone they make the last row (number, crank and sound; carriage and pin; carry and reset). The word inside is short so the box stays narrow (80–100 px); its minimum width keeps the longest name on its border (Japanese 繰り上がり) inside it. Reset's label goes below a 940 px stage and the separators below 820 px, so a 1280 px laptop with the dock and a 768 px tablet still have one row. A phone has three rows (it had two from 390 px): the toolbar's boxes are wider than two rows of a phone hold, and the carry's name should stay readable rather than become an icon.
 - **Only at rest, only in free play.** It changes the levers' phases, so it waits for the crank to stop; a lesson sets its own carry with each step's reset, so in a lesson the box is greyed like every control the step does not ask for. Reset keeps the choice; leaving a lesson keeps the machine as the lesson left it, the carry included, as for everything else.
-- The status line says what the choice means, and the Zweihörner turn to their new phases at once, visible in the Carry view.
+- The status line says what the choice means, and the carry set is exchanged at once: the original's horns and star s at the front, or the ripple set's at the back, behind the drums, visible in the Carry view.
 
