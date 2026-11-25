@@ -220,9 +220,10 @@ def build(p):
     base_x0, base_x1 = in_x0 - fx_["end_bar_left"], in_x1 + fx_["end_bar_right"]
     mb = MeshBuilder()
     mb.prism(geom.rect(in_x0, 4.0, in_x1, 85.0), "XZ", wall0, wall1, "brass_satin")
-    mb.prism(geom.rect(in_x0, zs - 4.5, in_x1, zs + 4.5), "XZ", 10.0, 13.0, "brass_satin")
+    fb0, fb1 = fr["register_front_bar_y"]
+    mb.prism(geom.rect(in_x0, zs - 4.5, in_x1, zs + 4.5), "XZ", fb0, fb1, "brass_satin")
     for bx in (in_x0, in_x1 - 3.0):
-        mb.prism(geom.rect(bx, 13.0, bx + 3.0, wall0), "XY", zs - 4.5, zs + 4.5, "brass_satin")
+        mb.prism(geom.rect(bx, fb1, bx + 3.0, wall0), "XY", zs - 4.5, zs + 4.5, "brass_satin")
     ny0, ny1, nz = ls["y"] - ls["radius"] - 2.5, ls["y"] + ls["radius"] + 2.5, ls["z"] - ls["radius"] - 2.5
     ysp, zlow = fr["side_wall_y_split"], fr["side_wall_low_z"]
     for wx0 in (in_x0 - sw, in_x1):

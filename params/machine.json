@@ -506,10 +506,10 @@
         "note": "tip clearance 0.67 mm against the drum's tip (p. 93)"
       },
       "y": {
-        "v": 20,
+        "v": 25.0,
         "unit": "mm",
         "conf": "design",
-        "src": "layout of one digit along Y (front to back), shared by every digit"
+        "src": "layout of one digit along Y (front to back), shared by every digit 2026-11-25 (owner: readable digits): the result dish is 8 deep, not Badur's 3, with digits 6.6 high on its rim (as on the setting dials), facing up at the window; everything behind the dishes (s and the Zweihorn, the drums through the receiving gear, the carry's planes, the frame bar, the ripple set, the rear wall, the pentagons, the register cover's end, the carriage's rear bearings and floor) moved 5 mm back to make room. No contact or mesh changes: only distances along the shafts (design/v1.3-notes.md)."
       }
     },
     "setting": {
@@ -720,49 +720,49 @@
         "v": {
           "pair": [
             [
-              33.0,
-              35.0
+              38.0,
+              40.0
             ],
             [
-              47.0,
-              49.0
+              52.0,
+              54.0
             ]
           ],
           "mesh_overhang": 0.25,
           "detent": [
-            51.0,
-            55.0
+            56.0,
+            60.0
           ],
           "s": [
-            -18.43,
-            -14.43
+            -13.43,
+            -9.43
           ],
           "zweihorn_add": [
-            -18.33,
-            -16.53
+            -13.33,
+            -11.53
           ],
           "zweihorn_sub": [
-            -16.33,
-            -14.53
+            -11.33,
+            -9.53
           ],
           "ripple_s": [
-            58.0,
-            62.0
+            63.0,
+            67.0
           ],
           "ripple_zweihorn_add": [
-            58.1,
-            59.9
+            63.1,
+            64.9
           ],
           "ripple_zweihorn_sub": [
-            60.1,
-            61.9
+            65.1,
+            66.9
           ],
-          "store_shaft_front": -18.3,
+          "store_shaft_front": -13.3,
           "lever_shaft_radius": 1.2,
           "frame_bar": {
             "y": [
-              55.3,
-              57.5
+              60.3,
+              62.5
             ],
             "z": [
               50.0,
@@ -772,7 +772,7 @@
         },
         "unit": "mm",
         "conf": "design",
-        "src": "Planes along Y (front to back) of the carry, behind the result discs (to 73.7): the five-horn p of store k with the Einzahn of wheel k and the ten-wheel of wheel k+1 in pair[k % 2] (the three meshing parts in one plane, neighbours alternating, as the replica's Muldenrad planes did); the detent wheel; the five-horn s with the Zweihorn's two horns, each in its own plane so the carry switch can turn them apart (the original's Zweihorn is one 2 mm part). Abb. II 9 (WALSDORF2014) draws s and the Zweihorn at the front, in front of the drums: in our layout the Zweihorn's 25.2 sweep would reach the drum's axis there (18.9 from the lever), so they stand behind the drum axes' rear end (80.5), as all the carry parts did before. The lever shaft is 1.2 in radius where it passes the drums' rib tips (0.2 mm). 2026-11-25: the two pair planes spread to 6 mm apart (Abb. II 9 draws o and r well apart on a shaft), and a bar of the register frame (BADUR2026 'Einzelteile 2', Zaehlwerkrahmen Pos. 3: one hole per shaft, 18.25 apart, and small holes for studs) between the detent wheels and s, through which the result and intermediate shafts pass and which carries the detent springs' studs; its section here (3 thick, 28 high) is a design value. 2026-11-25: s and the Zweihorn moved to the front, just behind the result discs and in front of the drums at their most forward (setting 0), as Abb. II 9 draws them; the intermediate shaft runs from s to the pentagon. 2026-11-25: the register made about as deep as the carriage (the TSD photo of Lehmann's replica, Brandt's Abb. II 5), the two depths 14 mm apart as Abb. II 9 spaces o and r, over the drums (p clears a drum's rib tips by 2.4 mm across the digit, the Einzahn and ten-wheel by 2.2). 2026-11-25: the ripple set (our design, design/v1.3-notes.md) stands behind the drum axes' rear end (57.5), where its long Zweihorn (17.65) turns clear of them: at the front it would pass 1.25 mm from each drum axis, through the sleeve and the shaft. The frame bar moved forward for it from 57-60 to 55.3-57.5 (0.3 behind the detent wheels, 7 above the carriage's rear bearings, which reach z 42.9)."
+        "src": "Planes along Y (front to back) of the carry, behind the result discs (to 73.7): the five-horn p of store k with the Einzahn of wheel k and the ten-wheel of wheel k+1 in pair[k % 2] (the three meshing parts in one plane, neighbours alternating, as the replica's Muldenrad planes did); the detent wheel; the five-horn s with the Zweihorn's two horns, each in its own plane so the carry switch can turn them apart (the original's Zweihorn is one 2 mm part). Abb. II 9 (WALSDORF2014) draws s and the Zweihorn at the front, in front of the drums: in our layout the Zweihorn's 25.2 sweep would reach the drum's axis there (18.9 from the lever), so they stand behind the drum axes' rear end (80.5), as all the carry parts did before. The lever shaft is 1.2 in radius where it passes the drums' rib tips (0.2 mm). 2026-11-25: the two pair planes spread to 6 mm apart (Abb. II 9 draws o and r well apart on a shaft), and a bar of the register frame (BADUR2026 'Einzelteile 2', Zaehlwerkrahmen Pos. 3: one hole per shaft, 18.25 apart, and small holes for studs) between the detent wheels and s, through which the result and intermediate shafts pass and which carries the detent springs' studs; its section here (3 thick, 28 high) is a design value. 2026-11-25: s and the Zweihorn moved to the front, just behind the result discs and in front of the drums at their most forward (setting 0), as Abb. II 9 draws them; the intermediate shaft runs from s to the pentagon. 2026-11-25: the register made about as deep as the carriage (the TSD photo of Lehmann's replica, Brandt's Abb. II 5), the two depths 14 mm apart as Abb. II 9 spaces o and r, over the drums (p clears a drum's rib tips by 2.4 mm across the digit, the Einzahn and ten-wheel by 2.2). 2026-11-25: the ripple set (our design, design/v1.3-notes.md) stands behind the drum axes' rear end (57.5), where its long Zweihorn (17.65) turns clear of them: at the front it would pass 1.25 mm from each drum axis, through the sleeve and the shaft. The frame bar moved forward for it from 57-60 to 55.3-57.5 (0.3 behind the detent wheels, 7 above the carriage's rear bearings, which reach z 42.9). 2026-11-25 (owner: readable digits): the result dish is 8 deep, not Badur's 3, with digits 6.6 high on its rim (as on the setting dials), facing up at the window; everything behind the dishes (s and the Zweihorn, the drums through the receiving gear, the carry's planes, the frame bar, the ripple set, the rear wall, the pentagons, the register cover's end, the carriage's rear bearings and floor) moved 5 mm back to make room. No contact or mesh changes: only distances along the shafts (design/v1.3-notes.md)."
       },
       "large_gears": {
         "v": {
@@ -797,8 +797,8 @@
       },
       "rear_wall_y": {
         "v": [
-          63.0,
-          66.0
+          68.0,
+          71.0
         ],
         "unit": "mm",
         "conf": "design",
@@ -810,7 +810,7 @@
           "x_margin_left": 50.75,
           "y": [
             -104,
-            61
+            66.0
           ],
           "z": [
             4.3,
@@ -825,10 +825,10 @@
       "carriage_rear": {
         "v": {
           "bearing_y": [
-            53.0,
-            56.0
+            58.0,
+            61.0
           ],
-          "drum_shaft_back": 57.5
+          "drum_shaft_back": 62.5
         },
         "unit": "mm",
         "conf": "design",
@@ -939,9 +939,13 @@
             112.0
           ],
           "side_wall_low_z": 24.5,
-          "side_wall_y_split": 10.0,
+          "side_wall_y_split": 15.0,
           "side_wall_top_z": 70.0,
-          "screw_start_dx": -14.5
+          "screw_start_dx": -14.5,
+          "register_front_bar_y": [
+            15.0,
+            18.0
+          ]
         },
         "unit": "mm",
         "conf": "design",
@@ -978,7 +982,7 @@
           "floor_top_z": -60.0,
           "wall_top_z": 140.0,
           "bearer_length": 50.0,
-          "register_cover_y1": 67.5
+          "register_cover_y1": 72.5
         },
         "unit": "mm",
         "conf": "design",
@@ -993,25 +997,25 @@
           ],
           "result_disc_y": [
             -21.93,
-            -18.93
+            -13.93
           ],
-          "result_glyph_size": 2.7,
+          "result_glyph_size": 6.6,
           "window_y": [
             -21.83,
-            -19.03
+            -14.03
           ],
           "window_half_x": 6.3,
           "window_rail_y": [
             -23.4,
-            -15.0
+            -10.0
           ],
           "read_half_size": [
             3.0,
-            1.1
+            3.3
           ],
           "cover_opening_y": [
             -22.4,
-            -18.4
+            -13.4
           ],
           "cover_opening_half_x": 7.3,
           "setting_plate_r": 18.0,
@@ -1029,7 +1033,7 @@
         },
         "unit": "mm",
         "conf": "design",
-        "src": "The result discs are the original's: BADUR2026 Pos. 32 (Zaehlerrad): 35.5 across, a dish: a rim ring about 3 deep (35.5 outside, a 32 recess inside, open to the front as in Brandt's Abb. II 5), a thin face plate at its back and a hub, the digits on the rim ring's outer face, digits 2.7 high punched round the rim, at the front end of the result shafts (Lange 1958, NL183/466 PLAN p. 9; Badur's plan view). The setting dials' glyphs remain a teaching deviation. Before 0.9.0 the discs were 14 wide with 14.3 digits, behind the drums. TEACHING DEVIATION for the digits, not a documented size; the discs themselves are the original's (result disc 17.35 + its 0.4 rim = Ø35.5, setting plate Ø36, BADUR2026): the sources give no digit sizes (Leupold 1727 only says the digits are inscribed). Enlarged so the digits read on the whole 16-digit machine. Digit height = 0.70 x glyph size. Result: 10.0 mm digits (was 4.3) on a disc r 17.5 (was 15), 14 mm wide (was 8), between the drum end at y 58 and the store horns at y 75; window 12.6 x 13.2 mm leaves about 3 mm of white beside and 1.6 mm above/below the digit, and neighbouring digits stay out of view; adjacent rims 1.2 mm apart. Setting dials: 4.6 mm digits (was 2.7) on r 14.3, plate r 18 (was 17; plates 1 mm apart on the 37 mm pitch), pointer 10.5. Magna Rota: 9.1 mm digits (was 4.2); rings from the edge: holes r 55, black digits r 45, red digits r 32, so the stop finger never covers a digit. M0/M1 slices keep their sizes. Setting plate radius 17.75: NL183/465 p. 35 (setting dial 35.5)."
+        "src": "The result discs are the original's: BADUR2026 Pos. 32 (Zaehlerrad): 35.5 across, a dish: a rim ring about 3 deep (35.5 outside, a 32 recess inside, open to the front as in Brandt's Abb. II 5), a thin face plate at its back and a hub, the digits on the rim ring's outer face, digits 2.7 high punched round the rim, at the front end of the result shafts (Lange 1958, NL183/466 PLAN p. 9; Badur's plan view). The setting dials' glyphs remain a teaching deviation. Before 0.9.0 the discs were 14 wide with 14.3 digits, behind the drums. TEACHING DEVIATION for the digits, not a documented size; the discs themselves are the original's (result disc 17.35 + its 0.4 rim = Ø35.5, setting plate Ø36, BADUR2026): the sources give no digit sizes (Leupold 1727 only says the digits are inscribed). Enlarged so the digits read on the whole 16-digit machine. Digit height = 0.70 x glyph size. Result: 10.0 mm digits (was 4.3) on a disc r 17.5 (was 15), 14 mm wide (was 8), between the drum end at y 58 and the store horns at y 75; window 12.6 x 13.2 mm leaves about 3 mm of white beside and 1.6 mm above/below the digit, and neighbouring digits stay out of view; adjacent rims 1.2 mm apart. Setting dials: 4.6 mm digits (was 2.7) on r 14.3, plate r 18 (was 17; plates 1 mm apart on the 37 mm pitch), pointer 10.5. Magna Rota: 9.1 mm digits (was 4.2); rings from the edge: holes r 55, black digits r 45, red digits r 32, so the stop finger never covers a digit. M0/M1 slices keep their sizes. Setting plate radius 17.75: NL183/465 p. 35 (setting dial 35.5). 2026-11-25 (owner: readable digits): the result dish is 8 deep, not Badur's 3, with digits 6.6 high on its rim (as on the setting dials), facing up at the window; everything behind the dishes (s and the Zweihorn, the drums through the receiving gear, the carry's planes, the frame bar, the ripple set, the rear wall, the pentagons, the register cover's end, the carriage's rear bearings and floor) moved 5 mm back to make room. No contact or mesh changes: only distances along the shafts (design/v1.3-notes.md)."
       },
       "explode": {
         "v": {
@@ -1138,12 +1142,12 @@
           "circumradius": 21.029,
           "y_rows": [
             [
-              68.0,
-              70.0
-            ],
-            [
               73.0,
               75.0
+            ],
+            [
+              78.0,
+              80.0
             ]
           ]
         },
