@@ -443,6 +443,8 @@ a { color: var(--md-primary); }
 .select-field[aria-expanded="true"] { border-color: var(--md-primary); box-shadow: inset 0 0 0 1px var(--md-primary); }
 .select-field[aria-expanded="true"] .field-label { color: var(--md-primary); }
 .select-field[aria-disabled="true"] { opacity: 0.45; cursor: default; }
+/* the pin set by a red number (for turning back), as on the counter */
+.select-value.red { color: var(--red); }
 /* A value's box with the buttons that act on it joined to its edges, full height, one outer
    corner shape (U21, U23): the pin's box and Run to stop (→|), the carriage's place between
    its arrows. Icon-only buttons; their names are in their tooltips. */

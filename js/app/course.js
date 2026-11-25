@@ -33,6 +33,7 @@ const TASK_CONTROLS = {
   ],
   pin: [{ id: "pinBtn", icon: "keyboard_arrow_down", label: "strip.pin" }],
   toStop: [{ id: "toStopBtn", icon: "last_page", label: "strip.toStop" }],
+  toStopBack: [{ id: "toStopBackBtn", icon: "first_page", label: "strip.toStopBack" }],
   reset: [{ id: "resetBtn", icon: "restart_alt", label: "strip.reset" }],
   carry: [{ id: "carryBtn", icon: "keyboard_arrow_down", label: "strip.carry" }],
 };

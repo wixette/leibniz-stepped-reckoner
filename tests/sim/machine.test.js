@@ -127,6 +127,18 @@ describe("Machine (16-digit register, 8-digit carriage)", () => {
     assert.equal(registerValue(m), 999_999_999);
   });
 
+  it("the pin at red m (the hole of black 9 - m) runs back to the stop after m turns: subtracting m times", () => {
+    for (const red of [1, 5, 8, 9]) {
+      const m = new Machine();
+      m.setResult(10_000);
+      m.setNumber(7);
+      assert.equal(m.setPin(9 - red), true); // red 9 is the hole of black 0
+      assert.equal(m.runBackToStop(), red);
+      assert.equal(m.blockedBack, true);
+      assert.equal(m.shownNumber(), 10_000 - 7 * red);
+    }
+  });
+
   it("the pin lets the crank turn back 9 - m whole turns, then refuses", () => {
     for (const hole of [0, 3, 8, 9]) {
       const m = new Machine();

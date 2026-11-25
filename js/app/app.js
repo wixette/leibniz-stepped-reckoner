@@ -185,6 +185,8 @@ export class App {
     if (control === "carry" && !m.atRest) return no("status.busy");
     if (control === "toStop" && m.pin === null) return no("status.noPin");
     if (control === "toStop" && m.blocked) return no("status.blockedPin");
+    if (control === "toStopBack" && m.pin === null) return no("status.noPin");
+    if (control === "toStopBack" && m.blockedBack) return no("status.blockedPinSub");
     return { enabled: true, reason: null, wanted };
   }
 
@@ -258,10 +260,36 @@ export class App {
     });
   }
 
-  /** @param {number | null} hole */
-  setPin(hole) {
-    this.machine.setPin(hole);
-    this.say(() => (hole === null ? t("status.pinOut") : t("status.pin", { n: hole })));
+  /** Turn back until the pin reaches the stop (subtracting its red number of times). */
+  toStopBack() {
+    const before = this.machine.turns;
+    this.animator.play(this.animator.expand([{ toStopBack: true }]), () => {
+      const n = before - this.machine.turns;
+      if (!this.machine.blockedBack) {
+        this.sound.play("refuse");
+        this.say(this.blockText(-1), true);
+        return this.afterLearner();
+      }
+      if (n !== 0) this.sound.play("stop");
+      this.say(() => tn("status.ranToStopBack", n));
+      this.afterLearner();
+    });
+  }
+
+  /**
+   * Which number circle the pin was set by: the black (adding) or the red (turning back). A hole
+   * has one of each: black m and red 9 - m.
+   */
+  pinRed = false;
+
+  /**
+   * @param {number | null} hole the hole, by its black number
+   * @param {boolean} [red] set by the red number (9 - hole): for turning back
+   */
+  setPin(hole, red = false) {
+    if (!this.machine.setPin(hole)) return;
+    this.pinRed = hole !== null && red;
+    this.say(() => (hole === null ? t("status.pinOut") : this.pinRed ? t("status.pinRed", { n: 9 - hole }) : t("status.pin", { n: hole })));
     this.afterLearner();
   }
 
@@ -329,7 +357,8 @@ export class App {
       return;
     }
     applyIntentNow(i, this.machine);
-    if (i.kind === "pin") this.say(() => (i.hole === null ? t("status.pinOut") : t("status.pin", { n: /** @type {number} */ (i.hole) })));
+    if (i.kind === "pin") this.pinRed = false; // a hole clicked on the model: by its black number (black 0 shows as red 9)
+    if (i.kind === "pin") this.say(() => (i.hole === null ? t("status.pinOut") : i.hole === 0 ? t("status.pinRed", { n: 9 }) : t("status.pin", { n: /** @type {number} */ (i.hole) })));
     else this.say(() => t("status.set", { n: group3(this.inputNumber()) }));
     this.afterLearner();
   }
@@ -846,6 +875,7 @@ export class App {
     $("leftBtn").addEventListener("click", () => this.use("shift", () => this.shift(1), 1));
     $("rightBtn").addEventListener("click", () => this.use("shift", () => this.shift(-1), -1));
     $("toStopBtn").addEventListener("click", () => this.use("toStop", () => this.toStop()));
+    $("toStopBackBtn").addEventListener("click", () => this.use("toStopBack", () => this.toStopBack()));
     $("resetBtn").addEventListener("click", () => this.use("reset", () => this.reset()));
     // the machine's sound, on or off, remembered (U29)
     const soundBtn = $("soundBtn");
@@ -862,12 +892,22 @@ export class App {
       this.use("pin", () =>
         showMenu(
           pinBtn,
-          [null, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((h) => ({
-            label: h === null ? t("strip.pin.out") : String(h),
-            checked: this.machine.pin === h,
-            divider: h === 1 ? t("strip.pin.hole") : undefined,
-            run: () => this.use("pin", () => this.setPin(h)),
-          })),
+          [
+            { label: t("strip.pin.out"), checked: this.machine.pin === null, run: () => this.use("pin", () => this.setPin(null)) },
+            // a hole for each number: black m (adding m times), red m (turning back m times: the hole of black 9 - m)
+            ...[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => ({
+              label: String(n),
+              checked: this.machine.pin === n && !this.pinRed,
+              divider: n === 1 ? t("strip.pin.adding") : undefined,
+              run: () => this.use("pin", () => this.setPin(n, false)),
+            })),
+            ...[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => ({
+              label: String(n),
+              checked: this.machine.pin === 9 - n && this.pinRed,
+              divider: n === 1 ? t("strip.pin.subtracting") : undefined,
+              run: () => this.use("pin", () => this.setPin(9 - n, true)),
+            })),
+          ],
         ),
       ),
     );
@@ -947,6 +987,7 @@ export class App {
     /** @type {HTMLElement} */ ($("placeStrip").parentElement).setAttribute("aria-disabled", String(shiftOff));
     show("pinBtn", "pin");
     show("toStopBtn", "toStop");
+    show("toStopBackBtn", "toStopBack");
     show("resetBtn", "reset");
     show("carryBtn", "carry");
     const input = /** @type {HTMLInputElement} */ ($("numInput"));
@@ -955,7 +996,10 @@ export class App {
     input.setAttribute("aria-disabled", String(!inputState.enabled));
     $("numberField").classList.toggle("wanted", inputState.wanted && inputState.enabled);
     if (document.activeElement !== input) input.value = String(this.inputNumber());
-    $("pinValue").textContent = m.pin === null ? "–" : String(m.pin);
+    // the number the pin was set by: black (adding) or red (turning back, the hole's other number)
+    const red = m.pin !== null && (this.pinRed || m.pin === 0);
+    $("pinValue").textContent = m.pin === null ? "–" : String(red ? 9 - m.pin : m.pin);
+    $("pinValue").classList.toggle("red", red);
     // its name says the hole (U22); the tooltip keeps what the pin does
     $("pinBtn").setAttribute("aria-label", m.pin === null ? t("strip.pin.nameOut") : t("strip.pin.name", { n: m.pin }));
     $("carryValue").textContent = t(`strip.carry.${m.mode}.short`);

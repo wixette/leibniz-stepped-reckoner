@@ -140,6 +140,7 @@ export class Animator {
       else if ("turn" in a) for (let k = 0; k < (a.times ?? 1); k++) yield { theta: a.turn * 360 };
       else if ("shift" in a) yield { shift: a.shift };
       else if ("toStop" in a) while (!m.blocked && m.canStart(1)) yield { theta: 360 };
+      else if ("toStopBack" in a) while (!m.blockedBack && m.canStart(-1)) yield { theta: -360 };
       else if ("divideDigit" in a) {
         for (;;) {
           yield { theta: -360 };

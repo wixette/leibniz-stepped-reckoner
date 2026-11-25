@@ -19,6 +19,7 @@ What changed in each release. Versions follow `package.json` and are tagged `vX.
 - The setting knobs have the original's 12 divisions (digits 30° apart, a 60° blank), and the pentagons the original's size.
 - A *Counter* view.
 - *Show case and frame*: with the case off, the frame, the carriage's front panel and its floor go too, and the whole mechanism shows (the large gears behind the panel among it).
+- The revolution counter's pin works both ways: its menu offers the black numbers for adding and the red ones for subtracting, and a new button turns the crank back until the pin meets the stop.
 - *Colour by part*, a switch in the Views menu: every kind of part in its own colour, so that the parts inside the machine can be told apart.
 - The register's intermediate shafts are the original's square steel shafts with their long curved cuts along the edges (Klaus Badur's drawing, photos of Lehmann's replica).
 

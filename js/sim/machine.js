@@ -344,6 +344,17 @@ export class Machine {
     return n;
   }
 
+  /**
+   * Turn back until the pin reaches the stop from the other side (division, or subtracting the
+   * pin's red number of times: a pin at red m sits in the hole of black 9 - m).
+   * @returns {number}
+   */
+  runBackToStop() {
+    let n = 0;
+    while (this.pin !== null && !this.blockedBack && this.turn(-1)) n++;
+    return n;
+  }
+
   // ---------------------------------------------------------------------------------------
   /**
    * Carriage digit working on register digit k, or -1 if k is outside the carriage (no lever

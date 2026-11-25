@@ -54,6 +54,7 @@ export const ICONS = [
   "close",
   "code",
   "explore",
+  "first_page",
   "home",
   "info",
   "keyboard",
