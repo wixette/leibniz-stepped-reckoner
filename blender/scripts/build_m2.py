@@ -697,7 +697,8 @@ def build(p):
     jspec = geom.GearSpec(tct["j"]["teeth"], tct["j"]["module"], tct["j"]["thickness_factor"])
     mb.prism_holes(geom.gear_outline(jspec, 90.0), [geom.circle(1.6, 16)], "XZ", jy[0], jy[1], "steel_dark")
     lug_y = tct["k_axle_lugs_y"]
-    mb.prism(geom.circle(2.0, 20), "XZ", lug_y[0][0] - 0.5, lug_y[1][1] + 0.5, "steel", smooth=True)
+    # the axle from K's front collar, through J and both lugs (K in front, J at L's front edge)
+    mb.prism(geom.circle(2.0, 20), "XZ", min(ky[0], jy[0]) - 0.6, lug_y[1][1] + 0.5, "steel", smooth=True)   # ends inside the front collar
     for a, b in ((ky[0] - 0.8, ky[0]), (ky[1], ky[1] + 0.8), (jy[0] - 0.8, jy[0]), (jy[1], jy[1] + 0.8)):
         mb.prism(geom.circle(5.0, 24), "XZ", a, b, "brass_satin", smooth=True)    # collars
     ck = mb.build("pm.counter_k", col, (klx, 0, kz))
