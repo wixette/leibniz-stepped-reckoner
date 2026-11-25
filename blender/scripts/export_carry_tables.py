@@ -11,7 +11,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from lib import carry, carry_solve, params  # noqa: E402
+from lib import carry, carry_solve, counter_train, params  # noqa: E402
 
 OUT = os.path.join(params.MACHINE_DIR, "params", "carry-tables.json")
 
@@ -19,7 +19,7 @@ OUT = os.path.join(params.MACHINE_DIR, "params", "carry-tables.json")
 def main():
     p = params.load()
     c = carry_solve.Carry(p)
-    push_step, horn_step = 0.0025, 0.05
+    push_step, horn_step, counter_step = 0.0025, 0.05, 0.5
     push = c.push_table(push_step)
     start, horn = c.zweihorn_table(horn_step)
     rc = carry_solve.Carry(p, ripple=True)
@@ -46,6 +46,14 @@ def main():
             },
         },
         "horn_tip_half_angle": round(carry.horn_tip_half_angle(p), 6),
+        # the revolution counter's star wheel K against the crank's |theta|, adding and subtracting
+        # (lib/counter_train.py): the single tooth on the 17th shaft steps it one tooth a turn
+        "counter": {
+            "step": counter_step,
+            "k_teeth": p.v("geometry.m2.counter_train")["k"]["teeth"],
+            "forward": [round(x, 5) for x in counter_train.step_table(p, 1, counter_step)],
+            "backward": [round(x, 5) for x in counter_train.step_table(p, -1, counter_step)],
+        },
     }
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(out, f, indent=None, separators=(",", ":"))

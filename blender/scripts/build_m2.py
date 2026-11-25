@@ -39,7 +39,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import bpy  # noqa: E402
-from lib import bl, carry, geom, kinematics, params  # noqa: E402
+from lib import bl, carry, counter_train, geom, kinematics, params  # noqa: E402
 from lib.bl import MeshBuilder  # noqa: E402
 
 DEFAULT_OUT = os.path.join(params.MACHINE_DIR, "assets", "m2-full-machine.glb")
@@ -494,6 +494,10 @@ def build(p):
     mb = MeshBuilder()
     mb.prism(geom.circle(1.5, 16), "XZ", shaft_front, dr["counter_shaft_back_y"], "steel", smooth=True)
     mb.prism(geom.gear_outline(dg, mesh_phase(drum_first[0], zg, D[0], P17, zg)), "XZ", gy0, gy1, "steel_dark")
+    # its single tooth, which steps the counter's star wheel K once a turn (lib/counter_train.py)
+    hub_, tooth_ = counter_train.driver_tooth(p)
+    dy_ = p.v(M2 + "counter_train")["driver"]["y"]
+    mb.prism(carry.star_union([hub_, tooth_]), "XZ", dy_[0], dy_[1], "steel_dark")   # one outline: no faces inside faces
     cshaft = mb.build("pm.counter_shaft", col, (P17[0], 0, P17[1]))
     bl.set_motion(cshaft, "rotate", (0, 1, 0), "Counter drive shaft (the 17th of the drive row)",
                   "Antriebswelle des Umdrehungszählers (die 17. der Antriebsreihe)")
@@ -599,7 +603,12 @@ def build(p):
     mb = MeshBuilder()
     shafts = [(X[j] + x_pl + pin_g.rp - 2.5, X[j] + x_pl + pin_g.rp + 2.5) for j in range(C)]
     plate_with_hole_row(mb, cx0, ky0, xt, ky1, py - 2.5, py + 2.5, shafts, kz0, kz1, "brass_polished")
-    mb.prism(geom.rect(xt, ky0, xr, ky1), "XY", zt - 2.0, zt, "brass_polished")           # lower top on the right
+    # lower top on the right, with a round hole under the counter's ring for the sleeve that
+    # turns it (the counter's train below, lib/counter_train.py)
+    tr_ = p.v(M2 + "counter_train")
+    cdx, cdy = X[0] + cs_["counter_dx"], py + cs_["counter_dy"]
+    mb.prism_holes(geom.rect(xt, ky0, xr, ky1), [[(u + cdx, w + cdy) for u, w in geom.circle(tr_["sleeve_radius"][1] + 0.4, 64)]],
+                   "XY", zt - 2.0, zt, "brass_polished")
     # the walls start behind the front panel: sharing its front face made them flicker (z-fighting)
     mb.prism(geom.rect(xt - 3.0, pnl1, xt, ky1), "XY", zt, kz0, "brass_satin")            # riser between them
     wz0 = cs["carriage_wall_z0"]
@@ -669,6 +678,89 @@ def build(p):
     mb.prism([(u, w - ct["park_r"]) for u, w in geom.circle(ct["pin_radius"] + 1.2, 20)], "XY", dz, dz + ct["pin_z"][0], "brass_satin", smooth=True)
     cpark = static(mb.build("pm.counter_pin_park", col, (dx, dy, 0)))   # where the pin waits, shown when it is out
     bl.parent(cpark, carriage)
+
+    # The counter's train (BADUR2026 sheet 8, Burkhardt 1897; lib/counter_train.py): the 17th
+    # shaft's single tooth steps the star wheel K a tooth a turn; J on K's axis turns the crown
+    # wheel L (the Teilrad) a tooth, 36 deg; M on L's axis turns N on the counter's axis, whose
+    # web and sleeve rise through the carriage's top to the ring. K's axis runs front to back
+    # under L's, in two lugs from the top; the counter's fixed spindle stands on a cross-bar
+    # (Pos. 39, "Traverse") hung from the top on two posts; a leaf holds K between its steps.
+    tct, s17, (klx, kz), drv, kspec = counter_train.layout(p)
+    ztop = zt - 2.0                                   # the underside of the carriage's top here
+    lz_p = kz + tct["j"]["teeth"] * tct["j"]["module"] / 2.0   # J's top on the pitch circle: L's pitch plane
+    ky = tct["k"]["y"]
+    jy = tct["j"]["y"]
+    # K and J on their axle (turning about the front-back axis)
+    mb = MeshBuilder()
+    k_out, _beta = counter_train.k_outline(p)
+    mb.prism_holes(k_out, [geom.circle(1.6, 16)], "XZ", ky[0], ky[1], "steel_dark")
+    jspec = geom.GearSpec(tct["j"]["teeth"], tct["j"]["module"], tct["j"]["thickness_factor"])
+    mb.prism_holes(geom.gear_outline(jspec, 90.0), [geom.circle(1.6, 16)], "XZ", jy[0], jy[1], "steel_dark")
+    lug_y = tct["k_axle_lugs_y"]
+    mb.prism(geom.circle(2.0, 20), "XZ", lug_y[0][0] - 0.5, lug_y[1][1] + 0.5, "steel", smooth=True)
+    for a, b in ((ky[0] - 0.8, ky[0]), (ky[1], ky[1] + 0.8), (jy[0] - 0.8, jy[0]), (jy[1], jy[1] + 0.8)):
+        mb.prism(geom.circle(5.0, 24), "XZ", a, b, "brass_satin", smooth=True)    # collars
+    ck = mb.build("pm.counter_k", col, (klx, 0, kz))
+    bl.set_motion(ck, "rotate", (0, 1, 0), "Revolution counter: star wheel K and gear J", "Umdrehungszähler: Sternrad K und Zahnrad J")
+    bl.parent(ck, carriage)
+    # L (a crown wheel: rack-profile teeth on its underside, meshing J at right angles) and M
+    mb = MeshBuilder()
+    lt = tct["l"]
+    lpitch = lt["teeth"] * lt["module"] / 2.0                 # 11.25: 10 x 7.07 round the circle
+    disc0, disc1 = lz_p + lt["disc_z_above_pitch"][0], lz_p + lt["disc_z_above_pitch"][1]
+    mb.prism(geom.circle(lt["r"][1], 64), "XY", disc0, disc1, "brass_polished", smooth=True)
+    zroot, ztip = disc0, disc0 - lt["tooth_height"]
+    half_p = math.pi * lt["module"] / 4.0                     # half the tooth's width on the pitch line
+    tan_a = math.tan(math.radians(20.0))
+    for i in range(lt["teeth"]):
+        a = math.radians(-90.0 + 18.0 + 36.0 * i)            # a gap faces J (towards the front) at rest
+        u, n = (math.cos(a), math.sin(a)), (-math.sin(a), math.cos(a))
+        verts = []
+        for r in (lt["r"][0], lt["r"][1]):
+            sc = r / lpitch                                    # a crown tooth widens outwards
+            for t_, z_ in ((-(half_p + (zroot - lz_p) * tan_a) * sc, zroot + 0.05), ((half_p + (zroot - lz_p) * tan_a) * sc, zroot + 0.05),
+                           ((half_p - (lz_p - ztip) * tan_a) * sc * 0.9, ztip), (-(half_p - (lz_p - ztip) * tan_a) * sc * 0.9, ztip)):
+                verts.append((u[0] * r + n[0] * t_, u[1] * r + n[1] * t_, z_))
+        faces = [(0, 1, 2, 3), (7, 6, 5, 4), (0, 4, 5, 1), (1, 5, 6, 2), (2, 6, 7, 3), (3, 7, 4, 0)]
+        mb.add_mesh_data(verts, faces, bl.frame_matrix((0, 0, 0), (1, 0, 0), (0, 1, 0)), "brass_polished")
+    mt = tct["m"]
+    mspec = geom.GearSpec(mt["teeth"], mt["module"], tct["k"]["thickness_factor"], 1.0, 1.25, mt["shift_mm"] / mt["module"])
+    mb.prism_holes(geom.gear_outline(mspec, 0.0), [geom.circle(1.6, 16)], "XY", mt["z"][0], mt["z"][1], "brass_polished")
+    mb.prism(geom.circle(2.0, 20), "XY", disc0 - 0.5, ztop - 0.3, "steel", smooth=True)
+    mb.prism(geom.circle(5.0, 24), "XY", disc1, mt["z"][0], "brass_satin", smooth=True)
+    cl = mb.build("pm.counter_l", col, (klx, cdy, 0))
+    bl.set_motion(cl, "rotate", (0, 0, 1), "Revolution counter: crown wheel L and gear M", "Umdrehungszähler: Teilrad L und Zahnrad M")
+    bl.parent(cl, carriage)
+    # N, its web and the sleeve up to the ring: part of the ring (they turn together)
+    mb = MeshBuilder()
+    nspec = mspec
+    mb.prism_holes(geom.gear_outline(nspec, 180.0 + 18.0), [geom.circle(3.3, 24)], "XY", mt["z"][0], mt["z"][1], "brass_polished")
+    s0, s1 = tct["sleeve_radius"]
+    mb.prism_holes(geom.circle(s1, 72), [geom.circle(3.3, 24)], "XY", mt["z"][1] + 0.5, mt["z"][1] + 1.5, "brass_satin")
+    mb.prism_holes(geom.circle(s1, 72), [geom.circle(s0, 72)], "XY", mt["z"][1] + 1.5, zt + 0.12, "brass_satin")  # 0.08 under the ring
+    cn = mb.build("pm.counter_n", col, (cdx, cdy, 0))
+    bl.set_motion(cn, "rotate", (0, 0, 1), "Revolution counter: gear N and the sleeve to the ring", "Umdrehungszähler: Zahnrad N und Hülse zum Ring")
+    bl.parent(cn, carriage)
+    # the fixed parts: the lugs, the cross-bar with its posts, the spindle down to it, the leaf
+    mb = MeshBuilder()
+    for y0_, y1_ in lug_y:
+        mb.prism_holes(geom.rect(klx - cdx - 2.5, kz - 3.0, klx - cdx + 2.5, ztop - 0.05), [[(u + klx - cdx, w + kz) for u, w in geom.circle(2.15, 20)]],
+                       "XZ", y0_ - cdy, y1_ - cdy, "brass_satin")
+    tb = tct["traverse"]
+    mb.prism(geom.rect(-tb["width"] / 2.0, -tb["length"] / 2.0, tb["width"] / 2.0, tb["length"] / 2.0), "XY", tb["z"][0], tb["z"][1], "brass_satin")
+    for sy in (-1.0, 1.0):
+        mb.prism([(u, w + sy * (tb["length"] / 2.0 - 3.0)) for u, w in geom.circle(2.5, 20)], "XY", tb["z"][1], ztop - 0.05, "brass_satin", smooth=True)
+    mb.prism(geom.circle(3.0, 24), "XY", tb["z"][0] + 0.5, zt + 0.5, "steel", smooth=True)
+    ka = math.radians(tct["leaf_deg"])
+    ra = kspec.ra + 0.15
+    # the leaf's V tip 0.15 off K's tip circle, every edge outside it (drawn rigid)
+    tip = (klx - cdx + ra * math.cos(ka), kz + ra * math.sin(ka))
+    ka2 = ka - math.radians(4.0)
+    side = (klx - cdx + (ra + 0.6) * math.cos(ka2), kz + (ra + 0.6) * math.sin(ka2))
+    leaf = [tip, side, (side[0] + 1.5, ztop - 0.05), (tip[0], ztop - 0.05)]
+    mb.prism(leaf, "XZ", ky[0] - cdy + 0.2, ky[1] - cdy - 0.2, "steel")
+    ctrain = static(mb.build("pm.counter_frame", col, (cdx, cdy, 0)))
+    bl.parent(ctrain, carriage)
 
     # =========================================================== teaching extras (M3)
     labels = {

@@ -23,6 +23,9 @@ export function m2NodeNames(R, C) {
     "pm.large_gear_b": "pm.large_gear_b",
     "pm.large_gear_c": "pm.large_gear_c",
     "pm.counter_shaft": "pm.counter_shaft",
+    "pm.counter_k": "pm.counter_k",
+    "pm.counter_l": "pm.counter_l",
+    "pm.counter_n": "pm.counter_n",
   };
   for (let k = 0; k < R; k++) {
     for (const base of ["pi.sum_wheel", "pi.carry_store", "pi.five_horn_s", "pi.five_horn_sr"]) names[`${base}.${k}`] = `${base}.${k}`;
@@ -60,6 +63,11 @@ export function m2NodeValues(m) {
     "pm.large_gear_a": p.mainCrank,
     "pm.large_gear_c": p.mainCrank,
     "pm.counter_shaft": p.mainCrank,
+    // the counter's train (build_m2.py): K and J step a tooth (24 deg) a turn about the front-back
+    // axis, L and M a tenth of a turn about the vertical, the other way from N and the ring
+    "pm.counter_k": (2 / 3) * p.counterRing,
+    "pm.counter_l": p.counterRing,
+    "pm.counter_n": ring,
   };
   p.register.forEach((r, k) => {
     out[`pi.sum_wheel.${k}`] = -r.wheel;

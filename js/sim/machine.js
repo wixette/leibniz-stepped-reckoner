@@ -74,7 +74,7 @@ import * as M from "./kinematicsM1.js";
  * @property {number} endCrank deg
  * @property {number} mainCrank deg (the operator's crank, = theta)
  * @property {number} magnaRota deg (turns with the crank)
- * @property {number} counterRing deg about the vertical (the revolution counter's ring, clockwise seen from above when adding)
+ * @property {number} counterRing deg about the vertical (the revolution counter's ring; stepped a tenth of a turn once a turn by the 17th shaft's train, M.counterStep)
  */
 
 export const DIGIT_PITCH = machine.layout.digit_pitch.v; // mm
@@ -463,7 +463,7 @@ export class Machine {
       endCrank: 360 * this.carriagePos,
       mainCrank: th,
       magnaRota: th,
-      counterRing: -36 * (this.ringTurns + th / 360),
+      counterRing: -36 * (this.ringTurns + M.counterStep(th)),
     };
   }
 

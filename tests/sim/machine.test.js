@@ -278,6 +278,29 @@ describe("Machine (16-digit register, 8-digit carriage)", () => {
     }
   });
 
+  it("the revolution counter steps a tenth of a turn once a turn, driven by the 17th shaft's single tooth", () => {
+    // the star wheel K is pushed one tooth (24 deg) while the single tooth passes it, then rests
+    for (const dir of /** @type {const} */ ([1, -1])) {
+      let last = 0;
+      for (let t = 0; t <= 360; t += 0.5) {
+        const s = M.counterStep(dir * t);
+        assert.ok(dir * s >= dir * last - 1e-9, `${dir}: monotonic at ${t}`);
+        last = s;
+      }
+      assert.ok(Math.abs(M.counterStep(dir * 90)) < 1e-12); // still before the tooth arrives
+      assert.ok(Math.abs(M.counterStep(dir * 300) - dir) < 1e-9); // the step done, before the turn ends
+    }
+    const m = new Machine();
+    m.setNumber(1);
+    m.setTheta(90);
+    assert.ok(Math.abs(m.machinePose().counterRing) < 1e-12);
+    m.setTheta(300);
+    assert.ok(Math.abs(m.machinePose().counterRing + 36) < 1e-9); // anticlockwise from above when adding (Badur)
+    m.setTheta(360);
+    assert.equal(m.ringTurns, 1);
+    assert.ok(Math.abs(m.machinePose().counterRing + 36) < 1e-9);
+  });
+
   it("the lever phases the build draws each Zweihorn with are the simulator's (pnpm phases)", () => {
     // each lever's Zweihorn is one part: build_m2.py puts its two horns the lever's spread apart
     const file = JSON.parse(readFileSync(new URL("../../params/lever-phases.json", import.meta.url), "utf8"));

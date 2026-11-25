@@ -249,3 +249,24 @@ export function leverPasses(i, mode, dir) {
     .map((t) => (t === 0 ? 360 : t))
     .sort((a, b) => a - b);
 }
+
+// --- revolution counter ---------------------------------------------------------------------
+
+/**
+ * How far the revolution counter has stepped in this turn (0..1 adding, 0..-1 subtracting) at
+ * crank angle theta: the 17th shaft's single tooth pushes the star wheel K one tooth, and K's
+ * detent completes it (params/carry-tables.json "counter", solved by lib/counter_train.py); J on
+ * K's axis turns the crown wheel L, and M, N and the ring follow, a tenth of a turn a turn.
+ * @param {number} theta
+ * @returns {number}
+ */
+export function counterStep(theta) {
+  const c = tables.counter;
+  const t = Math.min(360, Math.abs(theta));
+  const tab = theta >= 0 ? c.forward : c.backward;
+  const x = t / c.step;
+  const i = Math.max(0, Math.min(Math.floor(x), tab.length - 2));
+  const f = Math.min(1, x - i);
+  const k = tab[i] * (1 - f) + tab[i + 1] * f; // K's angle (its node's value)
+  return -k / (360 / c.k_teeth);
+}

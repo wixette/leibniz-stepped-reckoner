@@ -1228,6 +1228,89 @@
         "unit": "mm",
         "conf": "design",
         "src": "the revolution counter on the carriage's lower right top, laid out like the Dresden replica's (Commons Die_Rechenmaschine_von_Leibniz_(Nachbau)_2001_06.jpg): a steel ring Ø69.5 / Ø45 (BADUR2026) with 10 holes turns 36 deg a crank turn, clockwise seen from above when adding; a fixed outer circle of black 0-9 on the plate, running anticlockwise from 0 at the stop; a fixed inner circle of red 0-9 on the brass centre, running clockwise; a stop bracket at the top between 0 and 9, over the ring into the pin's plane; a parking place for the pin at the bottom. The pin set at black m reaches the stop after m turns (LEUPOLD1727's procedure; WALSDORF2014: pin at 0, read the count). z from the cover's top; radii from the dial's centre."
+      },
+      "counter_train": {
+        "v": {
+          "mn_centre_distance": 30.7,
+          "driver": {
+            "pitch_teeth": 8,
+            "thickness_factor": 0.85,
+            "hub_radius": 4.0,
+            "tooth_deg": 195.2,
+            "y": [
+              -99.3,
+              -96.7
+            ],
+            "addendum": 0.8
+          },
+          "k": {
+            "teeth": 15,
+            "module": 3.0,
+            "thickness_factor": 0.85,
+            "y": [
+              -99.4,
+              -96.6
+            ]
+          },
+          "j": {
+            "teeth": 15,
+            "module": 2.25,
+            "thickness_factor": 0.85,
+            "y": [
+              -76.4,
+              -74.4
+            ]
+          },
+          "l": {
+            "teeth": 10,
+            "module": 2.25,
+            "tooth_height": 4.85,
+            "r": [
+              9.6,
+              11.75
+            ],
+            "disc_z_above_pitch": [
+              2.4,
+              4.9
+            ]
+          },
+          "m": {
+            "teeth": 10,
+            "module": 3.0,
+            "shift_mm": 0.35,
+            "z": [
+              75.5,
+              78.5
+            ]
+          },
+          "detent_snap_deg": 6.0,
+          "sleeve_radius": [
+            22.65,
+            24.2
+          ],
+          "k_axle_lugs_y": [
+            [
+              -94.0,
+              -91.0
+            ],
+            [
+              -45.5,
+              -42.5
+            ]
+          ],
+          "traverse": {
+            "width": 24.0,
+            "length": 68.0,
+            "z": [
+              70.0,
+              73.0
+            ]
+          },
+          "leaf_deg": 75.0
+        },
+        "unit": "mm",
+        "conf": "design",
+        "src": "BADUR2026 sheet 'Einzelteile 8' (private; facts only): Zahnrad J (Pos. 42) steel, z 15, m 2.25, tip 38; Zahnrad K (Pos. 43) steel, z 15, m 3, tip 51; Teilrad L (Pos. 44) brass, z 10 with a rack profile m 2.25 cut on its face (36 deg, 7.07 mm pitch, teeth 4.85 high), Ø23.5; Zahnrad M (Pos. 45) brass, z 10, m 3, profile shift +0.35 mm, centre distance to Rad N 30.7. His assembly drawing: M lies flat under the counter, about 31 from its centre towards the 17th shaft; the counter 64 from that shaft. Burkhardt 1897: a single tooth on the 17th shaft steps a steel star wheel (axis front to back) once a turn, which turns a flat brass wheel and the ring. Design values (no source): the single tooth (one tooth of an 8-tooth m 3 gear, as Lehmann's replica steps its counter with a one-lobe cam of tip radius 15.4), K and J's axis under L and M's (the single tooth and K a gear pair apart), the planes along the shaft, N (z 10, m 3, as the 30.7 requires), K's detent (a spring leaf, drawn rigid), the bracket and the bearings. The single tooth and K turn just in front of the units drum's setting head (which sweeps y -96.1 to -27 as the setting changes) and behind the carriage's bearing bar; J at L's front edge."
       }
     }
   },
