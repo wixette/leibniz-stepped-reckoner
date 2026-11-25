@@ -133,9 +133,9 @@ const carry = {
     },
     {
       do: [{ theta: 360 }],
-      highlight: ["pm.zweihorn_add.0", "pm.zweihorn_add.1", "pm.zweihorn_add.2", "pm.zweihorn_add.3"],
+      highlight: ["pm.zweihorn.0", "pm.zweihorn.1", "pm.zweihorn.2", "pm.zweihorn.3"],
       context: [0, 1, 2, 3, 4].flatMap((k) => [`pi.carry_store.${k}`, `pi.sum_wheel.${k}`]),
-      callouts: [{ node: "pm.zweihorn_add.0", text: "l.carry.lever" }],
+      callouts: [{ node: "pm.zweihorn.0", text: "l.carry.lever" }],
       text: "l.carry.passedOn",
       expect: (m) => m.shownNumber() === 10000 && allLevel(m),
     },
@@ -192,7 +192,7 @@ const carryOriginal = {
     },
     {
       do: [{ theta: 360 }],
-      highlight: ["pi.carry_store.1", "pm.zweihorn_add.0", "pm.zweihorn_add.1"],
+      highlight: ["pi.carry_store.1", "pm.zweihorn.0", "pm.zweihorn.1"],
       context: [0, 1, 2, 3, 4].flatMap((k) => [`pi.carry_store.${k}`, `pi.sum_wheel.${k}`]),
       text: "l.carry.origWaits",
       expect: (m) => m.shownNumber() === 9900 && m.pending[1] === 1,

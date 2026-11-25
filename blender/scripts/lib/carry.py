@@ -206,3 +206,69 @@ def detent_wheel(p, first_middle_deg=90.0, land_samples=8):
         for i in range(1, land_samples):
             out.append(geom._polar(R, a0 + (a1 - a0) * i / land_samples))
     return out
+
+
+def _ray(poly, deg):
+    """Farthest distance from the origin to poly along the ray at deg (0 if the ray misses it)."""
+    c, s = math.cos(math.radians(deg)), math.sin(math.radians(deg))
+    best = 0.0
+    n = len(poly)
+    for i in range(n):
+        (x1, y1), (x2, y2) = poly[i], poly[(i + 1) % n]
+        ex, ey = x2 - x1, y2 - y1
+        den = c * ey - s * ex
+        if abs(den) < 1e-12:
+            continue
+        t = (x1 * ey - y1 * ex) / den          # distance along the ray
+        u = (x1 * s - y1 * c) / den            # position along the edge
+        if t > 0 and -1e-9 <= u <= 1 + 1e-9:
+            best = max(best, t)
+    return best
+
+
+def star_union(polys, step=2.0):
+    """Outline of the union of polygons that are all star-shaped about the origin (a hub and
+    horns radiating from it): at every angle the farthest boundary. Sampled at every vertex's
+    angle and every `step` degrees, with the angles where the outermost polygon changes found by
+    bisection, so straight edges stay straight and corners stay sharp."""
+    angs = {round(k * step, 9) for k in range(int(360 / step))}
+    for poly in polys:
+        for x, y in poly:
+            angs.add(math.degrees(math.atan2(y, x)) % 360.0)
+    angs = sorted(angs)
+
+    def best(a):
+        rs = [_ray(q, a) for q in polys]
+        i = max(range(len(rs)), key=lambda k: rs[k])
+        return rs[i], i
+
+    out, prev = [], None
+    for a in angs + [angs[0] + 360.0]:
+        r, i = best(a)
+        if prev is not None and prev[2] != i:
+            lo, hi = prev[0], a
+            for _ in range(30):
+                mid = (lo + hi) / 2.0
+                if best(mid)[1] == prev[2]:
+                    lo = mid
+                else:
+                    hi = mid
+            rm = best(hi)[0]
+            out.append(geom._polar(rm, hi))
+        out.append(geom._polar(r, a))
+        prev = (a, r, i)
+    return out[:-1]
+
+
+def zweihorn_part(p, spread_deg, key="zweihorn", first_deg=180.0):
+    """One Zweihorn (BADUR2026 Pos. 21: one part, two horns): the hub with the adding horn at
+    first_deg and the subtracting horn spread_deg further on (counter-clockwise), as one outline."""
+    z = p.v("geometry.carry")[key]
+    horn = zweihorn_horn(p, key)
+
+    def turned(poly, deg):
+        c, s = math.cos(math.radians(deg)), math.sin(math.radians(deg))
+        return [(u * c - w * s, u * s + w * c) for u, w in poly]
+
+    hub = [geom._polar(z["hub_radius"], 360.0 * i / 180) for i in range(180)]
+    return star_union([hub, turned(horn, first_deg), turned(horn, first_deg + spread_deg)])

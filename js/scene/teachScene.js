@@ -119,7 +119,7 @@ export function viewSubjects(root) {
       veil: ["steel_pentagon"],
       ...view({ x: -0.15, y: 0.9, z: -0.75 }, ["pi.carry_store.0", "pi.carry_store.1", "pi.carry_store.2", "pi.carry_store.3", "pi.sum_wheel.0", "pi.sum_wheel.1", "pi.sum_wheel.2", "pi.sum_wheel.3"]),
       inside: [0, 1, 2, 3].flatMap((k) => [`pi.carry_store.${k}`, `pi.five_horn_s.${k}`, `pi.five_horn_sr.${k}`, `pi.sum_wheel.${k}`,
-        `pm.zweihorn_add.${k}`, `pm.zweihorn_sub.${k}`, `pm.zweihorn_r_add.${k}`, `pm.zweihorn_r_sub.${k}`]),
+        `pm.zweihorn.${k}`, `pm.zweihorn_r.${k}`]),
     },
   };
 }

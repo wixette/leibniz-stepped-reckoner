@@ -1,5 +1,6 @@
 import tables from "../../params/carry-tables.json" with { type: "json" };
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { describe, it } from "node:test";
 import { DIGIT_PITCH, Machine } from "../../js/sim/machine.js";
 import { divide, multiply, registerValue } from "../../js/sim/operations.js";
@@ -273,6 +274,17 @@ describe("Machine (16-digit register, 8-digit carriage)", () => {
           const [, below] = M.leverPasses(i - 1, "ripple", dir);
           assert.ok(main - below >= transfer, `lever ${i} follows lever ${i - 1} after its transfer (${main - below})`);
         }
+      }
+    }
+  });
+
+  it("the lever phases the build draws each Zweihorn with are the simulator's (pnpm phases)", () => {
+    // each lever's Zweihorn is one part: build_m2.py puts its two horns the lever's spread apart
+    const file = JSON.parse(readFileSync(new URL("../../params/lever-phases.json", import.meta.url), "utf8"));
+    for (const mode of /** @type {const} */ (["simultaneous", "ripple"])) {
+      for (let j = 0; j < 8; j++) {
+        const ph = M.hornPhases(j, mode);
+        assert.ok(Math.abs(file[mode][j].add - ph.add) < 1e-5 && Math.abs(file[mode][j].sub - ph.sub) < 1e-5, `${mode} lever ${j}: run pnpm phases`);
       }
     }
   });

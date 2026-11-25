@@ -29,7 +29,8 @@
     "build:model": "pnpm build:model:m2",
     "build:model:m2": "\"${BLENDER:-/Applications/Blender.app/Contents/MacOS/Blender}\" --background --factory-startup --python-exit-code 1 --python blender/scripts/build_m2.py",
     "check:model": "pnpm poses:m2 && \"${BLENDER:-/Applications/Blender.app/Contents/MacOS/Blender}\" --background --factory-startup --python-exit-code 1 --python blender/scripts/check_m2_clearance.py",
-    "carry": "python3 -I blender/scripts/export_carry_tables.py"
+    "carry": "python3 -I blender/scripts/export_carry_tables.py",
+    "phases": "node tools/export-lever-phases.mjs"
   },
   "devDependencies": {
     "@fontsource-variable/roboto-flex": "5.3.0",

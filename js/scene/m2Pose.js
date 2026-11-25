@@ -28,7 +28,7 @@ export function m2NodeNames(R, C) {
     for (const base of ["pi.sum_wheel", "pi.carry_store", "pi.five_horn_s", "pi.five_horn_sr"]) names[`${base}.${k}`] = `${base}.${k}`;
   }
   for (let j = 0; j < C; j++) {
-    for (const base of ["pm.drum_shaft", "pm.drum", "pm.setting_rack", "pm.setting_dial", "pm.lever", "pm.zweihorn_add", "pm.zweihorn_sub", "pm.zweihorn_r_add", "pm.zweihorn_r_sub"]) {
+    for (const base of ["pm.drum_shaft", "pm.drum", "pm.setting_rack", "pm.setting_dial", "pm.lever", "pm.zweihorn", "pm.zweihorn_r"]) {
       names[`${base}.${j}`] = `${base}.${j}`;
     }
   }
@@ -73,11 +73,10 @@ export function m2NodeValues(m) {
     out[`pm.setting_rack.${j}`] = c.drumY;
     out[`pm.setting_dial.${j}`] = c.dial;
     out[`pm.lever.${j}`] = -c.lever;
-    out[`pm.zweihorn_add.${j}`] = -c.hornAdd;
-    out[`pm.zweihorn_sub.${j}`] = -c.hornSub;
-    // the carry sets are exchanged with the mode: the shown set's horns take the levers' phases
-    out[`pm.zweihorn_r_add.${j}`] = -c.hornAdd;
-    out[`pm.zweihorn_r_sub.${j}`] = -c.hornSub;
+    // one part per lever and set, its adding horn at the lever's phase and its subtracting horn
+    // built the lever's spread on (build_m2.py, params/lever-phases.json); only the fitted set shows
+    out[`pm.zweihorn.${j}`] = -c.hornAdd;
+    out[`pm.zweihorn_r.${j}`] = -c.hornAdd;
   });
   return out;
 }
@@ -94,7 +93,7 @@ export function unfittedCarrySet(m) {
   const out = [];
   for (let k = 0; k < m.registerDigits; k++) out.push(ripple ? `pi.five_horn_s.${k}` : `pi.five_horn_sr.${k}`);
   for (let j = 0; j < m.carriageDigits; j++) {
-    for (const kind of ["add", "sub"]) out.push(ripple ? `pm.zweihorn_${kind}.${j}` : `pm.zweihorn_r_${kind}.${j}`);
+    out.push(ripple ? `pm.zweihorn.${j}` : `pm.zweihorn_r.${j}`);
   }
   return out;
 }
@@ -117,7 +116,7 @@ export function applyM2Pose(rig, root, m) {
     }
   }
   for (let j = 0; j < m.carriageDigits; j++) {
-    for (const n of [`pm.zweihorn_add.${j}`, `pm.zweihorn_sub.${j}`, `pm.zweihorn_r_add.${j}`, `pm.zweihorn_r_sub.${j}`]) {
+    for (const n of [`pm.zweihorn.${j}`, `pm.zweihorn_r.${j}`]) {
       const o = root.getObjectByName(gltfName(n));
       if (o) o.visible = !off.has(gltfName(n));
     }

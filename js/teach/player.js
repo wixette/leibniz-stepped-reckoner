@@ -112,14 +112,14 @@ export const APART_VIEW = /** @type {const} */ ("apart");
  */
 
 /**
- * A lesson names the original's carry parts (s, the Zweihorn's horns); with the ripple set
+ * A lesson names the original's carry parts (s, the Zweihorn); with the ripple set
  * fitted, the same roles are played by its parts (s', the long horns), which the page shows.
  * @param {string} name node name or "prefix.*" pattern
  * @param {"ripple" | "simultaneous"} mode
  */
 export const fittedCarryPart = (name, mode) =>
   mode === "ripple"
-    ? name.replace(/^pm\.zweihorn_(add|sub)\./, "pm.zweihorn_r_$1.").replace(/^pi\.five_horn_s\./, "pi.five_horn_sr.")
+    ? name.replace(/^pm\.zweihorn\./, "pm.zweihorn_r.").replace(/^pi\.five_horn_s\./, "pi.five_horn_sr.")
     : name;
 
 /**

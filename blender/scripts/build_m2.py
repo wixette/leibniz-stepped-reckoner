@@ -14,7 +14,7 @@ Register (fixed), digit k at x = -36.5 k:
 Carriage pm.carriage (translate along +X), carriage digit j at x = -36.5 j (offset 0):
   pm.carriage_panel  front panel (static; hideable for a cut-away view)
   pm.drum_shaft.j / pm.drum.j / pm.setting_rack.j / pm.setting_dial.j / pm.setting_plate.j / pm.setting_stop.j
-  pm.lever.j / pm.zweihorn_add.j / pm.zweihorn_sub.j
+  pm.lever.j / pm.zweihorn.j (the original's Zweihorn, one part, two horns) / pm.zweihorn_r.j (the ripple set's)
   Front to back (Abb. II 9): large gears, the bearing bar, the drum axes' heads (pm.setting_rack.j:
   a sleeve with the rack teeth on an upright wall, meshing the knob's pinion), the drive row
   (17 gears: each drum's gear slides with the drum along the long gear on the lever shaft to
@@ -31,6 +31,7 @@ Casing (all static; the page hides them together to show the mechanism):
   pm.carriage_cover      brass top plates and end walls of the carriage, counter dial plate (moves with it)
 """
 
+import json
 import math
 import os
 import sys
@@ -363,21 +364,19 @@ def build(p):
     first = p.v(G + "drum.rib_first_angle")
     rib_pitch = p.v("pars_mobilis.drum.rib_pitch")
     sq = 3.0
-    za0, za1 = cp["zweihorn_add"]
-    zs0, zs1 = cp["zweihorn_sub"]
-    # one horn of the Zweihorn with its hub (a ring round the lever shaft), along +u
-    zh = cg["zweihorn"]
-    hub_r, hw0 = zh["hub_radius"], zh["root_half_width"]
-    horn = carry.zweihorn_horn(p)
-    a_root = math.degrees(math.asin(hw0 / hub_r))
-    hub_arc = [geom._polar(hub_r, a_root + (360.0 - 2 * a_root) * i / 40) for i in range(41)]
-    horn_outline = hub_arc + horn[1:-1]   # the arc ends where the horn's flanks meet the hub
-    # pointing the other way (local 180 deg): the model mirrors the solve about the vertical
-    # through the lever (m2Pose.js negates the horns' angles)
-    horn_outline = [(-u, -w) for u, w in horn_outline]
-    # the ripple set's Zweihorn, built the same way (its hub radius and root width are the same)
-    horn_r = carry.zweihorn_horn(p, "ripple_zweihorn")
-    horn_outline_r = [(-u, -w) for u, w in hub_arc + horn_r[1:-1]]
+    # Each lever's Zweihorn is one part (BADUR2026 Pos. 21, Abb. II 9 't'): a hub round the lever
+    # shaft and two horns, the adding horn at local 180 deg (pointing the other way: the model
+    # mirrors the solve about the vertical through the lever, and m2Pose.js negates the angles)
+    # and the subtracting horn the lever's spread further on. The spreads come from the
+    # simulator (params/lever-phases.json, `pnpm phases`): 82 deg on every lever of the
+    # original's set, 127 down to 43 deg across the ripple set's levers, units first.
+    with open(os.path.join(params.MACHINE_DIR, "params", "lever-phases.json"), encoding="utf-8") as f:
+        lever_phases = json.load(f)
+
+    def spread(mode, j):
+        ph = lever_phases[mode][j]
+        return (ph["add"] - ph["sub"]) % 360.0
+
     lever_r = cp["lever_shaft_radius"]
     # The drive row: the drum's gear (on a sleeve in front of the drum, sliding with it) has its
     # front face at drum_gear_y_at_9 at setting 9 and is 28.35 mm further back at setting 0;
@@ -479,18 +478,14 @@ def build(p):
         lever = mb.build(f"pm.lever.{j}", col, (lx, 0, lz))
         bl.set_motion(lever, "rotate", (0, 1, 0), f"Carry lever shaft {j}", f"Zweihornwelle {j}")
         bl.parent(lever, carriage)
-        for kind, (ay0, ay1), (ry0, ry1), le, ld in (
-                ("add", (za0, za1), cp["ripple_zweihorn_add"], "Zweihorn: adding horn", "Zweihorn: Additionshorn"),
-                ("sub", (zs0, zs1), cp["ripple_zweihorn_sub"], "Zweihorn: subtracting horn", "Zweihorn: Subtraktionshorn")):
+        for name, key, mode, (ay0, ay1), le, ld in (
+                (f"pm.zweihorn.{j}", "zweihorn", "simultaneous", cp["zweihorn"], f"Zweihorn {j}", f"Zweihorn {j}"),
+                (f"pm.zweihorn_r.{j}", "ripple_zweihorn", "ripple", cp["ripple_zweihorn"],
+                 f"Zweihorn {j} (ripple set)", f"Zweihorn {j} (Staffelsatz)")):
             mb = MeshBuilder()
-            mb.prism_holes(horn_outline, [geom.circle(lever_r + 0.15, 16)], "XZ", ay0, ay1, "steel_dark")
-            horn = mb.build(f"pm.zweihorn_{kind}.{j}", col, (lx, 0, lz))
-            bl.set_motion(horn, "rotate", (0, 1, 0), f"{le} {j}", f"{ld} {j}")
-            bl.parent(horn, carriage)
-            mb = MeshBuilder()
-            mb.prism_holes(horn_outline_r, [geom.circle(lever_r + 0.15, 16)], "XZ", ry0, ry1, "steel_dark")
-            horn = mb.build(f"pm.zweihorn_r_{kind}.{j}", col, (lx, 0, lz))
-            bl.set_motion(horn, "rotate", (0, 1, 0), f"{le} {j} (ripple set)", f"{ld} {j} (Staffelsatz)")
+            mb.prism_holes(carry.zweihorn_part(p, spread(mode, j), key), [geom.circle(lever_r + 0.15, 16)], "XZ", ay0, ay1, "steel_dark")
+            horn = mb.build(name, col, (lx, 0, lz))
+            bl.set_motion(horn, "rotate", (0, 1, 0), le, ld)
             bl.parent(horn, carriage)
 
     # The 17th shaft of the drive row, half a place right of the units drum at the levers'

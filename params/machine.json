@@ -735,27 +735,19 @@
           ],
           "s": [
             -13.43,
-            -9.43
+            -11.43
           ],
-          "zweihorn_add": [
+          "zweihorn": [
             -13.33,
             -11.53
           ],
-          "zweihorn_sub": [
-            -11.33,
-            -9.53
-          ],
           "ripple_s": [
             63.0,
-            67.0
+            65.0
           ],
-          "ripple_zweihorn_add": [
+          "ripple_zweihorn": [
             63.1,
             64.9
-          ],
-          "ripple_zweihorn_sub": [
-            65.1,
-            66.9
           ],
           "store_shaft_front": -13.3,
           "lever_shaft_radius": 1.2,
@@ -772,7 +764,7 @@
         },
         "unit": "mm",
         "conf": "design",
-        "src": "Planes along Y (front to back) of the carry, behind the result discs (to 73.7): the five-horn p of store k with the Einzahn of wheel k and the ten-wheel of wheel k+1 in pair[k % 2] (the three meshing parts in one plane, neighbours alternating, as the replica's Muldenrad planes did); the detent wheel; the five-horn s with the Zweihorn's two horns, each in its own plane so the carry switch can turn them apart (the original's Zweihorn is one 2 mm part). Abb. II 9 (WALSDORF2014) draws s and the Zweihorn at the front, in front of the drums: in our layout the Zweihorn's 25.2 sweep would reach the drum's axis there (18.9 from the lever), so they stand behind the drum axes' rear end (80.5), as all the carry parts did before. The lever shaft is 1.2 in radius where it passes the drums' rib tips (0.2 mm). 2026-11-25: the two pair planes spread to 6 mm apart (Abb. II 9 draws o and r well apart on a shaft), and a bar of the register frame (BADUR2026 'Einzelteile 2', Zaehlwerkrahmen Pos. 3: one hole per shaft, 18.25 apart, and small holes for studs) between the detent wheels and s, through which the result and intermediate shafts pass and which carries the detent springs' studs; its section here (3 thick, 28 high) is a design value. 2026-11-25: s and the Zweihorn moved to the front, just behind the result discs and in front of the drums at their most forward (setting 0), as Abb. II 9 draws them; the intermediate shaft runs from s to the pentagon. 2026-11-25: the register made about as deep as the carriage (the TSD photo of Lehmann's replica, Brandt's Abb. II 5), the two depths 14 mm apart as Abb. II 9 spaces o and r, over the drums (p clears a drum's rib tips by 2.4 mm across the digit, the Einzahn and ten-wheel by 2.2). 2026-11-25: the ripple set (our design, design/v1.3-notes.md) stands behind the drum axes' rear end (57.5), where its long Zweihorn (17.65) turns clear of them: at the front it would pass 1.25 mm from each drum axis, through the sleeve and the shaft. The frame bar moved forward for it from 57-60 to 55.3-57.5 (0.3 behind the detent wheels, 7 above the carriage's rear bearings, which reach z 42.9). 2026-11-25 (owner: readable digits): the result dish is 8 deep, not Badur's 3, with digits 6.6 high on its rim (as on the setting dials), facing up at the window; everything behind the dishes (s and the Zweihorn, the drums through the receiving gear, the carry's planes, the frame bar, the ripple set, the rear wall, the pentagons, the register cover's end, the carriage's rear bearings and floor) moved 5 mm back to make room. No contact or mesh changes: only distances along the shafts (design/v1.3-notes.md)."
+        "src": "Planes along Y (front to back) of the carry, behind the result discs (to 73.7): the five-horn p of store k with the Einzahn of wheel k and the ten-wheel of wheel k+1 in pair[k % 2] (the three meshing parts in one plane, neighbours alternating, as the replica's Muldenrad planes did); the detent wheel; the five-horn s with the Zweihorn's two horns, each in its own plane so the carry switch can turn them apart (the original's Zweihorn is one 2 mm part). Abb. II 9 (WALSDORF2014) draws s and the Zweihorn at the front, in front of the drums: in our layout the Zweihorn's 25.2 sweep would reach the drum's axis there (18.9 from the lever), so they stand behind the drum axes' rear end (80.5), as all the carry parts did before. The lever shaft is 1.2 in radius where it passes the drums' rib tips (0.2 mm). 2026-11-25: the two pair planes spread to 6 mm apart (Abb. II 9 draws o and r well apart on a shaft), and a bar of the register frame (BADUR2026 'Einzelteile 2', Zaehlwerkrahmen Pos. 3: one hole per shaft, 18.25 apart, and small holes for studs) between the detent wheels and s, through which the result and intermediate shafts pass and which carries the detent springs' studs; its section here (3 thick, 28 high) is a design value. 2026-11-25: s and the Zweihorn moved to the front, just behind the result discs and in front of the drums at their most forward (setting 0), as Abb. II 9 draws them; the intermediate shaft runs from s to the pentagon. 2026-11-25: the register made about as deep as the carriage (the TSD photo of Lehmann's replica, Brandt's Abb. II 5), the two depths 14 mm apart as Abb. II 9 spaces o and r, over the drums (p clears a drum's rib tips by 2.4 mm across the digit, the Einzahn and ten-wheel by 2.2). 2026-11-25: the ripple set (our design, design/v1.3-notes.md) stands behind the drum axes' rear end (57.5), where its long Zweihorn (17.65) turns clear of them: at the front it would pass 1.25 mm from each drum axis, through the sleeve and the shaft. The frame bar moved forward for it from 57-60 to 55.3-57.5 (0.3 behind the detent wheels, 7 above the carriage's rear bearings, which reach z 42.9). 2026-11-25 (owner: readable digits): the result dish is 8 deep, not Badur's 3, with digits 6.6 high on its rim (as on the setting dials), facing up at the window; everything behind the dishes (s and the Zweihorn, the drums through the receiving gear, the carry's planes, the frame bar, the ripple set, the rear wall, the pentagons, the register cover's end, the carriage's rear bearings and floor) moved 5 mm back to make room. No contact or mesh changes: only distances along the shafts (design/v1.3-notes.md). 2026-11-25: each lever's Zweihorn is one part with its two horns (BADUR2026 Pos. 21, Abb. II 9 't'), in one plane inside its five-horn's (s 2 thick, the Zweihorn 1.8, 0.1 inside each face), for both carry sets; the horns were two parts in two planes since v1.2.0, when switching the carry turned them apart. The 2 mm freed behind s and s' stay free."
       },
       "large_gears": {
         "v": {

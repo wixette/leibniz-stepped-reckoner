@@ -37,10 +37,8 @@ export function placeWord(k, loc = locale()) {
 const PLACED = /** @type {const} */ ([
   ["pm.drum_shaft.", "part.drumShaft"],
   ["pm.lever.", "part.lever"],
-  ["pm.zweihorn_add.", "part.zweihornAdd"],
-  ["pm.zweihorn_sub.", "part.zweihornSub"],
-  ["pm.zweihorn_r_add.", "part.zweihornAddRipple"],
-  ["pm.zweihorn_r_sub.", "part.zweihornSubRipple"],
+  ["pm.zweihorn_r.", "part.zweihornRipple"],
+  ["pm.zweihorn.", "part.zweihorn"],
   ["pi.five_horn_s.", "part.store"],
   ["pi.five_horn_sr.", "part.rippleStar"],
   ["pm.setting_stop.", "part.settingStop"],
