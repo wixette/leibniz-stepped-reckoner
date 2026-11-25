@@ -27,6 +27,7 @@ MATERIALS = {
     "brass_satin": ((0.78, 0.58, 0.26), 1.0, 0.38, "brushed"),
     "steel": ((0.55, 0.56, 0.58), 1.0, 0.28, "brushed"),
     "steel_dark": ((0.10, 0.11, 0.13), 1.0, 0.35, "brushed"),
+    "bronze": ((0.36, 0.25, 0.13), 1.0, 0.42, "brushed"),
     # the pentagons: steel, named apart so the Carry view can draw them half-transparent
     # (js/scene/teachScene.js, veil)
     "steel_pentagon": ((0.55, 0.56, 0.58), 1.0, 0.28, "brushed"),

@@ -500,10 +500,33 @@ def build(p):
         px = x + x_pl + pin_g.rp
         mb = MeshBuilder()
         mb.prism(geom.gear_outline(pin_g, 0.0), "XY", sh["teeth_z"][0], sh["teeth_z"][1], "steel_dark")
-        mb.prism(geom.circle(1.5, 16), "XY", sh["teeth_z"][0] + 0.5, z_plate + 10.0, "steel", smooth=True)
-        mb.prism(geom.circle(5.0, 32), "XY", z_plate + 2.0, z_plate + 4.0, "brass_satin", smooth=True)
-        mb.prism(geom.radial_bar(0, dl["pointer_r"], 2.2, -90.0), "XY", z_plate + 2.05, z_plate + 3.2, "steel_dark")  # not flush with the hub
-        mb.prism(geom.rect(-1.5, -4.0, 1.5, 4.0), "XY", z_plate + 4.0, z_plate + 12.0, "brass_polished")
+        # the pointer and its tail, one black part (photos of the replica): a square, thick tail on
+        # the axle, which carries the handle, and a flat arm narrowing to a round tip like the foot
+        # of a U, so that it reads as a pointer
+        hd_ = p.v(M2 + "setting_handle")
+        pt_ = hd_["pointer"]
+        tl_, tz_ = pt_["tail_half"], z_plate + 2.05 + pt_["tail_height"]
+        mb.prism(geom.rect(-tl_, -tl_, tl_, tl_), "XY", z_plate + 2.05, tz_, "steel_dark")
+        mb.prism(geom.pointer_outline(tl_ - 0.5, dl["pointer_r"], pt_["width"], pt_["tip_width"], -90.0), "XY", z_plate + 2.05, z_plate + 2.05 + pt_["thickness"], "steel_dark")  # not flush with the plate
+        # the handle: a C of steel strip upright in the pointer's plane, its back opposite the
+        # pointer and open towards it, its foot on the tail; the axle rises inside it to a flat,
+        # wide, knurled bronze nut, bevelled top and bottom, just under the C's centre
+        nut_ = hd_["nut"]
+        rc_, (th_, wd_) = hd_["radius"], hd_["strip"]
+        cz_ = tz_ + rc_ + th_ / 2.0 - 0.3                    # the C's foot sits just in the tail's top
+        nz1 = cz_ - nut_["below_centre"]
+        nz0 = nz1 - nut_["height"]
+        mb.prism(geom.circle(1.5, 16), "XY", sh["teeth_z"][0] + 0.5, nz0 + 0.2, "steel", smooth=True)
+        kn, nr_, bv_ = nut_["knurls"], nut_["radius"], nut_["bevel"]
+        knurl = [geom._polar(nr_ + (0.25 if i % 2 else 0.0), 360.0 * i / (2 * kn)) for i in range(2 * kn)]
+        mb.prism(knurl, "XY", nz0 + bv_, nz1 - bv_, "bronze")
+        lathe(mb, [(0.0, nz0), (nr_ - bv_, nz0), (nr_ + 0.1, nz0 + bv_), (nr_ + 0.1, nz1 - bv_), (nr_ - bv_, nz1), (0.0, nz1)], "bronze", (0.0, 0.0, 0.0), 48)
+        g0_, g1_ = hd_["gap_deg"]                            # the gap, in degrees from the pointer's way, up positive
+        arc_ = [g1_ + (360.0 - (g1_ - g0_)) * i / 48 for i in range(49)]
+        # in the YZ plane: u is y, and the pointer points to -y
+        c_out = [(-math.cos(math.radians(a)) * (rc_ + th_ / 2.0), cz_ + math.sin(math.radians(a)) * (rc_ + th_ / 2.0)) for a in arc_]
+        c_in = [(-math.cos(math.radians(a)) * (rc_ - th_ / 2.0), cz_ + math.sin(math.radians(a)) * (rc_ - th_ / 2.0)) for a in reversed(arc_)]
+        mb.prism(c_out + c_in, "YZ", -wd_ / 2.0, wd_ / 2.0, "steel")
         dial = mb.build(f"pm.setting_dial.{j}", col, (px, py, 0))
         bl.set_anchors(dial, "pointer_tip", [(0.0, -dl["pointer_r"], z_plate + 2.6)])
         bl.set_motion(dial, "rotate", (0, 0, 1), f"Setting knob {j}", f"Stellgriff {j}")
@@ -524,7 +547,7 @@ def build(p):
         # stop: a lug in the pointer's plane, filling the blank sector between 9 and 0 (NL183/465 p. 38)
         mb = MeshBuilder()
         # the blank sector runs anticlockwise from 0 (at 270 deg) to 9 (270 + 360 - 9 divisions)
-        mb.prism(geom.stop_lug(5.6, dl["pointer_r"] - 1.0, 270.0, 270.0 + 360.0 - kin.dial_step * 9, 1.1 + 0.15), "XY", z_plate + 2.0, z_plate + 3.4, "steel")
+        mb.prism(geom.stop_lug(5.6, dl["pointer_r"] - 1.0, 270.0, 270.0 + 360.0 - kin.dial_step * 9, p.v(M2 + "setting_handle")["pointer"]["width"] / 2.0 + 0.15), "XY", z_plate + 2.0, z_plate + 3.4, "steel")
         stop = static(mb.build(f"pm.setting_stop.{j}", col, (px, py, 0)))
         bl.parent(stop, carriage)
 

@@ -105,6 +105,19 @@ def radial_bar(r0, r1, width, angle_deg):
     ]
 
 
+def pointer_outline(r0, length, width, tip_width, angle_deg, n=10):
+    """A pointer from r0 out to length along angle_deg: width at r0, narrowing from half-way
+    to tip_width, and ending in a half-round tip (the foot of a U) at length."""
+    a = math.radians(angle_deg)
+    ux, uw = math.cos(a), math.sin(a)
+    nx, nw = -uw, ux
+    rt, rm = tip_width / 2.0, (r0 + length) / 2.0
+    pts = [(r0, -width / 2.0), (rm, -width / 2.0), (length - rt, -rt)]
+    pts += [(length - rt + rt * math.sin(math.pi * i / n), -rt * math.cos(math.pi * i / n)) for i in range(1, n)]
+    pts += [(length - rt, rt), (rm, width / 2.0), (r0, width / 2.0)]
+    return [(ux * s + nx * q, uw * s + nw * q) for s, q in pts]
+
+
 def stop_lug(r_in, r_out, a_from, a_to, offset, n=16):
     """Annular sector from a_from to a_to (CCW) whose two side faces are straight lines
     `offset` inside the radial lines at a_from and a_to: a bar of half-width `offset` lying
