@@ -846,7 +846,7 @@
       },
       "carriage_counter_section": {
         "v": {
-          "top_dx": 44.0,
+          "top_dx": 40.5,
           "top_z": 84.0,
           "step_dx": 112.0,
           "end_dx": 137.75,
@@ -858,7 +858,7 @@
         },
         "unit": "mm",
         "conf": "design",
-        "src": "right part of the carriage (photo overlay 2026-10-18): from digit 0 + top_dx its top is 12 mm lower (cover at top_z); full height to digit 0 + step_dx, then only the part above step_z to digit 0 + end_dx, so it passes over the frame's right end at offset 0 (step_z clears the lead screw). The hood ends 137.75 right of knob 0 (444 long, BADUR2026). The revolution counter's centre is counter_dx right of the units drum: BADUR2026's plan view puts it 64 mm right of the 17th drive shaft, which is half a place (18.25) right of the units drum (design/v1.3-notes.md); the replica's was 96.4 (NL183/465 p. 51, 52: 73 from the 8th setting station). top_dx moved from 50 to 44 so the counter's black numbers clear the step. counter_dy: the counter's centre 1 mm in front of the knobs' line, so its numbers stay under the hood.",
+        "src": "right part of the carriage (photo overlay 2026-10-18): from digit 0 + top_dx its top is 12 mm lower (cover at top_z); full height to digit 0 + step_dx, then only the part above step_z to digit 0 + end_dx, so it passes over the frame's right end at offset 0 (step_z clears the lead screw). The hood ends 137.75 right of knob 0 (444 long, BADUR2026). The revolution counter's centre is counter_dx right of the units drum: BADUR2026's plan view puts it 64 mm right of the 17th drive shaft, which is half a place (18.25) right of the units drum (design/v1.3-notes.md); the replica's was 96.4 (NL183/465 p. 51, 52: 73 from the 8th setting station). top_dx moved from 50 to 44 so the counter's black numbers clear the step. counter_dy: the counter's centre 1 mm in front of the knobs' line, so its numbers stay under the hood. 2026-11-25: top_dx 44 -> 40.5, so that the step's wall stands clear of the counter's dial plate (its edge 42.35 right of the units drum).",
         "note": "top_dx and step_dx are photo estimates; counter_dx is from Badur's plan view."
       },
       "knob_plate_z": {

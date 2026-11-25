@@ -655,13 +655,17 @@ def build(p):
     # the dial reaches past this top's left edge (xt), so the top is one outline with a round bite
     # out of that edge rather than a plate with a hole
     rh = p.v(M2 + "counter")["dial_plate_radius"] + 0.05
-    hy = math.sqrt(rh * rh - (cdx - xt) ** 2)
-    a1 = math.degrees(math.atan2(hy, xt - cdx))          # where the circle leaves the edge at the back
-    n_arc = 120
-    sweep = 360.0 - 2.0 * (180.0 - a1)                    # the arc inside the plate, clockwise
-    arc = [(cdx + rh * math.cos(math.radians(a1 - sweep * i / n_arc)), cdy + rh * math.sin(math.radians(a1 - sweep * i / n_arc))) for i in range(n_arc + 1)]
-    top_outline = [(xt, ky0), (xr, ky0), (xr, ky1), (xt, ky1)] + arc
-    mb.prism_holes(top_outline, [], "XY", zt - 2.0, zt, "brass_polished")
+    if cdx - rh > xt:
+        # the dial lies inside this top: a round hole for it
+        mb.prism_holes(geom.rect(xt, ky0, xr, ky1), [[(u + cdx, w + cdy) for u, w in geom.circle(rh, 96)]], "XY", zt - 2.0, zt, "brass_polished")
+    else:
+        # the dial reaches past the top's left edge: one outline with a round bite out of it
+        hy = math.sqrt(rh * rh - (cdx - xt) ** 2)
+        a1 = math.degrees(math.atan2(hy, xt - cdx))          # where the circle leaves the edge at the back
+        n_arc = 120
+        sweep = 360.0 - 2.0 * (180.0 - a1)                    # the arc inside the plate, clockwise
+        arc = [(cdx + rh * math.cos(math.radians(a1 - sweep * i / n_arc)), cdy + rh * math.sin(math.radians(a1 - sweep * i / n_arc))) for i in range(n_arc + 1)]
+        mb.prism_holes([(xt, ky0), (xr, ky0), (xr, ky1), (xt, ky1)] + arc, [], "XY", zt - 2.0, zt, "brass_polished")
     # the walls start behind the front panel: sharing its front face made them flicker (z-fighting)
     mb.prism(geom.rect(xt - 3.0, pnl1, xt, ky1), "XY", zt, kz0, "brass_satin")            # riser between them
     wz0 = cs["carriage_wall_z0"]
