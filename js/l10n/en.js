@@ -40,6 +40,7 @@ export default {
   "view.carry": "Carry",
   "view.inside": "Inside",
   "view.case": "Show case",
+  "view.colours": "Colour by part",
 
   "strip.number": "Number on the knobs",
   "strip.number.tip": "Type the number to set on the 8 knobs",
@@ -81,6 +82,8 @@ export default {
   "status.pinOut": "Pin out.",
   "status.carry.ripple": "Ripple carry: in every digit two of the original's carry parts are exchanged for a modern pair of our design, a longer lever and a small star, behind the drums. The levers come one after another, units first, so a chain of carries runs through within one turn. Not historical.",
   "status.carry.simultaneous": "Carry as on the original in Hannover: all levers act at once. A carry made while carries are being passed on waits, its pentagon tilted: turn again with 0 on the knobs to finish it.",
+  "status.colours.on": "Each kind of part in its own colour, to tell them apart. Hover over a part to see its name.",
+  "status.colours.off": "The parts in their metals again.",
   "status.reset": "Machine cleared.",
   "status.ranToStop.one": "The crank turned once and stopped at the pin.",
   "status.ranToStop.other": "The crank turned {n} times and stopped at the pin.",

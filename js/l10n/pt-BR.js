@@ -38,6 +38,7 @@ export default {
   "view.carry": "Transporte",
   "view.inside": "Por dentro",
   "view.case": "Mostrar a caixa",
+  "view.colours": "Cores por peça",
 
   "strip.number": "Número nos botões",
   "strip.number.tip": "Digitar o número a ajustar nos 8 botões",
@@ -79,6 +80,8 @@ export default {
   "status.pinOut": "Pino fora.",
   "status.carry.ripple": "Transporte em cascata: em cada dígito, duas peças de transporte do original são trocadas por um par moderno do nosso projeto, uma alavanca mais longa e uma pequena estrela, atrás dos tambores. As alavancas chegam uma depois da outra, as unidades primeiro, então uma cadeia de transportes segue em uma só volta. Não é histórico.",
   "status.carry.simultaneous": "Transporte como no original de Hannover: todas as alavancas agem juntas. Um transporte que surge enquanto os transportes são passados espera, com o pentágono inclinado: gire de novo com 0 nos botões para terminá-lo.",
+  "status.colours.on": "Cada tipo de peça com sua própria cor, para distingui-las. Passe o ponteiro sobre uma peça para ver o nome.",
+  "status.colours.off": "As peças de novo em seus metais.",
   "status.reset": "Máquina zerada.",
   "status.ranToStop.one": "A manivela deu uma volta e parou no pino.",
   "status.ranToStop.other": "A manivela deu {n} voltas e parou no pino.",

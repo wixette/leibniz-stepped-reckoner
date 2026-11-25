@@ -418,3 +418,11 @@ The machine can carry two ways (decision 0001): with the ripple carry, the defau
 - **Only at rest, only in free play.** It changes the levers' phases, so it waits for the crank to stop; a lesson sets its own carry with each step's reset, so in a lesson the box is greyed like every control the step does not ask for. Reset keeps the choice; leaving a lesson keeps the machine as the lesson left it, the carry included, as for everything else.
 - The status line says what the choice means, and the carry set is exchanged at once: the original's horns and star s at the front, or the ripple set's at the back, behind the drums, visible in the Carry view. That view draws the pentagons half-transparent (their tilt still shows a stored carry), since the ripple set's star works right in front of them.
 
+
+### U31 — Colour by part
+
+Inside the machine most moving parts are brass, as they are on the original, and in the inside views they glow amber besides: the parts at the back are hard to tell apart. The Views menu's **Colour by part** switch, under *Show case*, draws every kind of part in a colour of its own (`PART_COLOURS` in js/scene/teachScene.js): the drums orange, the result wheels with their Einzahn and ten-wheel blue, the carry stores (five-horn p, detent wheel, pentagon, shaft) green, the stars s and s' cyan, the Zweihörner red, the lever shafts with their long gears purple, the setting heads mustard, the counter and its drive pink, the large gears magenta, the Magna Rota and crank brown, the frame grey.
+
+- **Any time, in free play and in lessons.** It changes only the colours: highlighting, fading and the half-transparent pentagons of the inside views work on top of it, and a highlighted part glows in its own colour rather than amber, so its colour still says what it is.
+- **The numbers stay readable:** the digits and the white bands they are printed on keep their colours.
+- The status line says what the colours are for, and to hover over a part for its name.

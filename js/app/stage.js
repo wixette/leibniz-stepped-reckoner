@@ -180,6 +180,7 @@ export class Stage {
     this.rig = /** @type {Rig<string>} */ (new Rig(r, m2NodeNames(m.registerDigits, m.carriageDigits)));
     this.exploder = new Exploder(r);
     this.highlighter = new Highlighter(r);
+    this.highlighter.setColours(this.partColours);
     this.callouts = new Callouts(this.host, this.viewer.camera, r);
     this.callouts.valueOf = (node) => partInfo(node, this.machine);
     this.views = viewSubjects(r);
@@ -219,6 +220,16 @@ export class Stage {
     for (const o of findNodes(this.root, "pm.carriage_panel")) o.visible = !this.cutaway;
     this.viewer.invalidate();
     this.refreshHover();
+  }
+
+  /** Every kind of part in its own colour (the Views menu's "Colour by part"). */
+  partColours = false;
+
+  /** @param {boolean} on */
+  setPartColours(on) {
+    this.partColours = on;
+    this.highlighter?.setColours(on);
+    this.viewer.invalidate();
   }
 
   /**

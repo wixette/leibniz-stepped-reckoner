@@ -38,6 +38,7 @@ export default {
   "view.carry": "받아올림",
   "view.inside": "내부",
   "view.case": "케이스 표시",
+  "view.colours": "부품별 색",
 
   "strip.number": "손잡이에 설정한 수",
   "strip.number.tip": "8개 손잡이에 설정할 수 입력",
@@ -79,6 +80,8 @@ export default {
   "status.pinOut": "핀을 뺐습니다.",
   "status.carry.ripple": "리플 받아올림: 자리마다 원본의 받아올림 부품 두 개를 우리가 설계한 현대 부품 한 쌍(더 긴 레버와 작은 별 모양)으로 바꿔 계단 바퀴 뒤에 두었습니다. 레버가 일의 자리부터 차례로 오므로 이어지는 받아올림이 한 바퀴 안에 끝납니다. 역사적인 것이 아닙니다.",
   "status.carry.simultaneous": "하노버의 원본과 같은 받아올림입니다. 모든 레버가 동시에 움직입니다. 받아올림을 넘기는 도중에 생긴 받아올림은 오각형이 기운 채로 기다립니다. 손잡이를 0으로 두고 한 바퀴 더 돌리면 끝납니다.",
+  "status.colours.on": "부품 종류마다 다른 색으로 칠해 구별하기 쉽게 했습니다. 부품에 포인터를 올리면 이름이 보입니다.",
+  "status.colours.off": "부품을 다시 원래 금속 색으로 표시합니다.",
   "status.reset": "기계를 지웠습니다.",
   "status.ranToStop.one": "크랭크가 {n}바퀴 돌고 핀에서 멈췄습니다.",
   "status.ranToStop.other": "크랭크가 {n}바퀴 돌고 핀에서 멈췄습니다.",

@@ -38,6 +38,7 @@ export default {
   "view.carry": "Riporto",
   "view.inside": "All’interno",
   "view.case": "Mostra la cassa",
+  "view.colours": "Colori per parte",
 
   "strip.number": "Numero sulle manopole",
   "strip.number.tip": "Scrivi il numero da impostare sulle 8 manopole",
@@ -79,6 +80,8 @@ export default {
   "status.pinOut": "Perno fuori.",
   "status.carry.ripple": "Riporto a cascata: per ogni cifra, due parti di riporto dell’originale sono sostituite da una coppia moderna di nostro progetto, una leva più lunga e una piccola stella, dietro i tamburi. Le leve arrivano una dopo l’altra, prima le unità, così una catena di riporti prosegue in un solo giro. Non storico.",
   "status.carry.simultaneous": "Riporto come nell’originale di Hannover: tutte le leve agiscono insieme. Un riporto nato mentre si trasmettono i riporti aspetta, con il pentagono inclinato: gira ancora con 0 sulle manopole per completarlo.",
+  "status.colours.on": "Ogni tipo di parte nel suo colore, per distinguerle. Passa sopra una parte per vederne il nome.",
+  "status.colours.off": "Le parti di nuovo nei loro metalli.",
   "status.reset": "Macchina azzerata.",
   "status.ranToStop.one": "La manovella ha fatto un giro e si è fermata al perno.",
   "status.ranToStop.other": "La manovella ha fatto {n} giri e si è fermata al perno.",

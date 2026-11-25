@@ -165,7 +165,39 @@ def build(p):
         # the intermediate shaft: the five-horn p (pushed by the Einzahn, turning the next
         # ten-wheel), the detent wheel, the five-horn s (struck by the Zweihorn), the pentagon
         mb = MeshBuilder()
-        mb.prism(geom.circle(1.5, 16), "XZ", cp["store_shaft_front"], pb + 1.0, "steel", smooth=True)
+        # the intermediate shaft (BADUR2026 Pos. 23/24): Ø5 journals and a square part, 6 across,
+        # carrying s, p and the detent wheel; long concave cuts along its four edges narrow the flats
+        # to 3.5 in the middle of each cut (R 100), short square ends left; steel
+        ssh = p.v(M2 + "store_shaft")
+        sq0, sq1 = ssh["square_y"]
+        jr = ssh["journal_radius"]
+        half = ssh["square"] / 2.0
+        mb.prism(geom.circle(jr, 20), "XZ", cp["store_shaft_front"], sq0 + 0.2, "steel", smooth=True)
+        mb.prism(geom.circle(jr, 20), "XZ", sq1 - 0.2, pb + 1.0, "steel", smooth=True)
+        edges = [sq0] + [y for c_ in ssh["cuts_y"] for y in c_] + [sq1]
+        for a, b in zip(edges[0::2], edges[1::2]):
+            mb.prism(geom.rect(-half, -half, half, half), "XZ", a, b, "steel")    # the square ends
+        cmax = half - ssh["cut_flat"] / 2.0
+        for c0, c1 in ssh["cuts_y"]:
+            nseg_ = 24
+            rings = []
+            for i_ in range(nseg_ + 1):
+                y_ = c0 + (c1 - c0) * i_ / nseg_
+                u_ = 2.0 * i_ / nseg_ - 1.0                          # -1 .. 1 along the cut
+                cut_ = max(cmax * (1.0 - u_ * u_), 1e-4)        # the cut's depth at each edge (> 0 keeps the points in order)
+                pts = []
+                for sx, sz in ((1, -1), (1, 1), (-1, 1), (-1, -1)):
+                    pts += [(sx * half, sz * (half - cut_)), (sx * (half - cut_), sz * half)]
+                pts.sort(key=lambda q: math.atan2(q[1], q[0]))   # anticlockwise seen from the front
+                ring = [(x_, y_, z_) for x_, z_ in pts]
+                rings.append(ring)
+            verts = [v_ for r_ in rings for v_ in r_]
+            faces = []
+            for i_ in range(nseg_):
+                for q_ in range(8):
+                    a_, b_ = i_ * 8 + q_, i_ * 8 + (q_ + 1) % 8
+                    faces.append((a_, a_ + 8, b_ + 8, b_))
+            mb.add_mesh_data(verts, faces, bl.frame_matrix((0, 0, 0), (1, 0, 0), (0, 1, 0)), "steel")
         qa, qb = pair[k % 2]
         hub = cg["five_horn"]["hub_radius"]
         mb.prism(carry.five_horn(p, cg["p_phase"]), "XZ", qa, qb, "brass_polished")

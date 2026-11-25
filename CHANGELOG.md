@@ -18,6 +18,8 @@ What changed in each release. Versions follow `package.json` and are tagged `vX.
 - Each carry lever's Zweihorn is one part with its two horns, as on the original (Klaus Badur's drawing), in both carry sets.
 - The setting knobs have the original's 12 divisions (digits 30° apart, a 60° blank), and the pentagons the original's size.
 - A *Counter* view.
+- *Colour by part*, a switch in the Views menu: every kind of part in its own colour, so that the parts inside the machine can be told apart.
+- The register's intermediate shafts are the original's square steel shafts with their long curved cuts along the edges (Klaus Badur's drawing, photos of Lehmann's replica).
 
 ## 1.2.0
 

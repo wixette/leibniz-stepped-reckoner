@@ -38,6 +38,7 @@ export default {
   "view.carry": "进位",
   "view.inside": "内部",
   "view.case": "显示外壳",
+  "view.colours": "按部件着色",
 
   "strip.number": "旋钮上的数",
   "strip.number.tip": "输入要在 8 个旋钮上设置的数",
@@ -79,6 +80,8 @@ export default {
   "status.pinOut": "插销已拔出。",
   "status.carry.ripple": "行波进位：每一位都把原机的两个进位零件换成我们设计的一对现代零件（一根更长的杆和一个小星轮），装在步进轮后面。进位杆从个位起依次到达，所以一连串进位在一圈内传完。这不是历史上的设计。",
   "status.carry.simultaneous": "进位方式同汉诺威的原机：所有进位杆同时动作。在传递进位的过程中新产生的进位会等待，五边形保持倾斜：旋钮设为 0 再转一圈即可完成。",
+  "status.colours.on": "每类部件各用一种颜色，便于区分。把指针移到部件上可看到它的名称。",
+  "status.colours.off": "部件恢复为原来的金属颜色。",
   "status.reset": "机器已清零。",
   "status.ranToStop.one": "曲柄转了 {n} 圈，在插销处停下。",
   "status.ranToStop.other": "曲柄转了 {n} 圈，在插销处停下。",

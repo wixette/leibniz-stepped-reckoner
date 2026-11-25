@@ -38,6 +38,7 @@ export default {
   "view.carry": "Zehnerübertrag",
   "view.inside": "Innen",
   "view.case": "Gehäuse zeigen",
+  "view.colours": "Teile farbig",
 
   "strip.number": "Zahl an den Knöpfen",
   "strip.number.tip": "Die Zahl eintippen, die an den 8 Knöpfen eingestellt wird",
@@ -79,6 +80,8 @@ export default {
   "status.pinOut": "Stift heraus.",
   "status.carry.ripple": "Ripple-Übertrag: An jeder Stelle sind zwei Übertragsteile des Originals gegen ein modernes Paar unseres Entwurfs getauscht, einen längeren Hebel und einen kleinen Stern, hinter den Staffelwalzen. Die Hebel kommen nacheinander, die Einer zuerst, so läuft eine Kette von Überträgen in einer Umdrehung durch. Nicht historisch.",
   "status.carry.simultaneous": "Übertrag wie beim Original in Hannover: Alle Hebel arbeiten zugleich. Ein Übertrag, der beim Weitergeben entsteht, wartet mit gekipptem Fünfeck: Drehe noch einmal mit 0 an den Knöpfen, um ihn zu erledigen.",
+  "status.colours.on": "Jede Art von Teil in eigener Farbe, damit man sie unterscheiden kann. Zeige auf ein Teil, um seinen Namen zu sehen.",
+  "status.colours.off": "Die Teile wieder in ihren Metallen.",
   "status.reset": "Maschine gelöscht.",
   "status.ranToStop.one": "Die Kurbel drehte sich einmal und hielt am Stift an.",
   "status.ranToStop.other": "Die Kurbel drehte sich {n}-mal und hielt am Stift an.",

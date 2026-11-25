@@ -38,6 +38,7 @@ export default {
   "view.carry": "Acarreo",
   "view.inside": "Por dentro",
   "view.case": "Mostrar la caja",
+  "view.colours": "Colores por pieza",
 
   "strip.number": "Número en las perillas",
   "strip.number.tip": "Escribir el número que se ajusta en las 8 perillas",
@@ -79,6 +80,8 @@ export default {
   "status.pinOut": "Clavija fuera.",
   "status.carry.ripple": "Acarreo en cascada: en cada dígito, dos piezas de acarreo del original se cambian por un par moderno de nuestro diseño, una palanca más larga y una estrella pequeña, detrás de los tambores. Las palancas llegan una tras otra, primero las unidades, así que una cadena de acarreos avanza en una sola vuelta. No es histórico.",
   "status.carry.simultaneous": "Acarreo como en el original de Hannover: todas las palancas actúan a la vez. Un acarreo que nace mientras se pasan los acarreos espera, con su pentágono inclinado: gira otra vez con 0 en las perillas para terminarlo.",
+  "status.colours.on": "Cada tipo de pieza con su propio color, para distinguirlas. Pasa el puntero sobre una pieza para ver su nombre.",
+  "status.colours.off": "Las piezas otra vez en sus metales.",
   "status.reset": "Máquina borrada.",
   "status.ranToStop.one": "La manivela dio una vuelta y se detuvo en la clavija.",
   "status.ranToStop.other": "La manivela dio {n} vueltas y se detuvo en la clavija.",

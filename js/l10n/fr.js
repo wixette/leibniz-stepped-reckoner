@@ -38,6 +38,7 @@ export default {
   "view.carry": "Retenue",
   "view.inside": "À l’intérieur",
   "view.case": "Afficher le boîtier",
+  "view.colours": "Couleurs par pièce",
 
   "strip.number": "Nombre sur les boutons",
   "strip.number.tip": "Taper le nombre à régler sur les 8 boutons",
@@ -79,6 +80,8 @@ export default {
   "status.pinOut": "Cheville retirée.",
   "status.carry.ripple": "Retenue en cascade : pour chaque chiffre, deux pièces de retenue de l’original sont remplacées par une paire moderne de notre conception, un levier plus long et une petite étoile, derrière les cylindres. Les leviers passent l’un après l’autre, les unités d’abord, si bien qu’une chaîne de retenues se propage en un seul tour. Pas historique.",
   "status.carry.simultaneous": "Retenue comme sur l’original de Hanovre : tous les leviers agissent à la fois. Une retenue née pendant la transmission des retenues attend, son pentagone basculé : tournez encore avec 0 sur les boutons pour la terminer.",
+  "status.colours.on": "Chaque sorte de pièce dans sa propre couleur, pour les distinguer. Survolez une pièce pour voir son nom.",
+  "status.colours.off": "Les pièces de nouveau dans leurs métaux.",
   "status.reset": "Machine remise à zéro.",
   "status.ranToStop.one": "La manivelle a fait {n} tour et s’est arrêtée à la cheville.",
   "status.ranToStop.other": "La manivelle a fait {n} tours et s’est arrêtée à la cheville.",

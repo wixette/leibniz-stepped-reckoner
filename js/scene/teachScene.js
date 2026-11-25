@@ -125,6 +125,52 @@ export function viewSubjects(root) {
 }
 
 // ---- highlight and fade --------------------------------------------------------------------------
+/**
+ * "Colour by part" (the Views menu): every kind of part in a colour of its own, so that the parts
+ * can be told apart inside the machine. Later patterns override earlier ones (a node's colour goes to
+ * the parts it holds). The digits (ink) and the dishes' white bands keep their colours.
+ * @type {[string, number][]}
+ */
+export const PART_COLOURS = [
+  ["frame.*", 0x8a8f98],
+  ["pi.window", 0xc9b79c],
+  ["pm.carriage", 0x9ca3af],
+  ["pm.carriage_cover", 0xc9b79c],
+  ["pm.carriage_panel", 0xc9b79c],
+  ["frame.case", 0xb8a07e],
+  ["frame.register_cover", 0xc9b79c],
+  ["frame.lead_screw", 0x6b7280],
+  ["pm.drum_shaft.*", 0x4b5563],
+  ["pm.drum.*", 0xe07b39],
+  ["pm.setting_rack.*", 0xd4a017],
+  ["pm.setting_dial.*", 0xf2d16b],
+  ["pm.setting_plate.*", 0xf2d16b],
+  ["pm.setting_stop.*", 0xf2d16b],
+  ["pm.lever.*", 0x7c3aed],
+  ["pm.zweihorn.*", 0xdc2626],
+  ["pm.zweihorn_r.*", 0xdc2626],
+  ["pi.sum_wheel.*", 0x2563eb],
+  ["pi.carry_store.*", 0x16a34a],
+  ["pi.five_horn_s.*", 0x06b6d4],
+  ["pi.five_horn_sr.*", 0x06b6d4],
+  ["pm.magna_rota", 0xb45309],
+  ["pm.main_crank", 0xb45309],
+  ["pm.large_gear_a", 0xa21caf],
+  ["pm.large_gear_b", 0xa21caf],
+  ["pm.large_gear_c", 0xa21caf],
+  ["pm.counter_shaft", 0xdb2777],
+  ["pm.counter_k", 0xdb2777],
+  ["pm.counter_l", 0xdb2777],
+  ["pm.counter_n", 0xdb2777],
+  ["pm.counter_ring", 0xdb2777],
+  ["pm.counter_pin", 0xf59e0b],
+  ["pm.counter_pin_park", 0xf59e0b],
+  ["pm.counter_plate", 0xe5e7eb],
+  ["pm.counter_frame", 0x8a8f98],
+];
+/** Materials "Colour by part" leaves alone: the digits and the white bands they are printed on. */
+const KEEP_COLOUR = new Set(["ink_black", "ink_red", "enamel_white"]);
+
 /** The parts a step points at glow amber: the page's one colour for "your turn" (U5). */
 const GLOW = new THREE.Color(0xffa31a);
 
@@ -183,6 +229,68 @@ export class Highlighter {
       const m = /** @type {THREE.Mesh} */ (o);
       if (m.isMesh) this.originals.set(m, m.material);
     });
+    // each mesh's colour for "Colour by part": the last pattern that holds it wins
+    for (const [pattern, hex] of PART_COLOURS) {
+      for (const mesh of this.meshes([pattern])) this.partColour.set(mesh, hex);
+    }
+  }
+
+  /**
+   * The colour of each mesh's kind of part (PART_COLOURS).
+   * @private
+   * @type {Map<THREE.Mesh, number>}
+   */
+  partColour = new Map();
+
+  /** Draw every kind of part in its own colour (the Views menu's "Colour by part"). */
+  colours = false;
+
+  /**
+   * The flat-coloured stand-ins, one per original material and colour.
+   * @private
+   * @type {Map<THREE.Material, Map<number, THREE.Material>>}
+   */
+  coloured = new Map();
+
+  /**
+   * The last set() call, to apply again when the colours are switched.
+   * @private
+   * @type {[string[], boolean, string[], string[]]}
+   */
+  last = [[], false, [], []];
+
+  /**
+   * Switch "Colour by part" on or off, keeping the highlight and the fading.
+   * @param {boolean} on
+   */
+  setColours(on) {
+    this.colours = on;
+    this.set(...this.last);
+  }
+
+  /**
+   * A mesh's material as drawn before any highlight: the original, or its colour by part.
+   * @private
+   * @param {THREE.Mesh} mesh
+   * @param {THREE.Material} m
+   * @returns {THREE.Material}
+   */
+  base(mesh, m) {
+    const hex = this.partColour.get(mesh);
+    if (!this.colours || hex === undefined || KEEP_COLOUR.has(m.name)) return m;
+    const byHex = this.coloured.get(m) ?? new Map();
+    this.coloured.set(m, byHex);
+    let c = byHex.get(hex);
+    if (!c) {
+      const s = /** @type {THREE.MeshStandardMaterial} */ (m.clone());
+      s.color = new THREE.Color(hex);
+      s.map = null;
+      s.metalness = 0.15;
+      s.roughness = 0.6;
+      c = s;
+      byHex.set(hex, c);
+    }
+    return c;
   }
 
   /**
@@ -200,6 +308,7 @@ export class Highlighter {
    * @returns {void}
    */
   set(patterns, fade, context = [], veil = []) {
+    this.last = [patterns, fade, context, veil];
     this.faded.clear();
     const lit = this.meshes(patterns);
     const kept = this.meshes([...patterns, ...readouts(patterns), ...context]);
@@ -209,16 +318,17 @@ export class Highlighter {
       const dim = fade && lit.size > 0 && !kept.has(mesh);
       const thin = (Array.isArray(orig) ? orig : [orig]).some(veiled);
       if (!on && !dim && !thin) {
-        mesh.material = orig;
+        mesh.material = Array.isArray(orig) ? orig.map((m) => this.base(mesh, m)) : this.base(mesh, orig);
         continue;
       }
       if (dim) this.faded.add(mesh);
       /**
-       * @param {THREE.Material} m
+       * @param {THREE.Material} m0
        * @returns {THREE.Material}
        */
-      const edit = (m) => {
-        const half = !dim && veiled(m);
+      const edit = (m0) => {
+        const half = !dim && veiled(m0);
+        const m = this.base(mesh, m0);
         const look = `${on ? "lit" : ""} ${dim ? "dim" : ""} ${half ? "veil" : ""}`;
         if (!on && !dim && !half) return m;
         const byLook = this.clones.get(m) ?? new Map();
@@ -230,8 +340,10 @@ export class Highlighter {
         }
         const c = /** @type {THREE.MeshStandardMaterial} */ (m.clone());
         if (on && c.emissive) {
-          c.emissive = GLOW.clone();
-          c.emissiveIntensity = 0.45;
+          // in colour by part, a part glows in its own colour, so its colour still tells what it is
+          const hex = this.colours ? this.partColour.get(mesh) : undefined;
+          c.emissive = hex !== undefined && !KEEP_COLOUR.has(m0.name) ? new THREE.Color(hex) : GLOW.clone();
+          c.emissiveIntensity = hex !== undefined ? 0.3 : 0.45;
         }
         if (dim || half) {
           c.transparent = true;

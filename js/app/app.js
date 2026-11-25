@@ -699,6 +699,13 @@ export class App {
     this.render();
   }
 
+  /** Draw every kind of part in its own colour, or in its metal (the Views menu's switch). */
+  toggleColours() {
+    this.stage.setPartColours(!this.stage.partColours);
+    this.say(() => t(this.stage.partColours ? "status.colours.on" : "status.colours.off"));
+    this.render();
+  }
+
   /**
    * Back to where the reader should be (⌂, or Home on the 3D view): in a lesson step, the step's
    * own view and presentation; in free play, the whole machine as it first shows, case on.
@@ -728,6 +735,7 @@ export class App {
         run: () => this.chooseView(v),
       }));
       items.push({ label: t("view.case"), toggle: true, checked: this.stage.casing, divider: true, run: () => this.toggleCase() });
+      items.push({ label: t("view.colours"), toggle: true, checked: this.stage.partColours, run: () => this.toggleColours() });
       showMenu(viewsBtn, items);
     });
     $("resetViewBtn").addEventListener("click", () => this.resetView());
