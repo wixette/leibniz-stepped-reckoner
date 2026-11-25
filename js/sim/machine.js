@@ -374,7 +374,7 @@ export class Machine {
         if (!from) return 0;
         let sum = 0;
         for (const e of from.executions) {
-          if (t >= e.start) sum += e.sign * M.transferProgress(M.executionCurve(t - e.start));
+          if (t >= e.start) sum += e.sign * M.transferProgress(M.executionCurve(t - e.start, this.mode));
         }
         return sum;
       };
@@ -387,7 +387,7 @@ export class Machine {
       const store = (t) => {
         let a = K.storeAngle(p, v(t));
         for (const e of executions) {
-          if (t >= e.start) a += e.sign * (M.executionCurve(t - e.start) - K.STORE_STEP);
+          if (t >= e.start) a += e.sign * (M.executionCurve(t - e.start, this.mode) - K.STORE_STEP);
         }
         return a;
       };
@@ -519,7 +519,7 @@ export class Machine {
     /** @type {1 | -1} */
     const dir = th < 0 ? -1 : 1;
     const top = this.traces(dir)[this.registerDigits - 1];
-    const done = top.executions.filter((e) => Math.abs(th) >= e.start + M.TRANSFER_TRAVEL - 1e-9);
+    const done = top.executions.filter((e) => Math.abs(th) >= e.start + M.transferTravel(this.mode) - 1e-9);
     return this.carryOut + done.reduce((a, e) => a + e.sign, 0);
   }
 
@@ -535,7 +535,7 @@ export class Machine {
       for (let k = 10 - s; k <= 9; k++) ev.push(K.ribWindowStart(K.ribWindowIndex(k, dir)) + K.RIB_PITCH);
     }
     for (const x of this.traces(dir)) {
-      for (const e of x.executions) ev.push(e.start + M.TRANSFER_TRAVEL, e.start + M.EXECUTION_TRAVEL);
+      for (const e of x.executions) ev.push(e.start + M.transferTravel(this.mode), e.start + M.executionTravel(this.mode));
     }
     ev.push(360);
     const sorted = ev.map((a) => Math.min(360, a)).filter((a) => a > 0).sort((a, b) => a - b);

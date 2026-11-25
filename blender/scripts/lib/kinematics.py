@@ -5,7 +5,13 @@ theta: crank angle in degrees within one operation, 0..360 for addition and
 v: continuous value of the result wheel (digit + fraction of a step).
 """
 
+import json
 import math
+import os
+
+
+def params_dir():
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "params")
 
 
 class Kin:
@@ -17,17 +23,11 @@ class Kin:
         self.y_gear = p.v("geometry.receiving_gear.y")
         self.sum_step = p.v("pars_immobilis.sum_wheel_step")
         self.store_step = p.v("pars_immobilis.einzahn_store_rotation")
-        g = "geometry.result."
-        self.re = p.v(g + "einzahn_radius")
-        self.rpin = p.v(g + "einzahn_pin_radius")
-        self.psi_e = p.v(g + "einzahn_angle")
-        c = "geometry.carry_store."
-        self.F = tuple(p.v(c + "offset_xz"))
-        self.horn_len = p.v(c + "horn_length")
-        self.hw = p.v(c + "horn_width")
-        self.horns = p.v(c + "horns")
-        self.h_rest = math.degrees(math.atan2(-self.F[1], -self.F[0]))
-        self._push_table = self._build_push_table()
+        # The Einzahn's push is solved once from the parts' outlines (lib/carry_solve.py) and
+        # written to params/carry-tables.json, which the JavaScript twin reads too.
+        with open(os.path.join(params_dir(), "carry-tables.json"), encoding="utf-8") as f:
+            t = json.load(f)["push"]
+        self._push_v0, self._push_step, self._push_table = t["v0"], t["step"], t["store"]
         self.carry_window_start = p.v("timing.carry_window")[0]
         self.per_carry = p.v("timing.per_carry_angle")
         self.store_pitch = p.v("pars_immobilis.fuenfhorn_pitch")
@@ -66,47 +66,9 @@ class Kin:
         """Rotation about Blender +Y (deg). Negative: the gear counter-rotates the drum."""
         return -self.sum_step * v
 
-    # Carry push: the Einzahn pin (radius rpin, on radius re of the result shaft)
-    # pushes a capsule-shaped horn (segment of horn_len from the store axis, radius
-    # hw/2). The horn angle is the largest angle not intersecting the pin, swept
-    # forward from v = 9; the result is tabulated once.
-    TABLE_STEP = 0.0025
-
-    def _clearance(self, h, v):
-        a = math.radians(self.psi_e + self.sum_step * v)
-        px, pz = self.re * math.cos(a), self.re * math.sin(a)
-        best = 1e9
-        for j in range(self.horns):
-            ha = math.radians(h + 360.0 / self.horns * j)
-            ax, az = self.F
-            bx, bz = ax + self.horn_len * math.cos(ha), az + self.horn_len * math.sin(ha)
-            vx, vz = bx - ax, bz - az
-            t = max(0.0, min(1.0, ((px - ax) * vx + (pz - az) * vz) / (vx * vx + vz * vz)))
-            best = min(best, math.hypot(px - (ax + t * vx), pz - (az + t * vz)))
-        return best - (self.rpin + self.hw / 2.0)
-
-    def _build_push_table(self):
-        h = self.h_rest
-        table = []
-        n = int(round(1.0 / self.TABLE_STEP))
-        for i in range(n + 1):
-            v = 9.0 + i * self.TABLE_STEP
-            if self._clearance(h, v) < 0:
-                lo, hi = h - 60.0, h
-                for _ in range(40):
-                    mid = (lo + hi) / 2.0
-                    if self._clearance(mid, v) >= 0:
-                        lo = mid
-                    else:
-                        hi = mid
-                h = lo
-            table.append(min(self.store_step, self.h_rest - h))
-        table[-1] = self.store_step  # the detent completes the store exactly
-        return table
-
     def push(self, v):
         """Carry-store deflection (deg, 0..18) caused by the Einzahn for v in [9, 10]."""
-        x = (min(max(v, 9.0), 10.0) - 9.0) / self.TABLE_STEP
+        x = (min(max(v, 9.0), 10.0) - self._push_v0) / self._push_step
         i = min(int(x), len(self._push_table) - 2)
         f = x - i
         return self._push_table[i] * (1 - f) + self._push_table[i + 1] * f

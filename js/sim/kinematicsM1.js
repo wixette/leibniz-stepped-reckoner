@@ -1,10 +1,13 @@
-// M1 kinematics: carry execution (Zweihorn pin pushing the Fünfhorn), carry transfer
-// (Muldenrad teeth -> star on the next result shaft) and lever phases per carry mode.
+// M1 kinematics: carry execution (the Zweihorn's horn driving the five-horn s), carry transfer
+// (the five-horn p turning the next ten-wheel) and lever phases per carry mode.
+// The parts are the original's (BADUR2026, params geometry.carry); their contacts are solved
+// once from the outlines (blender/scripts/lib/carry_solve.py -> params/carry-tables.json).
 // Geometry is per digit, in mm, in the X-Z plane of the digit (x = 0 at its drum axis).
 // Angles: world angle in the X-Z plane, CCW positive (x = cos, z = sin). A part turned by
 // +phi about +Y has every feature at (local angle - phi).
 
 import machine from "../../params/machine.json" with { type: "json" };
+import tables from "../../params/carry-tables.json" with { type: "json" };
 import { STORE_PITCH, STORE_STEP } from "./kinematics.js";
 
 /**
@@ -23,14 +26,14 @@ const M1 = G.m1;
 const T = machine.timing;
 /** @param {number} r */
 const deg = (r) => (r * 180) / Math.PI;
-/** @param {number} d */
-const rad = (d) => (d * Math.PI) / 180;
 /** @param {number} x */
 const clamp01 = (x) => Math.min(1, Math.max(0, x));
 
 export const CARRY_WINDOW_START = val(/** @type {Entry<number[]>} */ (T.carry_window))[0];
 export const PER_CARRY = val(T.per_carry_angle);
 export const SPRING_SNAP = val(T.spring_snap_deg);
+/** Store angle past which the detent wheel's spring completes an executed carry (the point
+ *  between its notches at 54 and 72 deg, BADUR2026 Pos. 20). */
 export const SPRING_FROM = val(T.spring_from_store);
 
 // --- layout (per digit) ------------------------------------------------------------
@@ -40,130 +43,27 @@ export const F = { x: FDX, z: zs + FDZ };
 export const L = { x: val(M1.lever_axis_dx), z: val(M1.lever_axis_z) };
 export const B_FL = deg(Math.atan2(L.z - F.z, L.x - F.x)); // store axis -> lever axis
 export const B_LF = deg(Math.atan2(F.z - L.z, F.x - L.x)); // lever axis -> store axis
-
-const PIN_R = val(M1.zweihorn_pin_radius);
-const PATH_R = val(M1.zweihorn_pin_path_radius);
-const FH_LEN = val(M1.fuenfhorn_horn_length);
-const FH_R = val(M1.fuenfhorn_horn_radius);
-const FH_HUB = val(M1.fuenfhorn_hub_radius);
-const MR_CROSS = val(M1.muldenrad_crossing_store_angle); // 36
-
-/**
- * @param {number} px
- * @param {number} pz
- * @param {number} ax
- * @param {number} az
- * @param {number} bx
- * @param {number} bz
- */
-function segDist(px, pz, ax, az, bx, bz) {
-  const vx = bx - ax, vz = bz - az;
-  const t = clamp01(((px - ax) * vx + (pz - az) * vz) / (vx * vx + vz * vz));
-  return Math.hypot(px - (ax + t * vx), pz - (az + t * vz));
-}
-
-/**
- * Clearance (mm) between the Zweihorn pin at world angle alpha and the Fünfhorn at store angle.
- * @param {number} alpha
- * @param {number} store
- * @returns {number}
- */
-export function pinClearance(alpha, store) {
-  const px = L.x + PATH_R * Math.cos(rad(alpha));
-  const pz = L.z + PATH_R * Math.sin(rad(alpha));
-  let best = Math.hypot(px - F.x, pz - F.z) - (PIN_R + FH_HUB);
-  for (let k = 0; k < 5; k++) {
-    const a = rad(B_FL + 36 + 72 * k - store);
-    const d = segDist(px, pz, F.x, F.z, F.x + FH_LEN * Math.cos(a), F.z + FH_LEN * Math.sin(a)) - (PIN_R + FH_R);
-    best = Math.min(best, d);
-  }
-  return best;
-}
+/** Store angle at which a five-horn p's horn crosses the line to the next result shaft. */
+const CROSS = val(G.carry).transfer_crossing; // 36
 
 // --- Zweihorn push table (adding; subtraction is the mirror image) ----------------------
-const TABLE_STEP = 0.05; // deg of lever travel
-const push = (() => {
-  let store = STORE_STEP;
-  /** @type {number | null} */
-  let start = null;
-  /** @type {number[]} */
-  const table = [];
-  for (let alpha = B_LF - 40; alpha < B_LF + 40; alpha += TABLE_STEP) {
-    if (pinClearance(alpha, store) < 0) {
-      if (start === null) start = alpha;
-      let lo = store, hi = store + 90;
-      for (let it = 0; it < 40; it++) {
-        const mid = (lo + hi) / 2;
-        if (pinClearance(alpha, mid) >= 0) hi = mid;
-        else lo = mid;
-      }
-      store = hi;
-    }
-    if (start !== null) table.push(store);
-  }
-  if (start === null) throw new Error("Zweihorn never touches a stored Fünfhorn: check geometry params");
-  // Trim the table at release (the store stops moving).
-  let last = table.length - 1;
-  while (last > 0 && table[last] === table[last - 1]) last--;
-  return { contactStartRel: start - B_LF, table: table.slice(0, last + 1) };
-})();
+const Z = tables.zweihorn;
+const TABLE_STEP = Z.step; // deg of lever travel
 
 /** Lever angle (deg) between first contact and the crossing of the store->lever line (negative). */
-export const CONTACT_START_REL = push.contactStartRel;
-/** Lever travel (deg) from first contact to where the pin alone would release the store. */
-export const RELEASE_TRAVEL = (push.table.length - 1) * TABLE_STEP;
-export const RELEASE_STORE = push.table[push.table.length - 1];
+export const CONTACT_START_REL = Z.contact_start_rel;
+/** Lever travel (deg) from first contact to where the horn alone would release the store. */
+export const RELEASE_TRAVEL = (Z.store.length - 1) * TABLE_STEP;
+export const RELEASE_STORE = Z.store[Z.store.length - 1];
 
 /** @param {number} t */
 const pushed = (t) => {
   const x = t / TABLE_STEP;
-  const i = Math.min(Math.floor(x), push.table.length - 2);
+  const i = Math.min(Math.floor(x), Z.store.length - 2);
   const f = x - i;
-  return push.table[i] * (1 - f) + push.table[i + 1] * f;
+  return Z.store[i] * (1 - f) + Z.store[i + 1] * f;
 };
 
-/** Lever travel (deg) until the store reaches SPRING_FROM (or the pin releases it earlier). */
-export const SPRING_START = (() => {
-  for (let t = 0; t <= RELEASE_TRAVEL; t += 0.01) if (pushed(t) >= SPRING_FROM) return t;
-  return RELEASE_TRAVEL;
-})();
-const SPRING_START_STORE = pushed(SPRING_START);
-
-/**
- * Store angle (adding sense, 18..72) after the lever has travelled t deg since first contact.
- *  The pin pushes the store to SPRING_FROM; the detent spring then completes the horn pitch.
- * @param {number} t
- * @returns {number}
- */
-export function executionCurve(t) {
-  if (t <= 0) return STORE_STEP;
-  if (t <= SPRING_START) return pushed(t);
-  const u = clamp01((t - SPRING_START) / SPRING_SNAP);
-  const e = u * u * (3 - 2 * u);
-  return SPRING_START_STORE + (STORE_PITCH - SPRING_START_STORE) * e;
-}
-
-/**
- * Carry-transfer progress (0..1) of the next wheel while the store turns 18 -> 72 (Muldenrad teeth).
- * @param {number} storeAbs
- * @returns {number}
- */
-export function transferProgress(storeAbs) {
-  return clamp01((storeAbs - (MR_CROSS - 9)) / 18);
-}
-
-/** Lever travel (deg) after first contact until the next wheel has completed its step. */
-export const TRANSFER_TRAVEL = (() => {
-  for (let t = 0; t <= SPRING_START + SPRING_SNAP; t += 0.01) {
-    if (transferProgress(executionCurve(t)) >= 1) return t;
-  }
-  return SPRING_START + SPRING_SNAP;
-})();
-
-/** Lever travel (deg) after first contact until the store is back at rest (72 deg). */
-export const EXECUTION_TRAVEL = SPRING_START + SPRING_SNAP;
-
-// --- lever phases per mode ---------------------------------------------------------------
 /**
  * ripple: Lehmann's Dresden replica, levers staggered units first, so a chain of carries runs
  *  through in one turn. simultaneous: the original in Hannover, every lever at the same phase
@@ -171,6 +71,73 @@ export const EXECUTION_TRAVEL = SPRING_START + SPRING_SNAP;
  *  waits for a later pass (decision 0001).
  * @typedef {"ripple" | "simultaneous"} CarryMode
  */
+
+/**
+ * Lever travel (deg) after first contact from which the detent spring completes the store.
+ *  The original (simultaneous): the horn pushes the store past the detent's point (SPRING_FROM).
+ *  Lehmann (ripple): with the original's parts a carry takes ~26 deg of crank to reach the next
+ *  wheel, too slow for a chain of eight in one turn (Lehmann re-dimensioned his Zweihoerner); here
+ *  the spring completes the store as soon as the horn touches it (design/v1.3-notes.md).
+ * @param {CarryMode} mode
+ */
+function springStart(mode) {
+  if (mode === "ripple") return 0;
+  for (let t = 0; t <= RELEASE_TRAVEL; t += 0.01) if (pushed(t) >= SPRING_FROM) return t;
+  return RELEASE_TRAVEL;
+}
+const SPRING = { ripple: springStart("ripple"), simultaneous: springStart("simultaneous") };
+
+/**
+ * Store angle (adding sense, 18..72) after the lever has travelled t deg since first contact.
+ * @param {number} t
+ * @param {CarryMode} [mode]
+ * @returns {number}
+ */
+export function executionCurve(t, mode = "simultaneous") {
+  if (t <= 0) return STORE_STEP;
+  const s0 = SPRING[mode];
+  if (t <= s0) return pushed(t);
+  const from = s0 === 0 ? STORE_STEP : pushed(s0);
+  const u = clamp01((t - s0) / SPRING_SNAP);
+  const e = u * u * (3 - 2 * u);
+  return Math.max(t <= RELEASE_TRAVEL ? pushed(t) : RELEASE_STORE, from + (STORE_PITCH - from) * e);
+}
+
+/**
+ * Carry-transfer progress (0..1) of the next wheel while the store turns (the five-horn p's horn
+ * crosses the line to the next result shaft at CROSS, turning the ten-wheel 2:1).
+ * @param {number} storeAbs
+ * @returns {number}
+ */
+export function transferProgress(storeAbs) {
+  return clamp01((storeAbs - (CROSS - 9)) / 18);
+}
+
+/**
+ * Lever travel (deg) after first contact until the next wheel has completed its step.
+ * @param {CarryMode} [mode]
+ */
+export function transferTravel(mode = "simultaneous") {
+  return TRANSFER[mode];
+}
+/** @param {CarryMode} mode */
+function findTransfer(mode) {
+  for (let t = 0; t <= executionTravel(mode); t += 0.01) {
+    if (transferProgress(executionCurve(t, mode)) >= 1) return t;
+  }
+  return executionTravel(mode);
+}
+
+/**
+ * Lever travel (deg) after first contact until the store is back at rest (72 deg).
+ * @param {CarryMode} [mode]
+ */
+export function executionTravel(mode = "simultaneous") {
+  return SPRING[mode] + SPRING_SNAP;
+}
+const TRANSFER = { ripple: findTransfer("ripple"), simultaneous: findTransfer("simultaneous") };
+
+// --- lever phases per mode ---------------------------------------------------------------
 
 /**
  * |theta| at which digit i's adding horn first touches its store (and the subtracting horn, mirrored).
@@ -183,10 +150,10 @@ export function leverWindow(i, mode) {
 }
 
 /**
- * The original's Zweihorn angle, 90 deg at the outer edges of its two teeth (BADUR2026), between
- *  the centres of our pins on their path.
+ * The original's Zweihorn angle, 90 deg at the outer edges of its two horns (BADUR2026), between
+ *  the horns' centre lines.
  */
-export const ORIGINAL_SPREAD = val(machine.pars_mobilis.zweihorn.spread_original_outer) - 2 * deg(Math.asin(PIN_R / PATH_R));
+export const ORIGINAL_SPREAD = val(machine.pars_mobilis.zweihorn.spread_original_outer) - 2 * tables.horn_tip_half_angle;
 
 /**
  * |theta| of the 'simultaneous' (Original) carry's main horn pass. A lever's two horns pass its

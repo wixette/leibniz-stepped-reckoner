@@ -73,7 +73,13 @@ export const group3 = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 /** @typedef {Control | "reset" | "carry"} StripControl */
 
 export class App {
-  machine = new Machine();
+  machine = (() => {
+    // the model's carry parts are the original's: free play uses its carry (v1.3 notes; the
+    // Carry switch is hidden until Lehmann's carry has parts of its own)
+    const m = new Machine();
+    m.setMode("simultaneous");
+    return m;
+  })();
   /** @type {Course | null} */
   course = null;
   /**
@@ -279,6 +285,7 @@ export class App {
   reset() {
     this.animator.stop();
     this.machine.reset();
+    this.machine.setMode("simultaneous");
     // the wheels and knobs going back to zero: a quick ratchet, not a tick per knob
     this.sound.resync(this.machine);
     for (let k = 0; k < 3; k++) this.sound.play("step", { delay: k * 0.07 });

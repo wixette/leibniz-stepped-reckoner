@@ -4,8 +4,10 @@ Run headless:
   Blender --background --factory-startup --python build_m2.py -- [--out PATH] [--blend PATH]
 
 Register (fixed), digit k at x = -36.5 k:
-  pi.sum_wheel.k     result shaft, receiving gear, digit disc, Einzahn, star (k >= 1)
-  pi.carry_store.k   Einzahn horns, Muldenrad teeth, Fünfhorn, pentagon
+  pi.sum_wheel.k     result shaft, receiving gear, digit disc, Einzahn, small ten-wheel (k >= 1)
+  pi.carry_store.k   intermediate shaft half-way to the next result shaft: five-horn p (pushed by
+                     the Einzahn, turning the next ten-wheel), detent wheel, five-horn s (struck by
+                     the Zweihorn), pentagon. The carry parts are the original's (BADUR2026, lib/carry.py)
   pi.window          16 reading windows (static)
   frame.static       brass frame: side walls 610 apart, rear wall, front bar, brackets (static)
   frame.lead_screw   36.5 mm lead screw + end crank outside the case (rotate about +X)
@@ -36,7 +38,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import bpy  # noqa: E402
-from lib import bl, geom, kinematics, params  # noqa: E402
+from lib import bl, carry, geom, kinematics, params  # noqa: E402
 from lib.bl import MeshBuilder  # noqa: E402
 
 DEFAULT_OUT = os.path.join(params.MACHINE_DIR, "assets", "m2-full-machine.glb")
@@ -101,24 +103,16 @@ def build(p):
     F = [(x + Fdx, zf) for x in X]
     S = [(x, zs) for x in X]
 
-    t_add = p.v(M1 + "transfer_tooth_addendum")
-    mr = geom.GearSpec(p.v(M1 + "muldenrad_virtual_teeth"), p.v(M1 + "muldenrad_module"), 1.0, t_add, ded)
-    star = geom.GearSpec(p.v(M1 + "star_teeth"), p.v(M1 + "muldenrad_module"), 1.0, t_add, ded)
-    cross = p.v(M1 + "muldenrad_crossing_store_angle")
-    planes = p.v(M2 + "muldenrad_y_planes")
+    # the carry of the original (BADUR2026; lib/carry.py, design/v1.3-notes.md)
+    cg = p.v(G + "carry")
+    cp = p.v(M2 + "carry_planes")
+    pair, ov = cp["pair"], cp["mesh_overhang"]
     dl = p.v(M2 + "digit_labels")  # enlarged for teaching (see params: not a documented size)
     dy0, dy1 = dl["result_disc_y"]
     rd = dl["result_disc_r"]                    # the disc, without its rim
     rim_dr, rim_t = dl["result_rim"]
-    re, rpin = p.v("geometry.result.einzahn_radius"), p.v("geometry.result.einzahn_pin_radius")
-    psi = p.v("geometry.result.einzahn_angle")
-    ey0, ey1 = p.v("geometry.result.einzahn_pin_y")
-    hl, hw = p.v("geometry.carry_store.horn_length"), p.v("geometry.carry_store.horn_width")
-    hy0, hy1 = p.v("geometry.carry_store.horn_y")
     pent = p.v(M2 + "pentagon")  # the original's size, in two staggered rows (even digits in front)
     pr = pent["circumradius"]
-    fy0, fy1 = p.v(M2 + "fuenfhorn_y")
-    fh_len, fh_r, fh_hub = p.v(M1 + "fuenfhorn_horn_length"), p.v(M1 + "fuenfhorn_horn_radius"), p.v(M1 + "fuenfhorn_hub_radius")
     wall0, wall1 = p.v(M2 + "rear_wall_y")
     dr = p.v(M2 + "drive_row")
     gy0, gy1 = dr["long_gear_y"]
@@ -141,15 +135,14 @@ def build(p):
             glyphs.append(o)
             verts, faces = bl.glyph_mesh(str(d), dl["result_glyph_size"], 0.25)
             mb.add_mesh_data(verts, faces, bl.frame_matrix(o, tan, (0, 1, 0)), "ink_black")
-        mb.prism(geom.radial_bar(0.0, re, 3.0, psi), "XZ", 70.8, 73.5, "steel")
-        mb.prism(geom.circle(3.0, 24), "XZ", 70.5, 73.5, "steel", smooth=True)
-        ex, ez = re * math.cos(math.radians(psi)), re * math.sin(math.radians(psi))
-        mb.prism([(u + ex, w + ez) for u, w in geom.circle(rpin, 20)], "XZ", ey0, ey1, "steel_dark", smooth=True)
+        # the Einzahn (one pointed tooth on a ring) in the plane of its own store's five-horn p,
+        # and the small ten-wheel in the plane of the store below (k - 1), which turns it
+        ea, eb = pair[k % 2]
+        mb.prism(carry.einzahn(p, cg["einzahn"]["tooth_local"]), "XZ", ea - ov, eb + ov, "brass_polished")
         if k >= 1:
-            b_sf = ang(F[k - 1][0] - S[k][0], F[k - 1][1] - S[k][1])
-            sy0, sy1 = planes[(k - 1) % 2]
-            mb.prism(geom.gear_outline(star, b_sf), "XZ", sy0, sy1, "brass_polished")
-            mb.prism(geom.circle(2.5, 24), "XZ", sy0 - 0.5, sy1 + 0.5, "brass_satin", smooth=True)
+            ta, tb = pair[(k - 1) % 2]
+            mb.prism(carry.ten_wheel(p, cg["ten_wheel"]["first_tooth"]), "XZ", ta - ov, tb + ov, "brass_polished")
+            mb.prism(geom.circle(3.0, 24), "XZ", tb + ov, tb + ov + 1.0, "brass_satin", smooth=True)
         wheel = mb.build(f"pi.sum_wheel.{k}", col, (x, 0, zs))
         bl.set_anchors(wheel, "glyph_anchors", glyphs)
         bl.set_anchors(wheel, "gear_center", [(0.0, y_gear, 0.0)])
@@ -158,21 +151,19 @@ def build(p):
 
         pa, pb = pent["y_rows"][k % 2]
         fx, fz = F[k]
-        h_rest = ang(S[k][0] - fx, S[k][1] - fz)
-        b_fl = ang(x + dxL - fx, zL - fz)
-        b_fs = ang(x - pitch_x - fx, zs - fz)
+        # the intermediate shaft: the five-horn p (pushed by the Einzahn, turning the next
+        # ten-wheel), the detent wheel, the five-horn s (struck by the Zweihorn), the pentagon
         mb = MeshBuilder()
-        mb.prism(geom.circle(1.5, 16), "XZ", 73.8, pb + 1.0, "steel", smooth=True)
-        mb.prism(geom.circle(3.0, 24), "XZ", hy0, hy1, "brass_polished", smooth=True)
-        for j in range(5):
-            mb.prism(geom.capsule(hl, hw / 2.0, h_rest + 72.0 * j), "XZ", hy0, hy1, "brass_polished")
-        my0, my1 = planes[k % 2]
-        mb.prism(geom.circle(mr.rf, 72), "XZ", my0, my1, "brass_satin", smooth=True)
-        for j in range(5):
-            mb.prism(geom.tooth_polygon(mr, b_fs + cross + 72.0 * j, root_r=mr.rf - 0.3), "XZ", my0, my1, "brass_satin")
-        mb.prism(geom.circle(fh_hub, 24), "XZ", fy0, fy1, "brass_polished", smooth=True)
-        for j in range(5):
-            mb.prism(geom.capsule(fh_len, fh_r, b_fl + 36.0 + 72.0 * j), "XZ", fy0, fy1, "brass_polished")
+        mb.prism(geom.circle(1.5, 16), "XZ", cp["store_shaft_front"], pb + 1.0, "steel", smooth=True)
+        qa, qb = pair[k % 2]
+        hub = cg["five_horn"]["hub_radius"]
+        mb.prism(carry.five_horn(p, cg["p_phase"]), "XZ", qa, qb, "brass_polished")
+        mb.prism(geom.circle(hub, 32), "XZ", qa - 1.0, qb + 1.0, "brass_satin", smooth=True)
+        da, db = cp["detent"]
+        mb.prism(carry.detent_wheel(p, 90.0), "XZ", da, db, "brass_satin")
+        sa, sb = cp["s"]
+        mb.prism(carry.five_horn(p, cg["s_phase"]), "XZ", sa, sb, "brass_polished")
+        mb.prism(geom.circle(hub, 32), "XZ", sb, sb + 1.0, "brass_satin", smooth=True)
         mb.prism(geom.regular_polygon(pr, 5, 54.0), "XZ", pa, pb, "steel")
         store = mb.build(f"pi.carry_store.{k}", col, (fx, 0, fz))
         bl.set_anchors(store, "pentagon_corners", [(u, pb, w) for u, w in geom.regular_polygon(pr, 5, 54.0)])
@@ -216,6 +207,16 @@ def build(p):
         for r0 in (geom.rect(fr["y"][0], 4.0, ysp, nz), geom.rect(fr["y"][0], nz, ny0, zlow),
                    geom.rect(ny1, nz, ysp, zlow), geom.rect(ysp, 4.0, wall0, fr["side_wall_top_z"])):
             mb.prism(r0, "YZ", wx0, wx0 + sw, "brass_satin")
+    # the detent springs of the intermediate shafts (assembly drawing, section N-O: a leaf with a
+    # V tip over each detent wheel, from a stud on the register frame); drawn just clear of the
+    # wheel's points (the model does not bend them)
+    det = cg["detent"]
+    tip_z = det["radius"] + det["spring_gap"]
+    leaf = [(8.2, 11.9), (8.2, 12.9), (0.7, 11.9), (0.0, tip_z), (0.9, 11.3)]
+    da, db = cp["detent"]
+    for fxk, fzk in F:
+        mb.prism([(u + fxk, w + fzk) for u, w in leaf], "XZ", da + 0.5, db - 0.5, "steel")
+        mb.prism([(u + fxk + 8.6, w + fzk + 12.4) for u, w in geom.circle(1.0, 16)], "XZ", da - 0.5, db + 0.5, "brass_satin", smooth=True)
     frame = static(mb.build("frame.static", col))
     bl.parent(frame, root)
 
@@ -321,10 +322,16 @@ def build(p):
     first = p.v(G + "drum.rib_first_angle")
     rib_pitch = p.v("pars_mobilis.drum.rib_pitch")
     sq = 3.0
-    za0, za1 = p.v(M2 + "zweihorn_add_arm_y")
-    zs0, zs1 = p.v(M2 + "zweihorn_sub_arm_y")
-    zpy0 = p.v(M2 + "zweihorn_pin_y0")
-    zR, zpr, zaw = p.v(M1 + "zweihorn_pin_path_radius"), p.v(M1 + "zweihorn_pin_radius"), p.v(M1 + "zweihorn_arm_width")
+    za0, za1 = cp["zweihorn_add"]
+    zs0, zs1 = cp["zweihorn_sub"]
+    # one horn of the Zweihorn with its hub (a ring round the lever shaft), along +u
+    zh = cg["zweihorn"]
+    hub_r, hw0 = zh["hub_radius"], zh["root_half_width"]
+    horn = carry.zweihorn_horn(p)
+    a_root = math.degrees(math.asin(hw0 / hub_r))
+    hub_arc = [geom._polar(hub_r, a_root + (360.0 - 2 * a_root) * i / 40) for i in range(41)]
+    horn_outline = hub_arc + horn[1:-1]   # the arc ends where the horn's flanks meet the hub
+    lever_r = cp["lever_shaft_radius"]
     # The drive row: the drum's gear (on a sleeve in front of the drum, sliding with it) has its
     # front face at drum_gear_y_at_9 at setting 9 and is 28.35 mm further back at setting 0;
     # the long gears on the lever shafts cover that travel.
@@ -419,17 +426,15 @@ def build(p):
         mb = MeshBuilder()
         # from the bearing bar (or the large gear A or C in front of it) to the rear wall
         y_front = lgy0 + 0.2 if j in big_levers else shaft_front
-        mb.prism(geom.circle(1.5, 16), "XZ", y_front, wall0 - 0.3, "steel", smooth=True)
+        mb.prism(geom.circle(lever_r, 16), "XZ", y_front, wall0 - 0.3, "steel", smooth=True)
         mb.prism(geom.gear_outline(dg, lever_first[j]), "XZ", gy0, gy1, "steel_dark")   # the long drive gear
-        mb.prism(geom.circle(3.4, 24), "XZ", za0, zs1, "steel", smooth=True)
         lever = mb.build(f"pm.lever.{j}", col, (lx, 0, lz))
         bl.set_motion(lever, "rotate", (0, 1, 0), f"Carry lever shaft {j}", f"Zweihornwelle {j}")
         bl.parent(lever, carriage)
         for kind, (ay0, ay1), le, ld in (("add", (za0, za1), "Zweihorn: adding horn", "Zweihorn: Additionshorn"),
                                          ("sub", (zs0, zs1), "Zweihorn: subtracting horn", "Zweihorn: Subtraktionshorn")):
             mb = MeshBuilder()
-            mb.prism(geom.radial_bar(3.6, zR, zaw, 0.0), "XZ", ay0, ay1, "steel_dark")
-            mb.prism([(u + zR, w) for u, w in geom.circle(zpr, 20)], "XZ", zpy0, ay1, "steel_dark", smooth=True)
+            mb.prism_holes(horn_outline, [geom.circle(lever_r + 0.15, 16)], "XZ", ay0, ay1, "steel_dark")
             horn = mb.build(f"pm.zweihorn_{kind}.{j}", col, (lx, 0, lz))
             bl.set_motion(horn, "rotate", (0, 1, 0), f"{le} {j}", f"{ld} {j}")
             bl.parent(horn, carriage)

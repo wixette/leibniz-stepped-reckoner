@@ -1,3 +1,4 @@
+import tables from "../../params/carry-tables.json" with { type: "json" };
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { DIGIT_PITCH, Machine } from "../../js/sim/machine.js";
@@ -197,12 +198,12 @@ describe("Machine (16-digit register, 8-digit carriage)", () => {
   });
 
   it("simultaneous mode: the horns are the original's 90 deg apart at their outer edges, and pass outside the ribs", () => {
-    const outer = M.ORIGINAL_SPREAD + 2 * (Math.asin(1 / 17) * 180) / Math.PI;
+    const outer = M.ORIGINAL_SPREAD + 2 * tables.horn_tip_half_angle;
     assert.ok(Math.abs(outer - 90) < 1e-9, `${outer}`);
     for (const dir of /** @type {const} */ ([1, -1])) {
       const [early, main] = M.leverPasses(0, "simultaneous", dir);
-      assert.ok(early + M.EXECUTION_TRAVEL < 78.75, `early pass ${early} done before the ribs`);
-      assert.ok(main > 281.25 && main + M.EXECUTION_TRAVEL < 360, `main pass ${main} after the ribs`);
+      assert.ok(early + M.executionTravel("simultaneous") < 78.75, `early pass ${early} done before the ribs`);
+      assert.ok(main > 281.25 && main + M.executionTravel("simultaneous") < 360, `main pass ${main} after the ribs`);
     }
   });
 
@@ -224,15 +225,16 @@ describe("Machine (16-digit register, 8-digit carriage)", () => {
   });
 
   it("refuses a turn in which a wheel would pass 9 twice while its first carry still waits", () => {
-    // Digit 9 receives store 8's waiting carry early in the turn (9 -> 0, store 9 stored), then
-    // the ribs and store 8's new carry take it past 9 again before lever 7 passes store 9.
+    // Store 8's carry waits; its lever's horns reach it only late in the turn (the original's
+    // Zweihorn touches 30 deg before the vertical, so the second horn of a high ripple lever
+    // passes after the ribs), and the ribs take wheel 8 past 9 again first: two carries in one store.
     const m = new Machine();
     m.setResult(9_909_999_999);
     m.setNumber(99_999_999);
     m.turn(1);
     assert.equal(m.pending[8], 1);
     m.setOffset(2);
-    assert.deepEqual(m.startBlock(1), { storeFull: 9 });
+    assert.deepEqual(m.startBlock(1), { storeFull: 8 });
     assert.equal(m.turn(1), false);
     assert.equal(registerValue(m), 10_009_999_998); // nothing moved, nothing lost
     // what the page advises (status.blockedStoreLate): an idle turn the same way first

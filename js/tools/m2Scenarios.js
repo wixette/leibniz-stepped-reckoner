@@ -29,7 +29,7 @@ import { Machine } from "../sim/machine.js";
 export const M2_SCENARIOS = [
   {
     label: "1709 × 365 with the Magna Rota",
-    mode: "ripple",
+    mode: "simultaneous",
     result: 0,
     ops: [
       { input: 1709 },
@@ -40,20 +40,20 @@ export const M2_SCENARIOS = [
     ],
   },
   {
-    label: "ripple 999999999 + 1, shift, idle turn",
-    mode: "ripple",
+    label: "simultaneous 999999999 + 1, shift, idle turn",
+    mode: "simultaneous",
     result: 999_999_999,
     ops: [{ input: 1 }, { turn: 1 }, { input: 0 }, { shift: 7 }, { shift: 1 }, { turn: 1 }],
   },
   {
-    label: "ripple 99999999 + 99999999 (every rib, every lever)",
-    mode: "ripple",
+    label: "simultaneous 99999999 + 99999999 (every rib, every lever)",
+    mode: "simultaneous",
     result: 99_999_999,
     ops: [{ input: 99_999_999 }, { turn: 1 }],
   },
   {
-    label: "ripple 0 − 1 at offset 7 (borrow out of the top)",
-    mode: "ripple",
+    label: "simultaneous 0 − 1 at offset 7 (borrow out of the top)",
+    mode: "simultaneous",
     result: 0,
     ops: [{ shift: 7 }, { input: 1 }, { turn: -1 }, { shift: 0 }],
   },

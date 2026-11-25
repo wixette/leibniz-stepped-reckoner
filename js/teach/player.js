@@ -151,7 +151,7 @@ export const matches = (pattern, name) =>
 export function applyAction(m, a) {
   if ("reset" in a) {
     m.reset();
-    m.setMode(a.reset.mode ?? "ripple");
+    m.setMode(a.reset.mode ?? "ripple"); // the lessons still teach Lehmann's carry: reworked with the texts (v1.3 notes)
     m.setResult(a.reset.result ?? 0);
     m.setNumber(a.reset.input ?? 0);
     return true;
