@@ -129,11 +129,14 @@ def build(p):
         # open to the front round the hub, a thin face plate at its back
         dish = dl["result_dish"]
         r_out = rd + rim_dr
-        mb.prism_holes(geom.circle(r_out, 96), [geom.circle(dish["recess_r"], 96)], "XZ", dy0, dy1, "brass_polished")
-        # a white band round the rim, the digits on it (black on white reads best, as in v1.2.0),
-        # a thin gold ring left at each edge
+        # the rim: a gold ring at each edge, recessed 0.3 under the white band between them (the
+        # digits on the band: black on white reads best, as in v1.2.0); the band stands 0.36 off the
+        # brass under it and its ends just inside the gold rings, so no two faces share a place
         band = dish["band_edge"]
-        mb.prism_holes(geom.circle(r_out + 0.06, 96), [geom.circle(r_out - 0.5, 96)], "XZ", dy0 + band, dy1 - band, "enamel_white")
+        mb.prism_holes(geom.circle(r_out, 96), [geom.circle(dish["recess_r"], 96)], "XZ", dy0, dy0 + band, "brass_polished")
+        mb.prism_holes(geom.circle(r_out, 96), [geom.circle(dish["recess_r"], 96)], "XZ", dy1 - band, dy1, "brass_polished")
+        mb.prism_holes(geom.circle(r_out - 0.3, 96), [geom.circle(dish["recess_r"], 96)], "XZ", dy0 + band - 0.01, dy1 - band + 0.01, "brass_polished")
+        mb.prism_holes(geom.circle(r_out + 0.06, 96), [geom.circle(r_out - 0.5, 96)], "XZ", dy0 + band + 0.02, dy1 - band - 0.02, "enamel_white")
         mb.prism(geom.circle(dish["recess_r"] + 0.05, 96), "XZ", dy1 - dish["face"], dy1 - 0.05, "brass_satin", smooth=True)
         mb.prism(geom.circle(dish["hub_r"], 32), "XZ", dy0 + 0.5, dy1 - dish["face"], "brass_satin", smooth=True)
         glyphs = []
