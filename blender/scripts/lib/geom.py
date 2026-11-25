@@ -105,16 +105,14 @@ def radial_bar(r0, r1, width, angle_deg):
     ]
 
 
-def pointer_outline(r0, length, width, tip_width, angle_deg, n=10):
-    """A pointer from r0 out to length along angle_deg: width at r0, narrowing from half-way
-    to tip_width, and ending in a half-round tip (the foot of a U) at length."""
+def pointer_outline(r0, length, width, angle_deg):
+    """A flat pointer arm from r0 out to length along angle_deg, width wide, ending in a 90 deg
+    point at length (Lehmann's 'Fingerhebel', NL183/465 p. 23)."""
     a = math.radians(angle_deg)
     ux, uw = math.cos(a), math.sin(a)
     nx, nw = -uw, ux
-    rt, rm = tip_width / 2.0, (r0 + length) / 2.0
-    pts = [(r0, -width / 2.0), (rm, -width / 2.0), (length - rt, -rt)]
-    pts += [(length - rt + rt * math.sin(math.pi * i / n), -rt * math.cos(math.pi * i / n)) for i in range(1, n)]
-    pts += [(length - rt, rt), (rm, width / 2.0), (r0, width / 2.0)]
+    h = width / 2.0
+    pts = [(r0, -h), (length - h, -h), (length, 0.0), (length - h, h), (r0, h)]
     return [(ux * s + nx * q, uw * s + nw * q) for s, q in pts]
 
 

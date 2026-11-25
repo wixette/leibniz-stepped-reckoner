@@ -145,6 +145,21 @@ function pointerDigit(c, j) {
   return diffs[idx] <= ANGLE_TOL_DEG ? idx : -1;
 }
 
+/**
+ * The digit of setting knob j's digit disc under the plate's window (-1: none within 1.5 mm).
+ * @param {Ctx} c
+ * @param {number} j
+ * @returns {number}
+ */
+function windowDigit(c, j) {
+  const w = anchors(part(c, "pm.setting_plate", j), "window")[0];
+  const g = anchors(part(c, "pm.setting_dial", j), "window_glyphs");
+  /** @param {THREE.Vector3} q */
+  const d = (q) => Math.hypot(q.x - w.x, q.z - w.z);
+  const idx = nearestIndex(g, w);
+  return d(g[idx]) <= 0.0015 ? idx : -1;
+}
+
 // ---- the spec ---------------------------------------------------------------------------------
 /**
  * @typedef {object} M2Options
@@ -216,7 +231,7 @@ export function runM2Checks(root, opts = {}) {
     return { passed: bad.length === 0, detail: bad.join("; ") || `${R} register digits, ${C} carriage digits, Magna Rota, counter, crank and lead screw present with anchors` };
   });
 
-  run("A2-2", "All 16 windows read 0–9; all 8 pointers aim at their digit (offsets 0 and 7)", () => {
+  run("A2-2", "All 16 windows read 0–9; all 8 pointers aim at their digit and their windows show it (offsets 0 and 7)", () => {
     /** @type {string[]} */
     const bad = [];
     for (const offset of [0, c.m.maxOffset]) {
@@ -229,10 +244,12 @@ export function runM2Checks(root, opts = {}) {
         for (let j = 0; j < C; j++) {
           const p = pointerDigit(c, j);
           if (p !== d) bad.push(`offset ${offset}: pointer ${j} at ${p} for ${d}`);
+          const wd = windowDigit(c, j);
+          if (wd !== d) bad.push(`offset ${offset}: window ${j} shows ${wd} for ${d}`);
         }
       }
     }
-    return { passed: bad.length === 0, detail: bad.join("; ") || `16 windows × 10 digits and 8 pointers × 10 digits correct at offsets 0 and ${c.m.maxOffset}` };
+    return { passed: bad.length === 0, detail: bad.join("; ") || `16 windows × 10 digits and 8 pointers and setting windows × 10 digits correct at offsets 0 and ${c.m.maxOffset}` };
   });
 
   run("A2-3", "Every offset 0–7: drum j under gear o+j, lever j at store o+j, nothing intersecting at rest", () => {

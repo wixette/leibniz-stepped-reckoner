@@ -22,7 +22,7 @@ What changed in each release. Versions follow `package.json` and are tagged `vX.
 - The revolution counter's pin works both ways: its menu offers the black numbers for adding and the red ones for subtracting, and a new button turns the crank back until the pin meets the stop.
 - *Colour by part*, a switch in the Views menu: every kind of part in its own colour, so that the parts inside the machine can be told apart.
 - The register's intermediate shafts are the original's square steel shafts with their long curved cuts along the edges (Klaus Badur's drawing, photos of Lehmann's replica).
-- The setting knobs have round steel handles on knurled bronze nuts, as on the replica's photos.
+- The setting knobs are built as Lehmann drew the replica's (and as the original has them): a steel finger lever whose C handle and pointer are one part, with a pin under the pointer in a hole beside the set digit, and a window at the back of each dial, in the gap between 9 and 0, where a white digit disc under the plate shows the set digit. The dial plates lie flush in round holes of the carriage's cover.
 
 ## 1.2.0
 

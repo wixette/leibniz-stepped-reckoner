@@ -862,10 +862,10 @@
         "note": "top_dx and step_dx are photo estimates; counter_dx is from Badur's plan view."
       },
       "knob_plate_z": {
-        "v": 98.0,
+        "v": 94.0,
         "unit": "mm",
         "conf": "design",
-        "src": "on the carriage cover (z 94-96)"
+        "src": "flush with the carriage cover (z 94-96), in a round hole of it 0.4 wider than the plate (photos of the original and the replica: the plates lie in the cover's plane)"
       },
       "magna_rota_center": {
         "v": {
@@ -1010,7 +1010,7 @@
             -13.4
           ],
           "cover_opening_half_x": 7.3,
-          "setting_plate_r": 18.0,
+          "setting_plate_r": 17.4,
           "setting_glyph_r": 14.3,
           "setting_glyph_size": 6.6,
           "pointer_r": 10.5,
@@ -1354,21 +1354,25 @@
       },
       "setting_handle": {
         "v": {
-          "radius": 6.0,
+          "angle_deg": 45.0,
+          "radius": 7.0,
           "strip": [
-            1.2,
-            3.5
+            2.5,
+            5.0
           ],
           "gap_deg": [
             -85.0,
             50.0
           ],
           "pointer": {
-            "tail_half": 3.5,
-            "tail_height": 2.6,
-            "width": 3.0,
-            "tip_width": 1.6,
-            "thickness": 1.2
+            "tail_half": 3.0,
+            "tail_height": 5.5,
+            "width": 5.0,
+            "tip_r": 11.5,
+            "thickness": 2.5,
+            "pin_r": 9.0,
+            "pin_radius": 1.0,
+            "pin_length": 2.0
           },
           "nut": {
             "radius": 4.0,
@@ -1376,11 +1380,32 @@
             "bevel": 0.45,
             "below_centre": 1.3,
             "knurls": 28
-          }
+          },
+          "plate": {
+            "hole_radius": 1.15,
+            "window_r": [
+              10.5,
+              15.8
+            ],
+            "window_half_width": 3.3,
+            "cover_gap": 0.4
+          },
+          "disc": {
+            "radius": 16.2,
+            "gap": 0.8,
+            "thickness": 1.2,
+            "glyph_r": 13.4,
+            "tab_r": 17.0,
+            "tab_half_width": 1.0
+          },
+          "stop_r": [
+            16.6,
+            19.0
+          ]
         },
         "unit": "mm",
         "conf": "design",
-        "src": "The setting knob's handle as on the photos of the original (Badur's photo, the left edge) and Lehmann's replica (Commons 'Die Rechenmaschine von Leibniz (Nachbau) 2001 08') and Brandt's Abb. II 5: a C of steel strip standing upright in the black pointer's plane, its back opposite the pointer and open towards it, its foot on the square tail of the black pointer, one part with it (no hub); the axle rises inside it to a flat, wide, knurled bronze nut just under the C's centre. Sizes by eye from the photos against the Ø36 setting dial (design): C radius 6 over the strip's middle, strip 1.2 thick and 3.5 wide, open from 85 deg below to 50 deg above the pointer's way, nut Ø8 x 1.7 bevelled 0.45 top and bottom, its top 1.3 under the C's centre; the pointer's tail 7 x 7 x 2.6, its arm 3.0 narrowing to 1.6 at a round tip, 1.2 thick."
+        "src": "The setting knob as on the replica (NL183/465) and the original (Badur's photo of its left edge): the handle is Lehmann's 'Fingerhebel (fuer Einstellwerk) (Teil m/2)' (p. 23), one steel part: a strip 6 wide and 2.5 thick bent up into a hook about 17 across, a body on the axle's square, and a pointer arm with a pointed tip and a pin (2 across, 2 proud) underneath that drops into a hole beside each digit of the cover plate (p. 53, detail A: holes at radius 10, digits at 14); the lever is lifted by the hook, turned and set down (not animated). Under the plate a brass digit disc (p. 35, 'Ziffernscheibe (Teil n)', clamped to the axle) turns with the knob and shows the set digit through a square window in the plate in the middle of the blank between 9 and 0, which faces the back (p. 53; Leupold 1727, Jordan 1897, Badur's Abb. II 1). The stop (p. 38, 'Anschlag f. Fingerrad') is hidden under the plate: a fixed lug in the blank that a tab on the disc meets at 0 and at 9. Our sizes (design): angle_deg is where the pointer points at 0 (CCW from +x, 45: 0 just right of the window, digits clockwise); C radius 7 over the strip's middle (17 across outside), strip 2.5 x 5; the black arm 5 wide and 2.5 thick, pointed (90 deg) at 11.5, on a 6 x 6 body 5.5 high; the pin at 9 under the arm; holes 2.3 across at radius 9; window 6.6 wide, 10.5-15.8 from the axle (its corners inside the disc) (Lehmann 5 square, 9.75-14.75, scaled to our larger digits); the plate (r 17.4) lies in a round hole of the carriage's cover, flush with it, 0.4 clear all round; the disc, white like the result discs' bands outside the holes' radius (brass inside), 32.4 across and 1.2 thick, turns under it, 0.8 below, its digits as large as the plate's; the stop lug hangs from the cover's underside; the knurled bronze nut 8 across and 1.7 high, bevelled, on the axle just under the C's centre (photos)."
       }
     }
   },

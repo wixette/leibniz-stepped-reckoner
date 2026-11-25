@@ -500,54 +500,91 @@ def build(p):
         px = x + x_pl + pin_g.rp
         mb = MeshBuilder()
         mb.prism(geom.gear_outline(pin_g, 0.0), "XY", sh["teeth_z"][0], sh["teeth_z"][1], "steel_dark")
-        # the pointer and its tail, one black part (photos of the replica): a square, thick tail on
-        # the axle, which carries the handle, and a flat arm narrowing to a round tip like the foot
-        # of a U, so that it reads as a pointer
+        # The finger lever (Lehmann's 'Fingerhebel', NL183/465 p. 23), one black steel part: a body
+        # on the axle, a flat pointer arm with a pointed tip and a pin under it that stands in the
+        # hole beside the set digit, and the strip bent up from the body into a C, open towards
+        # the pointer, by which the lever is lifted and turned (the lift is not animated). Built
+        # pointing to -y, then turned to point at 0 (angle_deg).
         hd_ = p.v(M2 + "setting_handle")
-        pt_ = hd_["pointer"]
+        pt_, pl_, dk_ = hd_["pointer"], hd_["plate"], hd_["disc"]
+        a0_ = hd_["angle_deg"]
+        n_lever = len(mb.verts)
         tl_, tz_ = pt_["tail_half"], z_plate + 2.05 + pt_["tail_height"]
         mb.prism(geom.rect(-tl_, -tl_, tl_, tl_), "XY", z_plate + 2.05, tz_, "steel_dark")
-        mb.prism(geom.pointer_outline(tl_ - 0.5, dl["pointer_r"], pt_["width"], pt_["tip_width"], -90.0), "XY", z_plate + 2.05, z_plate + 2.05 + pt_["thickness"], "steel_dark")  # not flush with the plate
-        # the handle: a C of steel strip upright in the pointer's plane, its back opposite the
-        # pointer and open towards it, its foot on the tail; the axle rises inside it to a flat,
-        # wide, knurled bronze nut, bevelled top and bottom, just under the C's centre
-        nut_ = hd_["nut"]
+        mb.prism(geom.pointer_outline(tl_ - 0.5, pt_["tip_r"], pt_["width"], -90.0), "XY", z_plate + 2.05, z_plate + 2.05 + pt_["thickness"], "steel_dark")  # not flush with the plate
+        mb.prism(geom.circle(pt_["pin_radius"], 10), "XY", z_plate + 2.1 - pt_["pin_length"], z_plate + 2.1, "steel_dark", smooth=True, offset=(0.0, -pt_["pin_r"], 0.0))
         rc_, (th_, wd_) = hd_["radius"], hd_["strip"]
-        cz_ = tz_ + rc_ + th_ / 2.0 - 0.3                    # the C's foot sits just in the tail's top
+        cz_ = tz_ + rc_ + th_ / 2.0 - 0.3                    # the C's foot sits just in the body's top
+        g0_, g1_ = hd_["gap_deg"]                            # the gap, in degrees from the pointer's way, up positive
+        arc_ = [g1_ + (360.0 - (g1_ - g0_)) * i / 32 for i in range(33)]
+        # in the YZ plane: u is y, and the pointer points to -y
+        c_out = [(-math.cos(math.radians(a)) * (rc_ + th_ / 2.0), cz_ + math.sin(math.radians(a)) * (rc_ + th_ / 2.0)) for a in arc_]
+        c_in = [(-math.cos(math.radians(a)) * (rc_ - th_ / 2.0), cz_ + math.sin(math.radians(a)) * (rc_ - th_ / 2.0)) for a in reversed(arc_)]
+        mb.prism(c_out + c_in, "YZ", -wd_ / 2.0, wd_ / 2.0, "steel")
+        rot_ = math.radians(a0_ + 90.0)
+        cr_, sr_ = math.cos(rot_), math.sin(rot_)
+        mb.verts[n_lever:] = [(vx * cr_ - vy * sr_, vx * sr_ + vy * cr_, vz) for vx, vy, vz in mb.verts[n_lever:]]
+        # the axle rises inside the C to a flat, wide, knurled bronze nut, bevelled top and
+        # bottom, just under the C's centre (photos)
+        nut_ = hd_["nut"]
         nz1 = cz_ - nut_["below_centre"]
         nz0 = nz1 - nut_["height"]
         mb.prism(geom.circle(1.5, 16), "XY", sh["teeth_z"][0] + 0.5, nz0 + 0.2, "steel", smooth=True)
         kn, nr_, bv_ = nut_["knurls"], nut_["radius"], nut_["bevel"]
         knurl = [geom._polar(nr_ + (0.25 if i % 2 else 0.0), 360.0 * i / (2 * kn)) for i in range(2 * kn)]
         mb.prism(knurl, "XY", nz0 + bv_, nz1 - bv_, "bronze")
-        lathe(mb, [(0.0, nz0), (nr_ - bv_, nz0), (nr_ + 0.1, nz0 + bv_), (nr_ + 0.1, nz1 - bv_), (nr_ - bv_, nz1), (0.0, nz1)], "bronze", (0.0, 0.0, 0.0), 48)
-        g0_, g1_ = hd_["gap_deg"]                            # the gap, in degrees from the pointer's way, up positive
-        arc_ = [g1_ + (360.0 - (g1_ - g0_)) * i / 48 for i in range(49)]
-        # in the YZ plane: u is y, and the pointer points to -y
-        c_out = [(-math.cos(math.radians(a)) * (rc_ + th_ / 2.0), cz_ + math.sin(math.radians(a)) * (rc_ + th_ / 2.0)) for a in arc_]
-        c_in = [(-math.cos(math.radians(a)) * (rc_ - th_ / 2.0), cz_ + math.sin(math.radians(a)) * (rc_ - th_ / 2.0)) for a in reversed(arc_)]
-        mb.prism(c_out + c_in, "YZ", -wd_ / 2.0, wd_ / 2.0, "steel")
+        lathe(mb, [(0.0, nz0), (nr_ - bv_, nz0), (nr_ + 0.1, nz0 + bv_), (nr_ + 0.1, nz1 - bv_), (nr_ - bv_, nz1), (0.0, nz1)], "bronze", (0.0, 0.0, 0.0), 24)
+        # the digit disc under the plate (Lehmann's 'Ziffernscheibe', p. 35), clamped to the axle:
+        # digit s lies where the knob set to s brings it under the window, upright to a reader in
+        # front; a tab on its rim meets the hidden stop at 0 and at 9
+        # white, like the result discs' bands, so that the digit in the window stands out from
+        # the plate's; a gap below the plate shows that these are two plates
+        dz1 = z_plate - dk_["gap"]
+        dz0 = dz1 - dk_["thickness"]
+        # brass inside, under the pin's holes (which then look dark, as on the photos), white outside
+        wr_ = pl_["window_r"][0] - 0.2
+        mb.prism(geom.circle(wr_, 16), "XY", dz0, dz1, "brass_satin", smooth=True)
+        mb.prism_holes(geom.circle(dk_["radius"], 32), [geom.circle(wr_, 16)], "XY", dz0, dz1, "enamel_white")
+        mb.prism(geom.radial_bar(dk_["radius"] - 0.5, dk_["tab_r"], 2.0 * dk_["tab_half_width"], a0_), "XY", dz0 + 0.1, dz1 - 0.1, "brass_satin")  # inside the white ring's faces (A2-14)
+        wg = []
+        for s_ in range(10):
+            ph = math.radians(90.0 + kin.dial_step * s_)
+            ur, ut = (math.cos(ph), math.sin(ph)), (math.sin(ph), -math.cos(ph))
+            gx, gy = dk_["glyph_r"] * ur[0], dk_["glyph_r"] * ur[1]
+            wg.append((gx, gy, dz1 + 0.15))
+            verts, faces = bl.glyph_mesh(str(s_), dl["setting_glyph_size"], 0.0)   # flat: read from above only
+            mb.add_mesh_data(verts, faces, bl.frame_matrix((gx, gy, dz1 + 0.05), (ut[0], ut[1], 0), (ur[0], ur[1], 0)), "ink_black")
         dial = mb.build(f"pm.setting_dial.{j}", col, (px, py, 0))
-        bl.set_anchors(dial, "pointer_tip", [(0.0, -dl["pointer_r"], z_plate + 2.6)])
+        a0r = math.radians(a0_)
+        bl.set_anchors(dial, "pointer_tip", [(pt_["tip_r"] * math.cos(a0r), pt_["tip_r"] * math.sin(a0r), z_plate + 2.6)])
+        bl.set_anchors(dial, "window_glyphs", wg)
         bl.set_motion(dial, "rotate", (0, 0, 1), f"Setting knob {j}", f"Stellgriff {j}")
         bl.parent(dial, carriage)
 
+        # the cover plate round the knob (p. 53, detail A): digits clockwise from just right of
+        # the window, a hole beside each for the lever's pin, the window in the middle of the blank
+        # between 9 and 0 (at the back); it lies in a round hole of the carriage's cover, flush with it
         mb = MeshBuilder()
-        mb.prism(geom.circle(dl["setting_plate_r"], 48), "XY", z_plate, z_plate + 2.0, "brass_satin", smooth=True)
-        pg = []
-        for s in range(10):
-            a = math.radians(-90.0 - kin.dial_step * s)   # clockwise, as the knob turns
+        holes_, pg = [], []
+        wr0, wr1 = pl_["window_r"]
+        hw_ = pl_["window_half_width"]
+        holes_.append([(-hw_, wr0), (hw_, wr0), (hw_, wr1), (-hw_, wr1)])
+        for s_ in range(10):
+            a = math.radians(a0_ - kin.dial_step * s_)   # clockwise, as the knob turns
+            holes_.append([(u + pt_["pin_r"] * math.cos(a), w + pt_["pin_r"] * math.sin(a)) for u, w in geom.circle(pl_["hole_radius"], 10)])
             gx, gy = dl["setting_glyph_r"] * math.cos(a), dl["setting_glyph_r"] * math.sin(a)
             pg.append((gx, gy, z_plate + 2.25))
-            verts, faces = bl.glyph_mesh(str(s), dl["setting_glyph_size"], 0.3)
-            mb.add_mesh_data(verts, faces, bl.frame_matrix((gx, gy, z_plate + 2.1), (1, 0, 0), (0, 1, 0)), "ink_black")
+            verts, faces = bl.glyph_mesh(str(s_), dl["setting_glyph_size"], 0.0)   # flat (the triangle budget)
+            mb.add_mesh_data(verts, faces, bl.frame_matrix((gx, gy, z_plate + 2.05), (1, 0, 0), (0, 1, 0)), "ink_black")
+        mb.prism_holes(geom.circle(dl["setting_plate_r"], 72), holes_, "XY", z_plate, z_plate + 2.0, "brass_satin")
         plate = static(mb.build(f"pm.setting_plate.{j}", col, (px, py, 0)))
         bl.set_anchors(plate, "glyph_anchors", pg)
+        bl.set_anchors(plate, "window", [(0.0, (wr0 + wr1) / 2.0, z_plate)])
         bl.parent(plate, carriage)
-        # stop: a lug in the pointer's plane, filling the blank sector between 9 and 0 (NL183/465 p. 38)
+        # the stop (p. 38), hidden under the cover: a lug hanging from the cover's underside into
+        # the blank, which the disc's tab meets at 0 and at 9
         mb = MeshBuilder()
-        # the blank sector runs anticlockwise from 0 (at 270 deg) to 9 (270 + 360 - 9 divisions)
-        mb.prism(geom.stop_lug(5.6, dl["pointer_r"] - 1.0, 270.0, 270.0 + 360.0 - kin.dial_step * 9, p.v(M2 + "setting_handle")["pointer"]["width"] / 2.0 + 0.15), "XY", z_plate + 2.0, z_plate + 3.4, "steel")
+        mb.prism(geom.stop_lug(hd_["stop_r"][0], hd_["stop_r"][1], a0_, a0_ + 360.0 - kin.dial_step * 9, dk_["tab_half_width"] + 0.15), "XY", dz0, z_plate, "brass_satin")
         stop = static(mb.build(f"pm.setting_stop.{j}", col, (px, py, 0)))
         bl.parent(stop, carriage)
 
@@ -683,8 +720,11 @@ def build(p):
     kz0, kz1 = cs["carriage_cover_z"]
     ky0, ky1 = cs["carriage_cover_y"]
     mb = MeshBuilder()
-    shafts = [(X[j] + x_pl + pin_g.rp - 2.5, X[j] + x_pl + pin_g.rp + 2.5) for j in range(C)]
-    plate_with_hole_row(mb, cx0, ky0, xt, ky1, py - 2.5, py + 2.5, shafts, kz0, kz1, "brass_polished")
+    # round holes for the setting knobs' plates, which lie in them flush with this top, a little
+    # clear all round (photos: the plates are in the cover's plane)
+    hr_ = dl["setting_plate_r"] + p.v(M2 + "setting_handle")["plate"]["cover_gap"]
+    knob_holes = [[(u + X[j] + x_pl + pin_g.rp, w + py) for u, w in geom.circle(hr_, 48)] for j in range(C)]
+    mb.prism_holes(geom.rect(cx0, ky0, xt, ky1), knob_holes, "XY", kz0, kz1, "brass_polished")
     # lower top on the right, with a round hole under the counter's ring for the sleeve that
     # turns it (the counter's train below, lib/counter_train.py)
     tr_ = p.v(M2 + "counter_train")
