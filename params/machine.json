@@ -1223,11 +1223,12 @@
             "gap": 0.15
           },
           "spindle_radius": 3.0,
-          "park_r": 47.0
+          "park_r": 47.0,
+          "dial_plate_radius": 39.9
         },
         "unit": "mm",
         "conf": "design",
-        "src": "the revolution counter on the carriage's lower right top, laid out like the Dresden replica's (Commons Die_Rechenmaschine_von_Leibniz_(Nachbau)_2001_06.jpg): a steel ring Ø69.5 / Ø45 (BADUR2026) with 10 holes turns 36 deg a crank turn, clockwise seen from above when adding; a fixed outer circle of black 0-9 on the plate, running anticlockwise from 0 at the stop; a fixed inner circle of red 0-9 on the brass centre, running clockwise; a stop bracket at the top between 0 and 9, over the ring into the pin's plane; a parking place for the pin at the bottom. The pin set at black m reaches the stop after m turns (LEUPOLD1727's procedure; WALSDORF2014: pin at 0, read the count). z from the cover's top; radii from the dial's centre."
+        "src": "the revolution counter on the carriage's lower right top, laid out like the Dresden replica's (Commons Die_Rechenmaschine_von_Leibniz_(Nachbau)_2001_06.jpg): a steel ring Ø69.5 / Ø45 (BADUR2026) with 10 holes turns 36 deg a crank turn, clockwise seen from above when adding; a fixed outer circle of black 0-9 on the plate, running anticlockwise from 0 at the stop; a fixed inner circle of red 0-9 on the brass centre, running clockwise; a stop bracket at the top between 0 and 9, over the ring into the pin's plane; a parking place for the pin at the bottom. The pin set at black m reaches the stop after m turns (LEUPOLD1727's procedure; WALSDORF2014: pin at 0, read the count). z from the cover's top; radii from the dial's centre. dial_plate_radius (design): the outer number circle is engraved in the carriage's top; the model cuts that part of the top out as a ring of the counter's fixed plate (from the drive sleeve's hole to just beyond the numbers, which end at 39.75; the hood's top ends 40.1 behind the centre), flush with the top, so that the numbers keep their plate when the case and frame are hidden."
       },
       "counter_train": {
         "v": {

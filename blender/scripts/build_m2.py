@@ -650,8 +650,18 @@ def build(p):
     # turns it (the counter's train below, lib/counter_train.py)
     tr_ = p.v(M2 + "counter_train")
     cdx, cdy = X[0] + cs_["counter_dx"], py + cs_["counter_dy"]
-    mb.prism_holes(geom.rect(xt, ky0, xr, ky1), [[(u + cdx, w + cdy) for u, w in geom.circle(tr_["sleeve_radius"][1] + 0.4, 64)]],
-                   "XY", zt - 2.0, zt, "brass_polished")
+    # (the ring round the counter, out to just beyond its outer numbers, is the counter's dial
+    # plate: pm.counter_plate, so that the numbers keep their plate when the frame is hidden)
+    # the dial reaches past this top's left edge (xt), so the top is one outline with a round bite
+    # out of that edge rather than a plate with a hole
+    rh = p.v(M2 + "counter")["dial_plate_radius"] + 0.05
+    hy = math.sqrt(rh * rh - (cdx - xt) ** 2)
+    a1 = math.degrees(math.atan2(hy, xt - cdx))          # where the circle leaves the edge at the back
+    n_arc = 120
+    sweep = 360.0 - 2.0 * (180.0 - a1)                    # the arc inside the plate, clockwise
+    arc = [(cdx + rh * math.cos(math.radians(a1 - sweep * i / n_arc)), cdy + rh * math.sin(math.radians(a1 - sweep * i / n_arc))) for i in range(n_arc + 1)]
+    top_outline = [(xt, ky0), (xr, ky0), (xr, ky1), (xt, ky1)] + arc
+    mb.prism_holes(top_outline, [], "XY", zt - 2.0, zt, "brass_polished")
     # the walls start behind the front panel: sharing its front face made them flicker (z-fighting)
     mb.prism(geom.rect(xt - 3.0, pnl1, xt, ky1), "XY", zt, kz0, "brass_satin")            # riser between them
     wz0 = cs["carriage_wall_z0"]
@@ -675,6 +685,17 @@ def build(p):
     # finger stands just left of the top
     stop_a = 90.0 + math.degrees((ct["pin_radius"] + st["finger_width"] / 2.0 + st["gap"]) / hp)
     mb = MeshBuilder()
+    # the dial plate: the ring of the carriage's top that carries the outer numbers, flush with it
+    # (the top has a hole for it), from the drive sleeve's hole to just beyond the numbers
+    sleeve_hole = p.v(M2 + "counter_train")["sleeve_radius"][1] + 0.4
+    # cut straight where it passes the top's left edge (xt), flush with the top's bite
+    u_cut = xt - dx + 0.05
+    rdp = ct["dial_plate_radius"]
+    dial = []
+    for i in range(192):
+        a = 2.0 * math.pi * i / 192
+        dial.append((max(rdp * math.cos(a), u_cut), rdp * math.sin(a)))
+    mb.prism_holes(dial, [geom.circle(sleeve_hole, 64)], "XY", dz - 2.0, dz, "brass_polished")
     mb.prism(geom.circle(r_in - 0.3, 64), "XY", dz, dz + ct["centre_z"][1], "brass_satin", smooth=True)
     mb.prism(geom.circle(ct["spindle_radius"], 24), "XY", dz + 0.3, dz + 6.0, "steel", smooth=True)  # from inside the brass, not on its face
     mb.prism(geom.circle(ct["spindle_radius"] + 1.0, 24), "XY", dz + ct["centre_z"][1], dz + ct["centre_z"][1] + 1.0, "steel", smooth=True)
