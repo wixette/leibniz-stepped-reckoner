@@ -283,6 +283,32 @@ export class App {
   pinRed = false;
 
   /**
+   * The pin's number as the reader set it (black, or red when set by the red circle; black 0's
+   * hole is red 9), or null when it is out.
+   * @returns {number | null}
+   */
+  pinNumber() {
+    const p = this.machine.pin;
+    if (p === null) return null;
+    return this.pinRed || p === 0 ? 9 - p : p;
+  }
+
+  /**
+   * Count the holes by the black circle (adding) or the red one (turning back); a pin already in
+   * moves to the same number in the other circle.
+   * @param {boolean} red
+   */
+  setPinCircle(red) {
+    const n = this.pinNumber();
+    if (n === null || red === (this.pinRed || this.machine.pin === 0)) {
+      this.pinRed = red;
+      this.render();
+      return;
+    }
+    this.setPin(red ? 9 - n : n, red);
+  }
+
+  /**
    * @param {number | null} hole the hole, by its black number
    * @param {boolean} [red] set by the red number (9 - hole): for turning back
    */
@@ -893,19 +919,15 @@ export class App {
         showMenu(
           pinBtn,
           [
-            { label: t("strip.pin.out"), checked: this.machine.pin === null, run: () => this.use("pin", () => this.setPin(null)) },
-            // a hole for each number: black m (adding m times), red m (turning back m times: the hole of black 9 - m)
+            // which number circle the holes are counted by: black for adding, red for turning back
+            { label: t("strip.pin.adding"), checked: !this.pinRed, run: () => this.use("pin", () => this.setPinCircle(false)) },
+            { label: t("strip.pin.subtracting"), checked: this.pinRed, run: () => this.use("pin", () => this.setPinCircle(true)) },
+            { label: t("strip.pin.out"), checked: this.machine.pin === null, divider: true, run: () => this.use("pin", () => this.setPin(null)) },
             ...[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => ({
               label: String(n),
-              checked: this.machine.pin === n && !this.pinRed,
-              divider: n === 1 ? t("strip.pin.adding") : undefined,
-              run: () => this.use("pin", () => this.setPin(n, false)),
-            })),
-            ...[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => ({
-              label: String(n),
-              checked: this.machine.pin === 9 - n && this.pinRed,
-              divider: n === 1 ? t("strip.pin.subtracting") : undefined,
-              run: () => this.use("pin", () => this.setPin(9 - n, true)),
+              checked: this.pinNumber() === n,
+              divider: n === 1 ? t("strip.pin.hole") : undefined,
+              run: () => this.use("pin", () => this.setPin(this.pinRed ? 9 - n : n, this.pinRed)),
             })),
           ],
         ),
@@ -998,7 +1020,7 @@ export class App {
     if (document.activeElement !== input) input.value = String(this.inputNumber());
     // the number the pin was set by: black (adding) or red (turning back, the hole's other number)
     const red = m.pin !== null && (this.pinRed || m.pin === 0);
-    $("pinValue").textContent = m.pin === null ? "–" : String(red ? 9 - m.pin : m.pin);
+    $("pinValue").textContent = m.pin === null ? "–" : String(this.pinNumber());
     $("pinValue").classList.toggle("red", red);
     // its name says the hole (U22); the tooltip keeps what the pin does
     $("pinBtn").setAttribute("aria-label", m.pin === null ? t("strip.pin.nameOut") : t("strip.pin.name", { n: m.pin }));

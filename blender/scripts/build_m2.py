@@ -791,7 +791,7 @@ def build(p):
     bl.parent(cring, carriage)
 
     def pin_mesh(cx, cy):
-        # the pin: its stem in the hole, a flat cone on the ring, a neck and a big round head
+        # the pin: its stem in the hole, a slim collar resting on the ring, a neck and a big round head
         # (photos of the original and Brandt's Abb. II 5)
         m_ = MeshBuilder()
         sk, hd = ct["pin_skirt"], ct["pin_head"]
@@ -811,8 +811,12 @@ def build(p):
     cpin = pin_mesh(hp * math.cos(a0), hp * math.sin(a0)).build("pm.counter_pin", col, (dx, dy, 0))   # built at black 0, turned to its hole
     bl.set_motion(cpin, "rotate", (0, 0, 1), "Pin of the revolution counter", "Stift des Umdrehungszählers")
     bl.parent(cpin, carriage)
-    mb = pin_mesh(0.0, -ct["park_r"])
-    mb.prism([(u, w - ct["park_r"]) for u, w in geom.circle(ct["pin_radius"] + 1.2, 20)], "XY", dz, dz + ct["pin_skirt"]["z"][0] - 0.05, "brass_satin", smooth=True)
+    pa_ = math.radians(ct["park_deg"])
+    px_, py_ = ct["park_r"] * math.cos(pa_), ct["park_r"] * math.sin(pa_)
+    mb = pin_mesh(px_, py_)
+    # its socket on the top: a short tube the stem goes into, the collar resting on it
+    mb.prism_holes([(u + px_, w + py_) for u, w in geom.circle(ct["pin_skirt"]["radius"][0], 24)],
+                   [[(u + px_, w + py_) for u, w in geom.circle(ct["hole_radius"], 20)]], "XY", dz, dz + ct["pin_skirt"]["z"][0] - 0.05, "brass_satin")
     cpark = static(mb.build("pm.counter_pin_park", col, (dx, dy, 0)))   # where the pin waits, shown when it is out
     bl.parent(cpark, carriage)
 
