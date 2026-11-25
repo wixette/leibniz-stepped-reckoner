@@ -42,33 +42,38 @@ export function m2NodeNames(R, C) {
  */
 export function m2NodeValues(m) {
   const p = m.machinePose();
+  // The machine's pose (js/sim) and the carry's contact solves turn the drive one way; the model
+  // is built as their mirror image, so that adding turns the crank anticlockwise seen from the
+  // front, as on the original (K. Badur, 2026-11-25): every rotation of the drive and the carry
+  // is negated here, and the parts' features are mirrored in the build (build_m2.py).
+  const ring = -p.counterRing; // anticlockwise seen from above when adding (Badur)
   /** @type {Record<string, number>} */
   const out = {
     "pm.carriage": p.carriageX,
     "frame.lead_screw": p.endCrank,
-    "pm.magna_rota": p.magnaRota,
-    "pm.counter_ring": p.counterRing,
-    // built at black 0 by the stop; set in hole m it starts m holes anticlockwise of it
-    "pm.counter_pin": p.counterRing + 36 * (m.pin ?? 0),
-    "pm.main_crank": p.mainCrank,
+    "pm.magna_rota": -p.magnaRota,
+    "pm.counter_ring": ring,
+    // built at the stop; set in hole m it starts m holes clockwise of it (the centre's numbers)
+    "pm.counter_pin": ring - 36 * (m.pin ?? 0),
+    "pm.main_crank": -p.mainCrank,
     // B is on the crank's drum shaft; A, C and the 17th shaft turn with the lever shafts
-    "pm.large_gear_b": p.mainCrank,
-    "pm.large_gear_a": -p.mainCrank,
-    "pm.large_gear_c": -p.mainCrank,
-    "pm.counter_shaft": -p.mainCrank,
+    "pm.large_gear_b": -p.mainCrank,
+    "pm.large_gear_a": p.mainCrank,
+    "pm.large_gear_c": p.mainCrank,
+    "pm.counter_shaft": p.mainCrank,
   };
   p.register.forEach((r, k) => {
-    out[`pi.sum_wheel.${k}`] = r.wheel;
-    out[`pi.carry_store.${k}`] = r.store;
+    out[`pi.sum_wheel.${k}`] = -r.wheel;
+    out[`pi.carry_store.${k}`] = -r.store;
   });
   p.carriage.forEach((c, j) => {
-    out[`pm.drum_shaft.${j}`] = c.drumShaft;
+    out[`pm.drum_shaft.${j}`] = -c.drumShaft;
     out[`pm.drum.${j}`] = c.drumY;
     out[`pm.setting_rack.${j}`] = c.drumY;
     out[`pm.setting_dial.${j}`] = c.dial;
-    out[`pm.lever.${j}`] = c.lever;
-    out[`pm.zweihorn_add.${j}`] = c.hornAdd;
-    out[`pm.zweihorn_sub.${j}`] = c.hornSub;
+    out[`pm.lever.${j}`] = -c.lever;
+    out[`pm.zweihorn_add.${j}`] = -c.hornAdd;
+    out[`pm.zweihorn_sub.${j}`] = -c.hornSub;
   });
   return out;
 }

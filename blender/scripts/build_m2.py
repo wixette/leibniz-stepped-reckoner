@@ -133,7 +133,7 @@ def build(p):
         mb.prism(geom.circle(dish["hub_r"], 32), "XZ", dy0 + 0.5, dy1 - dish["face"], "brass_satin", smooth=True)
         glyphs = []
         for d in range(10):
-            a = math.radians(90.0 - 36.0 * d)
+            a = math.radians(90.0 + 36.0 * d)   # the wheel turns the other way in the model (m2Pose.js)
             nrm, tan = (math.cos(a), 0.0, math.sin(a)), (math.sin(a), 0.0, -math.cos(a))
             o = (nrm[0] * (r_out + 0.12), (dy0 + dy1) / 2.0, nrm[2] * (r_out + 0.12))
             glyphs.append(o)
@@ -142,7 +142,9 @@ def build(p):
         # the Einzahn (one pointed tooth on a ring) in the plane of its own store's five-horn p,
         # and the small ten-wheel in the plane of the store below (k - 1), which turns it
         ea, eb = pair[k % 2]
-        mb.prism(carry.einzahn(p, cg["einzahn"]["tooth_local"]), "XZ", ea - ov, eb + ov, "brass_polished")
+        # mirrored about the line to its store: the solve (lib/carry_solve.py) turns the parts the
+        # other way round from the model (m2Pose.js), which by symmetry gives the same contacts
+        mb.prism(carry.einzahn(p, 360.0 - cg["einzahn"]["tooth_local"]), "XZ", ea - ov, eb + ov, "brass_polished")
         if k >= 1:
             ta, tb = pair[(k - 1) % 2]
             mb.prism(carry.ten_wheel(p, cg["ten_wheel"]["first_tooth"]), "XZ", ta - ov, tb + ov, "brass_polished")
@@ -311,6 +313,15 @@ def build(p):
                geom.rect(cx0, mz - 4.0, mx - 4.0, mz + 4.0), geom.rect(mx + 4.0, mz - 4.0, xt, mz + 4.0),
                geom.rect(xt, pz0, xs, zt - 2.0), geom.rect(xs, zn, xr, zt - 2.0)):
         mb.prism(r0, "XZ", pnl0, pnl1, "brass_polished")
+    # the Magna Rota's spring detent ("federnde Raste" behind the disc, K. Badur 2026-11-25): a leaf
+    # with a V tip against the rear steel plate's rim, on a stud in the front panel; drawn just
+    # clear of the rim (the model does not bend it)
+    mrad_ = p.v(M2 + "magna_rota_radius")
+    py0, py1 = p.v(M2 + "magna_rota_plates")["y"][-1]
+    tip = mrad_ + 0.15
+    leaf = [(66.6, 7.4), (65.8, 8.6), (tip + 1.2, 1.0), (tip, 0.0), (tip + 1.2, -0.4)]
+    mb.prism([(mx + u, mz + w) for u, w in leaf], "XZ", py0 + 0.2, py1 - 0.2, "steel")
+    mb.prism([(mx + 66.2 + u, mz + 8.0 + w) for u, w in geom.circle(1.3, 16)], "XZ", py0 + 0.1, pnl0 + 0.5, "brass_satin", smooth=True)
     panel = static(mb.build("pm.carriage_panel", col))
     bl.parent(panel, carriage)
 
@@ -340,6 +351,9 @@ def build(p):
     a_root = math.degrees(math.asin(hw0 / hub_r))
     hub_arc = [geom._polar(hub_r, a_root + (360.0 - 2 * a_root) * i / 40) for i in range(41)]
     horn_outline = hub_arc + horn[1:-1]   # the arc ends where the horn's flanks meet the hub
+    # pointing the other way (local 180 deg): the model mirrors the solve about the vertical
+    # through the lever (m2Pose.js negates the horns' angles)
+    horn_outline = [(-u, -w) for u, w in horn_outline]
     lever_r = cp["lever_shaft_radius"]
     # The drive row: the drum's gear (on a sleeve in front of the drum, sliding with it) has its
     # front face at drum_gear_y_at_9 at setting 9 and is 28.35 mm further back at setting 0;
@@ -370,7 +384,8 @@ def build(p):
         # faces, where the two would flicker (A2-14)
         mb.prism(geom.circle(sq + 0.4, 32), "XZ", -0.5, L + 0.5, "steel_dark", smooth=True)
         for kk in range(1, 10):
-            tooth = geom.tooth_polygon(drum_gear, first + (kk - 1) * rib_pitch, root_r=drum_gear.rf - 0.3)
+            # mirrored about the vertical: the drum turns the other way in the model (m2Pose.js)
+            tooth = geom.tooth_polygon(drum_gear, 180.0 - (first + (kk - 1) * rib_pitch), root_r=drum_gear.rf - 0.3)
             mb.prism(tooth, "XZ", 0.0, kk * step, "brass_polished")   # all ribs start at the front face (Abb. II 1)
         mb.prism(geom.circle(9.0, 40), "XZ", -4.0, -3.0, "brass_satin", smooth=True)
         mb.prism(geom.circle(7.0, 40), "XZ", -3.0, -1.0, "brass_satin", smooth=True)
@@ -579,16 +594,20 @@ def build(p):
     r_in, r_out = ct["ring_radius"]
     hp, gs = ct["hole_path_radius"], ct["glyph_size"]
     st = ct["stop"]
-    stop_a = 90.0 - math.degrees((ct["pin_radius"] + st["finger_width"] / 2.0 + st["gap"]) / hp)
+    # the ring turns anticlockwise when adding (Badur): the pin arrives from the right, so the
+    # finger stands just left of the top
+    stop_a = 90.0 + math.degrees((ct["pin_radius"] + st["finger_width"] / 2.0 + st["gap"]) / hp)
     mb = MeshBuilder()
     mb.prism(geom.circle(r_in - 0.3, 64), "XY", dz, dz + ct["centre_z"][1], "brass_satin", smooth=True)
     mb.prism(geom.circle(ct["spindle_radius"], 24), "XY", dz + 0.3, dz + 6.0, "steel", smooth=True)  # from inside the brass, not on its face
     mb.prism(geom.circle(ct["spindle_radius"] + 1.0, 24), "XY", dz + ct["centre_z"][1], dz + ct["centre_z"][1] + 1.0, "steel", smooth=True)
     black, red = [], []
+    # as on the original (Badur's photo): the centre's numbers run clockwise from 0 at the stop
+    # and count additions (black), the outer circle's anticlockwise and count subtractions (red)
     for k in range(10):
-        a = math.radians(90.0 + 36.0 * k)
-        for rr, txt, mat, z, store in ((ct["black_r"], str(k), "ink_black", dz + 0.05, black),
-                                       (ct["red_r"], str((10 - k) % 10), "ink_red", dz + ct["centre_z"][1] + 0.05, red)):
+        for rr, a_deg, txt, mat, z, store in ((ct["red_r"], 90.0 - 36.0 * k, str(k), "ink_black", dz + ct["centre_z"][1] + 0.05, black),
+                                              (ct["black_r"], 90.0 + 36.0 * k, str(k), "ink_red", dz + 0.05, red)):
+            a = math.radians(a_deg)
             gx, gy = rr * math.cos(a), rr * math.sin(a)
             store.append((gx, gy, z))
             verts, faces = bl.glyph_mesh(txt, gs, 0.2)

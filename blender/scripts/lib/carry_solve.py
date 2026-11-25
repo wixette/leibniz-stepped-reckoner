@@ -2,6 +2,12 @@
 five-horn p, and how the Zweihorn's horn drives the five-horn s. Pure Python, slow (a minute
 or so); run by export_carry_profiles.py, whose output the JavaScript simulator reads.
 
+The solve (like the simulator's pose, js/sim) turns the drive one way; the model is built as its
+mirror image, so that adding turns the crank anticlockwise from the front as on the original
+(K. Badur, 2026-11-25): js/scene/m2Pose.js negates the rotations and build_m2.py mirrors the
+features (the Einzahn's tooth about the line to its store, the ribs and digits about the vertical,
+the Zweihorn's horns about the vertical). By symmetry the contacts, and these tables, are the same.
+
 Frame: the digit's plane, u = +X, w = +Z, origin on the intermediate shaft F. The own result
 shaft S (with the Einzahn) is at (+cd, 0), the next result shaft (ten-wheel) at (-cd, 0), the
 lever L (Zweihorn) at (0, -lever_below_store). A part turned by +phi about +Y (Blender) has
