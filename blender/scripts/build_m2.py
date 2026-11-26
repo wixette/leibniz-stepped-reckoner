@@ -334,7 +334,9 @@ def build(p):
     fx_ = p.v(M2 + "frame_x")
     in_x0, in_x1 = X[-1] - fx_["inner_left"], X[0] + fx_["inner_right"]
     zw = zs + rd + 2.0
-    xl, xr = in_x0, in_x1 - 3.0
+    # the plate reaches over the side walls, its ends lying on them (the owner)
+    swl = fx_["side_wall"]
+    xl, xr = in_x0 - swl, in_x1 + swl
     mb = MeshBuilder()
     (wy0, wy1), (ry0w, ry1w) = dl["window_y"], dl["window_rail_y"]
     mb.prism(geom.rect(xl, ry0w, xr, wy0), "XY", zw, zw + 1.5, "brass_satin")
@@ -343,12 +345,14 @@ def build(p):
     edges = [xl] + [v for x in reversed(X) for v in (x - whx, x + whx)] + [xr]
     for a, b in zip(edges[0::2], edges[1::2]):
         mb.prism(geom.rect(a, wy0, b, wy1), "XY", zw, zw + 1.5, "brass_satin")
-    for bx in (xr - 3.0, xl):
-        mb.prism(geom.rect(bx, ry1w, bx + 3.0, wall0), "XY", zw, zw + 1.5, "brass_satin")
-        # a post at the rail's front end down to the side wall's low front part, so the plate
-        # stands on four posts, not only on the rear beam's two (the owner)
-        px0_, px1_ = (bx, in_x1) if bx > xl else (xl, xl + 3.0)    # reaching the wall's inner face
-        mb.prism(geom.rect(px0_, ry1w, px1_, ry1w + 4.0), "XY", p.v(M2 + "frame")["side_wall_low_z"] - 0.5, zw + 0.01, "brass_satin")
+    fr_w = p.v(M2 + "frame")
+    for bx in (xl, xr - swl):
+        # an end strip over each side wall, standing on it on two posts: at the front on the wall's
+        # low front part, at the back on its tall rear part
+        mb.prism(geom.rect(bx, ry1w, bx + swl, wall0), "XY", zw, zw + 1.5, "brass_satin")
+        cxw = bx + swl / 2.0
+        mb.prism(geom.rect(cxw - 2.5, ry1w, cxw + 2.5, ry1w + 5.0), "XY", fr_w["side_wall_low_z"] - 0.5, zw + 0.01, "brass_satin")
+        mb.prism(geom.rect(cxw - 2.5, wall0 - 5.5, cxw + 2.5, wall0 - 0.5), "XY", fr_w["side_wall_top_z"] - 0.5, zw + 0.01, "brass_satin")
     window = static(mb.build("pi.window", col))
     bl.set_anchors(window, "read_points", [(x, (wy0 + wy1) / 2.0, zw + 3.0) for x in X])
     window["read_half_size_mm"] = dl["read_half_size"]
@@ -363,11 +367,9 @@ def build(p):
     base_x0, base_x1 = in_x0 - fx_["end_bar_left"], in_x1 + fx_["end_bar_right"]
     mb = MeshBuilder()
     # the rear beam (the rear wall slimmed, the owner 2026-11-26): it carries the result and
-    # intermediate shafts' rear bearings; a post at each end holds the window plate
+    # intermediate shafts' rear bearings
     rb0, rb1 = fr["rear_beam_z"]
     mb.prism(geom.rect(in_x0, rb0, in_x1, rb1), "XZ", wall0, wall1, "steel")
-    for px0 in (in_x0, in_x1 - 6.0):
-        mb.prism(geom.rect(px0, rb1, px0 + 6.0, 85.0), "XZ", wall0, wall1, "brass_satin")
     # the lower frame (NL183/465 p. 94 'Rahmen Unterteil'; TSD (02), (10)): three upright steel
     # beams between the side walls, no plate. The carriage rides on a and b. a, just in front of
     # the lead screw, has the 8 detent holes in its top, one under the carriage's catch at each
