@@ -38,7 +38,9 @@ export const APART_VIEW = /** @type {const} */ ("apart");
  * - theta: crank to this angle (a full turn completes at ±360)
  * - turn: whole crank turns
  * - toStop: forward turns until the pin reaches the stop
- * - divideDigit: subtract until overdrawn, then add back once
+ * - toStopBack: backward turns until the pin reaches the stop
+ * - divideDigit: subtract until overdrawn, then add back once; or, with the pin set at black 0
+ *   to count, until it reaches the stop after 9 (a quotient digit of 9: nothing to add back)
  * @typedef {(
  *   | { reset: { result?: number; input?: number; mode?: CarryMode } }
  *   | { input: number }
@@ -185,7 +187,12 @@ export function applyAction(m, a) {
     m.runToStop();
     return m.blocked;
   }
+  if ("toStopBack" in a) {
+    m.runBackToStop();
+    return m.blockedBack;
+  }
   for (;;) {
+    if (!m.canStart(-1)) return m.blockedBack; // the pin at the stop: the digit is 9
     if (!m.turn(-1)) return false;
     if (registerValue(m) < 0) return m.turn(1);
   }

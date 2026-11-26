@@ -177,7 +177,7 @@ export function partInfo(node, m, loc = locale()) {
   if ((k = index(node, "pm.setting_rack.")) !== null) return { name: named("part.rack", k), value: String(m.settings[k]) };
   if (node === gltfName("pm.magna_rota")) return { name: t("part.magna", {}, loc), value: null };
   if (node === gltfName("pm.counter_ring") || node === gltfName("pm.counter_plate")) {
-    const turns = Math.trunc(m.ringTurns + m.theta / 360);
+    const turns = m.countedTurns();
     const n = Math.abs(turns);
     return { name: t("part.counter", {}, loc), value: turns < 0 ? tn("value.back", n, {}, loc) : tn("value.turns", n, {}, loc), red: turns < 0 };
   }

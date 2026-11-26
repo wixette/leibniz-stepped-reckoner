@@ -20,7 +20,8 @@
 // pin goes round the other way and meets the stop finger's far face: the finger's width
 // (about 0.22 of a crank turn) leaves 9 - m whole backward turns, and the next would jam
 // part-way, so it is refused. (The sources describe no one-way catch; the model measures
-// where the pin meets the finger.) Division uses the ring as a counter with the pin out.
+// where the pin meets the finger.) Dividing counts the subtractions with the pin set at black 0
+// (K. Badur), which allows 9 backward turns: a quotient digit of 9 ends at the stop, not overdrawn.
 // A carry store holds one carry. A turn that would store a second carry in a store whose
 // first carry is still waiting is refused: one waiting above the carriage, with no lever over
 // it (the operator must shift the carriage over that digit first), or one whose wheel would
@@ -124,7 +125,8 @@ export class Machine {
   /** Carriage position used for drawing; equals offset at rest, fractional while shifting. */
   carriagePos = 0;
   /**
-   * Magna Rota: pin hole (0..9) or null, and turns counted since the ring was last set.
+   * Revolution counter: the pin's hole (0..9, by its black number) or null, and turns counted
+   * since the pin was last set.
    * @type {number | null}
    */
   pin = null;
@@ -238,16 +240,6 @@ export class Machine {
   setPin(m) {
     if (!this.atRest || (m !== null && (!Number.isInteger(m) || m < 0 || m > 9))) return false;
     this.pin = m;
-    this.ringTurns = 0;
-    return true;
-  }
-
-  /**
-   * Set the ring back to 0 at the stop (keeps the pin).
-   * @returns {boolean}
-   */
-  resetRing() {
-    if (!this.atRest) return false;
     this.ringTurns = 0;
     return true;
   }
@@ -504,11 +496,12 @@ export class Machine {
   }
 
   /**
-   * Digit the Magna Rota ring shows at the stop (the revolution counter).
+   * The turns the revolution counter's ring has counted, as it shows them: the ring steps a hole
+   * part-way through a turn (counterStep), not when the turn ends. Negative when turned back.
    * @returns {number}
    */
-  counterDigit() {
-    return ((Math.round(this.ringTurns + this._theta / 360) % 10) + 10) % 10;
+  countedTurns() {
+    return Math.trunc(Math.round((this.ringTurns + M.counterStep(this._theta)) * 1e6) / 1e6);
   }
 
   /**
@@ -527,20 +520,6 @@ export class Machine {
   /** @returns {boolean[]} */
   storesTilted() {
     return this.carryStates().map((s) => s !== "idle");
-  }
-
-  /**
-   * Carries that have left the top digit so far, including those completed in this turn.
-   * @returns {number}
-   */
-  carryOutLive() {
-    const th = this._theta;
-    if (th === 0) return this.carryOut;
-    /** @type {1 | -1} */
-    const dir = th < 0 ? -1 : 1;
-    const top = this.traces(dir)[this.registerDigits - 1];
-    const done = top.executions.filter((e) => Math.abs(th) >= e.start + M.transferTravel(this.mode) - 1e-9);
-    return this.carryOut + done.reduce((a, e) => a + e.sign, 0);
   }
 
 }

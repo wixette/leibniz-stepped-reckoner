@@ -41,7 +41,6 @@ const zs = val(G.drum.axis_z) + val(G.receiving_gear.centre_distance); // result
 const [FDX, FDZ] = val(/** @type {Entry<number[]>} */ (G.carry_store.offset_xz));
 export const F = { x: FDX, z: zs + FDZ };
 export const L = { x: val(M1.lever_axis_dx), z: val(M1.lever_axis_z) };
-export const B_FL = deg(Math.atan2(L.z - F.z, L.x - F.x)); // store axis -> lever axis
 export const B_LF = deg(Math.atan2(F.z - L.z, F.x - L.x)); // lever axis -> store axis
 /** Store angle at which a five-horn p's horn crosses the line to the next result shaft. */
 const CROSS = val(G.carry).transfer_crossing; // 36
@@ -240,8 +239,8 @@ export function hornPhases(i, mode) {
  */
 export function leverPasses(i, mode, dir) {
   const ph = hornPhases(i, mode);
-  // Adding: horns move CCW (+theta) and first touch at B_LF + CONTACT_START_REL.
-  // Subtracting: horns move CW and first touch at B_LF - CONTACT_START_REL.
+  // Adding: horns move CCW (+theta) and first touch at B_LF + the mode's contact start.
+  // Subtracting: horns move CW and first touch at B_LF - the mode's contact start.
   const c = contactStartRel(mode);
   const target = dir > 0 ? B_LF + c : B_LF - c;
   return [ph.add, ph.sub]

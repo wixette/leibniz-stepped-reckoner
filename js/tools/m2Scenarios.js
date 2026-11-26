@@ -28,7 +28,7 @@ import { Machine } from "../sim/machine.js";
 /** @type {M2Scenario[]} */
 export const M2_SCENARIOS = [
   {
-    label: "1709 × 365 with the Magna Rota",
+    label: "1709 × 365 with the revolution counter",
     mode: "simultaneous",
     result: 0,
     ops: [

@@ -148,6 +148,7 @@ export class Animator {
       else if ("toStopBack" in a) while (!m.blockedBack && m.canStart(-1)) yield { theta: -360 };
       else if ("divideDigit" in a) {
         for (;;) {
+          if (!m.canStart(-1)) break; // the pin at the stop after 9: the digit is 9 (player.js)
           yield { theta: -360 };
           if (registerValue(m) < 0) {
             yield { theta: 360 };

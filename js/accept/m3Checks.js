@@ -17,6 +17,8 @@ import { TUTORIAL } from "../teach/tutorial.js";
 import { applyIntentNow, CrankDrag, intentAt } from "../teach/partActions.js";
 import { anchors, rayHits, result } from "./harness.js";
 import { INSIDE_VIEWS, matches, presentation, replayTo, runLesson, VIEWS } from "../teach/player.js";
+/** @import { Lesson } from "../teach/player.js" */
+/** @import { CarryMode } from "../sim/kinematicsM1.js" */
 /** @import { CheckResult } from "./harness.js" */
 
 /** Exploded offsets and the rest pose must agree to this (m). */
@@ -35,6 +37,18 @@ const EXPLODED_GROUPS = ["frame.base", "pi.window", "pm.carriage", "pm.magna_rot
 
 /** The tutorial and the lessons: everything the step player runs. */
 const COURSES = [TUTORIAL, ...LESSONS];
+
+/**
+ * The carry mode the machine is in at the start of a course's step (the page shows that carry set).
+ * @param {Lesson} l
+ * @param {number} i
+ * @returns {CarryMode}
+ */
+function stepMode(l, i) {
+  const m = new Machine();
+  replayTo(l, i, m);
+  return m.mode;
+}
 
 /**
  * @param {THREE.Object3D} root
@@ -342,7 +356,7 @@ export function runM3Checks(root) {
       for (const n of mustStay(parts, context)) if (fadedPart(n)) bad.push(`${what}: ${n} faded`);
     };
     for (const l of COURSES) l.steps.forEach((_, i) => {
-      const p = presentation(l, i);
+      const p = presentation(l, i, stepMode(l, i)); // the carry set the page shows (A3-6)
       check(`${l.id} step ${i + 1}`, p.highlight, p.context);
     });
     const views = viewSubjects(root);
@@ -359,7 +373,7 @@ export function runM3Checks(root) {
     let interior = 0;
     for (const l of COURSES) {
       l.steps.forEach((_, i) => {
-        const p = presentation(l, i);
+        const p = presentation(l, i, stepMode(l, i));
         const inside = INSIDE_VIEWS.has(p.view);
         if (p.casing === inside || p.cutaway !== inside || p.fade !== inside) bad.push(`${l.id} step ${i + 1}: case, front or fading does not follow the ${p.view} view`);
         if (inside && p.highlight.length === 0) bad.push(`${l.id} step ${i + 1}: the ${p.view} view with nothing to show`);

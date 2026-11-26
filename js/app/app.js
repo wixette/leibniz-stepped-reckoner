@@ -988,7 +988,7 @@ export class App {
     const m = this.machine;
     // readouts
     $("resultOut").textContent = group3(m.shownText());
-    const ring = Math.trunc(m.ringTurns + m.theta / 360);
+    const ring = m.countedTurns(); // as the counter shows them (it steps part-way through a turn)
     const turns = $("turnsOut");
     turns.textContent = String(Math.abs(ring));
     turns.classList.toggle("red", ring < 0);
