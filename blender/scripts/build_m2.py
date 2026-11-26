@@ -533,7 +533,8 @@ def build(p):
     pz_ = lfa["z"][1] + cr_["pad_gap"]
     for sx_ in (bx0 + 2.0, rx_ - 10.0):
         mb.prism(geom.rect(sx_, sy0_, sx_ + 8.0, sy1_), "XY", sz0_, fz1_, "brass_satin")
-        mb.prism(geom.rect(sx_, lfa["y"][0], sx_ + 8.0, sy0_ + 0.01), "XY", pz_, fz0_ + 0.01, "brass_satin")
+        mb.prism(geom.rect(sx_, lfa["y"][0] - 1.5, sx_ + 8.0, sy0_ + 0.01), "XY", pz_, fz0_ + 0.01, "brass_satin")
+        mb.prism(geom.rect(sx_, lfa["y"][0] - 1.5, sx_ + 8.0, lfa["y"][0] - 0.3), "XY", sz0_, pz_ + 0.01, "brass_satin")   # a lip in front of the beam too
     cx_ = bx0 + cr_["catch_dx"]
     kz_, kr_ = cr_["knob_z"], cr_["knob_radius"]
     mb.prism(geom.rect(cx_ - 2.0, -100.0, cx_ + 2.0, -98.0), "XY", kz_, fz0_ + 0.1, "brass_satin")
@@ -546,7 +547,8 @@ def build(p):
     pzb = lfb["z"][1] + cr_["pad_gap"]
     ly0_, ly1_ = cr_["rear_shoe_lip_y"]
     for sx_ in (cx0 + 2.0, cx1 - 10.0):
-        mb.prism(geom.rect(sx_, lfb["y"][0], sx_ + 8.0, ly1_), "XY", pzb, rz0_ + 0.01, "brass_satin")
+        mb.prism(geom.rect(sx_, lfb["y"][0] - 1.5, sx_ + 8.0, ly1_), "XY", pzb, rz0_ + 0.01, "brass_satin")
+        mb.prism(geom.rect(sx_, lfb["y"][0] - 1.5, sx_ + 8.0, lfb["y"][0] - 0.3), "XY", lfb["z"][1] - 6.0, pzb + 0.01, "brass_satin")   # and in front of it
         mb.prism(geom.rect(sx_, ly0_, sx_ + 8.0, ly1_), "XY", lfb["z"][1] - 6.0, pzb + 0.01, "brass_satin")
     # nut around the lead screw (four bars leave a square hole), between the units drum's and
     # the tens drum's setting heads
