@@ -2,6 +2,7 @@
 
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 /**
@@ -191,7 +192,8 @@ export class Viewer {
    * @returns {Promise<THREE.Group>}
    */
   async load(url, onProgress) {
-    const gltf = await new GLTFLoader().loadAsync(url, (e) => onProgress?.(e.total ? e.loaded / e.total : 0));
+    // the model is packed with meshoptimizer (tools/compress-model.mjs)
+    const gltf = await new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).loadAsync(url, (e) => onProgress?.(e.total ? e.loaded / e.total : 0));
     gltf.scene.traverse((o) => {
       const m = /** @type {THREE.Mesh} */ (o);
       if (!m.isMesh) return;

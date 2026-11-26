@@ -19,6 +19,7 @@ export const VENDORED = {
     "build/three.core.js",
     "examples/jsm/controls/OrbitControls.js",
     "examples/jsm/loaders/GLTFLoader.js",
+    "examples/jsm/libs/meshopt_decoder.module.js",
     "examples/jsm/utils/BufferGeometryUtils.js",
     "examples/jsm/utils/SkeletonUtils.js",
   ],

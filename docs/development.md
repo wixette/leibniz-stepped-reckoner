@@ -43,7 +43,7 @@ pnpm test         # simulator logic, kinematics, acceptance tests on the .glb, v
 
 CI runs them on every push and pull request, together with the REUSE lint ([licensing.md](licensing.md)). How the code is typed, tested and vendored, and what the acceptance tests check: [conventions.md](conventions.md).
 
-**Model changes** (`params/`, `blender/scripts/`) need Blender: `pnpm build:model` rebuilds the `.glb` files, and `pnpm check:model` runs the slow collision sweep, which must pass before a model change is committed. Commit the new `.glb` together with the params.
+**Model changes** (`params/`, `blender/scripts/`) need Blender: `pnpm build:model` rebuilds the `.glb` files (Blender exports them, then [tools/compress-model.mjs](../tools/compress-model.mjs) packs them with meshoptimizer: the page and the tests decode them with three.js's meshopt decoder), and `pnpm check:model` runs the slow collision sweep, which must pass before a model change is committed. Commit the new `.glb` together with the params.
 
 ## Versions and releases
 
