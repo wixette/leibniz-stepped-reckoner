@@ -2,7 +2,7 @@
 
 What changed in each release. Versions follow `package.json` and are tagged `vX.Y.Z` ([docs/development.md](docs/development.md), *Versions and releases*). The design decisions cited (U1, U2, …) are in [docs/ui-design.md](docs/ui-design.md).
 
-## 1.3.0 (unreleased)
+## 1.3.0
 
 **The machine**
 - Adding turns the crank anticlockwise seen from the front, and the counter's ring anticlockwise seen from above, as Klaus Badur confirms on the original (clockwise before). The whole drive and carry turn the other way with it; the + and − buttons' icons and dragging the crank follow.
