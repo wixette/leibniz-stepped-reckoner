@@ -34,14 +34,11 @@ Do not set Blender's unit scale to 0.001. The glTF exporter ignores it, and mode
 - **The rest pose is exported. No baked animation is used in the interactive model.** Runtime code drives every part from simulator state. Baked clips are allowed only in separate `*-cinematic.glb` files.
 - **Budgets** (school Chromebook target): **under 300 k triangles** and **under 15 MB of compressed `.glb`** for the interactive model. Gear teeth can use lower-poly LODs when far from the camera.
 
-## Developer pages (one per milestone)
+## Developer pages (none since 1.3.0)
 
-- Every milestone ships a **permanent** developer page in `dev/NN-name/`, linked from `dev/index.html`. It is how the milestone is verified by hand. (The site's main page, `index.html`, is the lessons.)
-- Pages are never deleted when the next milestone arrives. They stay working and act as **live regression tests** in the browser for shared code.
-- Every page has a visible **Reset machine** control that returns to the initial state at any time.
-- **Step controls** ("Step ▸ (adding)" / "Step ▸ (subtracting)") turn the crank in that direction to the **next moment a visible change has just completed**: a digit has moved, a carry has been stored or finished, or the turn has been committed. They never stop at the *start* of a motion or in a stretch where nothing changes. After each step the panel says what just happened ("Step: …"). The sim exposes the stops (`stepStops(dir)`), and a unit test asserts that every step of scripted turns changes something visible.
-- Every page has a **`?selftest`** mode. It plays the milestone's acceptance scenarios (see *Testing*), shows a green or red tick for each check on screen, and publishes the results as `window.__selftest = { done, passed, failed: [...] }`.
-- They run from any static web server at the repository root, for example `python3 -m http.server` (http://localhost:8000/dev/). Nothing is built.
+- Milestones up to 1.2.0 each shipped a developer page in `dev/NN-name/` to check them by hand. The slice pages were removed in 1.2.0, and the full machine's (`dev/03-full-machine/`, with its crank-angle slider and step mode) in 1.3.0: the models were checked in the simulator itself instead. Their notes stay in `design/`.
+- The simulator has a **`?selftest`** mode. It plays the acceptance scenarios (see *Testing*), shows a green or red tick for each check on screen, and publishes the results as `window.__selftest = { done, passed, failed: [...] }`.
+- It runs from any static web server at the repository root, for example `python3 -m http.server` (http://localhost:8000/). Nothing is built.
 
 ## Testing
 

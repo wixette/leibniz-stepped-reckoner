@@ -31,6 +31,9 @@ What changed in each release. Versions follow `package.json` and are tagged `vX.
 - The register's intermediate shafts are the original's square steel shafts with their long curved cuts along the edges (Klaus Badur's drawing, photos of Lehmann's replica).
 - The setting knobs are built as Lehmann drew the replica's (and as the original has them): a steel finger lever whose C handle and pointer are one part, with a pin under the pointer in a hole beside the set digit, and a window at the back of each dial, in the gap between 9 and 0, where a white digit disc under the plate shows the set digit. The dial plates lie flush in round holes of the carriage's cover.
 
+**Development**
+- The developer page of the full machine (`dev/03-full-machine/`) is removed, with its step mode (`js/sim/narrate.js`, `Machine.stepStops()` and their tests): the models were checked in the simulator itself, with `?selftest`, the acceptance tests and the Blender collision sweep.
+
 ## 1.2.0
 
 The model moves toward the original in Hannover. Klaus Badur, who measured the original before building his replica, sent its dimensions and the angle of its carry levers, in agreement with the Gottfried Wilhelm Leibniz Library, and pages of his chapter in *Das letzte Original* on how it carries. The page now follows the original where he measured it and N. J. Lehmann's drawings of the Dresden replica elsewhere, and it can carry either way ([decision 0002](design/decisions/0002-original-replica-and-releases.md)).

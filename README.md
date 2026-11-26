@@ -152,7 +152,7 @@ Then open <http://localhost:8000/>. (Opening `index.html` straight from disk doe
 
 ## For developers
 
-The code is plain JavaScript modules with JSDoc types, three.js is vendored, and the 3D model is built from [params/machine.json](params/machine.json) by headless Blender scripts. The developer page at <http://localhost:8000/dev/> shows the whole mechanism step by step, with an acceptance self-test (`?selftest`).
+The code is plain JavaScript modules with JSDoc types, three.js is vendored, and the 3D model is built from [params/machine.json](params/machine.json) by headless Blender scripts. The simulator runs its acceptance self-test with `?selftest`.
 
 ```
 pnpm install

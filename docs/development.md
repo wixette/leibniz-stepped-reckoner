@@ -11,7 +11,7 @@ python3 -m http.server 8000
 ```
 
 - <http://localhost:8000/> is the simulator (`index.html`).
-- <http://localhost:8000/dev/> lists the developer page, `dev/03-full-machine/`: the whole mechanism step by step, with worked examples. It is not linked from the simulator. (The pages of the earlier milestones, one digit and a three-digit carry slice, were removed in 1.2.0; their notes are in `design/`.)
+- The developer pages are gone: the slice pages of the earlier milestones in 1.2.0, the full machine's (`dev/03-full-machine/`, its crank-angle slider and step mode) in 1.3.0, which was checked in the simulator itself, with `?selftest`, the acceptance tests and the Blender collision sweep. Their notes are in `design/`.
 
 Pages cannot be opened from `file://`, because browsers do not load modules from there.
 
@@ -21,7 +21,7 @@ Pages cannot be opened from `file://`, because browsers do not load modules from
 |---|---|
 | `?lang=de` | Start in that language (`en`, `es`, `fr`, `de`, `it`, `pt-BR`, `zh`, `zh-TW`, `ja`, `ko`) |
 | `?quality=lite` or `?quality=high` | Force the rendering quality (by default it drops to lite by itself on a slow device) |
-| `?selftest` | Run the page's acceptance checks on the loaded model and show the results (every page, `dev/` included) |
+| `?selftest` | Run the page's acceptance checks on the loaded model and show the results |
 | `?perf` | Show the frame rate, draw calls and triangles |
 | `?debug` | Expose the page's state to the console as `app` |
 
@@ -59,11 +59,11 @@ Release media are never kept in the repository: both tools write outside it by d
 
 To deploy, copy the whole directory to a web server, with the Git LFS files checked out.
 
-Every file a page names carries the version, `css/style.css?v=1.0.0`, and so does every module the scripts import, through the page's import map, and every model they load. A release asks for new names, so a cache can keep each file as long as it likes and still never give an old one to a new page. Only the pages themselves (`index.html` and the `index.html` files in `dev/`) must not be kept. On a server or a CDN that lets you set the headers:
+Every file a page names carries the version, `css/style.css?v=1.0.0`, and so does every module the scripts import, through the page's import map, and every model they load. A release asks for new names, so a cache can keep each file as long as it likes and still never give an old one to a new page. Only the page itself (`index.html`) must not be kept. On a server or a CDN that lets you set the headers:
 
 | What | `Cache-Control` |
 | --- | --- |
-| The pages (`index.html`, `/`, `dev/…/`) | `no-cache`: kept, but checked with the server each time |
+| The page (`index.html`, `/`) | `no-cache`: kept, but checked with the server each time |
 | Everything asked for with `?v=` | `public, max-age=31536000, immutable` |
 
 A CDN must count the query string in its cache key (most do unless told not to). GitHub Pages sets no headers you can change and keeps everything for 10 minutes, so there a release reaches everyone within 10 minutes. The stamps are written by `pnpm version` (or `pnpm stamp`, [tools/stamp.mjs](../tools/stamp.mjs)); `pnpm test` fails while a page and `package.json` disagree.
@@ -93,7 +93,6 @@ A CDN must count the query string in its cache key (most do unless told not to).
 | `index.html`, `css/`, `js/` | The simulator's main page and its code: `js/app/` (the page: stage, machine strip, dock, course player), `js/ui/` (components), `js/l10n/` (one file per language), `js/sim/` (the machine), `js/scene/` (three.js), `js/teach/` (tutorial, lessons, part names), `js/accept/` (acceptance checks), `js/tools/` (scenarios for the pose exports) |
 | `audio/` | The machine's sounds |
 | `images/` | The logo, the icons (`pnpm icons`), the tutorial's pictures and the README's screenshots |
-| `dev/` | The developer page of the full machine |
 | `vendor/` | three.js, three-mesh-bvh, the Roboto Flex font and the Material Symbols icons, copied from npm (`pnpm vendor`) |
 | `tests/` | `node --test` tests |
 | `tools/` | Reference check, vendoring, version stamps, icons, screenshots, videos and pose export scripts |

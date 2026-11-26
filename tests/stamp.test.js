@@ -32,7 +32,7 @@ function bareImports() {
       e.isDirectory() ? walk(`${dir}/${e.name}`) : e.name.endsWith(".js") ? [`${dir}/${e.name}`] : [],
     );
   const names = new Set();
-  for (const file of [...walk("js"), ...walk("dev")]) {
+  for (const file of walk("js")) {
     const src = readFileSync(join(ROOT, file), "utf8");
     for (const m of src.matchAll(/(?:\bfrom\s*|\bimport\s*\(?\s*)"([^".][^"]*)"/g)) names.add(m[1]);
   }
@@ -41,12 +41,7 @@ function bareImports() {
 
 describe("version stamps", () => {
   it("every page with an import map is one tools/stamp.mjs stamps", () => {
-    /** @param {string} dir @returns {string[]} */
-    const pages = (dir) =>
-      readdirSync(join(ROOT, dir), { withFileTypes: true }).flatMap((e) =>
-        e.isDirectory() ? pages(`${dir}/${e.name}`) : e.name.endsWith(".html") ? [`${dir}/${e.name}`] : [],
-      );
-    const found = ["index.html", ...pages("dev")].filter((f) => readFileSync(join(ROOT, f), "utf8").includes('<script type="importmap">'));
+    const found = readdirSync(ROOT).filter((f) => f.endsWith(".html") && readFileSync(join(ROOT, f), "utf8").includes('<script type="importmap">'));
     assert.deepEqual([...found].sort(), [...PAGES].sort());
   });
 

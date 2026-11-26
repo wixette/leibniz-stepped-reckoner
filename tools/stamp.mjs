@@ -16,7 +16,7 @@
 //   which the simulation imports as a module. The map turns each into the versioned
 //   name, for that page alone;
 // - each local file a stylesheet names by url() (the font files) gets the same, in
-//   css/ and dev/ (STYLESHEETS);
+//   css/ (STYLESHEETS);
 // - the models and images, which the scripts fetch themselves, take the version from the
 //   URL of the module that loads them (import.meta.url).
 //
@@ -30,7 +30,7 @@ import { fileURLToPath } from "node:url";
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 
 /** The pages that load modules. */
-export const PAGES = ["index.html", "dev/03-full-machine/index.html"];
+export const PAGES = ["index.html"];
 
 /**
  * Files under a folder of the repository with one of the given endings, relative to the
@@ -61,7 +61,7 @@ export function moduleFiles(root = ROOT) {
  * @returns {string[]}
  */
 export function stylesheets(root = ROOT) {
-  return [...walk(root, "css", [".css"]), ...walk(root, "dev", [".css"])].sort();
+  return walk(root, "css", [".css"]).sort();
 }
 
 /**

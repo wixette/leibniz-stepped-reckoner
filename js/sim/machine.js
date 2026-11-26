@@ -543,28 +543,4 @@ export class Machine {
     return this.carryOut + done.reduce((a, e) => a + e.sign, 0);
   }
 
-  /**
-   * Step stops (docs/conventions.md): only where a visible change has just completed.
-   * @param {1 | -1} dir
-   * @returns {number[]}
-   */
-  stepStops(dir) {
-    /** @type {number[]} */
-    const ev = [];
-    for (const s of this.settings) {
-      for (let k = 10 - s; k <= 9; k++) ev.push(K.ribWindowStart(K.ribWindowIndex(k, dir)) + K.RIB_PITCH);
-    }
-    for (const x of this.traces(dir)) {
-      for (const e of x.executions) ev.push(e.start + M.transferTravel(this.mode), e.start + M.executionTravel(this.mode));
-    }
-    ev.push(360);
-    const sorted = ev.map((a) => Math.min(360, a)).filter((a) => a > 0).sort((a, b) => a - b);
-    /** @type {number[]} */
-    const merged = [];
-    for (const a of sorted) {
-      if (merged.length && a - merged[merged.length - 1] < 0.5) merged[merged.length - 1] = a;
-      else merged.push(a);
-    }
-    return merged;
-  }
 }
