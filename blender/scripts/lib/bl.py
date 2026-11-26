@@ -179,6 +179,14 @@ class MeshBuilder:
         self.mat_idx = []
         self.smooth = []
         self.mats = []
+        self.cyl_uv = {}
+
+    def cylinder_uvs(self, mat, origin, axis, radius):
+        """Map the faces of material `mat` round an axis (origin and direction, mm) rather than
+        by box projection: u along the axis, v round it (a turned part's grain runs along it).
+        v is the angle times a radius near `radius` chosen so a full turn holds a whole number
+        of texture repeats, which hides the seam."""
+        self.cyl_uv[mat] = (origin, axis, radius)
 
     def _mat(self, name):
         if name not in self.mats:
@@ -275,12 +283,56 @@ class MeshBuilder:
         me.validate()
         if any(is_textured(m) for m in self.mats):
             _box_uvs(me)
+            if self.cyl_uv:
+                self._cylinder_uvs(me)
         if hasattr(me, "set_sharp_from_angle"):
             me.set_sharp_from_angle(angle=math.radians(40))
         obj = bpy.data.objects.new(name, me)
         obj.location = tuple(c * MM for c in location_mm)
         collection.objects.link(obj)
         return obj
+
+    def _cylinder_uvs(self, me):
+        """Overwrite the box-projected UVs of the faces whose material was mapped round an axis."""
+        uv = me.uv_layers["UVMap"].data
+        for poly in me.polygons:
+            mname = self.mats[poly.material_index]
+            if mname not in self.cyl_uv:
+                continue
+            origin, axis, radius = self.cyl_uv[mname]
+            pts = [self.verts[me.loops[li].vertex_index] for li in poly.loop_indices]
+            for li, (u, v) in zip(poly.loop_indices, _cyl_face_uvs(pts, origin, axis, radius)):
+                uv[li].uv = (u, v)
+
+
+def _cyl_face_uvs(pts, origin, axis, radius):
+    """u, v (UV units) of one face's points (mm) mapped round an axis; see cylinder_uvs."""
+    ax = Vector(axis).normalized()
+    ref = Vector((1.0, 0.0, 0.0)) if abs(ax.x) < 0.9 else Vector((0.0, 1.0, 0.0))
+    e1 = (ref - ax * ref.dot(ax)).normalized()
+    e2 = ax.cross(e1)
+    turns = max(1, round(2.0 * math.pi * radius / UV_MM))
+    r_ref = turns * UV_MM / (2.0 * math.pi)
+    o = Vector(origin)
+    along, ang = [], []
+    for q in pts:
+        d = Vector(q) - o
+        along.append(d.dot(ax))
+        x, y = d.dot(e1), d.dot(e2)
+        ang.append(math.atan2(y, x) if x * x + y * y > 1e-8 else None)
+    known = [a for a in ang if a is not None]
+    if not known:
+        known = [0.0]
+    base = known[0]
+    # unwrap round the face's first known angle, so a face across the seam does not span the turn
+    unwrapped = [base + math.remainder(a - base, 2.0 * math.pi) for a in known]
+    mean = sum(unwrapped) / len(unwrapped)
+    it = iter(unwrapped)
+    out = []
+    for a, t in zip(ang, along):
+        a2 = next(it) if a is not None else mean            # a point on the axis takes its face's angle
+        out.append((t / UV_MM, a2 * r_ref / UV_MM))
+    return out
 
 
 def _box_uvs(me):

@@ -746,6 +746,7 @@ def build(p):
     mb.prism([(u, w + hz) for u, w in geom.circle(ha["radius"], 32)], "XZ", depth(ha["front_x"]), ry1 + 0.3, "steel", smooth=True)
     mb.prism([(u, w + hz) for u, w in geom.circle(ha["pin_radius"], 24)], "XZ", depth(ha["pin_front_x"]) + 0.3, depth(ha["front_x"]) - 0.01, "steel", smooth=True)
     lathe_y(mb, side_profile(mc["wood"]), "oak_handle", 0.0, hz, 32)
+    mb.cylinder_uvs("oak_handle", (0.0, 0.0, hz), (0.0, -1.0, 0.0), 10.0)   # the grain along the handle, not box-projected
     lathe_y(mb, side_profile(mc["ball"]), "steel", 0.0, hz, 20)
     crank = mb.build("pm.main_crank", col, (mx, 0, mz))
     bl.set_motion(crank, "rotate", (0, 1, 0), "Main crank (one turn = one addition or subtraction)", "Hauptkurbel")
