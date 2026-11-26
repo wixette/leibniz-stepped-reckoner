@@ -529,8 +529,11 @@ def build(p):
     mb.prism(geom.rect(bx0, fz0_, rx_, bz0), "XZ", by0, by1, "brass_satin")
     mb.prism(geom.rect(bx0, fy0_, rx_, fy1_), "XY", fz0_, fz1_, "brass_satin")
     (sy0_, sy1_), (sz0_, sz1_) = cr_["shoe_y"], cr_["shoe_z"]
+    # the shoes: pads resting on the beam (the foot itself stands 1 mm clear), lips behind it
+    pz_ = lfa["z"][1] + cr_["pad_gap"]
     for sx_ in (bx0 + 2.0, rx_ - 10.0):
         mb.prism(geom.rect(sx_, sy0_, sx_ + 8.0, sy1_), "XY", sz0_, fz1_, "brass_satin")
+        mb.prism(geom.rect(sx_, lfa["y"][0], sx_ + 8.0, sy0_ + 0.01), "XY", pz_, fz0_ + 0.01, "brass_satin")
     cx_ = bx0 + cr_["catch_dx"]
     kz_, kr_ = cr_["knob_z"], cr_["knob_radius"]
     mb.prism(geom.rect(cx_ - 2.0, -100.0, cx_ + 2.0, -98.0), "XY", kz_, fz0_ + 0.1, "brass_satin")
@@ -538,6 +541,13 @@ def build(p):
     # its rear bearings stand on a bar riding on the frame's beam b
     (ry0_, ry1_), (rz0_, rz1_) = cr_["rear"]["y"], cr_["rear"]["z"]
     mb.prism(geom.rect(cx0, ry0_, cx1, ry1_), "XY", rz0_, rz1_, "brass_satin")
+    # its two shoes on beam b, like the front ones: a pad on the beam, a lip behind it
+    lfb = fr["lower_frame"]["b"]
+    pzb = lfb["z"][1] + cr_["pad_gap"]
+    ly0_, ly1_ = cr_["rear_shoe_lip_y"]
+    for sx_ in (cx0 + 2.0, cx1 - 10.0):
+        mb.prism(geom.rect(sx_, lfb["y"][0], sx_ + 8.0, ly1_), "XY", pzb, rz0_ + 0.01, "brass_satin")
+        mb.prism(geom.rect(sx_, ly0_, sx_ + 8.0, ly1_), "XY", lfb["z"][1] - 6.0, pzb + 0.01, "brass_satin")
     # nut around the lead screw (four bars leave a square hole), between the units drum's and
     # the tens drum's setting heads
     nx0, nx1, ny, nz, hole = X[0] - 30.0, X[0] - 6.0, ls["y"], ls["z"], ls["radius"] + 2.0
