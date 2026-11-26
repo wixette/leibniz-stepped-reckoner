@@ -41,6 +41,7 @@ export default {
   "view.inside": "Inside",
   "view.case": "Show case and frame",
   "view.colours": "Colour by part",
+  "view.slow": "Slow motion",
 
   "strip.number": "Number on the knobs",
   "strip.number.tip": "Type the number to set on the 8 knobs",
@@ -89,6 +90,8 @@ export default {
   "status.carry.simultaneous": "Carry as on the original in Hannover: all levers act at once. A carry made while carries are being passed on waits, its pentagon tilted: turn again with 0 on the knobs to finish it.",
   "status.colours.on": "Each kind of part in its own colour, to tell them apart. Hover over a part to see its name.",
   "status.colours.off": "The parts in their metals again.",
+  "status.slow.on": "Slow motion: every turn and shift plays at a quarter speed, to follow each part.",
+  "status.slow.off": "Normal speed again.",
   "status.reset": "Machine cleared.",
   "status.ranToStop.one": "The crank turned once and stopped at the pin.",
   "status.ranToStop.other": "The crank turned {n} times and stopped at the pin.",

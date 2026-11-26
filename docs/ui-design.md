@@ -102,7 +102,7 @@ Free play has no tab: its controls are the machine toolbar, under the machine (P
 
 - **Machine toolbar** (floating at the stage's bottom, centred under the machine, U18): the number on the setting knobs, turn forward (+) and back (−) as one pair, carriage left and right with its place as another, boxed and named like the number box (U21), the Magna Rota's pin (a dropdown box, U22) with turn to the stop joined to it (U23), how the carry levers act (a dropdown box, U30), reset (U20), and the machine's sound on or off (U29). Icon plus short label where there is room, icons with tooltips where there is not (U18).
 - **Readouts** sit on the stage's top edge: the result as on the machine, grouped in threes; the Magna Rota's turn count (red when subtracting); the carriage's place.
-- **View controls** float at the stage's top right (U15): a Reset view button (⌂), a − / + zoom pair (U24) and the Views menu, whose button names the view on show. The menu holds the seven views (two of them inside views, U11, and Taken apart) and two switches, Show case and frame (U32) and Colour by part (U31). Opening the front, fading and taking apart follow the view (U14, U15). They change how the machine is *shown*, not its state, so they stay enabled in a lesson, except where a step depends on them.
+- **View controls** float at the stage's top right (U15): a Reset view button (⌂), a − / + zoom pair (U24) and the Views menu, whose button names the view on show. The menu holds the seven views (two of them inside views, U11, and Taken apart) and three switches, Show case and frame (U32), Colour by part (U31) and Slow motion (U33). Opening the front, fading and taking apart follow the view (U14, U15). They change how the machine is *shown*, not its state, so they stay enabled in a lesson, except where a step depends on them.
 
 ### U5 — A dark Material 3 theme for a classroom: blue, with one colour per meaning
 
@@ -435,3 +435,12 @@ With the case off the reader wants the mechanism, and since v1.3.0 much of it st
 - The carriage's own floor and bearing bar are in the node that carries everything riding on it, so the page does not hide that node: it draws its own meshes with an invisible material (js/app/stage.js `structure()`, the Highlighter's `setConcealed`); clicks and hover labels pass through them.
 - The inside views, which hide the case, now drop the frame too.
 
+
+### U33 — Slow motion
+
+The crank turns at 300° a second, so one turn takes 1.2 s, and the quick moments of a carry are over in a few frames: the single tooth turns a carry store by 18° in 0.065 s, and the ripple set's Zweihorn turns it on by 54° in 0.045 s. The reader who zooms in to watch them sees jumps. The Views menu's **Slow motion** switch, after *Colour by part*, plays every motion, crank turns and carriage shifts alike, at a quarter speed (about 5 s a turn; `SLOW_SPEED` in js/app/animator.js).
+
+- **Any time, in free play and in lessons,** like the other switches: it changes only how fast the page shows the motion, not what the machine does, and a lesson step plays the same, only slower. A motion under way changes speed at once.
+- **The sounds follow the motion,** since they are struck by the parts as they pass, not by a clock.
+- It is not remembered: a page opens at the normal speed.
+- The status line says what it does.

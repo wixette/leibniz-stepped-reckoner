@@ -39,6 +39,7 @@ export default {
   "view.inside": "Por dentro",
   "view.case": "Mostrar la caja y el bastidor",
   "view.colours": "Colores por pieza",
+  "view.slow": "Cámara lenta",
 
   "strip.number": "Número en las perillas",
   "strip.number.tip": "Escribir el número que se ajusta en las 8 perillas",
@@ -87,6 +88,8 @@ export default {
   "status.carry.simultaneous": "Acarreo como en el original de Hannover: todas las palancas actúan a la vez. Un acarreo que nace mientras se pasan los acarreos espera, con su pentágono inclinado: gira otra vez con 0 en las perillas para terminarlo.",
   "status.colours.on": "Cada tipo de pieza con su propio color, para distinguirlas. Pasa el puntero sobre una pieza para ver su nombre.",
   "status.colours.off": "Las piezas otra vez en sus metales.",
+  "status.slow.on": "Cámara lenta: cada vuelta y cada desplazamiento van a un cuarto de la velocidad, para seguir cada pieza.",
+  "status.slow.off": "Otra vez a velocidad normal.",
   "status.reset": "Máquina borrada.",
   "status.ranToStop.one": "La manivela dio una vuelta y se detuvo en la clavija.",
   "status.ranToStop.other": "La manivela dio {n} vueltas y se detuvo en la clavija.",

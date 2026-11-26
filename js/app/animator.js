@@ -11,6 +11,8 @@ import { applyAction } from "../teach/player.js";
 
 const DEG_PER_SEC = 300;
 const PLACES_PER_SEC = 1.2;
+/** The slow-motion switch's speed, a fraction of the normal one (about 5 s a crank turn). */
+export const SLOW_SPEED = 0.25;
 
 export class Animator {
   /**
@@ -28,6 +30,8 @@ export class Animator {
    * @type {((blocked: 1 | -1 | null) => void) | null}
    */
   onDone = null;
+  /** Speed factor for every motion: 1, or SLOW_SPEED with the slow-motion switch on (U33). */
+  speed = 1;
   /** Called after a step's action set the machine up at once (a reset): not an operation. */
   onSetUp = () => {};
 
@@ -105,6 +109,7 @@ export class Animator {
   tick(dt) {
     const cur = this.cur;
     if (!cur || this.paused()) return;
+    dt *= this.speed;
     const m = this.machine;
     let done = false;
     if ("shift" in cur) {

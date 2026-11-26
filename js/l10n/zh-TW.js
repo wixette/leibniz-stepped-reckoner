@@ -39,6 +39,7 @@ export default {
   "view.inside": "內部",
   "view.case": "顯示外殼和框架",
   "view.colours": "依零件著色",
+  "view.slow": "慢動作",
 
   "strip.number": "旋鈕上的數",
   "strip.number.tip": "輸入要在 8 個旋鈕上設定的數",
@@ -87,6 +88,8 @@ export default {
   "status.carry.simultaneous": "進位方式同漢諾威的原機：所有進位桿同時動作。在傳遞進位的過程中新產生的進位會等待，五邊形保持傾斜：旋鈕設為 0 再轉一圈即可完成。",
   "status.colours.on": "每類零件各用一種顏色，方便區分。把指標移到零件上可看到它的名稱。",
   "status.colours.off": "零件恢復為原本的金屬顏色。",
+  "status.slow.on": "慢動作：每一次轉動和移動都以四分之一的速度播放，方便看清每個零件。",
+  "status.slow.off": "恢復正常速度。",
   "status.reset": "機器已歸零。",
   "status.ranToStop.one": "曲柄轉了 {n} 圈，在插銷處停下。",
   "status.ranToStop.other": "曲柄轉了 {n} 圈，在插銷處停下。",

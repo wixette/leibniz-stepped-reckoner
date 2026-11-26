@@ -39,6 +39,7 @@ export default {
   "view.inside": "内部",
   "view.case": "显示外壳和框架",
   "view.colours": "按部件着色",
+  "view.slow": "慢动作",
 
   "strip.number": "旋钮上的数",
   "strip.number.tip": "输入要在 8 个旋钮上设置的数",
@@ -87,6 +88,8 @@ export default {
   "status.carry.simultaneous": "进位方式同汉诺威的原机：所有进位杆同时动作。在传递进位的过程中新产生的进位会等待，五边形保持倾斜：旋钮设为 0 再转一圈即可完成。",
   "status.colours.on": "每类部件各用一种颜色，便于区分。把指针移到部件上可看到它的名称。",
   "status.colours.off": "部件恢复为原来的金属颜色。",
+  "status.slow.on": "慢动作：每一次转动和移动都以四分之一的速度播放，便于看清每个部件。",
+  "status.slow.off": "恢复正常速度。",
   "status.reset": "机器已清零。",
   "status.ranToStop.one": "曲柄转了 {n} 圈，在插销处停下。",
   "status.ranToStop.other": "曲柄转了 {n} 圈，在插销处停下。",

@@ -39,6 +39,7 @@ export default {
   "view.inside": "All’interno",
   "view.case": "Mostra la cassa e il telaio",
   "view.colours": "Colori per parte",
+  "view.slow": "Rallentatore",
 
   "strip.number": "Numero sulle manopole",
   "strip.number.tip": "Scrivi il numero da impostare sulle 8 manopole",
@@ -87,6 +88,8 @@ export default {
   "status.carry.simultaneous": "Riporto come nell’originale di Hannover: tutte le leve agiscono insieme. Un riporto nato mentre si trasmettono i riporti aspetta, con il pentagono inclinato: gira ancora con 0 sulle manopole per completarlo.",
   "status.colours.on": "Ogni tipo di parte nel suo colore, per distinguerle. Passa sopra una parte per vederne il nome.",
   "status.colours.off": "Le parti di nuovo nei loro metalli.",
+  "status.slow.on": "Rallentatore: ogni giro e ogni spostamento vanno a un quarto della velocità, per seguire ogni parte.",
+  "status.slow.off": "Di nuovo a velocità normale.",
   "status.reset": "Macchina azzerata.",
   "status.ranToStop.one": "La manovella ha fatto un giro e si è fermata al perno.",
   "status.ranToStop.other": "La manovella ha fatto {n} giri e si è fermata al perno.",

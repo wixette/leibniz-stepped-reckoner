@@ -39,6 +39,7 @@ export default {
   "view.inside": "À l’intérieur",
   "view.case": "Afficher le boîtier et le bâti",
   "view.colours": "Couleurs par pièce",
+  "view.slow": "Ralenti",
 
   "strip.number": "Nombre sur les boutons",
   "strip.number.tip": "Taper le nombre à régler sur les 8 boutons",
@@ -87,6 +88,8 @@ export default {
   "status.carry.simultaneous": "Retenue comme sur l’original de Hanovre : tous les leviers agissent à la fois. Une retenue née pendant la transmission des retenues attend, son pentagone basculé : tournez encore avec 0 sur les boutons pour la terminer.",
   "status.colours.on": "Chaque sorte de pièce dans sa propre couleur, pour les distinguer. Survolez une pièce pour voir son nom.",
   "status.colours.off": "Les pièces de nouveau dans leurs métaux.",
+  "status.slow.on": "Ralenti : chaque tour et chaque décalage se jouent au quart de la vitesse, pour suivre chaque pièce.",
+  "status.slow.off": "De nouveau à vitesse normale.",
   "status.reset": "Machine remise à zéro.",
   "status.ranToStop.one": "La manivelle a fait {n} tour et s’est arrêtée à la cheville.",
   "status.ranToStop.other": "La manivelle a fait {n} tours et s’est arrêtée à la cheville.",

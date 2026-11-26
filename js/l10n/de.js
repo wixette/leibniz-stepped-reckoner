@@ -39,6 +39,7 @@ export default {
   "view.inside": "Innen",
   "view.case": "Gehäuse und Gestell zeigen",
   "view.colours": "Teile farbig",
+  "view.slow": "Zeitlupe",
 
   "strip.number": "Zahl an den Knöpfen",
   "strip.number.tip": "Die Zahl eintippen, die an den 8 Knöpfen eingestellt wird",
@@ -87,6 +88,8 @@ export default {
   "status.carry.simultaneous": "Übertrag wie beim Original in Hannover: Alle Hebel arbeiten zugleich. Ein Übertrag, der beim Weitergeben entsteht, wartet mit gekipptem Fünfeck: Drehe noch einmal mit 0 an den Knöpfen, um ihn zu erledigen.",
   "status.colours.on": "Jede Art von Teil in eigener Farbe, damit man sie unterscheiden kann. Zeige auf ein Teil, um seinen Namen zu sehen.",
   "status.colours.off": "Die Teile wieder in ihren Metallen.",
+  "status.slow.on": "Zeitlupe: jede Drehung und Verschiebung läuft mit einem Viertel der Geschwindigkeit, damit man jedem Teil folgen kann.",
+  "status.slow.off": "Wieder normale Geschwindigkeit.",
   "status.reset": "Maschine gelöscht.",
   "status.ranToStop.one": "Die Kurbel drehte sich einmal und hielt am Stift an.",
   "status.ranToStop.other": "Die Kurbel drehte sich {n}-mal und hielt am Stift an.",

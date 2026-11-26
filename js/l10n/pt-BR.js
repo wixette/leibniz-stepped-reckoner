@@ -39,6 +39,7 @@ export default {
   "view.inside": "Por dentro",
   "view.case": "Mostrar a caixa e a estrutura",
   "view.colours": "Cores por peça",
+  "view.slow": "Câmera lenta",
 
   "strip.number": "Número nos botões",
   "strip.number.tip": "Digitar o número a ajustar nos 8 botões",
@@ -87,6 +88,8 @@ export default {
   "status.carry.simultaneous": "Transporte como no original de Hannover: todas as alavancas agem juntas. Um transporte que surge enquanto os transportes são passados espera, com o pentágono inclinado: gire de novo com 0 nos botões para terminá-lo.",
   "status.colours.on": "Cada tipo de peça com sua própria cor, para distingui-las. Passe o ponteiro sobre uma peça para ver o nome.",
   "status.colours.off": "As peças de novo em seus metais.",
+  "status.slow.on": "Câmera lenta: cada volta e cada deslocamento vão a um quarto da velocidade, para acompanhar cada peça.",
+  "status.slow.off": "De novo na velocidade normal.",
   "status.reset": "Máquina zerada.",
   "status.ranToStop.one": "A manivela deu uma volta e parou no pino.",
   "status.ranToStop.other": "A manivela deu {n} voltas e parou no pino.",

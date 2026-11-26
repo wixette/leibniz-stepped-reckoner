@@ -21,6 +21,7 @@ What changed in each release. Versions follow `package.json` and are tagged `vX.
 - *Show case and frame*: with the case off, the frame, the carriage's front panel and its floor go too, and the whole mechanism shows (the large gears behind the panel among it).
 - The revolution counter's pin works both ways: its menu offers the black numbers for adding and the red ones for subtracting, and a new button turns the crank back until the pin meets the stop.
 - *Colour by part*, a switch in the Views menu: every kind of part in its own colour, so that the parts inside the machine can be told apart.
+- *Slow motion*, a switch in the Views menu: every turn and shift plays at a quarter speed, so that quick moments such as a carry being stored can be followed.
 - The register's intermediate shafts are the original's square steel shafts with their long curved cuts along the edges (Klaus Badur's drawing, photos of Lehmann's replica).
 - The setting knobs are built as Lehmann drew the replica's (and as the original has them): a steel finger lever whose C handle and pointer are one part, with a pin under the pointer in a hole beside the set digit, and a window at the back of each dial, in the gap between 9 and 0, where a white digit disc under the plate shows the set digit. The dial plates lie flush in round holes of the carriage's cover.
 

@@ -39,6 +39,7 @@ export default {
   "view.inside": "내부",
   "view.case": "케이스와 틀 표시",
   "view.colours": "부품별 색",
+  "view.slow": "느린 동작",
 
   "strip.number": "손잡이에 설정한 수",
   "strip.number.tip": "8개 손잡이에 설정할 수 입력",
@@ -87,6 +88,8 @@ export default {
   "status.carry.simultaneous": "하노버의 원본과 같은 받아올림입니다. 모든 레버가 동시에 움직입니다. 받아올림을 넘기는 도중에 생긴 받아올림은 오각형이 기운 채로 기다립니다. 손잡이를 0으로 두고 한 바퀴 더 돌리면 끝납니다.",
   "status.colours.on": "부품 종류마다 다른 색으로 칠해 구별하기 쉽게 했습니다. 부품에 포인터를 올리면 이름이 보입니다.",
   "status.colours.off": "부품을 다시 원래 금속 색으로 표시합니다.",
+  "status.slow.on": "느린 동작: 모든 회전과 이동을 4분의 1 속도로 보여 주어 부품 하나하나의 움직임을 따라갈 수 있습니다.",
+  "status.slow.off": "다시 보통 속도입니다.",
   "status.reset": "기계를 지웠습니다.",
   "status.ranToStop.one": "크랭크가 {n}바퀴 돌고 핀에서 멈췄습니다.",
   "status.ranToStop.other": "크랭크가 {n}바퀴 돌고 핀에서 멈췄습니다.",

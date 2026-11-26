@@ -11,7 +11,7 @@ import { applyIntentNow, controlOf, possible, shiftDir } from "../teach/partActi
 import { APART_VIEW, INSIDE_VIEWS, presentation, replayTo, VIEWS } from "../teach/player.js";
 /** @import { Lesson, ViewName } from "../teach/player.js" */
 import { placeWord } from "../teach/partInfo.js";
-import { Animator } from "./animator.js";
+import { Animator, SLOW_SPEED } from "./animator.js";
 import { Stage } from "./stage.js";
 import { CourseUI } from "./course.js";
 import { showAbout } from "./about.js";
@@ -761,6 +761,13 @@ export class App {
     this.render();
   }
 
+  /** Play every motion at a quarter speed, or at the normal one (the Views menu's switch, U33). */
+  toggleSlow() {
+    this.animator.speed = this.animator.speed === 1 ? SLOW_SPEED : 1;
+    this.say(() => t(this.animator.speed === 1 ? "status.slow.off" : "status.slow.on"));
+    this.render();
+  }
+
   /**
    * Back to where the reader should be (⌂, or Home on the 3D view): in a lesson step, the step's
    * own view and presentation; in free play, the whole machine as it first shows, case on.
@@ -791,6 +798,7 @@ export class App {
       }));
       items.push({ label: t("view.case"), toggle: true, checked: this.stage.casing, divider: true, run: () => this.toggleCase() });
       items.push({ label: t("view.colours"), toggle: true, checked: this.stage.partColours, run: () => this.toggleColours() });
+      items.push({ label: t("view.slow"), toggle: true, checked: this.animator.speed !== 1, run: () => this.toggleSlow() });
       showMenu(viewsBtn, items);
     });
     $("resetViewBtn").addEventListener("click", () => this.resetView());

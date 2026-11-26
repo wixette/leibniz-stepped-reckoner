@@ -39,6 +39,7 @@ export default {
   "view.inside": "内部",
   "view.case": "ケースと枠を表示",
   "view.colours": "部品ごとに色分け",
+  "view.slow": "スローモーション",
 
   "strip.number": "つまみに置いた数",
   "strip.number.tip": "8 個のつまみに置く数を入力",
@@ -87,6 +88,8 @@ export default {
   "status.carry.simultaneous": "ハノーファーの実物と同じ繰り上がりです。すべてのレバーが同時に動きます。繰り上がりを送っている最中に生まれた繰り上がりは、五角形を傾けたまま待ちます。つまみを 0 にしてもう 1 回転させると完了します。",
   "status.colours.on": "部品の種類ごとに色を変えて、見分けやすくしました。部品にポインターを合わせると名前が出ます。",
   "status.colours.off": "部品を元の金属の色に戻しました。",
+  "status.slow.on": "スローモーション：回転も移動もすべて4分の1の速さで動くので、部品の動きを一つずつ追えます。",
+  "status.slow.off": "通常の速さに戻しました。",
   "status.reset": "機械をクリアしました。",
   "status.ranToStop.one": "クランクが {n} 回転してピンで止まりました。",
   "status.ranToStop.other": "クランクが {n} 回転してピンで止まりました。",
