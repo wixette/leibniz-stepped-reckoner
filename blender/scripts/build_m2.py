@@ -436,13 +436,15 @@ def build(p):
     # cranks clear the table
     bs_, bh_ = ft_["block"]
     for fx_, fy_ in feet_xy:
-        mb.prism(geom.rect(fx_ - bs_ / 2.0, fy_ - bs_ / 2.0, fx_ + bs_ / 2.0, fy_ + bs_ / 2.0), "XY", prof_[-1][1] - ph_ - bh_, prof_[-1][1] - ph_, "oak")
-    # the blocks on a wooden board (TSD (01)): reaching a little beyond them at the ends, and in
-    # front past the main crank's handle
+        mb.prism(geom.rect(fx_ - bs_ / 2.0, fy_ - bs_ / 2.0, fx_ + bs_ / 2.0, fy_ + bs_ / 2.0), "XY", prof_[-1][1] - ph_ - bh_, prof_[-1][1] - ph_, "oak_dark")
+    # the blocks on a wooden board (TSD (01)), the same margin beyond them on every side (the
+    # main crank's handle reaches over its front edge)
     bd_ = ft_["board"]
     bz1_ = prof_[-1][1] - ph_ - bh_
     xs_ = [fx_ for fx_, _ in feet_xy]
-    mb.prism(geom.rect(min(xs_) - bs_ / 2.0 - bd_["margin_x"], bd_["y"][0], max(xs_) + bs_ / 2.0 + bd_["margin_x"], bd_["y"][1]), "XY", bz1_ - bd_["thickness"], bz1_, "board")
+    ys_ = [fy_ for _, fy_ in feet_xy]
+    mg_ = bd_["margin"]
+    mb.prism(geom.rect(min(xs_) - bs_ / 2.0 - mg_, min(ys_) - bs_ / 2.0 - mg_, max(xs_) + bs_ / 2.0 + mg_, max(ys_) + bs_ / 2.0 + mg_), "XY", bz1_ - bd_["thickness"], bz1_, "oak_dark")   # dark oak: the machine stands out
     table_z = bz1_ - bd_["thickness"]
     base = static(mb.build("frame.base", col))
     # the table the feet stand on: the operability check (A2-13) compares the crank knobs with it

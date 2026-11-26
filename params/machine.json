@@ -1279,11 +1279,7 @@
       "feet": {
         "v": {
           "board": {
-            "margin_x": 20.0,
-            "y": [
-              -175.0,
-              135.0
-            ],
+            "margin": 20.0,
             "thickness": 18.0
           },
           "pad": [
@@ -1293,7 +1289,7 @@
           "inset": 14.0,
           "block": [
             60.0,
-            50.0
+            25.0
           ],
           "profile": [
             [7.0, 0.0],
@@ -1318,7 +1314,7 @@
         },
         "unit": "mm (profile: [radius, depth below the base plate])",
         "conf": "doc",
-        "src": "NL183/465 p. 25 ('Fuesse', brass, 2 x 2): a turned foot 40 high under its M6 thread: a collar 14 across, a neck 10.5, a bead 17 (14 shoulders), a neck 7 flaring into a dished base 33/36 across and 8 thick (the Commons photo 'Die Rechenmaschine von Leibniz (Nachbau) 2001 07' and TSD (13) show it). The curves between the drawn diameters by eye from the photo. One under each corner of the base plate, inset by eye. Under each foot a light wooden block (block: side, height; by eye from TSD (03), where the replica stands on four such blocks), so the cranks clear the table. A steel pad (pad: side, thickness) under the side wall at each foot: the foot's collar (14 across) is wider than the wall (10). The blocks stand on a dark-red wooden board (board: margin beyond the blocks at the ends, y extent, thickness; by eye from TSD (01)), as the replica does in its museum; the oak case is not rebuilt (the owner: its walls would hide the mechanism)."
+        "src": "NL183/465 p. 25 ('Fuesse', brass, 2 x 2): a turned foot 40 high under its M6 thread: a collar 14 across, a neck 10.5, a bead 17 (14 shoulders), a neck 7 flaring into a dished base 33/36 across and 8 thick (the Commons photo 'Die Rechenmaschine von Leibniz (Nachbau) 2001 07' and TSD (13) show it). The curves between the drawn diameters by eye from the photo. One under each corner of the base plate, inset by eye. Under each foot a wooden block (block: side, height; TSD (03): the replica stands on four such blocks), as low as lets the end crank's handle clear the board (2.8; the owner, 2026-11-27: lower blocks look steadier). A steel pad (pad: side, thickness) under the side wall at each foot: the foot's collar (14 across) is wider than the wall (10). The blocks stand on a wooden board (board: its margin beyond the blocks on every side, thickness; the main crank's handle reaches over its front edge), as the replica does in its museum; the oak case is not rebuilt (the owner: its walls would hide the mechanism)."
       },
       "magna_rota_crank": {
         "v": {
