@@ -545,9 +545,12 @@ def build(p):
     panel = static(mb.build("pm.carriage_panel", col))
     bl.parent(panel, carriage)
     mb = MeshBuilder()
-    leaf = [(66.6, 7.4), (65.8, 8.6), (tip + 1.2, 1.0), (tip, 0.0), (tip + 1.2, -0.4)]
+    # its stud stands in the gap between the plate's rim and the moulded frame (the owner: not on
+    # the frame), the leaf running down from it to the tip
+    sx_, sz_ = 60.3, 9.5
+    leaf = [(sx_ + 0.4, sz_ - 0.6), (sx_ - 0.4, sz_ + 0.6), (tip + 1.0, 1.0), (tip, 0.0), (tip + 1.0, -0.4)]
     mb.prism([(mx + u, mz + w) for u, w in leaf], "XZ", py0 + 0.2, py1 - 0.2, "steel")
-    mb.prism([(mx + 66.2 + u, mz + 8.0 + w) for u, w in geom.circle(1.3, 16)], "XZ", py0 + 0.1, pnl0 + 0.5, "brass_satin", smooth=True)
+    mb.prism([(mx + sx_ + u, mz + sz_ + w) for u, w in geom.circle(1.1, 16)], "XZ", py0 + 0.1, pnl0 + 0.5, "brass_satin", smooth=True)
     mdet = static(mb.build("pm.magna_rota_detent", col))
     bl.parent(mdet, carriage)
 
