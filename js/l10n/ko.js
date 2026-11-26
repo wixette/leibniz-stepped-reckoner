@@ -253,7 +253,7 @@ export default {
   "part.rippleStar": "리플 받아올림 별",
   "part.zweihornRipple": "리플 받아올림 레버",
   "part.settingStop": "설정 손잡이 멈춤쇠",
-  "part.base": "하부 틀과 다리",
+  "part.base": "다리와 나무 받침",
   "part.case": "참나무 케이스",
   "part.leadScrew": "이송 나사와 옆 크랭크 (캐리지를 옮김)",
   "part.registerCover": "결과부 덮개판",

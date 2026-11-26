@@ -253,7 +253,7 @@ export default {
   "part.rippleStar": "行波进位星轮",
   "part.zweihornRipple": "行波进位杆",
   "part.settingStop": "置数旋钮挡块",
-  "part.base": "下框架和支脚",
+  "part.base": "支脚与木垫块",
   "part.case": "橡木外壳",
   "part.leadScrew": "丝杠和侧曲柄（移动滑架）",
   "part.registerCover": "结果寄存器盖板",

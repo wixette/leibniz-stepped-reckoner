@@ -253,7 +253,7 @@ export default {
   "part.rippleStar": "Étoile de la retenue en cascade",
   "part.zweihornRipple": "Levier de la retenue en cascade",
   "part.settingStop": "Butée du bouton de réglage",
-  "part.base": "Bâti inférieur et pieds",
+  "part.base": "Pieds sur cales en bois",
   "part.case": "Boîtier en chêne",
   "part.leadScrew": "Vis et manivelle latérale (déplace le chariot)",
   "part.registerCover": "Plaque de couverture du totalisateur",

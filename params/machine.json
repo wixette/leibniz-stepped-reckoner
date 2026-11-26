@@ -945,24 +945,83 @@
           "side_wall_y_split": 15.0,
           "side_wall_top_z": 70.0,
           "screw_start_dx": -14.5,
-          "lower_beam_width": 16.0,
-          "middle_beam_y": [
-            -8.0,
-            8.0
-          ],
-          "back_beam_y": [
-            96.0,
-            112.0
-          ],
-          "front_beam": {
-            "y": [
-              -96.0,
-              -91.5
-            ],
-            "z": [
-              8.0,
-              24.0
+          "lower_frame": {
+            "a": {
+              "y": [
+                -97.0,
+                -89.5
+              ],
+              "z": [
+                0.0,
+                19.0
+              ]
+            },
+            "b": {
+              "y": [
+                57.5,
+                65.0
+              ],
+              "z": [
+                0.0,
+                13.7
+              ]
+            },
+            "c": {
+              "y": [
+                90.0,
+                96.0
+              ],
+              "z": [
+                0.0,
+                20.0
+              ]
+            },
+            "detent_hole_radius": 2.2,
+            "detent_hole_depth": 2.5,
+            "side_wall_back_y": 100.0,
+            "side_wall_back_z": 30.0,
+            "feet_y": [
+              -90.0,
+              86.0
             ]
+          },
+          "carriage_runners": {
+            "front": {
+              "y": [
+                -101.0,
+                -89.0
+              ],
+              "z": [
+                19.3,
+                22.3
+              ]
+            },
+            "rear": {
+              "y": [
+                58.0,
+                61.0
+              ],
+              "z": [
+                14.0,
+                22.0
+              ]
+            },
+            "right_x_dx": 33.5,
+            "shoe_y": [
+              -89.0,
+              -87.5
+            ],
+            "shoe_z": [
+              12.0,
+              19.3
+            ],
+            "catch_dx": 20.0,
+            "knob_radius": 5.0,
+            "knob_y": [
+              -100.6,
+              -97.6
+            ],
+            "knob_z": 12.0
           },
           "rear_beam_z": [
             58.0,
@@ -975,7 +1034,7 @@
         },
         "unit": "mm",
         "conf": "design",
-        "src": "base plate = the lower frame (frame_x), 629 long. The side walls are low (z <= side_wall_low_z) in front of side_wall_y_split, where the carriage's counter section passes over them (its underside is at z 30), and rise to side_wall_top_z behind it, under the register cover's skirt; the replica's walls likewise have a low front part and a tall rear block (NL183/465 p. 95). The lead screw runs in a notch in each wall's low part (the replica's screw passes through the walls). It starts screw_start_dx left of the base, outside the case's left wall, where the end crank is (photos). The end crank's arm sits 0.5 mm outside the case's left wall (screw_start_dx follows the 755 mm case). Since 0.6.0 the base starts at y -104, behind the carriage's large gears, which hang below it. side_wall_low_z lowered from 26 to 24.5 in 0.7.0, under the carriage frame's bearing bar (z 25.375). 2026-11-26 (owner; TSD (02), TSD (13) of the replica, the photo of the original): the frame as beams: the lower frame of two side beams (under the side walls, the feet under their ends), a middle and a back beam (lower_beam_width wide, 4 high; the carriage slides on the middle one); a front beam just in front of the lead screw between the side walls, over the carriage's floor (front_beam: 0.6 clear of the counter's star wheel K, 0.5 of the setting racks, 0.7 of the floor); the rear wall slimmed to a beam carrying the result and intermediate shafts' rear bearings (rear_beam_z), with a post at each end up to the window plate."
+        "src": "base plate = the lower frame (frame_x), 629 long. The side walls are low (z <= side_wall_low_z) in front of side_wall_y_split, where the carriage's counter section passes over them (its underside is at z 30), and rise to side_wall_top_z behind it, under the register cover's skirt; the replica's walls likewise have a low front part and a tall rear block (NL183/465 p. 95). The lead screw runs in a notch in each wall's low part (the replica's screw passes through the walls). It starts screw_start_dx left of the base, outside the case's left wall, where the end crank is (photos). The end crank's arm sits 0.5 mm outside the case's left wall (screw_start_dx follows the 755 mm case). Since 0.6.0 the base starts at y -104, behind the carriage's large gears, which hang below it. side_wall_low_z lowered from 26 to 24.5 in 0.7.0, under the carriage frame's bearing bar (z 25.375). 2026-11-26 (owner; TSD (02), TSD (13) of the replica, the photo of the original): the frame as beams: the lower frame of two side beams (under the side walls, the feet under their ends), a middle and a back beam (lower_beam_width wide, 4 high; the carriage slides on the middle one); a front beam just in front of the lead screw between the side walls, over the carriage's floor (front_beam: 0.6 clear of the counter's star wheel K, 0.5 of the setting racks, 0.7 of the floor); the rear wall slimmed to a beam carrying the result and intermediate shafts' rear bearings (rear_beam_z), with a post at each end up to the window plate. 2026-11-26, after Lehmann's sheets (NL183/465 p. 94 'Rahmen Unterteil', 104, 108; p. 102 the slide's angles; p. 105, 107, 113 the carriage's frame bars) and TSD (02), (10), (13): the lower frame is three upright steel beams between the side walls, no plate: a at the front (here just in front of the lead screw; 8 detent holes 36.5 apart in its top, 'Rastbohrungen 8x'), b right behind the carriage, c under the pentagons; the side walls carry the feet. The carriage rides on a and b: its front bar (the drive row's bearing bar) has a foot over a with a guide shoe behind a at each end and the detent catch with its knob at the left; its rear bearings stand on a bar over b (carriage_runners). Our beams are lower than Lehmann's 25 (a 19, b 13.7) to pass under the drums, and a stands where our carriage leaves room (lower_frame)."
       },
       "casing": {
         "v": {

@@ -9,7 +9,7 @@ Register (fixed), digit k at x = -36.5 k:
                      the Einzahn, turning the next ten-wheel), detent wheel, five-horn s (struck by
                      the Zweihorn), pentagon. The carry parts are the original's (BADUR2026, lib/carry.py)
   pi.window          16 reading windows (static)
-  frame.static       brass frame: side walls 610 apart, rear wall, front bar, brackets (static)
+  frame.static       frame: brass side walls 610 apart; steel beams a, b, c below, register front bar and rear beam above (static)
   frame.lead_screw   36.5 mm lead screw + end crank outside the case (rotate about +X)
 Carriage pm.carriage (translate along +X), carriage digit j at x = -36.5 j (offset 0):
   pm.carriage_panel  front panel (static; hideable for a cut-away view)
@@ -25,7 +25,7 @@ Carriage pm.carriage (translate along +X), carriage digit j at x = -36.5 j (offs
   pm.counter_pin (rotate about +Z), pm.counter_pin_park (static),
   pm.main_crank (rotate about +Y, 360 deg per turn; sits in the middle of the Magna Rota)
 Casing (all static; the page hides them together to show the mechanism):
-  frame.base             lower frame of beams on four turned brass feet and wooden blocks (hidden with the case)
+  frame.base             four turned brass feet under the side walls, on wooden blocks (hidden with the case)
   pm.carriage_cover      brass top plates and end walls of the carriage, counter dial plate (moves with it)
 """
 
@@ -361,22 +361,34 @@ def build(p):
     # the rear beam (the rear wall slimmed, the owner 2026-11-26): it carries the result and
     # intermediate shafts' rear bearings; a post at each end holds the window plate
     rb0, rb1 = fr["rear_beam_z"]
-    mb.prism(geom.rect(in_x0, rb0, in_x1, rb1), "XZ", wall0, wall1, "brass_satin")
+    mb.prism(geom.rect(in_x0, rb0, in_x1, rb1), "XZ", wall0, wall1, "steel")
     for px0 in (in_x0, in_x1 - 6.0):
         mb.prism(geom.rect(px0, rb1, px0 + 6.0, 85.0), "XZ", wall0, wall1, "brass_satin")
-    # the front beam, just in front of the lead screw between the side walls, over the carriage's
-    # floor (TSD (13): the replica's frame has one)
-    fbm = fr["front_beam"]
-    mb.prism(geom.rect(in_x0, fbm["y"][0], in_x1, fbm["y"][1]), "XY", fbm["z"][0], fbm["z"][1], "brass_satin")
+    # the lower frame (NL183/465 p. 94 'Rahmen Unterteil'; TSD (02), (10)): three upright steel
+    # beams between the side walls, no plate. The carriage rides on a and b. a, just in front of
+    # the lead screw, has the 8 detent holes in its top, one under the carriage's catch at each
+    # place (p. 108 'Rastbohrungen 8x', 36.5 apart); b stands right behind the carriage; c under
+    # the pentagons
+    lf = fr["lower_frame"]
+    cr_ = fr["carriage_runners"]
+    (ay0, ay1), (az0, az1) = lf["a"]["y"], lf["a"]["z"]
+    hd_ = lf["detent_hole_depth"]
+    catch_x = X[C - 1] - dr["bearing_bar_x_margins"][0] + cr_["catch_dx"]
+    holes_a = [[(u + catch_x - p.v("layout.digit_pitch") * k, w + (ay0 + ay1) / 2.0) for u, w in geom.circle(lf["detent_hole_radius"], 16)] for k in range(C)]
+    mb.prism(geom.rect(in_x0, ay0, in_x1, ay1), "XY", az0, az1 - hd_, "steel")
+    mb.prism_holes(geom.rect(in_x0, ay0, in_x1, ay1), holes_a, "XY", az1 - hd_, az1, "steel")
+    for key in ("b", "c"):
+        mb.prism(geom.rect(in_x0, lf[key]["y"][0], in_x1, lf[key]["y"][1]), "XY", lf[key]["z"][0], lf[key]["z"][1], "steel")
     fb0, fb1 = fr["register_front_bar_y"]
-    mb.prism(geom.rect(in_x0, zs - 4.5, in_x1, zs + 4.5), "XZ", fb0, fb1, "brass_satin")
+    mb.prism(geom.rect(in_x0, zs - 4.5, in_x1, zs + 4.5), "XZ", fb0, fb1, "steel")
     for bx in (in_x0, in_x1 - 3.0):
         mb.prism(geom.rect(bx, fb1, bx + 3.0, wall0), "XY", zs - 4.5, zs + 4.5, "brass_satin")
     ny0, ny1, nz = ls["y"] - ls["radius"] - 2.5, ls["y"] + ls["radius"] + 2.5, ls["z"] - ls["radius"] - 2.5
     ysp, zlow = fr["side_wall_y_split"], fr["side_wall_low_z"]
     for wx0 in (in_x0 - sw, in_x1):
-        for r0 in (geom.rect(fr["y"][0], 4.0, ysp, nz), geom.rect(fr["y"][0], nz, ny0, zlow),
-                   geom.rect(ny1, nz, ysp, zlow), geom.rect(ysp, 4.0, wall0, fr["side_wall_top_z"])):
+        for r0 in (geom.rect(fr["y"][0], 0.0, ysp, nz), geom.rect(fr["y"][0], nz, ny0, zlow),
+                   geom.rect(ny1, nz, ysp, zlow), geom.rect(ysp, 0.0, wall0, fr["side_wall_top_z"]),
+                   geom.rect(wall0, 0.0, fr["lower_frame"]["side_wall_back_y"], fr["lower_frame"]["side_wall_back_z"])):
             mb.prism(r0, "YZ", wx0, wx0 + sw, "brass_satin")
     # the detent springs of the intermediate shafts (assembly drawing, section N-O: a leaf with a
     # V tip over each detent wheel, from a stud on the register frame); drawn just clear of the
@@ -400,22 +412,14 @@ def build(p):
     springs = static(mb.build("frame.springs", col))
     bl.parent(springs, root)
 
-    # the lower frame under the mechanism (the replica's), standing on four turned brass feet at its corners (NL183/465 p. 25 "Fuesse", photos of the
+    # the feet under the frame's side walls: four turned brass feet at its corners (NL183/465 p. 25 "Fuesse", photos of the
     # replica). A separate node, hidden with the case and frame.
     cs = p.v(M2 + "casing")
     ft_ = p.v(M2 + "feet")
     mb = MeshBuilder()
-    # the lower frame as beams (TSD (02)): a side beam under each side wall, a middle and a back
-    # beam between them; the carriage slides on the middle beam
-    bw_ = fr["lower_beam_width"]
-    sbx = [(in_x0 - sw - 1.0, in_x0 - sw - 1.0 + bw_), (in_x1 + sw + 1.0 - bw_, in_x1 + sw + 1.0)]
-    for x0_, x1_ in sbx:
-        mb.prism(geom.rect(x0_, fr["y"][0], x1_, fr["y"][1]), "XY", 0.0, 4.0, "brass_satin")
-    for y0_, y1_ in (fr["middle_beam_y"], fr["back_beam_y"]):
-        mb.prism(geom.rect(sbx[0][1], y0_, sbx[1][0], y1_), "XY", 0.0, 4.0, "brass_satin")
-    ins = ft_["inset"]
-    prof_ = [(r, -z) for r, z in ft_["profile"]]          # from the top (z 0, under the beams) down
-    feet_xy = [((x0_ + x1_) / 2.0, fy_) for x0_, x1_ in sbx for fy_ in (fr["y"][0] + ins, fr["y"][1] - ins)]
+    # two feet under each side wall (the feet sheet: 'je 2x'), the walls standing on them
+    prof_ = [(r, -z) for r, z in ft_["profile"]]          # from the top (z 0, under the walls) down
+    feet_xy = [(wx_, fy_) for wx_ in (in_x0 - sw / 2.0, in_x1 + sw / 2.0) for fy_ in fr["lower_frame"]["feet_y"]]
     for fx_, fy_ in feet_xy:
         lathe(mb, [(0.0, prof_[-1][1])] + list(reversed(prof_)) + [(0.0, 0.0)], "brass_polished", (fx_, fy_, 0.0), 20)
     # a light wooden block under each foot (TSD (03): the replica stands on four), so that the
@@ -507,7 +511,7 @@ def build(p):
     xt, zt = X[0] + cs_["top_dx"], cs_["top_z"]
     xs, xr, zn = X[0] + cs_["step_dx"], X[0] + cs_["end_dx"], cs_["step_z"]
     mb = MeshBuilder()
-    mb.prism(geom.rect(cx0, fl["y"][0], cx1, fl["y"][1]), "XY", fl["z"][0], fl["z"][1], "brass_satin")
+    # (no floor: the carriage rides on the frame's beams a and b, NL183/465 p. 94, 102, 105)
     # the carriage frame's front wall (Badur's sheet 9, 333 long): the bearing bar of the drive
     # row's 17 shafts and the crank's, standing on a post at its left end over the floor (its
     # right end passes over the frame's right side wall)
@@ -515,7 +519,25 @@ def build(p):
     bz0, bz1 = dr["bearing_bar_z"]
     bx0, bx1 = X[C - 1] - dr["bearing_bar_x_margins"][0], X[0] + dr["bearing_bar_x_margins"][1]
     mb.prism(geom.rect(bx0, bz0, bx1, bz1), "XZ", by0, by1, "brass_satin")
-    mb.prism(geom.rect(bx0, fl["z"][1], bx0 + 4.0, bz0), "XZ", by0, by1, "brass_satin")
+    # its foot riding on the frame's beam a, with a guide shoe behind the beam at each end and the
+    # detent catch at the left: a knob in front of the beam (TSD (10)); within the side walls
+    # (its right end stops before the right wall, which the bar itself passes over)
+    cr_ = fr["carriage_runners"]
+    lfa = fr["lower_frame"]["a"]
+    (fy0_, fy1_), (fz0_, fz1_) = cr_["front"]["y"], cr_["front"]["z"]
+    rx_ = X[0] + cr_["right_x_dx"]
+    mb.prism(geom.rect(bx0, fz0_, rx_, bz0), "XZ", by0, by1, "brass_satin")
+    mb.prism(geom.rect(bx0, fy0_, rx_, fy1_), "XY", fz0_, fz1_, "brass_satin")
+    (sy0_, sy1_), (sz0_, sz1_) = cr_["shoe_y"], cr_["shoe_z"]
+    for sx_ in (bx0 + 2.0, rx_ - 10.0):
+        mb.prism(geom.rect(sx_, sy0_, sx_ + 8.0, sy1_), "XY", sz0_, fz1_, "brass_satin")
+    cx_ = bx0 + cr_["catch_dx"]
+    kz_, kr_ = cr_["knob_z"], cr_["knob_radius"]
+    mb.prism(geom.rect(cx_ - 2.0, -100.0, cx_ + 2.0, -98.0), "XY", kz_, fz0_ + 0.1, "brass_satin")
+    mb.prism([(u + cx_, w + kz_) for u, w in geom.circle(kr_, 24)], "XZ", cr_["knob_y"][0], cr_["knob_y"][1], "brass_polished", smooth=True)
+    # its rear bearings stand on a bar riding on the frame's beam b
+    (ry0_, ry1_), (rz0_, rz1_) = cr_["rear"]["y"], cr_["rear"]["z"]
+    mb.prism(geom.rect(cx0, ry0_, cx1, ry1_), "XY", rz0_, rz1_, "brass_satin")
     # nut around the lead screw (four bars leave a square hole), between the units drum's and
     # the tens drum's setting heads
     nx0, nx1, ny, nz, hole = X[0] - 30.0, X[0] - 6.0, ls["y"], ls["z"], ls["radius"] + 2.0
@@ -524,7 +546,8 @@ def build(p):
                geom.rect(ny - hole - 4, nz - hole, ny - hole, nz + hole),
                geom.rect(ny + hole, nz - hole, ny + hole + 4, nz + hole)):
         mb.prism(r0, "YZ", nx0, nx1, "brass_satin")
-    mb.prism(geom.rect(nx0, ny - hole - 4, nx1, ny + hole + 4), "XY", fl["z"][1], nz - hole - 4, "brass_satin")
+    # (the nut hangs from the foot over beam a)
+    mb.prism(geom.rect(nx0, fy1_ - 0.5, nx1, ny - hole - 4 + 0.5), "XY", fz0_, fz1_, "brass_satin")
     x_pl = p.v(G + "setting.rack_pitch_line_x")
     pm_ = p.v(G + "setting.pinion_module")
     pin_g = geom.GearSpec(p.v(G + "setting.pinion_teeth"), pm_)
@@ -533,7 +556,7 @@ def build(p):
     for j in range(C):
         x = X[j]
         rb0, rb1 = p.v(M2 + "carriage_rear")["bearing_y"]
-        mb.prism(geom.rect(x - 4, rb0, x + 4, rb1), "XY", fl["z"][1], zd, "brass_satin")
+        mb.prism(geom.rect(x - 4, rb0, x + 4, rb1), "XY", fr["carriage_runners"]["rear"]["z"][1], zd, "brass_satin")
         mb.prism(geom.circle(5, 24), "XZ", rb0, rb1, "brass_satin", smooth=True, offset=(x, 0, zd))
     carriage = mb.build("pm.carriage", col)
     bl.set_motion(carriage, "translate", (1, 0, 0), "Carriage (pars mobilis)", "Schlitten (pars mobilis)", unit="mm")
@@ -1211,7 +1234,7 @@ def build(p):
     # =========================================================== teaching extras (M3)
     labels = {
         "frame.static": ("Frame: side walls, rear wall and front bar", "Gestell: Seitenwände, Rückwand und Vorderleiste"),
-        "frame.base": ("Lower frame and feet", "Unterrahmen und Füße"),
+        "frame.base": ("Feet on wooden blocks", "Füße auf Holzklötzen"),
         "pi.window": ("Reading windows of the result register", "Ablesefenster des Resultatwerks"),
         "pm.carriage_panel": ("Front panel of the carriage", "Vorderwand des Schlittens"),
         "pm.carriage_cover": ("Cover plate of the carriage", "Deckplatte des Schlittens"),
