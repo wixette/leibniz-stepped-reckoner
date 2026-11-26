@@ -4,6 +4,7 @@
 // the name (A3-10). Names come from the message files (js/l10n), in every language (A3-1).
 // Pure logic: the page renders it, the tests check it.
 
+/** @import * as THREE from "three" */
 import { gltfName } from "../scene/rig.js";
 import { locale, t, tn } from "../l10n/l10n.js";
 /** @import { Locale } from "../l10n/l10n.js" */
@@ -64,8 +65,69 @@ const SINGLE = /** @type {const} */ ([
   ["pm.magna_rota_detent", "part.magnaDetent"],
 ]);
 
+/** The named parts within a part's node (the build's zones, glTF extras), by message key. */
+export const ZONE_KEYS = /** @type {const} */ ([
+  "part.counterStop",
+  "part.pentagon",
+  "part.fiveHornP",
+  "part.detentWheel",
+  "part.einzahn",
+  "part.tenWheel",
+  "part.receivingGear",
+  "part.fingerLever",
+  "part.digitDisc",
+  "part.settingPinion",
+  "part.drumGear",
+  "part.longGear",
+  "part.bearingBar",
+  "part.leadNut",
+  "part.detentCatch",
+  "part.slideShoe",
+  "part.rearBearings",
+  "part.beamFront",
+  "part.beamMiddle",
+  "part.beamBack",
+  "part.registerBar",
+  "part.rearBeam",
+  "part.registerFrameBar",
+]);
+
+/**
+ * The message key of the named part of a node at a world point (the first of its zones that
+ * holds the point), or null: one node can hold several parts that move together, such as a
+ * carry store's shaft, five-horn, detent wheel and pentagon.
+ * @param {THREE.Object3D} node
+ * @param {THREE.Vector3} point world
+ * @returns {string | null}
+ */
+export function zoneKey(node, point) {
+  const ex = /** @type {{ zone_keys?: string; zone_boxes?: number[] }} */ (node.userData);
+  if (!ex.zone_keys || !ex.zone_boxes) return null;
+  const p = node.worldToLocal(point.clone());
+  const keys = ex.zone_keys.split(",");
+  const b = ex.zone_boxes;
+  for (let i = 0; i < keys.length; i++) {
+    const o = i * 6;
+    if (p.x >= b[o] && p.y >= b[o + 1] && p.z >= b[o + 2] && p.x <= b[o + 3] && p.y <= b[o + 4] && p.z <= b[o + 5]) return keys[i];
+  }
+  return null;
+}
+
+/**
+ * A part's label renamed for the named part at a point: its place, if any, kept.
+ * @param {string} name the part's label name ("Carry store · tens")
+ * @param {string} key the named part's message key
+ * @param {Locale} [loc]
+ * @returns {string}
+ */
+export function zoneName(name, key, loc = locale()) {
+  const at = name.indexOf(" · ");
+  return t(key, {}, loc) + (at >= 0 ? name.slice(at) : "");
+}
+
 /** Every message key a part name can use (A3-1). */
 export const PART_KEYS = [
+  ...ZONE_KEYS,
   ...PLACED.map(([, k]) => k),
   ...SINGLE.map(([, k]) => k),
   "part.wheel",

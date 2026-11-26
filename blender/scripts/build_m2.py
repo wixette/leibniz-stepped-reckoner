@@ -219,8 +219,10 @@ def build(p):
         x = X[k]
         mb = MeshBuilder()
         mb.prism(geom.circle(1.5, 16), "XZ", dy0 - rim_t - 0.5, wall0 + 1.5, "steel", smooth=True)   # the disc at its front end
+        z0_ = len(mb.verts)
         mb.prism(geom.gear_outline(rg, 18.0), "XZ", y_gear - g_th / 2, y_gear + g_th / 2, "brass_polished")
         mb.prism(geom.circle(3.0, 24), "XZ", y_gear - g_th / 2 - 2, y_gear + g_th / 2 + 2, "brass_satin", smooth=True)
+        zones_ = [bl.zone(mb, z0_, "part.receivingGear")]
         # the result disc, a dish (BADUR2026 Pos. 32): the rim ring (digits on its outer face),
         # open to the front round the hub, a thin face plate at its back
         dish = dl["result_dish"]
@@ -248,12 +250,17 @@ def build(p):
         ea, eb = pair[k % 2]
         # mirrored about the line to its store: the solve (lib/carry_solve.py) turns the parts the
         # other way round from the model (m2Pose.js), which by symmetry gives the same contacts
+        z0_ = len(mb.verts)
         mb.prism(carry.einzahn(p, 360.0 - cg["einzahn"]["tooth_local"]), "XZ", ea - ov, eb + ov, "brass_polished")
+        zones_.insert(0, bl.zone(mb, z0_, "part.einzahn"))
         if k >= 1:
             ta, tb = pair[(k - 1) % 2]
+            z0_ = len(mb.verts)
             mb.prism(carry.ten_wheel(p, cg["ten_wheel"]["first_tooth"]), "XZ", ta - ov, tb + ov, "brass_polished")
             mb.prism(geom.circle(3.0, 24), "XZ", tb + ov, tb + ov + 1.0, "brass_satin", smooth=True)
+            zones_.insert(1, bl.zone(mb, z0_, "part.tenWheel"))
         wheel = mb.build(f"pi.sum_wheel.{k}", col, (x, 0, zs))
+        bl.set_zones(wheel, zones_)   # the hover's names for its parts (the disc is the wheel)
         bl.set_anchors(wheel, "glyph_anchors", glyphs)
         bl.set_anchors(wheel, "gear_center", [(0.0, y_gear, 0.0)])
         bl.set_motion(wheel, "rotate", (0, 1, 0), f"Result wheel {k}", f"Zählrad {k}")
@@ -301,13 +308,20 @@ def build(p):
             mb.add_mesh_data(verts, faces, bl.frame_matrix((0, 0, 0), (1, 0, 0), (0, 1, 0)), "steel")
         qa, qb = pair[k % 2]
         hub = cg["five_horn"]["hub_radius"]
+        z0_ = len(mb.verts)
         mb.prism(carry.five_horn(p, cg["p_phase"]), "XZ", qa, qb, "brass_polished")
         mb.prism(geom.circle(hub, 32), "XZ", qa - 0.8, qb + 1.0, "brass_satin", smooth=True)
+        zones_ = [bl.zone(mb, z0_, "part.fiveHornP")]
         da, db = cp["detent"]
+        z0_ = len(mb.verts)
         mb.prism(carry.detent_wheel(p, 90.0), "XZ", da, db, "brass_satin")
+        zones_.append(bl.zone(mb, z0_, "part.detentWheel"))
         sa, sb = cp["s"]
+        z0_ = len(mb.verts)
         mb.prism(geom.regular_polygon(pr, 5, 54.0), "XZ", pa, pb, "steel_pentagon")
+        zones_.insert(0, bl.zone(mb, z0_, "part.pentagon"))
         store = mb.build(f"pi.carry_store.{k}", col, (fx, 0, fz))
+        bl.set_zones(store, zones_)
         bl.set_anchors(store, "pentagon_corners", [(u, pb, w) for u, w in geom.regular_polygon(pr, 5, 54.0)])
         bl.set_motion(store, "rotate", (0, 1, 0), f"Carry store {k}", f"Übertragsspeicher {k}")
         bl.parent(store, root)
@@ -369,7 +383,9 @@ def build(p):
     # the rear beam (the rear wall slimmed, the owner 2026-11-26): it carries the result and
     # intermediate shafts' rear bearings
     rb0, rb1 = fr["rear_beam_z"]
+    z0_ = len(mb.verts)
     mb.prism(geom.rect(in_x0, rb0, in_x1, rb1), "XZ", wall0, wall1, "steel")
+    fzones = [bl.zone(mb, z0_, "part.rearBeam")]
     # the lower frame (NL183/465 p. 94 'Rahmen Unterteil'; TSD (02), (10)): three upright steel
     # beams between the side walls, no plate. The carriage rides on a and b. a, just in front of
     # the lead screw, has the 8 detent holes in its top, one under the carriage's catch at each
@@ -381,12 +397,18 @@ def build(p):
     hd_ = lf["detent_hole_depth"]
     catch_x = X[C - 1] - dr["bearing_bar_x_margins"][0] + cr_["catch_dx"]
     holes_a = [[(u + catch_x - p.v("layout.digit_pitch") * k, w + (ay0 + ay1) / 2.0) for u, w in geom.circle(lf["detent_hole_radius"], 16)] for k in range(C)]
+    z0_ = len(mb.verts)
     mb.prism(geom.rect(in_x0, ay0, in_x1, ay1), "XY", az0, az1 - hd_, "steel")
     mb.prism_holes(geom.rect(in_x0, ay0, in_x1, ay1), holes_a, "XY", az1 - hd_, az1, "steel")
-    for key in ("b", "c"):
+    fzones.append(bl.zone(mb, z0_, "part.beamFront"))
+    for key, zkey in (("b", "part.beamMiddle"), ("c", "part.beamBack")):
+        z0_ = len(mb.verts)
         mb.prism(geom.rect(in_x0, lf[key]["y"][0], in_x1, lf[key]["y"][1]), "XY", lf[key]["z"][0], lf[key]["z"][1], "steel")
+        fzones.append(bl.zone(mb, z0_, zkey))
     fb0, fb1 = fr["register_front_bar_y"]
+    z0_ = len(mb.verts)
     mb.prism(geom.rect(in_x0, zs - 4.5, in_x1, zs + 4.5), "XZ", fb0, fb1, "steel")
+    fzones.append(bl.zone(mb, z0_, "part.registerBar"))
     for bx in (in_x0, in_x1 - 3.0):
         mb.prism(geom.rect(bx, fb1, bx + 3.0, wall0), "XY", zs - 4.5, zs + 4.5, "brass_satin")
     ny0, ny1, nz = ls["y"] - ls["radius"] - 2.5, ls["y"] + ls["radius"] + 2.5, ls["z"] - ls["radius"] - 2.5
@@ -406,8 +428,11 @@ def build(p):
     fb = cp["frame_bar"]
     # the register frame's bar (BADUR2026 Zaehlwerkrahmen): the shafts pass through it, the
     # springs' studs stand in it
+    z0_ = len(mb.verts)
     mb.prism(geom.rect(in_x0, fb["z"][0], in_x1, fb["z"][1]), "XZ", fb["y"][0], fb["y"][1], "brass_satin")
+    fzones.append(bl.zone(mb, z0_, "part.registerFrameBar"))
     frame = static(mb.build("frame.static", col))
+    bl.set_zones(frame, fzones)   # the side walls are the frame
     bl.parent(frame, root)
     # the springs on their studs: working parts, a node apart from the frame (the page hides the
     # frame with the case and leaves them)
@@ -536,6 +561,7 @@ def build(p):
     by0, by1 = dr["bearing_bar_y"]
     bz0, bz1 = dr["bearing_bar_z"]
     bx0, bx1 = X[C - 1] - dr["bearing_bar_x_margins"][0], X[0] + dr["bearing_bar_x_margins"][1]
+    czones, z_bar = [], len(mb.verts)       # the hover's names for the carriage's own parts
     mb.prism(geom.rect(bx0, bz0, bx1, bz1), "XZ", by0, by1, "brass_satin")
     # its foot riding on the frame's beam a, with a guide shoe behind the beam at each end and the
     # detent catch at the left: a knob in front of the beam (TSD (10)); within the side walls
@@ -546,31 +572,41 @@ def build(p):
     rx_ = X[0] + cr_["right_x_dx"]
     mb.prism(geom.rect(bx0, fz0_, rx_, bz0), "XZ", by0, by1, "brass_satin")
     mb.prism(geom.rect(bx0, fy0_, rx_, fy1_), "XY", fz0_, fz1_, "brass_satin")
+    bar_zone = bl.zone(mb, z_bar, "part.bearingBar")
     (sy0_, sy1_), (sz0_, sz1_) = cr_["shoe_y"], cr_["shoe_z"]
     # the shoes: pads resting on the beam (the foot itself stands 1 mm clear), lips behind it
     pz_ = lfa["z"][1] + cr_["pad_gap"]
     for sx_ in (bx0 + 2.0, rx_ - 10.0):
+        z0_ = len(mb.verts)
         mb.prism(geom.rect(sx_, sy0_, sx_ + 8.0, sy1_), "XY", sz0_, fz1_, "brass_satin")
         mb.prism(geom.rect(sx_, lfa["y"][0] - 1.5, sx_ + 8.0, sy0_ + 0.01), "XY", pz_, fz0_ + 0.01, "brass_satin")
         mb.prism(geom.rect(sx_, lfa["y"][0] - 1.5, sx_ + 8.0, lfa["y"][0] - 0.3), "XY", sz0_, pz_ + 0.01, "brass_satin")   # a lip in front of the beam too
+        czones.append(bl.zone(mb, z0_, "part.slideShoe"))
     cx_ = bx0 + cr_["catch_dx"]
     kz_, kr_ = cr_["knob_z"], cr_["knob_radius"]
+    z0_ = len(mb.verts)
     mb.prism(geom.rect(cx_ - 2.0, -100.0, cx_ + 2.0, -98.0), "XY", kz_, fz0_ + 0.1, "brass_satin")
     mb.prism([(u + cx_, w + kz_) for u, w in geom.circle(kr_, 24)], "XZ", cr_["knob_y"][0], cr_["knob_y"][1], "brass_polished", smooth=True)
+    czones.append(bl.zone(mb, z0_, "part.detentCatch"))
     # its rear bearings stand on a bar riding on the frame's beam b
     (ry0_, ry1_), (rz0_, rz1_) = cr_["rear"]["y"], cr_["rear"]["z"]
+    z0_ = len(mb.verts)
     mb.prism(geom.rect(cx0, ry0_, cx1, ry1_), "XY", rz0_, rz1_, "brass_satin")
+    rear_zone = bl.zone(mb, z0_, "part.rearBearings")
     # its two shoes on beam b, like the front ones: a pad on the beam, a lip behind it
     lfb = fr["lower_frame"]["b"]
     pzb = lfb["z"][1] + cr_["pad_gap"]
     ly0_, ly1_ = cr_["rear_shoe_lip_y"]
     for sx_ in (cx0 + 2.0, cx1 - 10.0):
+        z0_ = len(mb.verts)
         mb.prism(geom.rect(sx_, lfb["y"][0] - 1.5, sx_ + 8.0, ly1_), "XY", pzb, rz0_ + 0.01, "brass_satin")
         mb.prism(geom.rect(sx_, lfb["y"][0] - 1.5, sx_ + 8.0, lfb["y"][0] - 0.3), "XY", lfb["z"][1] - 6.0, pzb + 0.01, "brass_satin")   # and in front of it
         mb.prism(geom.rect(sx_, ly0_, sx_ + 8.0, ly1_), "XY", lfb["z"][1] - 6.0, pzb + 0.01, "brass_satin")
+        czones.append(bl.zone(mb, z0_, "part.slideShoe"))
     # nut around the lead screw (four bars leave a square hole), between the units drum's and
     # the tens drum's setting heads
     nx0, nx1, ny, nz, hole = X[0] - 30.0, X[0] - 6.0, ls["y"], ls["z"], ls["radius"] + 2.0
+    z_nut = len(mb.verts)
     for r0 in (geom.rect(ny - hole - 4, nz - hole - 4, ny + hole + 4, nz - hole),
                geom.rect(ny - hole - 4, nz + hole, ny + hole + 4, nz + hole + 4),
                geom.rect(ny - hole - 4, nz - hole, ny - hole, nz + hole),
@@ -578,6 +614,7 @@ def build(p):
         mb.prism(r0, "YZ", nx0, nx1, "brass_satin")
     # (the nut hangs from the foot over beam a)
     mb.prism(geom.rect(nx0, fy1_ - 0.5, nx1, ny - hole - 4 + 0.5), "XY", fz0_, fz1_, "brass_satin")
+    czones.append(bl.zone(mb, z_nut, "part.leadNut"))
     x_pl = p.v(G + "setting.rack_pitch_line_x")
     pm_ = p.v(G + "setting.pinion_module")
     pin_g = geom.GearSpec(p.v(G + "setting.pinion_teeth"), pm_)
@@ -586,9 +623,12 @@ def build(p):
     for j in range(C):
         x = X[j]
         rb0, rb1 = p.v(M2 + "carriage_rear")["bearing_y"]
+        z0_ = len(mb.verts)
         mb.prism(geom.rect(x - 4, rb0, x + 4, rb1), "XY", fr["carriage_runners"]["rear"]["z"][1], zd, "brass_satin")
         mb.prism(geom.circle(5, 24), "XZ", rb0, rb1, "brass_satin", smooth=True, offset=(x, 0, zd))
+        czones.append(bl.zone(mb, z0_, "part.rearBearings"))
     carriage = mb.build("pm.carriage", col)
+    bl.set_zones(carriage, czones + [rear_zone, bar_zone])
     bl.set_motion(carriage, "translate", (1, 0, 0), "Carriage (pars mobilis)", "Schlitten (pars mobilis)", unit="mm")
     bl.parent(carriage, root)
 
@@ -703,8 +743,11 @@ def build(p):
         mb.prism(geom.circle(boss["diameter"] / 2.0, 40), "XZ", L - 0.01, L + boss["length"], "brass_polished", smooth=True)
         # the sleeve forward to the drum's gear in the drive row (it ends inside the flange)
         mb.prism(geom.circle(sleeve_r, 32), "XZ", g_lo + dgw - 0.5, -3.5, "brass_satin", smooth=True)
+        z0_ = len(mb.verts)
         mb.prism(geom.gear_outline(dg, drum_first[j]), "XZ", g_lo, g_lo + dgw, "steel_dark")
+        dzone = bl.zone(mb, z0_, "part.drumGear")
         drum = mb.build(f"pm.drum.{j}", col, (x, 0, zd))
+        bl.set_zones(drum, [dzone])
         drum["core_radius_mm"], drum["rib_tip_radius_mm"] = drum_gear.rf, drum_gear.ra
         bl.set_motion(drum, "translate", (0, 1, 0), f"Stepped drum {j}", f"Staffelwalze {j}", unit="mm")
         bl.parent(drum, shaft)
@@ -727,6 +770,7 @@ def build(p):
         px = x + x_pl + pin_g.rp
         mb = MeshBuilder()
         mb.prism(geom.gear_outline(pin_g, 0.0), "XY", sh["teeth_z"][0], sh["teeth_z"][1], "steel_dark")
+        kzones = [bl.zone(mb, 0, "part.settingPinion")]
         # The finger lever (Lehmann's 'Fingerhebel', NL183/465 p. 23), one black steel part: a body
         # on the axle, a flat pointer arm with a pointed tip and a pin under it that stands in the
         # hole beside the set digit, and the strip bent up from the body into a C, open towards
@@ -751,6 +795,7 @@ def build(p):
         rot_ = math.radians(a0_ + 90.0)
         cr_, sr_ = math.cos(rot_), math.sin(rot_)
         mb.verts[n_lever:] = [(vx * cr_ - vy * sr_, vx * sr_ + vy * cr_, vz) for vx, vy, vz in mb.verts[n_lever:]]
+        lever_zone = bl.zone(mb, n_lever, "part.fingerLever")
         # the axle rises inside the C to a flat, wide, knurled bronze nut, bevelled top and
         # bottom, just under the C's centre (photos)
         nut_ = hd_["nut"]
@@ -770,6 +815,7 @@ def build(p):
         dz0 = dz1 - dk_["thickness"]
         # brass inside, under the pin's holes (which then look dark, as on the photos), white outside
         wr_ = pl_["window_r"][0] - 0.2
+        z_disc = len(mb.verts)
         mb.prism(geom.circle(wr_, 16), "XY", dz0, dz1, "brass_satin", smooth=True)
         mb.prism_holes(geom.circle(dk_["radius"], 32), [geom.circle(wr_, 16)], "XY", dz0, dz1, "enamel_white")
         mb.prism(geom.radial_bar(dk_["radius"] - 0.5, dk_["tab_r"], 2.0 * dk_["tab_half_width"], a0_), "XY", dz0 + 0.1, dz1 - 0.1, "brass_satin")  # inside the white ring's faces (A2-14)
@@ -781,7 +827,9 @@ def build(p):
             wg.append((gx, gy, dz1 + 0.15))
             verts, faces = bl.glyph_mesh(str(s_), dl["setting_glyph_size"], 0.0)   # flat: read from above only
             mb.add_mesh_data(verts, faces, bl.frame_matrix((gx, gy, dz1 + 0.05), (ut[0], ut[1], 0), (ur[0], ur[1], 0)), "ink_black")
+        kzones += [bl.zone(mb, z_disc, "part.digitDisc"), lever_zone]
         dial = mb.build(f"pm.setting_dial.{j}", col, (px, py, 0))
+        bl.set_zones(dial, kzones)
         a0r = math.radians(a0_)
         bl.set_anchors(dial, "pointer_tip", [(pt_["tip_r"] * math.cos(a0r), pt_["tip_r"] * math.sin(a0r), z_plate + 2.6)])
         bl.set_anchors(dial, "window_glyphs", wg)
@@ -820,8 +868,11 @@ def build(p):
         # from the bearing bar (or the large gear A or C in front of it) to the rear wall
         y_front = lgy0 + 0.2 if j in big_levers else shaft_front
         mb.prism(geom.circle(lever_r, 16), "XZ", y_front, wall0 - 0.3, "steel", smooth=True)
+        z0_ = len(mb.verts)
         mb.prism(geom.gear_outline(dg, lever_first[j]), "XZ", gy0, gy1, "steel_dark")   # the long drive gear
+        lzone = bl.zone(mb, z0_, "part.longGear")
         lever = mb.build(f"pm.lever.{j}", col, (lx, 0, lz))
+        bl.set_zones(lever, [lzone])
         bl.set_motion(lever, "rotate", (0, 1, 0), f"Carry lever shaft {j}", f"Zweihornwelle {j}")
         bl.parent(lever, carriage)
         for name, key, mode, (ay0, ay1), le, ld in (
@@ -1122,6 +1173,7 @@ def build(p):
     strip = [at_(sr0, -tw), at_(r_tip, -tw), at_(sr1, -wr(sr1)), at_(sr1, wr(sr1)), at_(r_tip, tw), at_(sr0, tw)]
     sw1 = 2.0 * wr(sr1)
     fz0, fz1 = st["finger_z"]
+    z_stop = len(mb.verts)
     mb.prism(strip, "XY", dz + fz0, dz + fz1, "steel")
     leg_o = [at_(sr1 - 2.2, -wr(sr1 - 2.2)), at_(sr1, -wr(sr1)), at_(sr1, wr(sr1)), at_(sr1 - 2.2, wr(sr1 - 2.2))]
     mb.prism(leg_o, "XY", dz - 0.5, dz + fz0 + 0.1, "steel")                     # down to the plate (into it)
@@ -1130,7 +1182,9 @@ def build(p):
     for r_, t_ in ((sr1 - 1.2, -sw1 / 4), (sr1 - 1.2, sw1 / 4), (sr0 + 1.2, 0.0)):  # the screws' heads
         cx_, cy_ = at_(r_, t_)
         mb.prism([(cx_ + q[0], cy_ + q[1]) for q in geom.circle(1.0, 16)], "XY", dz + fz1 - 0.1, dz + fz1 + 0.5, "steel_dark", smooth=True)
+    stop_zone = bl.zone(mb, z_stop, "part.counterStop")
     cplate = mb.build("pm.counter_plate", col, (dx, dy, 0))
+    bl.set_zones(cplate, [stop_zone])
     bl.set_anchors(cplate, "black_glyphs", black)
     bl.set_anchors(cplate, "red_glyphs", red)
     sa = math.radians(stop_a)

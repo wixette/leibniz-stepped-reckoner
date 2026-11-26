@@ -418,6 +418,27 @@ def gltf_point(p_mm):
     return [x * MM, z * MM, -y * MM]
 
 
+def zone(mb, start, key, pad=0.3):
+    """A named part of a node's mesh, for its hover label: the box (node-local mm, padded) round
+    the vertices added to mb since start (mb.verts length then)."""
+    vs = mb.verts[start:]
+    lo = tuple(min(v[i] for v in vs) - pad for i in range(3))
+    hi = tuple(max(v[i] for v in vs) + pad for i in range(3))
+    return (key, lo, hi)
+
+
+def set_zones(obj, zones):
+    """Named parts of a node (zone() boxes, the first that holds a point wins): extras zone_keys
+    (comma-separated message keys) and zone_boxes (6 glTF-local numbers each, min then max)."""
+    keys, flat = [], []
+    for key, lo, hi in zones:
+        a, b = gltf_point(lo), gltf_point(hi)
+        keys.append(key)
+        flat += [min(a[i], b[i]) for i in range(3)] + [max(a[i], b[i]) for i in range(3)]
+    obj["zone_keys"] = ",".join(keys)
+    obj["zone_boxes"] = flat
+
+
 def set_anchors(obj, key, points_mm):
     """Store points (node-local, Blender mm) as a flat glTF-local list in extras[key].
 

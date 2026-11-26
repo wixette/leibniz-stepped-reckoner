@@ -12,7 +12,7 @@ import { Viewer } from "../scene/viewer.js";
 /** @import { Machine } from "../sim/machine.js" */
 import { CRANK_COMMIT, CrankDrag, crankAt, intentAt, intentHint } from "../teach/partActions.js";
 /** @import { Intent } from "../teach/partActions.js" */
-import { partInfo, partName } from "../teach/partInfo.js";
+import { partInfo, partName, zoneKey, zoneName } from "../teach/partInfo.js";
 /** @import { ViewName } from "../teach/player.js" */
 
 /** Parts hidden by "Case" (the lower frame with its feet and the carriage's cover). */
@@ -401,17 +401,19 @@ export class Stage {
   }
 
   /**
-   * Name and live value of a part (walking up to the nearest named node).
+   * Name and live value of a part (walking up to the nearest named node), named for the part
+   * of it at the point where the node holds several (its zones).
    * @private
    * @param {THREE.Object3D} o
+   * @param {THREE.Vector3} point world
    * @returns {{ name: string; value: string | null; red?: boolean } | null}
    */
-  labelFor(o) {
+  labelFor(o, point) {
     for (let n = /** @type {THREE.Object3D | null} */ (o); n; n = n.parent) {
-      const info = partInfo(n.name, this.machine);
-      if (info) return info;
-      const name = partName(n.name);
-      if (name) return { name, value: null };
+      const info = partInfo(n.name, this.machine) ?? (partName(n.name) ? { name: /** @type {string} */ (partName(n.name)), value: null } : null);
+      if (!info) continue;
+      const key = zoneKey(n, point);
+      return key ? { ...info, name: zoneName(info.name, key) } : info;
     }
     return null;
   }
@@ -450,7 +452,7 @@ export class Stage {
   showHover(x, y) {
     const canvas = this.viewer.renderer.domElement;
     const hit = this.pick(x, y);
-    const label = hit ? this.labelFor(hit.object) : null;
+    const label = hit ? this.labelFor(hit.object, hit.point) : null;
     const intent = this.intentAtHit(hit, this.shift ? -1 : 1);
     canvas.style.cursor = !intent ? "" : intent.kind === "turn" || intent.kind === "shiftStep" ? "grab" : "pointer";
     this.hoverBox.hidden = !label;

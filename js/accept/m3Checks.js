@@ -12,7 +12,7 @@ import { Machine } from "../sim/machine.js";
 import { MESSAGES } from "../l10n/all.js";
 import { LOCALES } from "../l10n/l10n.js";
 import { LESSONS } from "../teach/lessons.js";
-import { PART_KEYS, partInfo, partName } from "../teach/partInfo.js";
+import { PART_KEYS, partInfo, partName, ZONE_KEYS, zoneKey } from "../teach/partInfo.js";
 import { TUTORIAL } from "../teach/tutorial.js";
 import { applyIntentNow, CrankDrag, intentAt } from "../teach/partActions.js";
 import { anchors, rayHits, result } from "./harness.js";
@@ -538,6 +538,37 @@ export function runM3Checks(root) {
       if (!partInfo(gltfName("pm.counter_pin"), m, lang)?.value?.includes("4")) bad.push(`${lang}: pin value is not hole 4`);
     }
     return { passed: bad.length === 0, detail: bad.join("; ") || `${n} labels: names in words, values match the machine` };
+  });
+
+  run("A3-16", "Parts within a part's node have labels of their own: each named zone is a known part, and the label at its centre names it", () => {
+    // e.g. the counter's stop within the counter's plate, the pentagon within a carry store
+    /** @type {string[]} */
+    const bad = [];
+    const known = new Set(/** @type {readonly string[]} */ (ZONE_KEYS));
+    root.updateMatrixWorld(true);
+    let n = 0;
+    root.traverse((o) => {
+      const ex = /** @type {{ zone_keys?: string; zone_boxes?: number[] }} */ (o.userData);
+      if (!ex.zone_keys || !ex.zone_boxes) return;
+      const keys = ex.zone_keys.split(",");
+      const boxes = ex.zone_boxes;
+      if (boxes.length !== keys.length * 6) bad.push(`${o.name}: ${keys.length} zones, ${boxes.length} box numbers`);
+      if (!partInfo(o.name, new Machine()) && !partName(o.name)) bad.push(`${o.name}: zones on a part without a label`);
+      keys.forEach((k, i) => {
+        n++;
+        if (!known.has(k)) bad.push(`${o.name}: unknown zone ${k}`);
+        const b = boxes.slice(i * 6, i * 6 + 6);
+        const c = o.localToWorld(new THREE.Vector3((b[0] + b[3]) / 2, (b[1] + b[4]) / 2, (b[2] + b[5]) / 2));
+        const got = zoneKey(o, c);
+        if (got !== k) bad.push(`${o.name}: the centre of ${k} reads ${got}`);
+      });
+    });
+    for (const k of ["part.counterStop", "part.pentagon", "part.einzahn", "part.fingerLever", "part.detentCatch", "part.beamFront"]) {
+      let found = false;
+      root.traverse((o) => (found ||= (/** @type {{ zone_keys?: string }} */ (o.userData)).zone_keys?.split(",").includes(k) ?? false));
+      if (!found) bad.push(`no zone ${k}`);
+    }
+    return { passed: bad.length === 0, detail: bad.join("; ") || `${n} named parts within nodes, each labelled at its centre` };
   });
 
   return out.sort((a, b) => a.id.localeCompare(b.id, undefined, { numeric: true }));
