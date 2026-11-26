@@ -73,6 +73,88 @@ def plate_with_hole_row(mb, x0, y0, x1, y1, hy0, hy1, holes, z0, z1, mat):
             mb.prism(geom.rect(a, hy0, b, hy1), "XY", z0, z1, mat)
 
 
+def ripple_frame(mb, outline, closed, n_ridges, ridge_w, ridge_h, samples, base, plane, face, mat):
+    """A moulded frame of n_ridges convex ridges side by side (an oil painting's frame), laid on a
+    face along a polyline outline: the frame lies to the left of the outline's direction (inside a
+    counter-clockwise closed outline). plane "XZ": the face is y = face, outline (x, z), the
+    ridges stand towards -y; "XY": the face is z = face, outline (x, y), the ridges stand up.
+    Each ridge is an arc rising ridge_h above a base; the frame's edges sink 0.2 into the face."""
+    n = len(outline)
+    W = n_ridges * ridge_w
+
+    def unit(dx, dy):
+        ln = math.hypot(dx, dy)
+        return dx / ln, dy / ln
+
+    segs = n if closed else n - 1
+    nrm = []
+    for i in range(segs):
+        (x0, y0), (x1, y1) = outline[i], outline[(i + 1) % n]
+        ux, uy = unit(x1 - x0, y1 - y0)
+        nrm.append((-uy, ux))                                 # left of the direction
+
+    def offset(d):
+        out = []
+        for i in range(n):
+            a = nrm[i - 1] if (closed or i > 0) else None
+            b = nrm[i] if (closed or i < n - 1) else None
+            if a is None:
+                a = b
+            if b is None:
+                b = a
+            k = 1.0 + a[0] * b[0] + a[1] * b[1]
+            out.append((outline[i][0] + d * (a[0] + b[0]) / k, outline[i][1] + d * (a[1] + b[1]) / k))
+        return out
+
+    prof = [(0.0, -0.2)]
+    for r in range(n_ridges):
+        for t in range(0 if r == 0 else 1, samples + 1):
+            f = t / samples
+            prof.append(((r + f) * ridge_w, base + ridge_h * math.sin(math.pi * f)))
+    prof.append((W, -0.2))
+
+    def to3(u, w, h):
+        return (u, face - h, w) if plane == "XZ" else (u, w, face + h)
+
+    rings = []
+    for d, h in prof:
+        rings.append([len(mb.verts) + k for k in range(n)])
+        # 0.05 inside the outline: on a box's edge the frame's sunk sides would share its faces (A2-14)
+        mb.verts.extend(to3(u, w, h) for u, w in offset(d + 0.05))
+    mi = mb._mat(mat)
+    faces = []
+    for a, b in zip(rings, rings[1:]):
+        for i in range(segs):
+            j = (i + 1) % n
+            faces.append([a[i], a[j], b[j], b[i]])
+    caps = [] if closed else [[r[0] for r in rings], [r[-1] for r in reversed(rings)]]
+
+    def normal(f):
+        vs = [mb.verts[v] for v in f]
+        nx = ny = nz = 0.0
+        for (x0, y0, z0), (x1, y1, z1) in zip(vs, vs[1:] + vs[:1]):
+            nx += (y0 - y1) * (z0 + z1)
+            ny += (z0 - z1) * (x0 + x1)
+            nz += (x0 - x1) * (y0 + y1)
+        return nx, ny, nz
+
+    # orient: a ridge's crest faces away from the face it lies on
+    crest = faces[(samples // 2) * segs]
+    out_dir = (0.0, -1.0, 0.0) if plane == "XZ" else (0.0, 0.0, 1.0)
+    if sum(a * b for a, b in zip(normal(crest), out_dir)) < 0:
+        faces = [f[::-1] for f in faces]
+    for f in faces:
+        mb._add(f, mi, True)
+    # the open ends: closed by the profile, facing out along the outline
+    for cap, (pi_, qi) in zip(caps, ((0, 1), (n - 1, n - 2))):
+        (x0, y0), (x1, y1) = outline[qi], outline[pi_]
+        ex_, ey_ = unit(x1 - x0, y1 - y0)
+        want = (ex_, 0.0, ey_) if plane == "XZ" else (ex_, ey_, 0.0)
+        if sum(a * b for a, b in zip(normal(cap), want)) < 0:
+            cap = cap[::-1]
+        mb._add(cap, mi, False)
+
+
 def static(obj):
     obj["motion"] = "static"
     return obj
@@ -439,10 +521,21 @@ def build(p):
     mb = MeshBuilder()
     # full height to the step (lower top from xt), then only the upper part (it passes over
     # the frame's right end)
-    for r0 in (geom.rect(cx0, pz0, xt, mz - 4.0), geom.rect(cx0, mz + 4.0, xt, pz1),
+    fw = p.v(M2 + "carriage_front_wall")
+    ws_, wz_ = cx0 + fw["x0_dx"], fw["top_z"]
+    for r0 in (geom.rect(cx0, pz0, xt, mz - 4.0), geom.rect(cx0, mz + 4.0, ws_, pz1), geom.rect(ws_, mz + 4.0, xt, wz_ - fw["thickness"]),
                geom.rect(cx0, mz - 4.0, mx - 4.0, mz + 4.0), geom.rect(mx + 4.0, mz - 4.0, xt, mz + 4.0),
                geom.rect(xt, pz0, xs, zt - 2.0), geom.rect(xs, zn, xr, zt - 2.0)):
         mb.prism(r0, "XZ", pnl0, pnl1, "brass_polished")
+    # the moulded frames on the front (the owner's schematic): left of the Magna Rota, right of it
+    # to the counter's section, and round the counter section's L-shaped front
+    rf = p.v(M2 + "ripple_frame")
+    mrad_f = p.v(M2 + "magna_rota_radius") + rf["magna_rota_gap"]
+    for outline in ([(ws_, pz0), (mx - mrad_f, pz0), (mx - mrad_f, wz_), (ws_, wz_)],
+                    [(mx + mrad_f, pz0), (xt, pz0), (xt, wz_), (mx + mrad_f, wz_)],
+                    [(xt, pz0), (xs, pz0), (xs, zn), (xr, zn), (xr, zt), (xt, zt)]):
+        # counter-clockwise seen from the front (x right, z up)
+        ripple_frame(mb, outline, True, 3, rf["ridge_width"], rf["ridge_height"], rf["samples"], rf["base"], "XZ", pnl0, "brass_polished")
     # the Magna Rota's spring detent ("federnde Raste" behind the disc, K. Badur 2026-11-25): a leaf
     # with a V tip against the rear steel plate's rim, on a stud in the front panel; drawn just
     # clear of the rim (the model does not bend it)
@@ -846,7 +939,17 @@ def build(p):
     # clear all round (photos: the plates are in the cover's plane)
     hr_ = dl["setting_plate_r"] + p.v(M2 + "setting_handle")["plate"]["cover_gap"]
     knob_holes = [[(u + X[j] + x_pl + pin_g.rp, w + py) for u, w in geom.circle(hr_, 48)] for j in range(C)]
-    mb.prism_holes(geom.rect(cx0, ky0, xt, ky1), knob_holes, "XY", kz0, kz1, "brass_polished")
+    fw = p.v(M2 + "carriage_front_wall")
+    ws_, wz_, wy1, wt_ = cx0 + fw["x0_dx"], fw["top_z"], fw["y1"], fw["thickness"]
+    # the top behind the short front wall (the knobs' part, at the counter's height), and to the
+    # wall's left, where it reaches the front
+    mb.prism_holes([(cx0, ky0), (ws_, ky0), (ws_, wy1), (xt, wy1), (xt, ky1), (cx0, ky1)], knob_holes, "XY", kz0, kz1, "brass_polished")
+    # the short wall at the front (the owner's schematic and the photo of the original): its top,
+    # its back, and its two ends standing on the top; its front is the front panel's upper part
+    mb.prism(geom.rect(ws_, ky0, xt, wy1), "XY", wz_ - wt_, wz_, "brass_polished")
+    mb.prism(geom.rect(ws_, wy1 - wt_, xt, wy1), "XY", kz0, wz_ - wt_, "brass_polished")
+    mb.prism(geom.rect(ws_, pnl1, ws_ + wt_, wy1 - wt_), "XY", kz0, wz_ - wt_, "brass_polished")
+    mb.prism(geom.rect(xt - wt_, pnl1, xt, wy1 - wt_), "XY", kz0, wz_ - wt_, "brass_polished")
     # lower top on the right, with a round hole under the counter's ring for the sleeve that
     # turns it (the counter's train below, lib/counter_train.py)
     tr_ = p.v(M2 + "counter_train")
@@ -872,7 +975,10 @@ def build(p):
         arc = [(cdx + rh * math.cos(math.radians(a1 - sweep * i / n_arc)), cdy + rh * math.sin(math.radians(a1 - sweep * i / n_arc))) for i in range(n_arc + 1)]
         mb.prism_holes([(xt, ky0), (xr, ky0), (xr, ky1), (xt, ky1)] + arc, [park_hole], "XY", zt - 2.0, zt, "brass_polished")
     # the walls start behind the front panel: sharing its front face made them flicker (z-fighting)
-    mb.prism(geom.rect(xt - 3.0, pnl1, xt, ky1), "XY", zt, kz0, "brass_satin")            # riser between them
+    # the moulded frame round the counter's top, thin, on three sides (left, front, right; none at
+    # the back: TSD (02)); the outline runs from the back left round to the back right
+    rf = p.v(M2 + "ripple_frame")
+    ripple_frame(mb, [(xt, ky1), (xt, ky0), (xr, ky0), (xr, ky1)], False, 2, rf["thin_ridge_width"], rf["thin_ridge_height"], rf["samples"], rf["base"], "XY", zt, "brass_polished")
     wz0 = cs["carriage_wall_z0"]
     mb.prism(geom.rect(cx0, pnl1, cx0 + 3.0, ky1), "XY", wz0, kz0, "brass_satin")       # left end
     mb.prism(geom.rect(xs - 3.0, pnl1, xr, ky1), "XY", zn, zn + 2.0, "brass_satin")       # underside of the right part

@@ -838,17 +838,42 @@
       "carriage_front_panel_z": {
         "v": [
           -15.0,
-          94.0
+          82.0
         ],
         "unit": "mm",
         "conf": "design",
         "src": "front 111 mm high with the cover (BADUR2026; 121 from the photos before): it hangs below the carriage floor, in front of the base plate"
       },
+      "carriage_front_wall": {
+        "v": {
+          "x0_dx": 13.3,
+          "y1": -95.0,
+          "top_z": 97.0,
+          "thickness": 2.0
+        },
+        "unit": "mm",
+        "conf": "design",
+        "src": "The short wall along the front of the carriage's top (owner's schematic design/drawings/carriage-box-schematic.svg, from the photo of the original, Commons Leibniz_Rechenmaschine_(1690).jpg): it rises 13 above the top, from x0_dx right of the carriage's left end to the counter's section (top_dx), 17 deep (to y1); the Magna Rota's top (z 96.1) is just under its top, and the large gears behind the front panel (up to z 90) stand inside it. With it the front is 112 high (BADUR2026: 111). Sizes from the schematic at the Magna Rota's scale."
+      },
+      "ripple_frame": {
+        "v": {
+          "ridge_width": 4.27,
+          "ridge_height": 1.1,
+          "thin_ridge_width": 3.0,
+          "thin_ridge_height": 0.8,
+          "samples": 6,
+          "base": 0.2,
+          "magna_rota_gap": 3.5
+        },
+        "unit": "mm",
+        "conf": "design",
+        "src": "The moulded frames on the carriage box (owner's schematic design/drawings/carriage-box-schematic.svg; photos of the original and TSD (02) of the replica): three convex ridges side by side, like an oil painting's frame; on the front: left of the Magna Rota, right of it to the counter's section, and round the counter section's L-shaped front; on the counter's top two thinner ridges on three sides (left, right, front; none at the back, TSD (02)). Ridges by eye: the schematic draws a frame as 6 bands, 12.8 wide (3 ridges, owner)."
+      },
       "carriage_counter_section": {
         "v": {
-          "top_dx": 40.5,
+          "top_dx": 33.0,
           "top_z": 84.0,
-          "step_dx": 112.0,
+          "step_dx": 82.25,
           "end_dx": 137.75,
           "counter_dx": 82.25,
           "step_z": 30.0,
@@ -858,14 +883,14 @@
         },
         "unit": "mm",
         "conf": "design",
-        "src": "right part of the carriage (photo overlay 2026-10-18): from digit 0 + top_dx its top is 12 mm lower (cover at top_z); full height to digit 0 + step_dx, then only the part above step_z to digit 0 + end_dx, so it passes over the frame's right end at offset 0 (step_z clears the lead screw). The hood ends 137.75 right of knob 0 (444 long, BADUR2026). The revolution counter's centre is counter_dx right of the units drum: BADUR2026's plan view puts it 64 mm right of the 17th drive shaft, which is half a place (18.25) right of the units drum (design/v1.3-notes.md); the replica's was 96.4 (NL183/465 p. 51, 52: 73 from the 8th setting station). top_dx moved from 50 to 44 so the counter's black numbers clear the step. counter_dy: the counter's centre 1 mm in front of the knobs' line, so its numbers stay under the hood. 2026-11-25: top_dx 44 -> 40.5, so that the step's wall stands clear of the counter's dial plate (its edge 42.35 right of the units drum).",
+        "src": "right part of the carriage (photo overlay 2026-10-18): from digit 0 + top_dx its top is 12 mm lower (cover at top_z); full height to digit 0 + step_dx, then only the part above step_z to digit 0 + end_dx, so it passes over the frame's right end at offset 0 (step_z clears the lead screw). The hood ends 137.75 right of knob 0 (444 long, BADUR2026). The revolution counter's centre is counter_dx right of the units drum: BADUR2026's plan view puts it 64 mm right of the 17th drive shaft, which is half a place (18.25) right of the units drum (design/v1.3-notes.md); the replica's was 96.4 (NL183/465 p. 51, 52: 73 from the 8th setting station). top_dx moved from 50 to 44 so the counter's black numbers clear the step. counter_dy: the counter's centre 1 mm in front of the knobs' line, so its numbers stay under the hood. 2026-11-25: top_dx 44 -> 40.5, so that the step's wall stands clear of the counter's dial plate (its edge 42.35 right of the units drum). 2026-11-26 (owner's schematic design/drawings/carriage-box-schematic.svg and the photo of the original): the whole top at top_z, the knobs' part too, behind a short wall at the front (carriage_front_wall); top_dx 40.5 -> 33 (the short wall ends there; room for the counter top's left frame); step_dx 112 -> 82.25, the L's corner under the counter's centre.",
         "note": "top_dx and step_dx are photo estimates; counter_dx is from Badur's plan view."
       },
       "knob_plate_z": {
-        "v": 94.0,
+        "v": 82.0,
         "unit": "mm",
         "conf": "design",
-        "src": "flush with the carriage cover (z 94-96), in a round hole of it 0.4 wider than the plate (photos of the original and the replica: the plates lie in the cover's plane)"
+        "src": "flush with the carriage cover (z 82-84, lowered 12 behind the short front wall, owner 2026-11-26), in a round hole of it 0.4 wider than the plate (photos of the original and the replica: the plates lie in the cover's plane)"
       },
       "magna_rota_center": {
         "v": {
@@ -948,8 +973,8 @@
           ],
           "register_cover_y0": -23.6,
           "carriage_cover_z": [
-            94.0,
-            96.0
+            82.0,
+            84.0
           ],
           "carriage_cover_y": [
             -112.0,
