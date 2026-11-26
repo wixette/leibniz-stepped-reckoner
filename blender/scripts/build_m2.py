@@ -26,7 +26,6 @@ Carriage pm.carriage (translate along +X), carriage digit j at x = -36.5 j (offs
   pm.main_crank (rotate about +Y, 360 deg per turn; sits in the middle of the Magna Rota)
 Casing (all static; the page hides them together to show the mechanism):
   frame.base             lower frame of beams on four turned brass feet and wooden blocks (hidden with the case)
-  frame.register_cover   brass top plate over the register, openings over the 16 windows
   pm.carriage_cover      brass top plates and end walls of the carriage, counter dial plate (moves with it)
 """
 
@@ -932,18 +931,8 @@ def build(p):
     # (the oak case is gone for now, the owner 2026-11-26: the machine stands on its four feet;
     # the case will be rebuilt round it later)
 
-    # register cover: above every register part (Muldenrad tips z 84.4, rear wall 85);
-    # its openings sit over the window plate's openings, 1-2 mm larger so a digit 8 mm
-    # below stays readable from an angle (the window plate still frames it)
-    mb = MeshBuilder()
-    oy0, oy1 = dl["cover_opening_y"]
-    plate_with_hole_row(mb, ix0, cs["register_cover_y0"], ix1, cs["register_cover_y1"], oy0, oy1, [(x - dl["cover_opening_half_x"], x + dl["cover_opening_half_x"]) for x in X], cz0, cz1, "brass_polished")
-    # skirt along the front edge (above the frame's front bar, z <= 69, and every carriage part)
-    y0 = cs["register_cover_y0"]
-    mb.prism(geom.rect(ix0, y0, ix1, y0 + 1.2), "XY", cs["register_cover_skirt_z0"], cz0, "brass_satin")
-    rcover = static(mb.build("frame.register_cover", col))
-    bl.set_anchors(rcover, "opening_centres", [(x, (oy0 + oy1) / 2.0, cz1) for x in X])
-    bl.parent(rcover, root)
+    # (no cover over the register, as on the original, the owner 2026-11-26: the digits are read
+    # through the window plate, pi.window, which frames each one)
 
     # carriage cover: top plate on the front panel, under the knob plates (holes for the
     # knob shafts), and end walls hanging from it above the lead screw
@@ -1223,7 +1212,6 @@ def build(p):
     labels = {
         "frame.static": ("Frame: side walls, rear wall and front bar", "Gestell: Seitenwände, Rückwand und Vorderleiste"),
         "frame.base": ("Lower frame and feet", "Unterrahmen und Füße"),
-        "frame.register_cover": ("Cover plate of the result register", "Deckplatte des Resultatwerks"),
         "pi.window": ("Reading windows of the result register", "Ablesefenster des Resultatwerks"),
         "pm.carriage_panel": ("Front panel of the carriage", "Vorderwand des Schlittens"),
         "pm.carriage_cover": ("Cover plate of the carriage", "Deckplatte des Schlittens"),

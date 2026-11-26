@@ -437,10 +437,10 @@ export function runM2Checks(root, opts = {}) {
     };
   });
 
-  run("A2-12", "Casing: base and cover plates are static, no woodwork elsewhere; all 16 windows read through the cover", () => {
+  run("A2-12", "Casing: the lower frame and the carriage's cover are static, no woodwork elsewhere; all 16 windows read through the window plate", () => {
     /** @type {string[]} */
     const bad = [];
-    const parts = ["frame.base", "frame.register_cover", "pm.carriage_cover"].map((n) => node(root, n));
+    const parts = ["frame.base", "pm.carriage_cover"].map((n) => node(root, n));
     // With the casing hidden only the mechanism remains: no woodwork (oak) left in the rest of the model.
     const casingSet = new Set(parts);
     root.traverse((o) => {
@@ -456,9 +456,10 @@ export function runM2Checks(root, opts = {}) {
     let onCarriage = false;
     for (let p = /** @type {THREE.Object3D | null} */ (node(root, "pm.carriage_cover")); p; p = p.parent) if (p === carriage) onCarriage = true;
     if (!onCarriage) bad.push("carriage cover does not move with the carriage");
-    const openings = anchors(node(root, "frame.register_cover"), "opening_centres");
-    if (openings.length !== R) bad.push(`${openings.length} cover openings`);
-    // Look down through each cover opening from above: the first part hit must be the
+    // (no cover over the register, as on the original: the window plate frames each digit)
+    const openings = anchors(node(root, "pi.window"), "read_points");
+    if (openings.length !== R) bad.push(`${openings.length} windows`);
+    // Look down through each window from above: the first part hit must be the
     // result wheel, showing a digit (no casing part in the way), at both carriage ends.
     const blockers = [...parts, node(root, "pi.window"), node(root, "frame.static")];
     // the corners of each window's reading area (the window plate's own read_half_size)
@@ -481,7 +482,7 @@ export function runM2Checks(root, opts = {}) {
         }
       }
     }
-    return { passed: bad.length === 0, detail: bad.join("; ") || `4 casing parts (no oak elsewhere); 16 windows clear through the cover at offsets 0 and ${c.m.maxOffset}` };
+    return { passed: bad.length === 0, detail: bad.join("; ") || `casing parts static (no oak elsewhere); 16 windows clear at offsets 0 and ${c.m.maxOffset}` };
   });
 
   run("A2-13", "Both cranks can be turned by hand: their handles clear the table the feet stand on", () => {

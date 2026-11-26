@@ -46,7 +46,6 @@ const PLACED = /** @type {const} */ ([
 const SINGLE = /** @type {const} */ ([
   ["frame.base", "part.base"],
   ["frame.lead_screw", "part.leadScrew"],
-  ["frame.register_cover", "part.registerCover"],
   ["frame.static", "part.frame"],
   ["pi.window", "part.windows"],
   ["pm.carriage_cover", "part.carriageCover"],

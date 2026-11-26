@@ -137,7 +137,6 @@ export const PART_COLOURS = [
   ["pm.carriage", 0xa7abb1],
   ["pm.carriage_cover", 0xc9b79c],
   ["pm.carriage_panel", 0xc9b79c],
-  ["frame.register_cover", 0xc9b79c],
   ["frame.lead_screw", 0x7c828c],
   ["pm.drum_shaft.*", 0x646a73],
   ["pm.drum.*", 0xcc8f66],

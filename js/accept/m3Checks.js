@@ -24,14 +24,14 @@ export const EXPLODE_TOL_M = 1e-6;
 /** Exploding must not rotate anything; recomputing a rotation differs by float noise (~1e-8 rad). */
 export const EXPLODE_TOL_RAD = 1e-6;
 
-const CASING = ["frame.base", "frame.register_cover", "pm.carriage_cover"];
+const CASING = ["frame.base", "pm.carriage_cover"];
 /** Parts that can be seen with the case on (through the windows, on top, at the front). */
 const EXTERIOR = [
   "pi.window", "pi.sum_wheel.*", "pm.setting_dial.*", "pm.setting_plate.*", "pm.magna_rota", "pm.counter_plate",
   "pm.counter_ring", "pm.counter_pin", "pm.counter_pin_park", "pm.main_crank", "pm.carriage", "pm.carriage_panel", "frame.lead_screw", ...CASING,
 ];
 /** Part groups the exploded view must move. */
-const EXPLODED_GROUPS = ["frame.base", "frame.register_cover", "pm.carriage", "pm.magna_rota", "pi.carry_store.*", "pm.setting_dial.*"];
+const EXPLODED_GROUPS = ["frame.base", "pi.window", "pm.carriage", "pm.magna_rota", "pi.carry_store.*", "pm.setting_dial.*"];
 
 /** The tutorial and the lessons: everything the step player runs. */
 const COURSES = [TUTORIAL, ...LESSONS];
