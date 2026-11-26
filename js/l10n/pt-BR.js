@@ -37,7 +37,7 @@ export default {
   "view.drum": "Tambor escalonado",
   "view.carry": "Transporte",
   "view.inside": "Por dentro",
-  "view.case": "Mostrar a caixa e a estrutura",
+  "view.case": "Mostrar a estrutura",
   "view.colours": "Cores por peça",
   "view.slow": "Câmera lenta",
 
@@ -104,7 +104,7 @@ export default {
   "status.blockedPinSub": "Girando para trás, o pino chegou ao outro lado do batente: mais uma volta para trás o travaria. Tire o pino ou mude-o de furo para girar mais para trás.",
   "status.blockedStore": "Um transporte ainda espera na roda ({place}), aonde nenhuma alavanca de transporte chega, e esta volta lhe daria um segundo. Mova o carro para a esquerda sobre essa roda, dê uma volta com 0 nos botões para passar o transporte adiante e depois traga o carro de volta.",
   "status.blockedStoreLate": "Esta volta levaria um segundo transporte à memória de transporte da roda ({place}) antes que sua alavanca tenha passado o primeiro adiante, e uma memória guarda só um. Primeiro gire a manivela uma vez no mesmo sentido com 0 nos botões: isso passa adiante o transporte que espera.",
-  "status.inside": "Vista interna: a caixa está oculta, a frente aberta e as outras peças esmaecidas. A máquina funciona normalmente.",
+  "status.inside": "Vista interna: a estrutura está oculta, a frente aberta e as outras peças esmaecidas. A máquina funciona normalmente.",
   "status.stepDone": "Pronto! Clique em Próximo.",
   "status.stepDoneClosed": "Pronto! Abra a lição (barra superior) para o próximo passo.",
   "status.lessonDone": "Lição concluída: {title}.",
@@ -151,7 +151,7 @@ export default {
   "start.look.point": "Aponte para uma peça para ver o nome e o valor.",
   "start.look.click": "Clique nos botões, na manivela, na Magna Rota ou nos furos do contador de voltas para acioná-los.",
   "start.look.crank": "Arraste uma manivela em círculo para girá-la em qualquer sentido: para a frente soma, para trás subtrai.",
-  "start.look.views": "O menu da câmera, no alto à direita, escolhe uma vista; seus interruptores escondem a caixa e a estrutura, colorem cada tipo de peça ou deixam o movimento mais lento.",
+  "start.look.views": "O menu da câmera, no alto à direita, escolhe uma vista; seus interruptores escondem a estrutura, colorem cada tipo de peça ou deixam o movimento mais lento.",
   "start.look.keys": "Com o teclado: vá até a máquina com Tab; as setas a giram, Shift e as setas a movem, + e − aproximam e afastam.",
   "start.then": "Depois continue com as lições.",
 

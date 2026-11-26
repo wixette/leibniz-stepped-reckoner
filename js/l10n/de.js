@@ -37,7 +37,7 @@ export default {
   "view.drum": "Staffelwalze",
   "view.carry": "Zehnerübertrag",
   "view.inside": "Innen",
-  "view.case": "Gehäuse und Gestell zeigen",
+  "view.case": "Gestell zeigen",
   "view.colours": "Teile farbig",
   "view.slow": "Zeitlupe",
 
@@ -104,7 +104,7 @@ export default {
   "status.blockedPinSub": "Rückwärts gedreht, ist der Stift von der anderen Seite an den Anschlag gekommen: Eine weitere Drehung rückwärts würde klemmen. Nimm den Stift heraus oder setz ihn um, um weiter rückwärts zu drehen.",
   "status.blockedStore": "Am Rad der {place} wartet noch ein Übertrag, den kein Übertragshebel erreicht, und diese Umdrehung brächte einen zweiten dazu. Schiebe den Schlitten nach links über dieses Rad, dreh einmal mit 0 an den Knöpfen, damit der Übertrag weitergegeben wird, und schiebe ihn dann zurück.",
   "status.blockedStoreLate": "Diese Umdrehung brächte dem Übertragsspeicher am Rad der {place} einen zweiten Übertrag, bevor sein Hebel den ersten weitergegeben hat, und ein Speicher fasst nur einen. Dreh die Kurbel zuerst einmal in dieselbe Richtung, mit 0 an den Knöpfen: Das gibt den wartenden Übertrag weiter.",
-  "status.inside": "Innenansicht: Das Gehäuse ist ausgeblendet, die Vorderseite offen und die übrigen Teile sind blass. Die Maschine arbeitet wie gewohnt.",
+  "status.inside": "Innenansicht: Das Gestell ist ausgeblendet, die Vorderseite offen und die übrigen Teile sind blass. Die Maschine arbeitet wie gewohnt.",
   "status.stepDone": "Geschafft! Weiter mit „Weiter“.",
   "status.stepDoneClosed": "Geschafft! Öffne die Lektion (oben in der Leiste) für den nächsten Schritt.",
   "status.lessonDone": "Lektion abgeschlossen: {title}.",
@@ -151,7 +151,7 @@ export default {
   "start.look.point": "Zeig auf ein Teil, um seinen Namen und Wert zu sehen.",
   "start.look.click": "Klick die Knöpfe, die Kurbel, die Magna Rota oder die Löcher des Umdrehungszählers an, um sie zu bedienen.",
   "start.look.crank": "Zieh eine Kurbel herum, um sie in beide Richtungen zu drehen: vorwärts addiert, rückwärts subtrahiert.",
-  "start.look.views": "Das Kameramenü oben rechts wählt eine Ansicht; seine Schalter blenden Gehäuse und Gestell aus, färben jede Art von Teil ein oder verlangsamen die Bewegung.",
+  "start.look.views": "Das Kameramenü oben rechts wählt eine Ansicht; seine Schalter blenden das Gestell aus, färben jede Art von Teil ein oder verlangsamen die Bewegung.",
   "start.look.keys": "Mit der Tastatur: Mit Tab zur Maschine, dann drehen die Pfeiltasten sie, Umschalt und Pfeile verschieben sie, + und − zoomen.",
   "start.then": "Danach geht es mit den Lektionen weiter.",
 

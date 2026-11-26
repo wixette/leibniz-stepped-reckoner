@@ -37,7 +37,7 @@ export default {
   "view.drum": "Cylindre à cannelures",
   "view.carry": "Retenue",
   "view.inside": "À l’intérieur",
-  "view.case": "Afficher le boîtier et le bâti",
+  "view.case": "Afficher le bâti",
   "view.colours": "Couleurs par pièce",
   "view.slow": "Ralenti",
 
@@ -104,7 +104,7 @@ export default {
   "status.blockedPinSub": "En tournant en arrière, la cheville est arrivée de l’autre côté de la butée : un tour de plus en arrière la bloquerait. Retirez la cheville ou changez-la de trou pour tourner encore en arrière.",
   "status.blockedStore": "Une retenue attend encore à la roue ({place}), qu’aucun levier de retenue n’atteint, et ce tour lui en ajouterait une deuxième. Décalez le chariot vers la gauche au-dessus de cette roue, faites un tour avec 0 sur les boutons pour transmettre la retenue, puis ramenez le chariot.",
   "status.blockedStoreLate": "Ce tour apporterait une deuxième retenue à la mémoire de retenue de la roue ({place}) avant que son levier ait transmis la première, et une mémoire n’en garde qu’une. Faites d’abord un tour de manivelle dans le même sens avec 0 sur les boutons : il transmet la retenue en attente.",
-  "status.inside": "Vue intérieure : le boîtier est masqué, la façade ouverte et les autres pièces estompées. La machine fonctionne normalement.",
+  "status.inside": "Vue intérieure : le bâti est masqué, la façade ouverte et les autres pièces estompées. La machine fonctionne normalement.",
   "status.stepDone": "Réussi ! Appuyez sur Suivant.",
   "status.stepDoneClosed": "Réussi ! Ouvrez la leçon (barre du haut) pour l’étape suivante.",
   "status.lessonDone": "Leçon terminée : {title}.",
@@ -151,7 +151,7 @@ export default {
   "start.look.point": "Pointez une pièce pour voir son nom et sa valeur.",
   "start.look.click": "Cliquez sur les boutons, la manivelle, la Magna Rota ou les trous du compte-tours pour les actionner.",
   "start.look.crank": "Faites tourner une manivelle en la faisant glisser, dans un sens ou dans l’autre : en avant elle additionne, en arrière elle soustrait.",
-  "start.look.views": "Le menu caméra, en haut à droite, choisit une vue ; ses interrupteurs masquent le boîtier et le bâti, colorent chaque sorte de pièce ou ralentissent le mouvement.",
+  "start.look.views": "Le menu caméra, en haut à droite, choisit une vue ; ses interrupteurs masquent le bâti, colorent chaque sorte de pièce ou ralentissent le mouvement.",
   "start.look.keys": "Au clavier : allez à la machine avec Tab ; les flèches la font tourner, Maj et les flèches la déplacent, + et − zooment.",
   "start.then": "Continuez ensuite avec les leçons.",
 

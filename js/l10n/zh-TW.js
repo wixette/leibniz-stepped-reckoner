@@ -37,7 +37,7 @@ export default {
   "view.drum": "步進輪",
   "view.carry": "進位",
   "view.inside": "內部",
-  "view.case": "顯示外殼和框架",
+  "view.case": "顯示機架",
   "view.colours": "依零件著色",
   "view.slow": "慢動作",
 
@@ -104,7 +104,7 @@ export default {
   "status.blockedPinSub": "向後轉時，插銷已轉到擋塊的另一側：再向後轉一圈就會卡住。請拔出插銷或換個孔再向後轉。",
   "status.blockedStore": "{place}的輪子上還有一個進位在等待，那裡沒有進位桿能碰到，這一圈又會給它第二個進位。請把滑架向左移到這個輪子上方，旋鈕設為 0 轉一圈把進位傳下去，再把滑架移回來。",
   "status.blockedStoreLate": "這一圈會在進位桿傳走第一個進位之前，給{place}輪子的進位儲存器帶來第二個進位，而一個儲存器只能存一個。請先把旋鈕設為 0，向同一方向轉一圈曲柄，把等待的進位傳下去。",
-  "status.inside": "內部視圖：外殼已隱藏，前板已打開，其他零件已淡化。機器照常運轉。",
+  "status.inside": "內部視圖：機架已隱藏，前板已打開，其他零件已淡化。機器照常運轉。",
   "status.stepDone": "完成！請按「下一步」。",
   "status.stepDoneClosed": "完成！請打開課程（頂列）進入下一步。",
   "status.lessonDone": "課程完成：{title}。",
@@ -151,7 +151,7 @@ export default {
   "start.look.point": "把游標移到零件上，可以看到它的名稱和數值。",
   "start.look.click": "點選旋鈕、曲柄、大輪或轉數計的孔就能操作它們。",
   "start.look.crank": "拖著曲柄轉圈，兩個方向都能轉：向前是加，向後是減。",
-  "start.look.views": "右上角的攝影機選單可以選擇視圖；它的開關可以隱藏外殼和機架、為各類零件著色，或讓動作變慢。",
+  "start.look.views": "右上角的攝影機選單可以選擇視圖；它的開關可以隱藏機架、為各類零件著色，或讓動作變慢。",
   "start.look.keys": "用鍵盤：按 Tab 鍵選取機器，然後用方向鍵旋轉，Shift 加方向鍵平移，+ 和 − 縮放。",
   "start.then": "接著繼續學習課程。",
 

@@ -39,7 +39,7 @@ export default {
   "view.drum": "Stepped drum",
   "view.carry": "Carry",
   "view.inside": "Inside",
-  "view.case": "Show case and frame",
+  "view.case": "Show the frame",
   "view.colours": "Colour by part",
   "view.slow": "Slow motion",
 
@@ -106,7 +106,7 @@ export default {
   "status.blockedPinSub": "Turned back, the pin has come round to the stop's other side: another turn back would jam it. Take the pin out or move it to turn back again.",
   "status.blockedStore": "A carry is still waiting at the {place} wheel, where no carry lever reaches, and this turn would bring it a second one. Slide the carriage left over that wheel, turn once with 0 on the knobs to pass the carry on, then slide it back.",
   "status.blockedStoreLate": "This turn would bring a second carry to the {place} wheel's carry store before its lever has passed the first one on, and a store holds only one. First turn the crank once the same way with 0 on the knobs: that passes the waiting carry on.",
-  "status.inside": "Inside view: the case is hidden, the front is open and the other parts are faded. The machine works as usual.",
+  "status.inside": "Inside view: the frame is hidden, the front is open and the other parts are faded. The machine works as usual.",
   "status.stepDone": "Done! Press Next.",
   "status.stepDoneClosed": "Done! Open the lesson (top bar) for the next step.",
   "status.lessonDone": "Lesson complete: {title}.",
@@ -153,7 +153,7 @@ export default {
   "start.look.point": "Point at a part to see its name and value.",
   "start.look.click": "Click the knobs, the crank, the Magna Rota or the holes of the revolution counter to operate them.",
   "start.look.crank": "Drag a crank round to turn it either way: forward adds, backward subtracts.",
-  "start.look.views": "The camera menu at the top right picks a view; its switches hide the case and frame, colour each kind of part, or slow the motion down.",
+  "start.look.views": "The camera menu at the top right picks a view; its switches hide the frame, colour each kind of part, or slow the motion down.",
   "start.look.keys": "With the keyboard: Tab to the machine, then the arrow keys turn it, Shift and the arrows move it, + and − zoom.",
   "start.then": "Then go on with the lessons.",
 

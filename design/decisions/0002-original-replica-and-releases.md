@@ -45,3 +45,12 @@ Until v1.1 the model followed N. J. Lehmann's Dresden replica (decision D1 in `d
 - the pentagons' height: in the GWLB CAD model they rise above the register, while ours sit on the carry stores' shafts at Lehmann's height (top edge level with the register cover); to be asked of Badur before changing;
 - reconsider the default carry.
 - ~~after v1.3.0 is released, decide whether to keep `dev/03-full-machine/`~~ Done 2026-11-27 (owner): it was not used during v1.3.0 (the models were checked in the simulator, with `?selftest`, the acceptance tests and the sweep), so `dev/` was removed with `js/sim/narrate.js`, `tests/sim/steps.test.js` and `Machine.stepStops()`, as the slice pages were in 1.2.0.
+
+## Addendum 2026-11-27: where v1.3.0 left the items above
+
+- **B1** done: Klaus Badur confirmed that adding turns the crank anticlockwise seen from the front (2026-11-25); the model turns that way, and the counter's ring anticlockwise seen from above.
+- **B2/B3** done: the revolution counter at the top right holds the pin, the black numbers (adding) on its centre and the red ones (turning back) round the ring, and its stop stops the crank; the Magna Rota is the original's pierced disc, Ø116.5, fixed to the crank, with a spring detent behind it. *Run to stop* and a new *Run back to stop* work the counter's pin; the multiplication lesson sets the pin at a black number, and the division lesson counts the subtractions with the pin at black 0, as Badur describes.
+- **C1, C2, C3** done: the drums at the original's sizes; the three large gears behind the Magna Rota with the row of 17 gears; the counter's drive from the 17th shaft and the carriage's detent catch.
+- **The pentagons:** placed in depth as on Badur's assembly drawing (two rows 10.5 apart); their height is still not measured.
+- **The default carry** stays the ripple carry, now with a pair of carry parts of our own design (decision 0001, last addendum).
+- **The exterior:** the oak case (A7 in v1.2.0) is removed. The machine stands as Lehmann's replica does in its museum: on turned brass feet under the frame's side walls, on wooden blocks on a board, with the frame of beams from his drawings and no cover over the register, as on the original. "The model already shows the oak case" in the table above no longer holds; a case may come back later.

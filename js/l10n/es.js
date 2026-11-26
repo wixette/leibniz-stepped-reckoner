@@ -37,7 +37,7 @@ export default {
   "view.drum": "Tambor escalonado",
   "view.carry": "Acarreo",
   "view.inside": "Por dentro",
-  "view.case": "Mostrar la caja y el bastidor",
+  "view.case": "Mostrar el bastidor",
   "view.colours": "Colores por pieza",
   "view.slow": "Cámara lenta",
 
@@ -104,7 +104,7 @@ export default {
   "status.blockedPinSub": "Girando hacia atrás, la clavija ha llegado al otro lado del tope: otra vuelta atrás la atascaría. Saca la clavija o cámbiala de agujero para seguir girando hacia atrás.",
   "status.blockedStore": "Todavía espera un acarreo en la rueda ({place}), adonde no llega ninguna palanca de acarreo, y esta vuelta le añadiría un segundo. Mueve el carro a la izquierda sobre esa rueda, gira una vez con 0 en las perillas para pasar el acarreo y luego devuelve el carro.",
   "status.blockedStoreLate": "Esta vuelta llevaría un segundo acarreo a la memoria de acarreo de la rueda ({place}) antes de que su palanca pase el primero, y una memoria solo guarda uno. Primero gira la manivela una vez en el mismo sentido con 0 en las perillas: así pasa el acarreo que espera.",
-  "status.inside": "Vista interior: la caja está oculta, el frente abierto y las demás piezas atenuadas. La máquina funciona como siempre.",
+  "status.inside": "Vista interior: el bastidor está oculto, el frente abierto y las demás piezas atenuadas. La máquina funciona como siempre.",
   "status.stepDone": "¡Hecho! Pulsa Siguiente.",
   "status.stepDoneClosed": "¡Hecho! Abre la lección (barra superior) para el paso siguiente.",
   "status.lessonDone": "Lección completada: {title}.",
@@ -151,7 +151,7 @@ export default {
   "start.look.point": "Señala una pieza para ver su nombre y su valor.",
   "start.look.click": "Haz clic en las perillas, la manivela, la Magna Rota o los agujeros del contador de vueltas para accionarlos.",
   "start.look.crank": "Arrastra una manivela en círculo para girarla en cualquier sentido: hacia adelante suma, hacia atrás resta.",
-  "start.look.views": "El menú de la cámara, arriba a la derecha, elige una vista; sus interruptores ocultan la caja y el bastidor, colorean cada tipo de pieza o hacen el movimiento más lento.",
+  "start.look.views": "El menú de la cámara, arriba a la derecha, elige una vista; sus interruptores ocultan el bastidor, colorean cada tipo de pieza o hacen el movimiento más lento.",
   "start.look.keys": "Con el teclado: ve a la máquina con Tab; las flechas la giran, Mayús y las flechas la desplazan, + y − acercan y alejan.",
   "start.then": "Después sigue con las lecciones.",
 

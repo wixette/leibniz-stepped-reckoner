@@ -37,7 +37,7 @@ export default {
   "view.drum": "Tamburo a gradini",
   "view.carry": "Riporto",
   "view.inside": "All’interno",
-  "view.case": "Mostra la cassa e il telaio",
+  "view.case": "Mostra il telaio",
   "view.colours": "Colori per parte",
   "view.slow": "Rallentatore",
 
@@ -104,7 +104,7 @@ export default {
   "status.blockedPinSub": "Girando all’indietro, il perno è arrivato dall’altra parte dell’arresto: un altro giro indietro lo bloccherebbe. Togli il perno o spostalo per girare ancora all’indietro.",
   "status.blockedStore": "Un riporto aspetta ancora alla ruota ({place}), dove non arriva nessuna leva di riporto, e questo giro gliene aggiungerebbe un secondo. Sposta il carrello a sinistra sopra quella ruota, fai un giro con 0 sulle manopole per trasmettere il riporto, poi riporta indietro il carrello.",
   "status.blockedStoreLate": "Questo giro porterebbe un secondo riporto alla memoria del riporto della ruota ({place}) prima che la sua leva abbia trasmesso il primo, e una memoria ne tiene uno solo. Prima fai un giro di manovella nello stesso verso con 0 sulle manopole: così il riporto in attesa viene trasmesso.",
-  "status.inside": "Vista interna: la cassa è nascosta, il fronte aperto e gli altri pezzi attenuati. La macchina funziona come sempre.",
+  "status.inside": "Vista interna: il telaio è nascosto, il fronte aperto e gli altri pezzi attenuati. La macchina funziona come sempre.",
   "status.stepDone": "Fatto! Premi Avanti.",
   "status.stepDoneClosed": "Fatto! Apri la lezione (barra in alto) per il passo successivo.",
   "status.lessonDone": "Lezione completata: {title}.",
@@ -151,7 +151,7 @@ export default {
   "start.look.point": "Punta un pezzo per vederne il nome e il valore.",
   "start.look.click": "Fai clic sulle manopole, sulla manovella, sulla Magna Rota o sui fori del contagiri per azionarli.",
   "start.look.crank": "Trascina in tondo una manovella per girarla in un verso o nell’altro: in avanti somma, all’indietro sottrae.",
-  "start.look.views": "Il menu della videocamera, in alto a destra, sceglie una vista; i suoi interruttori nascondono la cassa e il telaio, colorano ogni tipo di pezzo o rallentano il movimento.",
+  "start.look.views": "Il menu della videocamera, in alto a destra, sceglie una vista; i suoi interruttori nascondono il telaio, colorano ogni tipo di pezzo o rallentano il movimento.",
   "start.look.keys": "Con la tastiera: vai alla macchina con Tab; le frecce la ruotano, Maiusc e le frecce la spostano, + e − ingrandiscono e riducono.",
   "start.then": "Poi continua con le lezioni.",
 
