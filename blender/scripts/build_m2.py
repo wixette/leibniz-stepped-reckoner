@@ -403,7 +403,12 @@ def build(p):
     feet_xy = [(fx_, fy_) for fx_ in (base_x0 + ins, base_x1 - ins) for fy_ in (fr["y"][0] + ins, fr["y"][1] - ins)]
     for fx_, fy_ in feet_xy:
         lathe(mb, [(0.0, prof_[-1][1])] + list(reversed(prof_)) + [(0.0, 0.0)], "brass_polished", (fx_, fy_, 0.0), 20)
-    table_z = prof_[-1][1]
+    # a light wooden block under each foot (TSD (03): the replica stands on four), so that the
+    # cranks clear the table
+    bs_, bh_ = ft_["block"]
+    for fx_, fy_ in feet_xy:
+        mb.prism(geom.rect(fx_ - bs_ / 2.0, fy_ - bs_ / 2.0, fx_ + bs_ / 2.0, fy_ + bs_ / 2.0), "XY", prof_[-1][1] - bh_, prof_[-1][1], "oak")
+    table_z = prof_[-1][1] - bh_
     base = static(mb.build("frame.base", col))
     # the table the feet stand on: the operability check (A2-13) compares the crank knobs with it
     bl.set_anchors(base, "table", [(0.0, 0.0, table_z)])

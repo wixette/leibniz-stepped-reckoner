@@ -487,7 +487,7 @@ export function runM2Checks(root, opts = {}) {
   run("A2-13", "Both cranks can be turned by hand: their handles clear the table the feet stand on", () => {
     // A handle is the crank's wooden mesh (oak_handle on both cranks). Over a full turn, at both
     // carriage ends, its lowest point must leave room for a hand above the table (main crank) and
-    // stay above it (end crank). The table is where the base plate's feet stand.
+    // stay above it (end crank). The table is under the wooden blocks the feet stand on.
     /** @type {string[]} */
     const bad = [];
     const table = anchors(node(root, "frame.base"), "table")[0].y * 1000;
@@ -522,13 +522,11 @@ export function runM2Checks(root, opts = {}) {
       pose(c);
       endLow = Math.min(endLow, lowest(node(root, "frame.lead_screw")));
     }
-    // Until the oak case is rebuilt round the feet (the owner, 2026-11-26), the machine stands on
-    // the table: the main crank's handle must clear it (the hand-room rule, HAND_MM, waits for the
-    // case), and the end crank's (radius 68), which reaches below it, is reported, not held.
-    if (mainLow - table < CLEARANCE_TABLE_MM) bad.push(`main crank handle ${fmt(mainLow - table, 1)} mm above the table`);
+    if (mainLow - table < HAND_MM) bad.push(`main crank handle ${fmt(mainLow - table, 1)} mm above the table`);
+    if (endLow - table < CLEARANCE_TABLE_MM) bad.push(`end crank handle ${fmt(endLow - table, 1)} mm above the table`);
     return {
       passed: bad.length === 0,
-      detail: bad.join("; ") || `main crank handle ${fmt(mainLow - table, 1)} mm above the table; end crank handle ${fmt(endLow - table, 1)} mm (not held until the case is rebuilt)`,
+      detail: bad.join("; ") || `main crank handle ${fmt(mainLow - table, 1)} mm above the table; end crank handle ${fmt(endLow - table, 1)} mm above it`,
     };
   });
 
