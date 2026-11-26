@@ -978,6 +978,9 @@ def build(p):
     # the moulded frame round the counter's top, thin, on three sides (left, front, right; none at
     # the back: TSD (02)); the outline runs from the back left round to the back right
     rf = p.v(M2 + "ripple_frame")
+    # and round the knobs' part on its back and left sides (the owner): three ridges, from the
+    # counter's section along the back and down the left end to the front
+    ripple_frame(mb, [(xt, ky1), (cx0, ky1), (cx0, ky0)], False, 3, rf["ridge_width"], rf["ridge_height"], rf["samples"], rf["base"], "XY", kz1, "brass_polished")
     ripple_frame(mb, [(xt, ky1), (xt, ky0), (xr, ky0), (xr, ky1)], False, 2, rf["thin_ridge_width"], rf["thin_ridge_height"], rf["samples"], rf["base"], "XY", zt, "brass_polished")
     wz0 = cs["carriage_wall_z0"]
     mb.prism(geom.rect(cx0, pnl1, cx0 + 3.0, ky1), "XY", wz0, kz0, "brass_satin")       # left end
