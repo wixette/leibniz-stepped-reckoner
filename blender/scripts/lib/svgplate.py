@@ -117,7 +117,7 @@ def read_plate(svg_file, plate_id, diameter_mm, tol_mm=0.02):
     xs, ys = [p[0] for p in rim_raw], [p[1] for p in rim_raw]
     cx, cy = (min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2
     s = diameter_mm / (max(max(xs) - min(xs), max(ys) - min(ys)))
-    loops = path_loops(paths[0].get("d"), tol_mm / s)
+    loops = [_simplify(lp, tol_mm / s) for lp in path_loops(paths[0].get("d"), tol_mm / s)]
     loops = [[((x - cx) * s, -(y - cy) * s) for x, y in lp] for lp in loops]
     rim = max(loops, key=lambda lp: abs(_area(lp)))
     holes = [lp for lp in loops if lp is not rim]
@@ -125,3 +125,56 @@ def read_plate(svg_file, plate_id, diameter_mm, tol_mm=0.02):
         rim = rim[::-1]
     holes = [h if _area(h) < 0 else h[::-1] for h in holes]
     return rim, holes
+
+
+def plate_frame(svg_file, ref_id, diameter_mm):
+    """(scale mm per drawing unit, centre x, centre y) of the plate drawn as `ref_id`, scaled so
+    that its rim has the given diameter: other shapes of the same drawing are placed with it."""
+    root = ET.parse(svg_file).getroot()
+    el = next((e for e in root.iter() if e.get("id") == ref_id), None)
+    if el is None:
+        raise KeyError(f"{svg_file}: no element with id {ref_id}")
+    path = el if el.tag.endswith("path") else next(e for e in el.iter() if e.tag.endswith("path"))
+    rim = max(path_loops(path.get("d"), 0.05), key=lambda lp: abs(_area(lp)))
+    xs, ys = [q[0] for q in rim], [q[1] for q in rim]
+    return diameter_mm / (max(max(xs) - min(xs), max(ys) - min(ys))), (min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2
+
+
+def shape_loops(svg_file, shape_id, scale, tol_mm=0.02):
+    """The loops of the path `shape_id` (or the one path in the group `shape_id`), in drawing units,
+    flattened to within tol_mm at the given scale (mm per unit)."""
+    root = ET.parse(svg_file).getroot()
+    el = next((e for e in root.iter() if e.get("id") == shape_id), None)
+    if el is None:
+        raise KeyError(f"{svg_file}: no element with id {shape_id}")
+    paths = [e for e in el.iter() if e.tag.endswith("path")]
+    if len(paths) != 1:
+        raise ValueError(f"{shape_id}: expected one path, found {len(paths)}")
+    return [_simplify(lp, tol_mm / scale) for lp in path_loops(paths[0].get("d"), tol_mm / scale)]
+
+
+def _simplify(loop, eps):
+    """Douglas-Peucker: drop the points of an open or closed polyline that lie within eps of
+    the line through their neighbours kept (the flattened curves have many more than needed)."""
+    if len(loop) < 4:
+        return loop
+
+    def rdp(pts):
+        (x0, y0), (x1, y1) = pts[0], pts[-1]
+        dx, dy = x1 - x0, y1 - y0
+        ln = (dx * dx + dy * dy) ** 0.5
+        best, at = -1.0, 0
+        for i in range(1, len(pts) - 1):
+            px, py = pts[i]
+            d = abs(dy * (px - x0) - dx * (py - y0)) / ln if ln > 0 else ((px - x0) ** 2 + (py - y0) ** 2) ** 0.5
+            if d > best:
+                best, at = d, i
+        if best <= eps:
+            return [pts[0], pts[-1]]
+        return rdp(pts[: at + 1])[:-1] + rdp(pts[at:])
+
+    # split at the point farthest from the first, so both halves are open polylines
+    far = max(range(len(loop)), key=lambda i: (loop[i][0] - loop[0][0]) ** 2 + (loop[i][1] - loop[0][1]) ** 2)
+    a = rdp(loop[: far + 1])
+    b = rdp(loop[far:] + [loop[0]])
+    return a[:-1] + b[:-1]

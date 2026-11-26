@@ -36,6 +36,7 @@ MATERIALS = {
     "ink_red": ((0.62, 0.06, 0.04), 0.0, 0.55, None),
     "wood_dark": ((0.035, 0.022, 0.016), 0.0, 0.35, None),
     "oak": ((0.16, 0.085, 0.04), 0.0, 0.55, "oak"),
+    "oak_handle": ((0.075, 0.035, 0.016), 0.0, 0.45, "oak"),   # the Magna Rota's crank handle: a darker oak than the case's (owner), and not the casing's (A2-12)
 }
 
 # Textures repeat every UV_MM millimetres (box-projected UVs, see MeshBuilder.build).

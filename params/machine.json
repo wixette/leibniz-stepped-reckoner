@@ -887,20 +887,6 @@
         "conf": "design",
         "src": "one hole of the revolution counter per crank turn (10 holes); the Magna Rota itself turns with the crank"
       },
-      "main_crank": {
-        "v": {
-          "radius": 60.0,
-          "arm_y": [
-            -129.5,
-            -128.0
-          ],
-          "knob_y": -148.0,
-          "knob_radius": 5.5
-        },
-        "unit": "mm",
-        "conf": "design",
-        "src": "crank in the middle of the Magna Rota; arm in front of the Magna Rota; knob 60 mm out, near the ring's rim (front elevation about 65 mm), above the case floor"
-      },
       "lead_screw": {
         "v": {
           "y": -77.0,
@@ -1148,6 +1134,44 @@
         "conf": "doc",
         "src": "BADUR2026 (measured on the original): pentagons 40 across the two side corners (BADUR2026 Pos. 22, \"Fuenfeck\", 1.5 thick), circumradius 21.03. Adjacent stores are only 36.5 apart, so the pentagons stand in two staggered rows, even digits in front, odd behind (Lange 1958 via NL183/466 PLAN p. 9: '15 pentagon plates in two staggered rows'; the GWLB CAD model shows the same). Behind the rear wall; their top edges (z 86.1) are level with the register cover (z 86-87.5), just behind its back edge, so the oak case hides them. On the original they appear to rise above the register (GWLB CAD model): their height there is not measured and is asked for v1.3.0 (decision 0002). 2026-11-25: placed as on Badur's assembly drawing (plan view, scaled by the 36.5 digit pitch): the two rows 10.5 apart, as his two intermediate shafts' lengths differ (Pos. 23/24: 82.5 and 93 from the front end to the pentagon's shoulder), the front row about 17.6 and the back row about 28.1 behind the middle of the rear wall the shafts come through; 1.5 thick (Pos. 22). The TSD photographs of Lehmann's replica show the same: the shafts stand well out of the rear wall, the two rows clearly apart."
       },
+      "magna_rota_crank": {
+        "v": {
+          "drawing": "design/drawings/magna-rota-details.svg",
+          "front_ref": "UnderPlate2",
+          "rod": "Rod",
+          "wood": "HandleWoodPart_2",
+          "ball": "HandleMetalBallHead_2",
+          "side_plate_front_x": 880.0,
+          "side_axis_y": 471.0,
+          "rod_side_x": [
+            881.0,
+            893.0
+          ],
+          "centre": {
+            "radius": 5.5,
+            "front_x": 905.0
+          },
+          "handle_axis": {
+            "z": -51.0,
+            "radius": 4.8,
+            "front_x": 905.0,
+            "pin_radius": 3.2,
+            "pin_front_x": 917.0
+          },
+          "bolts": {
+            "x": 51.0,
+            "z": 10.8,
+            "shank_radius": 1.5,
+            "nut_radius": 3.0,
+            "nut_front_x": 896.0,
+            "head_radius": 2.3,
+            "head_centre_x": 897.5
+          }
+        },
+        "unit": "mm",
+        "conf": "design",
+        "src": "The Magna Rota's crank as the owner drew it (design/drawings/magna-rota-details.svg, after Brandt's Abb. II 5 and photos of the replica; shapes simplified): a steel rod across the plate from the top rim down past the centre, shaped round the centre and in a waist, ending in a ring round the handle's axis inside the rim; a turned oak handle on that axis, standing out to the front, with a steel ball at its end; the plates held by two bolts left and right, nuts in front (the drawing's side view draws them through the plates: bolts, the owner, 2026-11-26). No source gives these sizes: the drawing is scaled so that its plate is the measured 116.5 across (front_ref), its side view by the same scale from the brass plate's front face (side_plate_front_x); the rod's outline, the handle's and the ball's profiles are read from the drawing, the rest are the drawing's sizes in mm, or its side-view x positions (front_x). The plates keep their own thicknesses (magna_rota_plates). The bolts' heads behind the back plate are left out: the plates stand 0.6 in front of the carriage's panel."
+      },
       "magna_rota_plates": {
         "v": {
           "drawing": "design/drawings/magna-rota.svg",
@@ -1159,14 +1183,14 @@
           "y": [
             [
               -117.5,
-              -116.0
+              -116.1
             ],
             [
-              -116.0,
-              -115.0
+              -115.85,
+              -115.1
             ],
             [
-              -115.0,
+              -114.85,
               -112.6
             ]
           ],
@@ -1179,7 +1203,7 @@
         },
         "unit": "mm",
         "conf": "design",
-        "src": "the Magna Rota: three plates of Ø116.5 (BADUR2026) fixed to the crank, front to back: the pierced brass plate (after Badur's saw template for Pos. 70 and the photo of the original), and two steel plates (his sheet 7; plate 3 is his Pos. 69, about 2.5 thick, fixed to a hub with three screws). The owner's drawing gives their outlines and holes; the thicknesses are by eye, and the order of the two steel plates is assumed (design/v1.3-notes.md). The front plate is satin brass, so its rim stands out from the polished front panel; its curves are flattened to within 0.08 mm."
+        "src": "the Magna Rota: three plates of Ø116.5 (BADUR2026) fixed to the crank, front to back: the pierced brass plate (after Badur's saw template for Pos. 70 and the photo of the original), and two steel plates (his sheet 7; plate 3 is his Pos. 69, about 2.5 thick, fixed to a hub with three screws). The owner's drawing gives their outlines and holes; the thicknesses are by eye, with 0.25 between the plates so that they read as three (owner, 2026-11-26), and the order of the two steel plates is assumed (design/v1.3-notes.md). The front plate is satin brass, so its rim stands out from the polished front panel; its curves are flattened to within 0.08 mm."
       },
       "counter": {
         "v": {

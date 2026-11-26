@@ -485,7 +485,7 @@ export function runM2Checks(root, opts = {}) {
   });
 
   run("A2-13", "Both cranks can be turned by hand: knobs clear the case's front wall, floor and the table", () => {
-    // A knob is the crank's wood_dark mesh. Over a full turn, at both carriage ends, its
+    // A knob is the crank's wooden mesh (oak_handle on the main crank, wood_dark on the end crank). Over a full turn, at both carriage ends, its
     // lowest point must leave room for a hand above the front wall top and the case floor
     // (main crank), and stay above the table the case stands on (end crank).
     /** @type {string[]} */
@@ -507,7 +507,7 @@ export function runM2Checks(root, opts = {}) {
         const mesh = /** @type {THREE.Mesh} */ (o);
         if (!mesh.isMesh) return;
         const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
-        if (!mats.some((m) => m.name === "wood_dark")) return;
+        if (!mats.some((m) => m.name === "wood_dark" || m.name === "oak_handle")) return;
         const pos = mesh.geometry.attributes.position;
         for (let i = 0; i < pos.count; i++) min = Math.min(min, v.fromBufferAttribute(pos, i).applyMatrix4(mesh.matrixWorld).y * 1000);
       });

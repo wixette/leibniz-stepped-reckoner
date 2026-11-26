@@ -657,27 +657,96 @@ def build(p):
 
     # Magna Rota: three plates of the owner's drawing (design/drawings/magna-rota.svg), fixed to
     # the crank and turning with it: the pierced brass plate in front, two steel plates behind.
-    from lib.svgplate import read_plate
+    from lib.svgplate import _area as _svg_area, plate_frame, read_plate, shape_loops
     mr_cfg = p.v(M2 + "magna_rota_plates")
     mrad = p.v(M2 + "magna_rota_radius")
+    # the owner's drawing of the crank and the bolts (design/drawings/magna-rota-details.svg): its
+    # front view gives outlines (x right, y down), its side view depths (x to the front, from the
+    # brass plate's front face); one scale, from the plate's measured diameter
+    mc = p.v(M2 + "magna_rota_crank")
+    dwg = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", mc["drawing"])
+    s_, cx_, cy_ = plate_frame(dwg, mc["front_ref"], 2.0 * mrad)
+    yf_ = mr_cfg["y"][0][0]                                  # the brass plate's front face
+
+    def depth(xd):
+        """y of a side-view x (in front of the plates)."""
+        return yf_ - (xd - mc["side_plate_front_x"]) * s_
+
     drawing = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", mr_cfg["drawing"])
     mb = MeshBuilder()
     for pid, (y0, y1), mat in zip(mr_cfg["ids"], mr_cfg["y"], mr_cfg["materials"]):
         rim, holes = read_plate(drawing, pid, 2.0 * mrad, mr_cfg["tolerance"])
         # the drawing's x right and y up are the machine's x and z, seen from the front
         mb.prism_holes(rim, holes, "XZ", y0, y1, mat)
+    # the two bolts holding the plates together, left and right (the owner's drawing): a shank
+    # through the plates' holes, a round nut in front with a domed head
+    bo = mc["bolts"]
+    for sx_ in (-1.0, 1.0):
+        bx, bz = sx_ * bo["x"], bo["z"]
+        mb.prism([(u + bx, w + bz) for u, w in geom.circle(bo["shank_radius"], 12)], "XZ", yf_ + 0.2, mr_cfg["y"][-1][1] - 0.1, "steel", smooth=True)
+        y_nut = depth(bo["nut_front_x"])
+        mb.prism([(u + bx, w + bz) for u, w in geom.circle(bo["nut_radius"], 24)], "XZ", y_nut, yf_ + 0.01, "steel", smooth=True)
+        yc = depth(bo["head_centre_x"])
+        hr = bo["head_radius"]
+        n0 = len(mb.verts)
+        lathe(mb, [(0.0, -0.3)] + [(hr * math.cos(math.radians(a)), hr * math.sin(math.radians(a))) for a in range(0, 91, 15)], "steel", (0.0, 0.0, 0.0), 20)
+        mb.verts[n0:] = [(bx + vx, yc - vz, bz + vy) for vx, vy, vz in mb.verts[n0:]]
+        mb.prism([(u + bx, w + bz) for u, w in geom.circle(hr, 20)], "XZ", yc, y_nut + 0.01, "steel", smooth=True)
     mrota = mb.build("pm.magna_rota", col, (mx, 0, mz))
     bl.set_motion(mrota, "rotate", (0, 1, 0), "Magna Rota (turns with the crank)", "Magna Rota (dreht sich mit der Kurbel)")
     bl.parent(mrota, carriage)
 
-    # main crank: shaft through the Magna Rota's centre hole, arm in front of it,
-    # pointing down at rest; the knob stays above the case floor.
-    ck = p.v(M2 + "main_crank")
+    # main crank (the owner's drawing, design/drawings/magna-rota-details.svg): a steel rod across
+    # the Magna Rota's face, a boss on the centre, and a turned oak handle with a steel ball on an
+    # axis at the rod's lower end, standing out to the front; the plates are held by two bolts.
+    # The drawing's front view gives the outlines (x right, y down), its side view the depths
+    # (x to the front, from the brass plate's front face); one scale, from the plate's diameter.
+    def lathe_y(m_, profile_px, mat, ox, oz, n=32):
+        """A turned part on an axis along y at (ox, oz): profile [(r, x)] in side-view units."""
+        n0 = len(m_.verts)
+        lathe(m_, [(r * s_, (xd - mc["side_plate_front_x"]) * s_) for r, xd in profile_px], mat, (0.0, 0.0, 0.0), n)
+        # turned a quarter about x: the lathe's axis (+z) points to the front (-y)
+        m_.verts[n0:] = [(ox + vx, yf_ - vz, oz + vy) for vx, vy, vz in m_.verts[n0:]]
+
+    def side_profile(shape_id):
+        """The upper half of a side-view outline about the handle's axis, in the outline's own
+        order (so a lip that curls back is kept), as [(r, x)] from the axis round to the axis."""
+        loop = max(shape_loops(dwg, shape_id, s_, 0.05), key=lambda lp: abs(_svg_area(lp)))
+        loop = [q for i, q in enumerate(loop) if i == 0 or q != loop[i - 1]]
+        if loop[0] == loop[-1]:
+            loop = loop[:-1]
+        ay, n = mc["side_axis_y"], len(loop)
+        upper = [q[1] <= ay + 1e-6 for q in loop]
+        i0 = next(i for i in range(n) if upper[i] and not upper[i - 1])   # where the outline enters the upper half
+        chain = []
+        for k in range(n):
+            q = loop[(i0 + k) % n]
+            if not upper[(i0 + k) % n]:
+                break
+            chain.append((max(0.0, ay - q[1]), q[0]))
+        if chain[0][1] > chain[-1][1]:
+            chain.reverse()                                   # from the plate to the front
+        prof = ([] if chain[0][0] == 0.0 else [(0.0, chain[0][1])]) + chain
+        return prof + ([] if prof[-1][0] == 0.0 else [(0.0, prof[-1][1])])
+
     mb = MeshBuilder()
-    mb.prism(geom.circle(3.0, 24), "XZ", ck["arm_y"][0], pnl0 - 2.6, "steel", smooth=True)
-    mb.prism(geom.circle(6.0, 32), "XZ", ck["arm_y"][0] - 1.0, ck["arm_y"][1], "brass_satin", smooth=True)
-    mb.prism(geom.radial_bar(4.0, ck["radius"], 6.0, -90.0), "XZ", ck["arm_y"][0], ck["arm_y"][1], "brass_satin")
-    mb.prism([(u, w - ck["radius"]) for u, w in geom.circle(ck["knob_radius"], 24)], "XZ", ck["knob_y"], ck["arm_y"][0], "wood_dark", smooth=True)
+    mb.prism(geom.circle(3.0, 24), "XZ", depth(mc["centre"]["front_x"]) + 0.5, pnl0 - 2.6, "steel", smooth=True)
+    # the rod, centred on the crank's axis (the drawing has it about 0.2 off)
+    rl = shape_loops(dwg, mc["rod"], s_, 0.03)
+    rod = max(rl, key=lambda lp: abs(_svg_area(lp)))
+    rx0, rx1 = min(q[0] for q in rod), max(q[0] for q in rod)
+    rcx = (rx0 + rx1) / 2.0
+    rod_mm = [((xd - rcx) * s_, -(yd - cy_) * s_) for xd, yd in rod]
+    ry0, ry1 = (depth(v) for v in mc["rod_side_x"])
+    mb.prism(rod_mm, "XZ", ry1, ry0, "steel")
+    cb = mc["centre"]
+    mb.prism(geom.circle(cb["radius"], 32), "XZ", depth(cb["front_x"]), ry1 + 0.3, "steel", smooth=True)
+    ha = mc["handle_axis"]
+    hz = ha["z"]
+    mb.prism([(u, w + hz) for u, w in geom.circle(ha["radius"], 32)], "XZ", depth(ha["front_x"]), ry1 + 0.3, "steel", smooth=True)
+    mb.prism([(u, w + hz) for u, w in geom.circle(ha["pin_radius"], 24)], "XZ", depth(ha["pin_front_x"]) + 0.3, depth(ha["front_x"]) - 0.01, "steel", smooth=True)
+    lathe_y(mb, side_profile(mc["wood"]), "oak_handle", 0.0, hz, 32)
+    lathe_y(mb, side_profile(mc["ball"]), "steel", 0.0, hz, 20)
     crank = mb.build("pm.main_crank", col, (mx, 0, mz))
     bl.set_motion(crank, "rotate", (0, 1, 0), "Main crank (one turn = one addition or subtraction)", "Hauptkurbel")
     bl.parent(crank, carriage)
