@@ -248,9 +248,11 @@ export class Viewer {
    * Smoothly move the camera to look at target from position (metres).
    * @param {THREE.Vector3Like} position
    * @param {THREE.Vector3Like} target
+   * @param {number} [seconds]
+   * @param {() => void} [done] called when the camera arrives (not if another flight replaces this one)
    * @returns {void}
    */
-  flyTo(position, target, seconds = 0.8) {
+  flyTo(position, target, seconds = 0.8, done) {
     // A new flight replaces one under way, from wherever the camera is now.
     if (this.flight) this.endFlight(this.flight);
     const p0 = this.camera.position.clone();
@@ -265,7 +267,10 @@ export class Viewer {
       this.camera.position.lerpVectors(p0, p1, e);
       this.controls.target.lerpVectors(t0, t1, e);
       this.invalidate(false);
-      if (t >= 1) this.endFlight(step);
+      if (t >= 1) {
+        this.endFlight(step);
+        done?.();
+      }
     };
     this.flight = step;
     this.onFrame.push(step);

@@ -210,7 +210,7 @@ export class Highlighter {
   originals = new Map();
 
   /**
-   * The clones, by original material and look ("lit", "dim" or "lit dim").
+   * The clones, by base material and look ("lit" with its glow colour, "dim", "veil").
    * @private
    * @type {Map<THREE.Material, Map<string, THREE.Material>>}
    */
@@ -362,7 +362,9 @@ export class Highlighter {
       const edit = (m0) => {
         const half = !dim && veiled(m0);
         const m = this.base(mesh, m0);
-        const look = `${on ? "lit" : ""} ${dim ? "dim" : ""} ${half ? "veil" : ""}`;
+        // in colour by part, a part glows in its own colour, so its colour still tells what it is
+        const hex = this.colours && !KEEP_COLOUR.has(m0.name) ? this.partColour.get(mesh) : undefined;
+        const look = `${on ? `lit${hex ?? ""}` : ""} ${dim ? "dim" : ""} ${half ? "veil" : ""}`;
         if (!on && !dim && !half) return m;
         const byLook = this.clones.get(m) ?? new Map();
         this.clones.set(m, byLook);
@@ -373,10 +375,8 @@ export class Highlighter {
         }
         const c = /** @type {THREE.MeshStandardMaterial} */ (m.clone());
         if (on && c.emissive) {
-          // in colour by part, a part glows in its own colour, so its colour still tells what it is
-          const hex = this.colours ? this.partColour.get(mesh) : undefined;
-          c.emissive = hex !== undefined && !KEEP_COLOUR.has(m0.name) ? new THREE.Color(hex) : GLOW.clone();
-          c.emissiveIntensity = hex !== undefined ? 0.3 : 0.45;
+          c.emissive = hex !== undefined ? new THREE.Color(hex) : GLOW.clone();
+          c.emissiveIntensity = hex !== undefined ? 0.6 : 0.45;
         }
         if (dim || half) {
           c.transparent = true;
@@ -510,7 +510,10 @@ export class Callouts {
       const info = this.valueOf(node.name);
       fillLabel(it.el, it.text, info?.value ?? null, info?.red);
       const at = it.anchor ? /** @type {Record<string, unknown>} */ (node.userData)[it.anchor] : null;
-      if (Array.isArray(at) && at.length >= 3) this.v.set(at[0], at[1], at[2]).applyMatrix4(node.matrixWorld);
+      if (Array.isArray(at) && at.length >= 3) {
+        node.updateWorldMatrix(true, false); // as setFromObject does: the pose may have moved it since the last render
+        this.v.set(at[0], at[1], at[2]).applyMatrix4(node.matrixWorld);
+      }
       else this.box.setFromObject(node).getCenter(this.v);
       this.v.project(this.camera);
       it.el.hidden = this.v.z > 1;

@@ -67,7 +67,7 @@ Also:
 │                                                     ┃ │ ●●●○○○○○  step 3 of 8  │ │
 │                                                     ┃ │ Behind each result...  │ │
 │                                                     ┃ │ ▸ Your turn  [Number]  │ │  task line (U18)
-│ ╭[00000001] [↻ + │ ↺ −] [‹‹ 0 ››] [Pin – ▾│→|]  ⟳ ╮ ┃ └────────────────────────┘ │  toolbar (U18)
+│ ╭[00000001] [↺ + │ ↻ −] [‹‹ 0 ››] [Pin – ▾│→|]  ⟳ ╮ ┃ └────────────────────────┘ │  toolbar (U18)
 ├─────────────────────────────────────────────────────┴────────────────────────────┤
 │ The ribs added 1 to the units: 9 → 0, and the carry is stored.                   │  status bar
 └──────────────────────────────────────────────────────────────────────────────────┘
@@ -271,7 +271,7 @@ The dock had a fixed size, so the reader could not give the machine more room, o
 With the dock on the right, the toolbar ran the full width under the stage, left-aligned, at the window's bottom-left corner: far from the machine, centred above it, and from the lesson text in the dock.
 
 - **The toolbar floats at the stage's bottom, centred under the machine,** as a compact bar like the view controls at the top right. It sits where the reader is already looking, and the 3D view gets the full height. The framing (U10) keeps the machine clear of it, and refits when the bar re-wraps (a longer language, a narrower stage). It wraps to two rows when the stage is narrow, and shows icons with tooltips on a phone.
-- **A step's task line shows the controls it asks for,** for example "Your turn [↻ Add]". Each button works the toolbar's own control, so the same locks, lesson rules and reasons apply (P6). It is greyed when that control is, and the toolbar still makes the asked-for control glow. In a lesson, the moment the reader most often hunts for a control, their eyes can stay in the dock. The number box is a button that puts the cursor in the toolbar's number field.
+- **A step's task line shows the controls it asks for,** for example "Your turn [↺ Add]". Each button works the toolbar's own control, so the same locks, lesson rules and reasons apply (P6). It is greyed when that control is, and the toolbar still makes the asked-for control glow. In a lesson, the moment the reader most often hunts for a control, their eyes can stay in the dock. The number box is a button that puts the cursor in the toolbar's number field.
 
 *Rejected:* the controls in the top band beside the readouts (it would crowd the band that holds the numbers and the camera: top is state and camera, bottom is acting); the controls inside the dock (in free play the dock may be closed).
 
@@ -291,10 +291,10 @@ The number typed into the box under the machine reached the knobs only on Enter,
 
 The buttons were labelled Add and Subtract, and Add was filled (the main action, in Material) while Subtract was tonal, so they looked like one active and one inactive button, which they are not. The words were also long in some languages ("Addieren / Subtrahieren", "Additionner / Soustraire").
 
-- **The labels are the crank's turning icon and the sign of what the turn does,** ↻ + and ↺ −. The signs are the same in every language, so the buttons are equally short in all ten. The icons keep them from reading as "make the number bigger or smaller": they say "turn forward: add", as the machine does (U16). The words stay in the tooltip and the accessible name ("Turn the crank forward once: adds the number on the knobs"). The minus is the true minus sign (−), larger than the body text.
+- **The labels are the crank's turning icon and the sign of what the turn does,** ↺ + and ↻ −: adding turns the crank anticlockwise seen from the front, as the model does. The signs are the same in every language, so the buttons are equally short in all ten. The icons keep them from reading as "make the number bigger or smaller": they say "turn forward: add", as the machine does (U16). The words stay in the tooltip and the accessible name ("Turn the crank forward once: adds the number on the knobs"). The minus is the true minus sign (−), larger than the body text.
 - **They are one joined pair, alike:** one crank, two ways. The carriage's left and right arrows are a joined pair too, with its place between them.
 - **The toolbar is consistent:** every machine operation is a tonal button. None looks like the default or the active one; in a lesson the step's own control is marked by the glow and its task-line button (U18). Reset, which clears the machine, is the one quiet text button, at the end of the operations (only the sound switch follows it, U29).
-- **The texts that named the buttons say "press +" or "press −"** (in the tutorial and the subtraction lesson, and in Get started), and the task line shows the same ↻ + and ↺ −.
+- **The texts that named the buttons say "press +" or "press −"** (in the tutorial and the subtraction lesson, and in Get started), and the task line shows the same ↺ + and ↻ −.
 
 *Rejected:* "Add" and "Sub" (only shortens English; "Sub" means nothing, or something else, in most of our languages); signs without the crank icons (a bare − reads as "smaller" or "remove").
 

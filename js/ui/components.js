@@ -78,19 +78,23 @@ let tipTimer;
 /**
  * Give an element a tooltip (shown on hover and keyboard focus) and a screen-reader name. An
  * element with its own visible label (data-tip-describes: a text button, a labelled field) keeps
- * that label as its name, and the tooltip describes it.
+ * that label as its name, and the tooltip describes it. A tab (data-tip-unlabelled) shows its
+ * tooltip only while its label is hidden, and keeps the label as its name.
  * @param {HTMLElement} e
  * @param {string} text
  */
 export function setTip(e, text) {
   e.dataset.tip = text;
-  e.setAttribute(e.hasAttribute("data-tip-describes") ? "aria-description" : "aria-label", text);
+  // a tab's label (visually hidden on a narrow screen) stays its name: the tip only shows it
+  if (!e.hasAttribute("data-tip-unlabelled")) e.setAttribute(e.hasAttribute("data-tip-describes") ? "aria-description" : "aria-label", text);
   if (e.dataset.tipBound) return;
   e.dataset.tipBound = "1";
   const show = () => {
     clearTimeout(tipTimer);
     tipTimer = setTimeout(() => {
       if (!e.isConnected || !e.dataset.tip) return;
+      // a tab says its name only while its label is hidden (a narrow screen shows its icon alone)
+      if (e.hasAttribute("data-tip-unlabelled") && (/** @type {HTMLElement | null} */ (e.querySelector("span"))?.offsetWidth ?? 0) > 1) return;
       tipBox ??= document.body.appendChild(el("div", { class: "tooltip", role: "presentation" }));
       tipBox.textContent = e.dataset.tip;
       tipBox.hidden = false;

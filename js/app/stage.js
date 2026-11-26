@@ -15,7 +15,7 @@ import { CRANK_COMMIT, CrankDrag, crankAt, intentAt, intentHint } from "../teach
 import { partInfo, partName, zoneKey, zoneName } from "../teach/partInfo.js";
 /** @import { ViewName } from "../teach/player.js" */
 
-/** Parts hidden by "Case" (the lower frame with its feet and the carriage's cover). */
+/** Parts hidden by "Case": the feet with their blocks and board, and the carriage's cover. */
 const CASING = ["frame.base", "pm.carriage_cover"];
 /**
  * The structure that goes with the case (U32): the frame, the carriage's front panel, its own floor,
@@ -62,7 +62,7 @@ export class Stage {
   /**
    * The callouts' texts (message keys), kept to translate them again.
    * @private
-   * @type {{ node: string; text: () => string; value?: false }[]}
+   * @type {{ node: string; text: () => string; value?: false; anchor?: string }[]}
    */
   calloutItems = [];
 
@@ -146,8 +146,7 @@ export class Stage {
     const f = frame(this.viewer.camera, points, dir, w, h, this.insets(), 0.9);
     // a narrow screen needs the camera farther than the usual limit to show a whole view (a
     // phone upright: about 3 m for the whole machine); let it, with room to zoom out a little
-    this.viewer.controls.maxDistance = Math.max(MAX_DISTANCE, f.position.distanceTo(f.target) * 1.25);
-    return f;
+    return { ...f, maxDistance: Math.max(MAX_DISTANCE, f.position.distanceTo(f.target) * 1.25) };
   }
 
   /** The canvas changed size (or the bands did): centre on the free area, refit a fitted view. */
@@ -158,6 +157,7 @@ export class Stage {
     centreOnFreeArea(this.viewer.camera, w, h, this.insets());
     if (this.fitted && this.views && !this.viewer.isFlying) {
       const f = this.framing(this.fitted);
+      this.viewer.controls.maxDistance = f.maxDistance;
       this.viewer.camera.position.copy(f.position);
       this.viewer.controls.target.copy(f.target);
       this.viewer.camera.lookAt(f.target); // now, not at the next frame's controls update
@@ -225,7 +225,10 @@ export class Stage {
     return true;
   }
 
-  /** Show or hide the case and the carriage front, as set. */
+  /**
+   * Show or hide the case (the board, the carriage's top, and the frame's and the carriage's
+   * structure, concealed) and the carriage's front panel, as set.
+   */
   applyToggles() {
     if (!this.root) return;
     for (const n of CASING) for (const o of findNodes(this.root, n)) o.visible = this.casing;
@@ -310,7 +313,11 @@ export class Stage {
     centreOnFreeArea(this.viewer.camera, this.host.clientWidth, this.host.clientHeight, this.insets());
     const f = this.framing(view);
     this.fitted = view;
-    this.viewer.flyTo(f.position, f.target, reducedMotion() ? 0.001 : 0.8);
+    // the limit comes down only once the camera is there: lowered now, the controls would pull
+    // a far camera (a phone's whole machine) in at once, then fly on from there
+    const { camera, controls } = this.viewer;
+    controls.maxDistance = Math.max(f.maxDistance, camera.position.distanceTo(controls.target));
+    this.viewer.flyTo(f.position, f.target, reducedMotion() ? 0.001 : 0.8, () => (controls.maxDistance = f.maxDistance));
   }
 
   // ---- moving the camera by keys and buttons (U24) ----------------------------------------------

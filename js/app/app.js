@@ -310,11 +310,12 @@ export class App {
 
   /**
    * @param {number | null} hole the hole, by its black number
-   * @param {boolean} [red] set by the red number (9 - hole): for turning back
+   * @param {boolean} [red] set by the red number (9 - hole): for turning back; taking the pin
+   *   out keeps the circle chosen
    */
-  setPin(hole, red = false) {
+  setPin(hole, red = this.pinRed) {
     if (!this.machine.setPin(hole)) return;
-    this.pinRed = hole !== null && red;
+    if (hole !== null) this.pinRed = red;
     this.say(() => (hole === null ? t("status.pinOut") : this.pinRed ? t("status.pinRed", { n: 9 - hole }) : t("status.pin", { n: hole })));
     this.afterLearner();
   }
@@ -341,6 +342,7 @@ export class App {
   reset() {
     this.animator.stop();
     this.machine.reset(); // the carry stays as chosen (U30)
+    this.pinRed = false; // and the pin, out, counts by the black numbers again
     // the wheels and knobs going back to zero: a quick ratchet, not a tick per knob
     this.sound.resync(this.machine);
     for (let k = 0; k < 3; k++) this.sound.play("step", { delay: k * 0.07 });
@@ -383,7 +385,7 @@ export class App {
       return;
     }
     applyIntentNow(i, this.machine);
-    if (i.kind === "pin") this.pinRed = false; // a hole clicked on the model: by its black number
+    if (i.kind === "pin" && i.hole !== null) this.pinRed = false; // a hole clicked on the model: by its black number
     if (i.kind === "pin") this.say(() => (i.hole === null ? t("status.pinOut") : t("status.pin", { n: /** @type {number} */ (i.hole) })));
     else this.say(() => t("status.set", { n: group3(this.inputNumber()) }));
     this.afterLearner();
@@ -423,10 +425,10 @@ export class App {
     const c = this.course;
     if (!c) return;
     this.animator.stop();
+    this.pinRed = false; // a lesson sets its pin by the black number
     if (replay) {
       replayTo(c.lesson, i, this.machine);
       this.sound.resync(this.machine); // set up for the step, not operated: silent
-      this.pinRed = false; // a lesson's pin is set by its black number
       this.changed(); // pose the model before the view frames it (a carriage moved by the replay)
     }
     c.i = i;
@@ -1033,8 +1035,11 @@ export class App {
     const red = m.pin !== null && this.pinRed;
     $("pinValue").textContent = m.pin === null ? "–" : String(this.pinNumber());
     $("pinValue").classList.toggle("red", red);
-    // its name says the hole (U22); the tooltip keeps what the pin does
-    $("pinBtn").setAttribute("aria-label", m.pin === null ? t("strip.pin.nameOut") : t("strip.pin.name", { n: m.pin }));
+    // its name says the number it was set by, black or red (U22); the tooltip keeps what the pin does
+    $("pinBtn").setAttribute(
+      "aria-label",
+      m.pin === null ? t("strip.pin.nameOut") : red ? t("status.pinRed", { n: 9 - m.pin }) : t("status.pin", { n: m.pin }),
+    );
     $("carryValue").textContent = t(`strip.carry.${m.mode}.short`);
     $("carryBtn").setAttribute("aria-label", t("strip.carry.name", { mode: t(`strip.carry.${m.mode}`) }));
     // the view on show, on the Views menu's button
