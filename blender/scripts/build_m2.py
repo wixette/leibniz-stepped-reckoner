@@ -345,6 +345,10 @@ def build(p):
         mb.prism(geom.rect(a, wy0, b, wy1), "XY", zw, zw + 1.5, "brass_satin")
     for bx in (xr - 3.0, xl):
         mb.prism(geom.rect(bx, ry1w, bx + 3.0, wall0), "XY", zw, zw + 1.5, "brass_satin")
+        # a post at the rail's front end down to the side wall's low front part, so the plate
+        # stands on four posts, not only on the rear beam's two (the owner)
+        px0_, px1_ = (bx, in_x1) if bx > xl else (xl, xl + 3.0)    # reaching the wall's inner face
+        mb.prism(geom.rect(px0_, ry1w, px1_, ry1w + 4.0), "XY", p.v(M2 + "frame")["side_wall_low_z"] - 0.5, zw + 0.01, "brass_satin")
     window = static(mb.build("pi.window", col))
     bl.set_anchors(window, "read_points", [(x, (wy0 + wy1) / 2.0, zw + 3.0) for x in X])
     window["read_half_size_mm"] = dl["read_half_size"]
@@ -420,14 +424,18 @@ def build(p):
     # two feet under each side wall (the feet sheet: 'je 2x'), the walls standing on them
     prof_ = [(r, -z) for r, z in ft_["profile"]]          # from the top (z 0, under the walls) down
     feet_xy = [(wx_, fy_) for wx_ in (in_x0 - sw / 2.0, in_x1 + sw / 2.0) for fy_ in fr["lower_frame"]["feet_y"]]
+    # a square pad under the wall at each foot: the foot's collar (14 across) is wider than the
+    # wall (10), so it bears on the pad (the owner)
+    pw_, ph_ = ft_["pad"]
     for fx_, fy_ in feet_xy:
-        lathe(mb, [(0.0, prof_[-1][1])] + list(reversed(prof_)) + [(0.0, 0.0)], "brass_polished", (fx_, fy_, 0.0), 20)
+        mb.prism(geom.rect(fx_ - pw_ / 2.0, fy_ - pw_ / 2.0, fx_ + pw_ / 2.0, fy_ + pw_ / 2.0), "XY", -ph_, 0.0, "steel")
+        lathe(mb, [(0.0, prof_[-1][1] - ph_)] + [(r, z - ph_) for r, z in reversed(prof_)] + [(0.0, -ph_)], "brass_polished", (fx_, fy_, 0.0), 20)
     # a light wooden block under each foot (TSD (03): the replica stands on four), so that the
     # cranks clear the table
     bs_, bh_ = ft_["block"]
     for fx_, fy_ in feet_xy:
-        mb.prism(geom.rect(fx_ - bs_ / 2.0, fy_ - bs_ / 2.0, fx_ + bs_ / 2.0, fy_ + bs_ / 2.0), "XY", prof_[-1][1] - bh_, prof_[-1][1], "oak")
-    table_z = prof_[-1][1] - bh_
+        mb.prism(geom.rect(fx_ - bs_ / 2.0, fy_ - bs_ / 2.0, fx_ + bs_ / 2.0, fy_ + bs_ / 2.0), "XY", prof_[-1][1] - ph_ - bh_, prof_[-1][1] - ph_, "oak")
+    table_z = prof_[-1][1] - ph_ - bh_
     base = static(mb.build("frame.base", col))
     # the table the feet stand on: the operability check (A2-13) compares the crank knobs with it
     bl.set_anchors(base, "table", [(0.0, 0.0, table_z)])
