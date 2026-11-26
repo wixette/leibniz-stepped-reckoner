@@ -253,7 +253,7 @@ export default {
   "part.rippleStar": "Estrella del acarreo en cascada",
   "part.zweihornRipple": "Palanca del acarreo en cascada",
   "part.settingStop": "Tope de la perilla de ajuste",
-  "part.base": "Patas sobre tacos de madera",
+  "part.base": "Patas, tacos y tablero de madera",
   "part.case": "Caja de roble",
   "part.leadScrew": "Tornillo y manivela lateral (mueve el carro)",
   "part.registerCover": "Placa de cubierta del registro de resultados",

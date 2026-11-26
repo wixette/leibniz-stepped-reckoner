@@ -253,7 +253,7 @@ export default {
   "part.rippleStar": "Stella del riporto a cascata",
   "part.zweihornRipple": "Leva del riporto a cascata",
   "part.settingStop": "Fermo della manopola di impostazione",
-  "part.base": "Piedini su blocchetti di legno",
+  "part.base": "Piedini, blocchetti e base in legno",
   "part.case": "Cassa in rovere",
   "part.leadScrew": "Vite e manovella laterale (sposta il carrello)",
   "part.registerCover": "Piastra di copertura del totalizzatore",

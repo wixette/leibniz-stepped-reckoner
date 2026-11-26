@@ -36,6 +36,7 @@ MATERIALS = {
     "ink_red": ((0.62, 0.06, 0.04), 0.0, 0.55, None),
     "wood_dark": ((0.035, 0.022, 0.016), 0.0, 0.35, None),
     "oak": ((0.16, 0.085, 0.04), 0.0, 0.55, "oak"),
+    "board": ((0.13, 0.04, 0.03), 0.0, 0.5, "oak"),   # the reddish board the machine stands on (TSD (01))
     "oak_handle": ((0.075, 0.035, 0.016), 0.0, 0.45, "oak"),   # the Magna Rota's crank handle: a darker oak than the case's (owner), and not the casing's (A2-12)
 }
 

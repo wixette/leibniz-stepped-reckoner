@@ -25,7 +25,7 @@ Carriage pm.carriage (translate along +X), carriage digit j at x = -36.5 j (offs
   pm.counter_pin (rotate about +Z), pm.counter_pin_park (static),
   pm.main_crank (rotate about +Y, 360 deg per turn; sits in the middle of the Magna Rota)
 Casing (all static; the page hides them together to show the mechanism):
-  frame.base             four turned brass feet under the side walls, on wooden blocks (hidden with the case)
+  frame.base             four turned brass feet under the side walls, on wooden blocks on a board (hidden with the case)
   pm.carriage_cover      brass top plates and end walls of the carriage, counter dial plate (moves with it)
 """
 
@@ -437,7 +437,13 @@ def build(p):
     bs_, bh_ = ft_["block"]
     for fx_, fy_ in feet_xy:
         mb.prism(geom.rect(fx_ - bs_ / 2.0, fy_ - bs_ / 2.0, fx_ + bs_ / 2.0, fy_ + bs_ / 2.0), "XY", prof_[-1][1] - ph_ - bh_, prof_[-1][1] - ph_, "oak")
-    table_z = prof_[-1][1] - ph_ - bh_
+    # the blocks on a wooden board (TSD (01)): reaching a little beyond them at the ends, and in
+    # front past the main crank's handle
+    bd_ = ft_["board"]
+    bz1_ = prof_[-1][1] - ph_ - bh_
+    xs_ = [fx_ for fx_, _ in feet_xy]
+    mb.prism(geom.rect(min(xs_) - bs_ / 2.0 - bd_["margin_x"], bd_["y"][0], max(xs_) + bs_ / 2.0 + bd_["margin_x"], bd_["y"][1]), "XY", bz1_ - bd_["thickness"], bz1_, "board")
+    table_z = bz1_ - bd_["thickness"]
     base = static(mb.build("frame.base", col))
     # the table the feet stand on: the operability check (A2-13) compares the crank knobs with it
     bl.set_anchors(base, "table", [(0.0, 0.0, table_z)])
@@ -1256,7 +1262,7 @@ def build(p):
     # =========================================================== teaching extras (M3)
     labels = {
         "frame.static": ("Frame: side walls, rear wall and front bar", "Gestell: Seitenwände, Rückwand und Vorderleiste"),
-        "frame.base": ("Feet on wooden blocks", "Füße auf Holzklötzen"),
+        "frame.base": ("Feet, wooden blocks and board", "Füße, Holzklötze und Brett"),
         "pi.window": ("Reading windows of the result register", "Ablesefenster des Resultatwerks"),
         "pm.carriage_panel": ("Front panel of the carriage", "Vorderwand des Schlittens"),
         "pm.carriage_cover": ("Cover plate of the carriage", "Deckplatte des Schlittens"),

@@ -253,7 +253,7 @@ export default {
   "part.rippleStar": "リップル繰り上がりの星形",
   "part.zweihornRipple": "リップル繰り上がりレバー",
   "part.settingStop": "置数つまみのストッパー",
-  "part.base": "脚と木の台",
+  "part.base": "脚、木の台と台板",
   "part.case": "オーク材のケース",
   "part.leadScrew": "送りねじと側面クランク（キャリッジを動かす）",
   "part.registerCover": "結果部のカバー板",

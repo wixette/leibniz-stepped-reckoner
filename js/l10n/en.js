@@ -255,7 +255,7 @@ export default {
   "part.rippleStar": "Ripple carry star",
   "part.zweihornRipple": "Ripple carry lever (Zweihorn)",
   "part.settingStop": "Setting stop",
-  "part.base": "Feet on wooden blocks",
+  "part.base": "Feet, wooden blocks and board",
   "part.case": "Oak case",
   "part.leadScrew": "Lead screw and end crank (slides the carriage)",
   "part.registerCover": "Cover plate of the result register",
