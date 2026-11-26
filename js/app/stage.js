@@ -23,6 +23,8 @@ const CASING = ["frame.base", "pm.carriage_cover"];
  * bracket. The working springs are nodes of their own and stay.
  */
 const STRUCTURE = ["frame.static", "pm.carriage_panel", "pm.counter_frame"];
+/** How far the camera may go from the machine (m), unless a view needs it farther. */
+const MAX_DISTANCE = 2.2;
 const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 export class Stage {
@@ -96,7 +98,7 @@ export class Stage {
     }
     const c = this.viewer.controls;
     c.minDistance = 0.12;
-    c.maxDistance = 2.2;
+    c.maxDistance = MAX_DISTANCE;
     c.maxPolarAngle = Math.PI * 0.62; // a little below the table, never from underneath
     c.screenSpacePanning = true;
     c.addEventListener("start", () => (this.fitted = null)); // the reader took the camera
@@ -141,7 +143,11 @@ export class Stage {
     const w = this.host.clientWidth;
     const h = this.host.clientHeight;
     const dir = this.machine.mode === "ripple" && v.dirRipple ? v.dirRipple : v.dir;
-    return frame(this.viewer.camera, points, dir, w, h, this.insets(), 0.9);
+    const f = frame(this.viewer.camera, points, dir, w, h, this.insets(), 0.9);
+    // a narrow screen needs the camera farther than the usual limit to show a whole view (a
+    // phone upright: about 3 m for the whole machine); let it, with room to zoom out a little
+    this.viewer.controls.maxDistance = Math.max(MAX_DISTANCE, f.position.distanceTo(f.target) * 1.25);
+    return f;
   }
 
   /** The canvas changed size (or the bands did): centre on the free area, refit a fitted view. */
