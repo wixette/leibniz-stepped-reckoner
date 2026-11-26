@@ -17,7 +17,7 @@ import { t } from "../l10n/l10n.js";
  * - setDigit: a digit on a setting dial
  * - nextDigit: the knob itself: next digit
  * - turn: the main crank: one turn forward (1, adds) or backward (-1, subtracts)
- * - pin: a hole of the revolution counter by its black number (black 0 is red 9), or the pin (out)
+ * - pin: a hole of the revolution counter by its black number, or the pin (out)
  * - shiftTo: a result wheel: carriage units under it
  * - shiftStep: the end crank: the carriage one place left (1) or right (-1)
  * @typedef {(
@@ -114,7 +114,7 @@ export function intentAt(hit, point, m, dir = 1) {
         const d = (q) => Math.abs(Math.atan2(Math.sin(ang(q) - a), Math.cos(ang(q) - a)));
         if (d(g) < d(glyphs[best])) best = i;
       });
-      return { kind: "pin", hole: best }; // black 0 is red 9, for turning back (the pin itself takes it out)
+      return { kind: "pin", hole: best }; // by its black number (the pin itself takes it out)
     }
     if (n.name === gltfName("frame.lead_screw")) return { kind: "shiftStep", dir };
   }
@@ -227,7 +227,7 @@ export function intentHint(i) {
     case "turn":
       return t(i.dir > 0 ? "hint.turn" : "hint.turnBack");
     case "pin":
-      return i.hole === null ? t("hint.pinOut") : i.hole === 0 ? t("hint.pinRed", { n: 9 }) : t("hint.pin", { n: i.hole });
+      return i.hole === null ? t("hint.pinOut") : t("hint.pin", { n: i.hole });
     case "shiftTo":
       return t("hint.shiftTo");
     case "shiftStep":

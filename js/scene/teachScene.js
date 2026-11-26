@@ -408,6 +408,8 @@ export class Highlighter {
  * @typedef {object} CalloutItem
  * @property {string} node
  * @property {string} text
+ * @property {string} [anchor] an anchor of the node (glTF extras) to pin it to, rather than the
+ *   node's middle: a feature of a larger part, such as the counter's stop on its plate
  */
 /**
  * The current value of a part (glTF node name), shown in a chip beside the name.
@@ -444,7 +446,7 @@ export function fillLabel(el, name, value, red = false) {
 export class Callouts {
   /**
    * @private
-   * @type {{ nodes: THREE.Object3D[]; el: HTMLDivElement; text: string }[]}
+   * @type {{ nodes: THREE.Object3D[]; el: HTMLDivElement; text: string; anchor?: string }[]}
    */
   items = [];
   /** @type {ValueOf} */
@@ -491,7 +493,7 @@ export class Callouts {
       const el = document.createElement("div");
       el.className = "callout";
       this.host.appendChild(el);
-      return { nodes: findNodes(this.root, c.node), el, text: c.text };
+      return { nodes: findNodes(this.root, c.node), el, text: c.text, anchor: c.anchor };
     });
   }
 
@@ -507,7 +509,10 @@ export class Callouts {
       }
       const info = this.valueOf(node.name);
       fillLabel(it.el, it.text, info?.value ?? null, info?.red);
-      this.box.setFromObject(node).getCenter(this.v).project(this.camera);
+      const at = it.anchor ? /** @type {Record<string, unknown>} */ (node.userData)[it.anchor] : null;
+      if (Array.isArray(at) && at.length >= 3) this.v.set(at[0], at[1], at[2]).applyMatrix4(node.matrixWorld);
+      else this.box.setFromObject(node).getCenter(this.v);
+      this.v.project(this.camera);
       it.el.hidden = this.v.z > 1;
       it.el.style.left = `${((this.v.x + 1) / 2) * w}px`;
       it.el.style.top = `${((1 - this.v.y) / 2) * h}px`;

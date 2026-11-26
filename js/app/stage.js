@@ -279,13 +279,13 @@ export class Stage {
   /**
    * Callouts: labels pinned to parts, with their texts as functions (they follow the language).
    * A callout with value: false names an area and shows no live value.
-   * @param {{ node: string; text: () => string; value?: false }[]} items
+   * @param {{ node: string; text: () => string; value?: false; anchor?: string }[]} items
    */
   setCallouts(items) {
     this.calloutItems = items;
     const quiet = new Set(items.filter((c) => c.value === false).map((c) => gltfName(c.node)));
     if (this.callouts) this.callouts.valueOf = (node) => (quiet.has(node) ? null : partInfo(node, this.machine));
-    this.callouts?.set(items.map((c) => ({ node: c.node, text: c.text() })));
+    this.callouts?.set(items.map((c) => ({ node: c.node, text: c.text(), anchor: c.anchor })));
     this.viewer.invalidate();
   }
 

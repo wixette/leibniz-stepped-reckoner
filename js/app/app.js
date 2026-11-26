@@ -283,14 +283,14 @@ export class App {
   pinRed = false;
 
   /**
-   * The pin's number as the reader set it (black, or red when set by the red circle; black 0's
-   * hole is red 9), or null when it is out.
+   * The pin's number as the reader set it (black, or red when set by the red circle: black m's
+   * hole is red 9 - m), or null when it is out.
    * @returns {number | null}
    */
   pinNumber() {
     const p = this.machine.pin;
     if (p === null) return null;
-    return this.pinRed || p === 0 ? 9 - p : p;
+    return this.pinRed ? 9 - p : p;
   }
 
   /**
@@ -300,7 +300,7 @@ export class App {
    */
   setPinCircle(red) {
     const n = this.pinNumber();
-    if (n === null || red === (this.pinRed || this.machine.pin === 0)) {
+    if (n === null || red === this.pinRed) {
       this.pinRed = red;
       this.render();
       return;
@@ -383,8 +383,8 @@ export class App {
       return;
     }
     applyIntentNow(i, this.machine);
-    if (i.kind === "pin") this.pinRed = false; // a hole clicked on the model: by its black number (black 0 shows as red 9)
-    if (i.kind === "pin") this.say(() => (i.hole === null ? t("status.pinOut") : i.hole === 0 ? t("status.pinRed", { n: 9 }) : t("status.pin", { n: /** @type {number} */ (i.hole) })));
+    if (i.kind === "pin") this.pinRed = false; // a hole clicked on the model: by its black number
+    if (i.kind === "pin") this.say(() => (i.hole === null ? t("status.pinOut") : t("status.pin", { n: /** @type {number} */ (i.hole) })));
     else this.say(() => t("status.set", { n: group3(this.inputNumber()) }));
     this.afterLearner();
   }
@@ -426,6 +426,8 @@ export class App {
     if (replay) {
       replayTo(c.lesson, i, this.machine);
       this.sound.resync(this.machine); // set up for the step, not operated: silent
+      this.pinRed = false; // a lesson's pin is set by its black number
+      this.changed(); // pose the model before the view frames it (a carriage moved by the replay)
     }
     c.i = i;
     c.playing = true;
@@ -536,7 +538,7 @@ export class App {
     this.stage.setExplode(p.explode);
     this.stage.applyToggles();
     this.stage.highlight(p.highlight, this.inside !== null, p.context, this.inside ? p.view : undefined);
-    this.stage.setCallouts(p.callouts.map((x) => ({ node: x.node, text: () => t(x.text), value: x.value })));
+    this.stage.setCallouts(p.callouts.map((x) => ({ node: x.node, text: () => t(x.text), value: x.value, anchor: x.anchor })));
     if (fly || p.view !== this.lastView) this.stage.fly(p.view);
     this.lastView = p.view;
   }
@@ -931,10 +933,11 @@ export class App {
             { label: t("strip.pin.adding"), checked: !this.pinRed, run: () => this.use("pin", () => this.setPinCircle(false)) },
             { label: t("strip.pin.subtracting"), checked: this.pinRed, run: () => this.use("pin", () => this.setPinCircle(true)) },
             { label: t("strip.pin.out"), checked: this.machine.pin === null, divider: true, run: () => this.use("pin", () => this.setPin(null)) },
-            ...[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => ({
+            // 0 too: the hole beside the stop, where a pin counts the turns from (dividing)
+            ...[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => ({
               label: String(n),
               checked: this.pinNumber() === n,
-              divider: n === 1 ? t("strip.pin.hole") : undefined,
+              divider: n === 0 ? t("strip.pin.hole") : undefined,
               run: () => this.use("pin", () => this.setPin(this.pinRed ? 9 - n : n, this.pinRed)),
             })),
           ],
@@ -1027,7 +1030,7 @@ export class App {
     $("numberField").classList.toggle("wanted", inputState.wanted && inputState.enabled);
     if (document.activeElement !== input) input.value = String(this.inputNumber());
     // the number the pin was set by: black (adding) or red (turning back, the hole's other number)
-    const red = m.pin !== null && (this.pinRed || m.pin === 0);
+    const red = m.pin !== null && this.pinRed;
     $("pinValue").textContent = m.pin === null ? "–" : String(this.pinNumber());
     $("pinValue").classList.toggle("red", red);
     // its name says the hole (U22); the tooltip keeps what the pin does

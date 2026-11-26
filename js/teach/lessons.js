@@ -279,7 +279,7 @@ const subtract = {
     {
       view: "counter",
       highlight: ["pm.counter_ring"],
-      callouts: [{ node: "pm.counter_ring", text: "part.magna" }],
+      callouts: [{ node: "pm.counter_ring", text: "part.counter" }],
       text: "l.sub.red",
       expect: (m) => m.ringTurns === -1,
     },
@@ -342,7 +342,7 @@ const multiply = {
     {
       view: "counter",
       highlight: ["pm.counter_ring", "pm.counter_pin", "pm.counter_plate"],
-      callouts: [{ node: "pm.counter_plate", text: "l.mul.stop" }],
+      callouts: [{ node: "pm.counter_plate", text: "l.mul.stop", anchor: "stop_point", value: false }],
       text: "l.mul.pin5",
       task: { check: (m) => m.pin === 5 && m.offset === 0, solve: (m) => m.setPin(5), wrong: (m) => m.setPin(6), controls: ["pin"] },
     },
@@ -408,7 +408,9 @@ const divide = {
     { view: "knobs", highlight: ["pm.setting_dial.*"], text: "l.div.setDivisor", task: setInput(1709, 1790) },
     { view: "overview", highlight: ["pm.carriage"], text: "l.div.shift2", task: shiftTo(2, 1) },
     {
-      do: [{ pin: null }, { turn: -1, times: 3 }],
+      // the pin beside the stop, at black 0: each subtraction moves it on one black number, so it
+      // counts them (K. Badur: for dividing, the pin goes in front of the inner circle's 0)
+      do: [{ pin: 0 }, { turn: -1, times: 3 }],
       view: "counter",
       highlight: ["pm.counter_ring"],
       text: "l.div.three",
@@ -424,7 +426,7 @@ const divide = {
     },
     { view: "overview", highlight: ["pm.carriage"], text: "l.div.shift1", task: shiftTo(1, 0) },
     {
-      do: [{ pin: null }, { divideDigit: true }],
+      do: [{ pin: 0 }, { divideDigit: true }],
       view: "counter",
       highlight: ["pm.counter_ring"],
       text: "l.div.six",
@@ -432,7 +434,7 @@ const divide = {
     },
     { view: "overview", highlight: ["pm.carriage"], text: "l.div.shift0", task: shiftTo(0, 1) },
     {
-      do: [{ pin: null }, { divideDigit: true }],
+      do: [{ pin: 0 }, { divideDigit: true }],
       view: "counter",
       highlight: ["pm.counter_ring"],
       text: "l.div.five",

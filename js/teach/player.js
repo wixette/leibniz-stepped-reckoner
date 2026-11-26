@@ -33,7 +33,7 @@ export const APART_VIEW = /** @type {const} */ ("apart");
  * A scripted machine action:
  * - reset: a fresh machine
  * - input: setting knobs
- * - pin: Magna Rota pin (also sets the ring back to 0)
+ * - pin: the revolution counter's pin, by its hole (black number; also sets the ring back to 0)
  * - shift: carriage to this offset
  * - theta: crank to this angle (a full turn completes at ±360)
  * - turn: whole crank turns
@@ -65,6 +65,7 @@ export const APART_VIEW = /** @type {const} */ ("apart");
  * @property {string} node
  * @property {string} text message key (js/l10n)
  * @property {false} [value] no live value: the callout names an area, not the part it is pinned to
+ * @property {string} [anchor] an anchor of the node to pin it to (e.g. the counter's "stop_point")
  */
 
 /**
