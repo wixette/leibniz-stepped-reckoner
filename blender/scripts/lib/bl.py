@@ -37,7 +37,7 @@ MATERIALS = {
     "wood_dark": ((0.035, 0.022, 0.016), 0.0, 0.35, None),
     "oak": ((0.16, 0.085, 0.04), 0.0, 0.55, "oak"),
     "oak_handle": ((0.16, 0.085, 0.04), 0.0, 0.5, "oak"),   # the cranks' handles: a lighter oak than the board's (owner), not the casing's (A2-12)
-    "oak_dark": ((0.075, 0.035, 0.016), 0.0, 0.45, "oak"),   # the board and blocks the machine stands on
+    "oak_dark": ((0.045, 0.021, 0.01), 0.0, 0.9, "oak"),   # the board and blocks the machine stands on: dark and matte, so no sheen makes it look as light as the handles (owner)
 }
 
 # Textures repeat every UV_MM millimetres (box-projected UVs, see MeshBuilder.build).
