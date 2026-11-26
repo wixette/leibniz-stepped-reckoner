@@ -743,6 +743,12 @@ dialog::backdrop { background: var(--md-scrim); }
   .brand { font-size: 15px; }
 }
 @media (max-width: 599px) {
+  /* a phone (owner): the dock starts lower, its tabs show their icons alone (the labels stay for
+     screen readers), so the machine and its toolbar keep the height */
+  .workspace { grid-template-rows: minmax(0, 1fr) var(--dock-h, 36%); }
+  .tab { padding: 9px 6px 7px; }
+  .tab > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .tab .dot { top: 6px; }
   .chip .txt { display: none; }
   .chip { padding: 0 8px; }
   /* the top bar on a phone (U27): the logo without the title, the language by its 文A alone,

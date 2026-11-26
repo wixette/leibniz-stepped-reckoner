@@ -344,6 +344,7 @@ The dock's three tabs stack each icon above its label. That suits a narrow dock 
 
 - **When the dock is about 480 px or wider, each tab's icon sits beside its label,** and the tab bar is 42 px tall instead of 60. Narrower, the tabs stack as before.
 - **It goes by the dock's own width,** not by where the dock is: a dock dragged wide beside the machine (U17) gets the row too, and a phone's dock below the machine (about 375 px) keeps the stacked tabs. In practice the row appears below the machine from tablets up, and beside it once the dock is widened.
+- **On a phone (under 600 px wide) the tabs show their icons alone,** in a bar about 40 px tall, and the dock starts at 36% of the height instead of 45% (dragging it still sets and keeps its own height, U17): the machine's toolbar already takes much of a phone's height. The labels stay for screen readers.
 - **All ten languages fit at the narrowest row width.** The longest labels (Portuguese) leave 8 px to spare; the "lesson under way" dot sits after the label. The selected tab keeps its bar, and the keys are unchanged.
 
 ### U26 — A step is a card that adapts to the dock's width
