@@ -15,8 +15,8 @@ import { CRANK_COMMIT, CrankDrag, crankAt, intentAt, intentHint } from "../teach
 import { partInfo, partName } from "../teach/partInfo.js";
 /** @import { ViewName } from "../teach/player.js" */
 
-/** Parts hidden by "Case" (the oak case, base and the brass cover plates). */
-const CASING = ["frame.case", "frame.base", "frame.register_cover", "pm.carriage_cover"];
+/** Parts hidden by "Case" (the base plate with its feet and the brass cover plates). */
+const CASING = ["frame.base", "frame.register_cover", "pm.carriage_cover"];
 /**
  * The structure that goes with the case (U32): the frame, the carriage's front panel, its own floor,
  * bearing bar and post (the carriage node's own mesh, not the parts riding on it), the counter drive's

@@ -1041,11 +1041,6 @@
       },
       "explode": {
         "v": {
-          "frame.case": [
-            0,
-            0,
-            -120
-          ],
           "frame.base": [
             0,
             0,
@@ -1198,6 +1193,34 @@
         "unit": "drawing units (front view: x to the right, y down)",
         "conf": "design",
         "src": "The end crank as the owner drew it (design/drawings/end-crank-details.svg, after Brandt's Abb. II 5): a hub on the lead screw's end (Axis, AxisSleeve), a bent steel bar (Crank) from a boss under the hub (CrankHead2) down and outward to a rounded cap (CrankHead1), and the main crank's turned oak handle with its gold ball on an axis parallel to the screw, pointing away from the machine. No source gives its sizes: the drawing is at the Magna Rota drawing's scale (its handle is the same, 234.5 units long), so the crank's radius is 68 mm (was 55) and the handle the main crank's. The drawing's axis end (axis_centre) is the screw's end, inside the case's left wall; the side views give the bar's thickness (bar_half_width) and the boss's and the hub's circles."
+      },
+      "feet": {
+        "v": {
+          "inset": 14.0,
+          "profile": [
+            [7.0, 0.0],
+            [7.0, 1.5],
+            [6.0, 4.0],
+            [5.25, 4.6],
+            [5.25, 15.0],
+            [7.0, 16.0],
+            [8.5, 18.5],
+            [8.5, 21.5],
+            [7.0, 24.0],
+            [3.5, 25.0],
+            [3.5, 28.0],
+            [5.0, 30.5],
+            [9.0, 33.0],
+            [14.0, 34.8],
+            [16.5, 36.0],
+            [18.0, 37.5],
+            [18.0, 38.5],
+            [16.5, 40.0]
+          ]
+        },
+        "unit": "mm (profile: [radius, depth below the base plate])",
+        "conf": "doc",
+        "src": "NL183/465 p. 25 ('Fuesse', brass, 2 x 2): a turned foot 40 high under its M6 thread: a collar 14 across, a neck 10.5, a bead 17 (14 shoulders), a neck 7 flaring into a dished base 33/36 across and 8 thick (the Commons photo 'Die Rechenmaschine von Leibniz (Nachbau) 2001 07' and TSD (13) show it). The curves between the drawn diameters by eye from the photo. One under each corner of the base plate, inset by eye."
       },
       "magna_rota_crank": {
         "v": {

@@ -253,7 +253,7 @@ export default {
   "part.rippleStar": "漣波進位星輪",
   "part.zweihornRipple": "漣波進位桿",
   "part.settingStop": "設定旋鈕擋塊",
-  "part.base": "橡木底板",
+  "part.base": "底板和支腳",
   "part.case": "橡木外殼",
   "part.leadScrew": "導螺桿與側曲柄（移動滑架）",
   "part.registerCover": "結果暫存器蓋板",

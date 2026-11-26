@@ -25,8 +25,7 @@ Carriage pm.carriage (translate along +X), carriage digit j at x = -36.5 j (offs
   pm.counter_pin (rotate about +Z), pm.counter_pin_park (static),
   pm.main_crank (rotate about +Y, 360 deg per turn; sits in the middle of the Magna Rota)
 Casing (all static; the page hides them together to show the mechanism):
-  frame.base             oak base board and the two bearers under it (woodwork, hidden with the case)
-  frame.case             oak case: floor, rear and end walls, low front wall
+  frame.base             brass base plate on four turned brass feet (hidden with the case)
   frame.register_cover   brass top plate over the register, openings over the 16 windows
   pm.carriage_cover      brass top plates and end walls of the carriage, counter dial plate (moves with it)
 """
@@ -392,15 +391,22 @@ def build(p):
     springs = static(mb.build("frame.springs", col))
     bl.parent(springs, root)
 
-    # woodwork under the mechanism: the oak base board, and two oak bearers that lift it
-    # off the case floor (so the carriage front hangs below the base). A separate node so
-    # the page hides it with the case and leaves only the mechanism.
+    # the base plate under the mechanism (the replica's lower frame; the carriage slides on it),
+    # standing on four turned brass feet at its corners (NL183/465 p. 25 "Fuesse", photos of the
+    # replica). A separate node, hidden with the case and frame.
     cs = p.v(M2 + "casing")
+    ft_ = p.v(M2 + "feet")
     mb = MeshBuilder()
-    mb.prism(geom.rect(base_x0, fr["y"][0], base_x1, fr["y"][1]), "XY", 0.0, 4.0, "oak")
-    for a in (base_x0, base_x1 - cs["bearer_length"]):
-        mb.prism(geom.rect(a, fr["y"][0] + 4.0, a + cs["bearer_length"], fr["y"][1] - 4.0), "XY", cs["floor_top_z"], 0.0, "oak")
+    mb.prism(geom.rect(base_x0, fr["y"][0], base_x1, fr["y"][1]), "XY", 0.0, 4.0, "brass_satin")
+    ins = ft_["inset"]
+    prof_ = [(r, -z) for r, z in ft_["profile"]]          # from the top (z 0, under the plate) down
+    feet_xy = [(fx_, fy_) for fx_ in (base_x0 + ins, base_x1 - ins) for fy_ in (fr["y"][0] + ins, fr["y"][1] - ins)]
+    for fx_, fy_ in feet_xy:
+        lathe(mb, [(0.0, prof_[-1][1])] + list(reversed(prof_)) + [(0.0, 0.0)], "brass_polished", (fx_, fy_, 0.0), 20)
+    table_z = prof_[-1][1]
     base = static(mb.build("frame.base", col))
+    # the table the feet stand on: the operability check (A2-13) compares the crank knobs with it
+    bl.set_anchors(base, "table", [(0.0, 0.0, table_z)])
     bl.parent(base, root)
 
     # lead screw with a helical ridge, and the end crank (left end, outside the case wall)
@@ -902,23 +908,8 @@ def build(p):
     cs = p.v(M2 + "casing")
     wt, cz0, cz1 = cs["wall"], cs["register_cover_z"][0], cs["register_cover_z"][1]
     ix0, ix1, iy0, iy1 = cs["inner_x"][0], cs["inner_x"][1], cs["inner_y"][0], cs["inner_y"][1]
-    ft, wtop = cs["floor_top_z"], cs["wall_top_z"]
-    mb = MeshBuilder()
-    mb.prism(geom.rect(ix0 - wt, iy0 - wt, ix1 + wt, iy1 + wt), "XY", ft - cs["floor"], ft, "oak")
-    mb.prism(geom.rect(ix0 - wt, iy1, ix1 + wt, iy1 + wt), "XY", ft, wtop, "oak")                   # rear
-    mb.prism(geom.rect(ix0 - wt, iy0 - wt, ix1 + wt, iy0), "XY", ft, ft + cs["front_height"], "oak")  # front (low)
-    mb.prism(geom.rect(ix1, iy0, ix1 + wt, iy1), "XY", ft, wtop, "oak")                              # right end
-    # left end: the lead screw passes through a hole to the end crank outside
-    hy, hz, hh = ls["y"], ls["z"], ls["radius"] + 3.0
-    for r0 in (geom.rect(iy0, ft, iy1, hz - hh), geom.rect(iy0, hz + hh, iy1, wtop),
-               geom.rect(iy0, hz - hh, hy - hh, hz + hh), geom.rect(hy + hh, hz - hh, iy1, hz + hh)):
-        mb.prism(r0, "YZ", ix0 - wt, ix0, "oak")
-    case = static(mb.build("frame.case", col))
-    # heights the operability check (A2-13) compares the crank knobs against
-    bl.set_anchors(case, "front_wall_top", [(0.0, iy0, ft + cs["front_height"])])
-    bl.set_anchors(case, "floor_top", [(0.0, 0.0, ft)])
-    bl.set_anchors(case, "underside", [(0.0, 0.0, ft - cs["floor"])])
-    bl.parent(case, root)
+    # (the oak case is gone for now, the owner 2026-11-26: the machine stands on its four feet;
+    # the case will be rebuilt round it later)
 
     # register cover: above every register part (Muldenrad tips z 84.4, rear wall 85);
     # its openings sit over the window plate's openings, 1-2 mm larger so a digit 8 mm
@@ -1210,8 +1201,7 @@ def build(p):
     # =========================================================== teaching extras (M3)
     labels = {
         "frame.static": ("Frame: side walls, rear wall and front bar", "Gestell: Seitenwände, Rückwand und Vorderleiste"),
-        "frame.base": ("Oak base board and bearers", "Grundbrett und Auflageleisten aus Eiche"),
-        "frame.case": ("Oak case", "Eichenkasten"),
+        "frame.base": ("Base plate and feet", "Grundplatte und Füße"),
         "frame.register_cover": ("Cover plate of the result register", "Deckplatte des Resultatwerks"),
         "pi.window": ("Reading windows of the result register", "Ablesefenster des Resultatwerks"),
         "pm.carriage_panel": ("Front panel of the carriage", "Vorderwand des Schlittens"),

@@ -253,7 +253,7 @@ export default {
   "part.rippleStar": "Estrela do transporte em cascata",
   "part.zweihornRipple": "Alavanca do transporte em cascata",
   "part.settingStop": "Batente do botão de ajuste",
-  "part.base": "Base de carvalho",
+  "part.base": "Placa de base e pés",
   "part.case": "Caixa de carvalho",
   "part.leadScrew": "Parafuso e manivela lateral (move o carro)",
   "part.registerCover": "Placa de cobertura do registrador de resultados",
