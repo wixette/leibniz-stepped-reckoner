@@ -38,7 +38,7 @@ def driver_tooth(p):
     a = ct["driver"]["tooth_deg"]
     hub = [geom._polar(ct["driver"]["hub_radius"], a + 180.0 + 360.0 * i / 48) for i in range(48)]
     tooth = geom.tooth_polygon(drv, a, root_r=ct["driver"]["hub_radius"] - 0.3)
-    # the tooth on its arm: a web from the hub to the tooth's root, as wide as the root
+    # the tooth's root reaches just inside the hub's circle, so the two make one outline (no web)
     return hub, tooth
 
 

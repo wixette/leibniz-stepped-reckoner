@@ -30,11 +30,12 @@ def _cubic(p0, p1, p2, p3, tol):
 
 
 def path_loops(d, tol):
-    """The closed loops of an SVG path's d attribute, as lists of (x, y) in drawing units."""
+    """The closed loops of an SVG path's d attribute, as lists of (x, y) in drawing units.
+    Supports M/L/H/V/C/S/Q/T/Z (absolute and relative); arcs (A) raise ValueError."""
     toks = _TOKEN.findall(d)
     loops, cur, i = [], [], 0
     pos = start = (0.0, 0.0)
-    last_ctrl, cmd = None, None
+    last_ctrl, last_kind, cmd = None, None, None
 
     def num():
         nonlocal i
@@ -46,14 +47,18 @@ def path_loops(d, tol):
         if re.match(r"[A-Za-z]", toks[i]):
             cmd = toks[i]
             i += 1
+        elif cmd is None or cmd.upper() == "Z":
+            raise ValueError(f"SVG path: a number with no command before it ({toks[i]})")
         rel = cmd.islower()
         c = cmd.upper()
         ox, oy = pos if rel else (0.0, 0.0)
         if c == "Z":
             if cur:
                 loops.append(cur)
-            cur, pos, last_ctrl = [], start, None
+            cur, pos, last_ctrl, last_kind = [], start, None, None
             continue
+        if c != "M" and not cur:
+            cur = [pos]  # a drawing command right after Z starts a new loop at the subpath's start
         if c == "M":
             if cur:
                 loops.append(cur)
@@ -77,18 +82,20 @@ def path_loops(d, tol):
             if c == "C":
                 p1 = (ox + num(), oy + num())
             else:
-                p1 = (2 * pos[0] - last_ctrl[0], 2 * pos[1] - last_ctrl[1]) if last_ctrl else pos
+                p1 = (2 * pos[0] - last_ctrl[0], 2 * pos[1] - last_ctrl[1]) if last_ctrl and last_kind == "C" else pos
             p2 = (ox + num(), oy + num())
             p3 = (ox + num(), oy + num())
             cur += _cubic(pos, p1, p2, p3, tol)
-            pos, last_ctrl = p3, p2
+            pos, last_ctrl, last_kind = p3, p2, "C"
+            continue
         elif c in "QT":
-            q = (ox + num(), oy + num()) if c == "Q" else ((2 * pos[0] - last_ctrl[0], 2 * pos[1] - last_ctrl[1]) if last_ctrl else pos)
+            q = (ox + num(), oy + num()) if c == "Q" else ((2 * pos[0] - last_ctrl[0], 2 * pos[1] - last_ctrl[1]) if last_ctrl and last_kind == "Q" else pos)
             p3 = (ox + num(), oy + num())
             p1 = (pos[0] + 2 / 3 * (q[0] - pos[0]), pos[1] + 2 / 3 * (q[1] - pos[1]))
             p2 = (p3[0] + 2 / 3 * (q[0] - p3[0]), p3[1] + 2 / 3 * (q[1] - p3[1]))
             cur += _cubic(pos, p1, p2, p3, tol)
-            pos, last_ctrl = p3, q
+            pos, last_ctrl, last_kind = p3, q, "Q"
+            continue
         else:
             raise ValueError(f"SVG path command {cmd} is not supported")
     if cur:
@@ -110,6 +117,8 @@ def read_plate(svg_file, plate_id, diameter_mm, tol_mm=0.02):
     if el is None:
         raise KeyError(f"{svg_file}: no element with id {plate_id}")
     paths = [e for e in el.iter() if e.tag.endswith("path")]
+    if any(e.get("transform") for e in el.iter()):
+        raise ValueError(f"{svg_file}: {el.get('id')} has a transform, which this reader does not apply")
     if len(paths) != 1:
         raise ValueError(f"{plate_id}: expected one path, found {len(paths)}")
     raw = path_loops(paths[0].get("d"), 0.05)
@@ -148,6 +157,8 @@ def shape_loops(svg_file, shape_id, scale, tol_mm=0.02):
     if el is None:
         raise KeyError(f"{svg_file}: no element with id {shape_id}")
     paths = [e for e in el.iter() if e.tag.endswith("path")]
+    if any(e.get("transform") for e in el.iter()):
+        raise ValueError(f"{svg_file}: {el.get('id')} has a transform, which this reader does not apply")
     if len(paths) != 1:
         raise ValueError(f"{shape_id}: expected one path, found {len(paths)}")
     return [_simplify(lp, tol_mm / scale) for lp in path_loops(paths[0].get("d"), tol_mm / scale)]

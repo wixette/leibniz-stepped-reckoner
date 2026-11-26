@@ -2,7 +2,8 @@
 
 Plain Python (no Blender):  python3 -I blender/scripts/export_carry_tables.py   (pnpm carry)
 Output: params/carry-tables.json, read by js/sim/kinematics*.js and lib/kinematics.py.
-Rerun after any change to geometry.carry in params/machine.json (pnpm test checks the version).
+Rerun after any change to geometry.carry or geometry.m2.counter_train in params/machine.json, or to
+lib/carry.py, lib/carry_solve.py or lib/counter_train.py (pnpm test only checks that the tables' version matches params).
 """
 
 import json

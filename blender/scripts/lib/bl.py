@@ -185,8 +185,10 @@ class MeshBuilder:
     def cylinder_uvs(self, mat, origin, axis, radius):
         """Map the faces of material `mat` round an axis (origin and direction, mm) rather than
         by box projection: u along the axis, v round it (a turned part's grain runs along it).
-        v is the angle times a radius near `radius` chosen so a full turn holds a whole number
-        of texture repeats, which hides the seam."""
+        v is the angle times a reference radius chosen so a full turn holds a whole number of
+        texture repeats (at least one), which hides the seam: for a part much smaller round than
+        a texture repeat (UV_MM), one repeat fills the turn, so its grain is finer than on a
+        board (the handles: r about 10, the grain about 4x finer)."""
         self.cyl_uv[mat] = (origin, axis, radius)
 
     def _mat(self, name):

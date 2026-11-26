@@ -1,6 +1,6 @@
 """Contact solves for the carry of the original (no bpy): how far the Einzahn pushes the
 five-horn p, and how the Zweihorn's horn drives the five-horn s. Pure Python, slow (a minute
-or so); run by export_carry_profiles.py, whose output the JavaScript simulator reads.
+or so); run by export_carry_tables.py (pnpm carry), whose output the JavaScript simulator reads.
 
 The solve (like the simulator's pose, js/sim) turns the drive one way; the model is built as its
 mirror image, so that adding turns the crank anticlockwise from the front as on the original

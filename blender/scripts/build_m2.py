@@ -198,7 +198,6 @@ def build(p):
     zf = zs + Fdz
     dxL, zL = p.v(M1 + "lever_axis_dx"), p.v(M1 + "lever_axis_z")
     F = [(x + Fdx, zf) for x in X]
-    S = [(x, zs) for x in X]
 
     # the carry of the original (BADUR2026; lib/carry.py, design/v1.3-notes.md)
     cg = p.v(G + "carry")
@@ -378,7 +377,7 @@ def build(p):
     ls = p.v(M2 + "lead_screw")
     fr = p.v(M2 + "frame")
     sw = fx_["side_wall"]
-    base_x0, base_x1 = in_x0 - fx_["end_bar_left"], in_x1 + fx_["end_bar_right"]
+    base_x0 = in_x0 - fx_["end_bar_left"]   # where the lead screw starts from
     mb = MeshBuilder()
     # the rear beam (the rear wall slimmed, the owner 2026-11-26): it carries the result and
     # intermediate shafts' rear bearings
@@ -445,7 +444,6 @@ def build(p):
 
     # the feet under the frame's side walls: four turned brass feet at its corners (NL183/465 p. 25 "Fuesse", photos of the
     # replica). A separate node, hidden with the case and frame.
-    cs = p.v(M2 + "casing")
     ft_ = p.v(M2 + "feet")
     mb = MeshBuilder()
     # two feet under each side wall (the feet sheet: 'je 2x'), the walls standing on them
@@ -578,7 +576,7 @@ def build(p):
     pz_ = lfa["z"][1] + cr_["pad_gap"]
     for sx_ in (bx0 + 2.0, rx_ - 10.0):
         z0_ = len(mb.verts)
-        mb.prism(geom.rect(sx_, sy0_, sx_ + 8.0, sy1_), "XY", sz0_, fz1_, "brass_satin")
+        mb.prism(geom.rect(sx_, sy0_, sx_ + 8.0, sy1_), "XY", sz0_, sz1_, "brass_satin")
         mb.prism(geom.rect(sx_, lfa["y"][0] - 1.5, sx_ + 8.0, sy0_ + 0.01), "XY", pz_, fz0_ + 0.01, "brass_satin")
         mb.prism(geom.rect(sx_, lfa["y"][0] - 1.5, sx_ + 8.0, lfa["y"][0] - 0.3), "XY", sz0_, pz_ + 0.01, "brass_satin")   # a lip in front of the beam too
         czones.append(bl.zone(mb, z0_, "part.slideShoe"))
@@ -1030,8 +1028,6 @@ def build(p):
 
     # =========================================================== casing
     cs = p.v(M2 + "casing")
-    wt, cz0, cz1 = cs["wall"], cs["register_cover_z"][0], cs["register_cover_z"][1]
-    ix0, ix1, iy0, iy1 = cs["inner_x"][0], cs["inner_x"][1], cs["inner_y"][0], cs["inner_y"][1]
     # (the oak case is gone for now, the owner 2026-11-26: the machine stands on its four feet;
     # the case will be rebuilt round it later)
 
@@ -1060,7 +1056,6 @@ def build(p):
     mb.prism(geom.rect(xt - wt_, pnl1, xt, wy1 - wt_), "XY", kz0, wz_ - wt_, "brass_polished")
     # lower top on the right, with a round hole under the counter's ring for the sleeve that
     # turns it (the counter's train below, lib/counter_train.py)
-    tr_ = p.v(M2 + "counter_train")
     cdx, cdy = X[0] + cs_["counter_dx"], py + cs_["counter_dy"]
     # (the ring round the counter, out to just beyond its outer numbers, is the counter's dial
     # plate: pm.counter_plate, so that the numbers keep their plate when the frame is hidden)
@@ -1098,17 +1093,16 @@ def build(p):
     ccover = static(mb.build("pm.carriage_cover", col))
     bl.parent(ccover, carriage)
 
-    # Revolution counter (decision in design/v1.3-notes.md), laid out like the Dresden replica's:
-    # a fixed plate with the black outer circle (anticlockwise from 0 at the stop) and the red
-    # inner circle on the brass centre (clockwise), the stop bracket at the top; the steel ring
-    # with 10 holes turns 36 deg a crank turn about the vertical, clockwise seen from above when
-    # adding; the pin sits in a hole and reaches the stop after m turns from black m.
+    # Revolution counter (decision in design/v1.3-notes.md), as on the original: a fixed plate with
+    # the black circle on the brass centre (clockwise from 0 at the stop, counting additions) and
+    # the red circle round the ring (anticlockwise, counting subtractions), the stop at the top;
+    # the steel ring with 10 holes steps 36 deg a crank turn about the vertical, anticlockwise seen
+    # from above when adding; the pin sits in a hole and reaches the stop after m turns from black
+    # m (or m turns back from red m). The params' red_r / black_r name the circles' old colours.
     ct = p.v(M2 + "counter")
     r_in, r_out = ct["ring_radius"]
     hp, gs = ct["hole_path_radius"], ct["glyph_size"]
     st = ct["stop"]
-    # the ring turns anticlockwise when adding (Badur): the pin arrives from the right, so the
-    # finger stands just left of the top
     # the stop stands at the top, centred, half a step from the holes and the numbers on both sides
     # (photos of the original and the replica); a wedge as wide, where the holes' circle crosses it,
     # as the gap between two holes less the pin and the gap: the pin in the hole beside it rests on it
@@ -1161,7 +1155,6 @@ def build(p):
             verts, faces = bl.glyph_mesh(txt, gs, 0.2)
             # lying on the top, upright for the operator at the front
             mb.add_mesh_data(verts, faces, bl.frame_matrix((gx, gy, z), (1, 0, 0), (0, 1, 0)), mat)
-    # the stop: a post outside the ring and a finger over it, in the pin's plane
     # the stop: a tapered steel strip raised over the ring in the pin's neck's plane, its wide end
     # on two screws on the plate beyond the ring, its tip on a screw on the brass centre by the tower
     ua = math.radians(stop_a)
@@ -1183,7 +1176,7 @@ def build(p):
         cx_, cy_ = at_(r_, t_)
         mb.prism([(cx_ + q[0], cy_ + q[1]) for q in geom.circle(1.0, 16)], "XY", dz + fz1 - 0.1, dz + fz1 + 0.5, "steel_dark", smooth=True)
     stop_zone = bl.zone(mb, z_stop, "part.counterStop")
-    cplate = mb.build("pm.counter_plate", col, (dx, dy, 0))
+    cplate = static(mb.build("pm.counter_plate", col, (dx, dy, 0)))   # static: the sweep tests its stop against the pin and the ring
     bl.set_zones(cplate, [stop_zone])
     bl.set_anchors(cplate, "black_glyphs", black)
     bl.set_anchors(cplate, "red_glyphs", red)
@@ -1300,7 +1293,7 @@ def build(p):
     mb.prism(geom.rect(-tb["width"] / 2.0, -tb["length"] / 2.0, tb["width"] / 2.0, tb["length"] / 2.0), "XY", tb["z"][0], tb["z"][1], "brass_satin")
     for sy in (-1.0, 1.0):
         mb.prism([(u, w + sy * (tb["length"] / 2.0 - 3.0)) for u, w in geom.circle(2.5, 20)], "XY", tb["z"][1], ztop - 0.05, "brass_satin", smooth=True)
-    mb.prism(geom.circle(3.0, 24), "XY", tb["z"][0] + 0.5, zt + 0.5, "steel", smooth=True)
+    mb.prism(geom.circle(ct["spindle_radius"], 24), "XY", tb["z"][0] + 0.5, zt + 0.5, "steel", smooth=True)   # the fixed spindle
     ka = math.radians(tct["leaf_deg"])
     ra = kspec.ra + 0.15
     # the leaf's V tip 0.15 off K's tip circle, every edge outside it (drawn rigid)

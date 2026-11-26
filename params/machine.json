@@ -877,8 +877,6 @@
           "end_dx": 137.75,
           "counter_dx": 82.25,
           "step_z": 30.0,
-          "dial_radius": 34.75,
-          "dial_inner_radius": 22.5,
           "counter_dy": -1.0
         },
         "unit": "mm",
@@ -906,12 +904,6 @@
         "conf": "doc",
         "src": "BADUR2026 (measured on the original): Ø116.5"
       },
-      "magna_rota_gear_ratio": {
-        "v": 10,
-        "unit": "turns of crank per dial turn",
-        "conf": "design",
-        "src": "one hole of the revolution counter per crank turn (10 holes); the Magna Rota itself turns with the crank"
-      },
       "lead_screw": {
         "v": {
           "y": -77.0,
@@ -927,12 +919,11 @@
           "inner_left": 28.5,
           "inner_right": 34.0,
           "side_wall": 10.0,
-          "end_bar_left": 11.0,
-          "end_bar_right": 8.0
+          "end_bar_left": 11.0
         },
         "unit": "mm",
         "conf": "doc",
-        "src": "NL183/465 p. 13, 47, 107-110 (610 between the side walls; register digit 15 is 28.5 from the crank-side wall, digit 0 is 34 from the other), p. 95, 99 (side walls 10 thick), p. 93 (lower frame 629: end bars 11 on the crank side, 8 on the other)",
+        "src": "Current (v1.3.0): end_bar_left places the lead screw's start; the right end bar is not built. NL183/465 p. 13, 47, 107-110 (610 between the side walls; register digit 15 is 28.5 from the crank-side wall, digit 0 is 34 from the other), p. 95, 99 (side walls 10 thick), p. 93 (lower frame 629: end bars 11 on the crank side, 8 on the other)",
         "note": "The lower frame's plan view is drawn with the front at the top, so its right end bar (11) is on the crank side, the left in the front view."
       },
       "frame": {
@@ -1018,7 +1009,7 @@
             ],
             "shoe_z": [
               12.0,
-              19.3
+              22.3
             ],
             "catch_dx": 20.0,
             "knob_radius": 5.0,
@@ -1039,26 +1030,10 @@
         },
         "unit": "mm",
         "conf": "design",
-        "src": "base plate = the lower frame (frame_x), 629 long. The side walls are low (z <= side_wall_low_z) in front of side_wall_y_split, where the carriage's counter section passes over them (its underside is at z 30), and rise to side_wall_top_z behind it, under the register cover's skirt; the replica's walls likewise have a low front part and a tall rear block (NL183/465 p. 95). The lead screw runs in a notch in each wall's low part (the replica's screw passes through the walls). It starts screw_start_dx left of the base, outside the case's left wall, where the end crank is (photos). The end crank's arm sits 0.5 mm outside the case's left wall (screw_start_dx follows the 755 mm case). Since 0.6.0 the base starts at y -104, behind the carriage's large gears, which hang below it. side_wall_low_z lowered from 26 to 24.5 in 0.7.0, under the carriage frame's bearing bar (z 25.375). 2026-11-26 (owner; TSD (02), TSD (13) of the replica, the photo of the original): the frame as beams: the lower frame of two side beams (under the side walls, the feet under their ends), a middle and a back beam (lower_beam_width wide, 4 high; the carriage slides on the middle one); a front beam just in front of the lead screw between the side walls, over the carriage's floor (front_beam: 0.6 clear of the counter's star wheel K, 0.5 of the setting racks, 0.7 of the floor); the rear wall slimmed to a beam carrying the result and intermediate shafts' rear bearings (rear_beam_z), with a post at each end up to the window plate. 2026-11-26, after Lehmann's sheets (NL183/465 p. 94 'Rahmen Unterteil', 104, 108; p. 102 the slide's angles; p. 105, 107, 113 the carriage's frame bars) and TSD (02), (10), (13): the lower frame is three upright steel beams between the side walls, no plate: a at the front (here just in front of the lead screw; 8 detent holes 36.5 apart in its top, 'Rastbohrungen 8x'), b right behind the carriage, c under the pentagons; the side walls carry the feet. The carriage rides on a and b on four shoes (owner: not on long bars, which would drag): its front bar (the drive row's bearing bar) has a foot 1.3 over a, a shoe at each end resting on a (pad_gap) with a lip behind it, and the detent catch with its knob at the left; its rear bearings stand on a bar 1.3 over b with a shoe at each end the same way (carriage_runners). Our beams are lower than Lehmann's 25 (a 19, b 13.7) to pass under the drums, and a stands where our carriage leaves room (lower_frame)."
+        "src": "Current (v1.3.0): no base plate; the lower frame is beams a, b, c between the side walls, which carry the feet (lower_frame), and the carriage rides on a and b (carriage_runners). History: base plate = the lower frame (frame_x), 629 long. The side walls are low (z <= side_wall_low_z) in front of side_wall_y_split, where the carriage's counter section passes over them (its underside is at z 30), and rise to side_wall_top_z behind it, under the register cover's skirt; the replica's walls likewise have a low front part and a tall rear block (NL183/465 p. 95). The lead screw runs in a notch in each wall's low part (the replica's screw passes through the walls). It starts screw_start_dx left of the base, outside the case's left wall, where the end crank is (photos). The end crank's arm sits 0.5 mm outside the case's left wall (screw_start_dx follows the 755 mm case). Since 0.6.0 the base starts at y -104, behind the carriage's large gears, which hang below it. side_wall_low_z lowered from 26 to 24.5 in 0.7.0, under the carriage frame's bearing bar (z 25.375). 2026-11-26 (owner; TSD (02), TSD (13) of the replica, the photo of the original): the frame as beams: the lower frame of two side beams (under the side walls, the feet under their ends), a middle and a back beam (lower_beam_width wide, 4 high; the carriage slides on the middle one); a front beam just in front of the lead screw between the side walls, over the carriage's floor (front_beam: 0.6 clear of the counter's star wheel K, 0.5 of the setting racks, 0.7 of the floor); the rear wall slimmed to a beam carrying the result and intermediate shafts' rear bearings (rear_beam_z), with a post at each end up to the window plate. 2026-11-26, after Lehmann's sheets (NL183/465 p. 94 'Rahmen Unterteil', 104, 108; p. 102 the slide's angles; p. 105, 107, 113 the carriage's frame bars) and TSD (02), (10), (13): the lower frame is three upright steel beams between the side walls, no plate: a at the front (here just in front of the lead screw; 8 detent holes 36.5 apart in its top, 'Rastbohrungen 8x'), b right behind the carriage, c under the pentagons; the side walls carry the feet. The carriage rides on a and b on four shoes (owner: not on long bars, which would drag): its front bar (the drive row's bearing bar) has a foot 1.3 over a, a shoe at each end resting on a (pad_gap) with a lip behind it, and the detent catch with its knob at the left; its rear bearings stand on a bar 1.3 over b with a shoe at each end the same way (carriage_runners). Our beams are lower than Lehmann's 25 (a 19, b 13.7) to pass under the drums, and a stands where our carriage leaves room (lower_frame)."
       },
       "casing": {
         "v": {
-          "wall": 8.0,
-          "floor": 8.0,
-          "inner_x": [
-            -596.0,
-            143.0
-          ],
-          "inner_y": [
-            -154.0,
-            120.0
-          ],
-          "front_height": 18.0,
-          "register_cover_z": [
-            86.0,
-            87.5
-          ],
-          "register_cover_y0": -23.6,
           "carriage_cover_z": [
             82.0,
             84.0
@@ -1067,16 +1042,11 @@
             -112.0,
             -24.0
           ],
-          "carriage_wall_z0": 30.0,
-          "register_cover_skirt_z0": 72.0,
-          "floor_top_z": -60.0,
-          "wall_top_z": 140.0,
-          "bearer_length": 50.0,
-          "register_cover_y1": 72.5
+          "carriage_wall_z0": 30.0
         },
         "unit": "mm",
         "conf": "design",
-        "src": "2026-11-24: outer 755 long (BADUR2026: the original's wooden case), 290 wide; inside from 9 mm left of the base board to 5 mm right of the carriage hood at offset 0. The register cover ends over the rear wall (register_cover_y1): the larger pentagons (z up to 86.1) would cut through it if it reached the back of the case. They stay out of sight behind the case's back wall. Earlier: oak case with brass cover plates (machine_spec: oak case, polished brass). Outer 806 x 290 mm, 182 mm high without the lid: the photos of the original give about 800 mm long (photo overlay 2026-10-18, design/m2-notes.md); the secondary sources give 970 x 300 x 250 mm with the lid. The mechanism stands on two oak bearers (34 mm) so the carriage front and the Magna Rota hang below the base plate, as in the 1892 photo. The end crank is outside the left wall. Register cover above the Muldenrad tips (84.4) and the rear wall (85); carriage cover on the front panel, under the knob plates (98); low front wall keeps the Magna Rota visible. No lid. Carriage cover ends at y 4, in front of the result-wheel shafts (y >= 6). Main crank (2026-10-18): the crank rests pointing down, so its knob (lowest z -30 at radius 60 around z 35.5) sits at the bottom of its sweep whenever it is at rest. The case floor is lowered from -34 to -60, with taller bearers, and the front wall top sits at -42: the knob clears it by 12 mm and the floor by 30 mm, so a hand can follow it round. Before, the knob ran in a 6 mm slot behind a wall 16 mm higher than its lowest point. 2026-11-25: the carriage hood's top ends at y -24 (88 deep, not 116 from the photos) so the result windows behind it can be read; the register cover reaches forward to -23.6, with the windows over the discs at its front."
+        "src": "Current (v1.3.0): only the carriage's cover (carriage_cover_z, carriage_cover_y) and its end walls (carriage_wall_z0) remain here; the oak case and the register cover were removed and their sizes dropped. History: 2026-11-24: outer 755 long (BADUR2026: the original's wooden case), 290 wide; inside from 9 mm left of the base board to 5 mm right of the carriage hood at offset 0. The register cover ends over the rear wall (register_cover_y1): the larger pentagons (z up to 86.1) would cut through it if it reached the back of the case. They stay out of sight behind the case's back wall. Earlier: oak case with brass cover plates (machine_spec: oak case, polished brass). Outer 806 x 290 mm, 182 mm high without the lid: the photos of the original give about 800 mm long (photo overlay 2026-10-18, design/m2-notes.md); the secondary sources give 970 x 300 x 250 mm with the lid. The mechanism stands on two oak bearers (34 mm) so the carriage front and the Magna Rota hang below the base plate, as in the 1892 photo. The end crank is outside the left wall. Register cover above the Muldenrad tips (84.4) and the rear wall (85); carriage cover on the front panel, under the knob plates (98); low front wall keeps the Magna Rota visible. No lid. Carriage cover ends at y 4, in front of the result-wheel shafts (y >= 6). Main crank (2026-10-18): the crank rests pointing down, so its knob (lowest z -30 at radius 60 around z 35.5) sits at the bottom of its sweep whenever it is at rest. The case floor is lowered from -34 to -60, with taller bearers, and the front wall top sits at -42: the knob clears it by 12 mm and the floor by 30 mm, so a hand can follow it round. Before, the knob ran in a 6 mm slot behind a wall 16 mm higher than its lowest point. 2026-11-25: the carriage hood's top ends at y -24 (88 deep, not 116 from the photos) so the result windows behind it can be read; the register cover reaches forward to -23.6, with the windows over the discs at its front."
       },
       "digit_labels": {
         "v": {
@@ -1103,18 +1073,9 @@
             3.0,
             3.3
           ],
-          "cover_opening_y": [
-            -22.4,
-            -13.4
-          ],
-          "cover_opening_half_x": 7.3,
           "setting_plate_r": 17.4,
           "setting_glyph_r": 14.3,
           "setting_glyph_size": 6.6,
-          "pointer_r": 10.5,
-          "magna_glyph_size": 13.0,
-          "magna_black_dr": -10.0,
-          "magna_red_dr": -23.0,
           "result_dish": {
             "recess_r": 16.0,
             "face": 1.0,
@@ -1286,7 +1247,6 @@
             16.0,
             3.0
           ],
-          "inset": 14.0,
           "block": [
             60.0,
             25.0
@@ -1314,7 +1274,7 @@
         },
         "unit": "mm (profile: [radius, depth below the base plate])",
         "conf": "doc",
-        "src": "NL183/465 p. 25 ('Fuesse', brass, 2 x 2): a turned foot 40 high under its M6 thread: a collar 14 across, a neck 10.5, a bead 17 (14 shoulders), a neck 7 flaring into a dished base 33/36 across and 8 thick (the Commons photo 'Die Rechenmaschine von Leibniz (Nachbau) 2001 07' and TSD (13) show it). The curves between the drawn diameters by eye from the photo. One under each corner of the base plate, inset by eye. Under each foot a wooden block (block: side, height; TSD (03): the replica stands on four such blocks), as low as lets the end crank's handle clear the board (2.8; the owner, 2026-11-27: lower blocks look steadier). A steel pad (pad: side, thickness) under the side wall at each foot: the foot's collar (14 across) is wider than the wall (10). The blocks stand on a wooden board (board: its margin beyond the blocks on every side, thickness; the main crank's handle reaches over its front edge), as the replica does in its museum; the oak case is not rebuilt (the owner: its walls would hide the mechanism)."
+        "src": "NL183/465 p. 25 ('Fuesse', brass, 2 x 2): a turned foot 40 high under its M6 thread: a collar 14 across, a neck 10.5, a bead 17 (14 shoulders), a neck 7 flaring into a dished base 33/36 across and 8 thick (the Commons photo 'Die Rechenmaschine von Leibniz (Nachbau) 2001 07' and TSD (13) show it). The curves between the drawn diameters by eye from the photo. Two under each side wall, at lower_frame.feet_y (frame). Under each foot a wooden block (block: side, height; TSD (03): the replica stands on four such blocks), as low as lets the end crank's handle clear the board (2.8; the owner, 2026-11-27: lower blocks look steadier). A steel pad (pad: side, thickness) under the side wall at each foot: the foot's collar (14 across) is wider than the wall (10). The blocks stand on a wooden board (board: its margin beyond the blocks on every side, thickness; the main crank's handle reaches over its front edge), as the replica does in its museum; the oak case is not rebuilt (the owner: its walls would hide the mechanism)."
       },
       "magna_rota_crank": {
         "v": {
@@ -1407,13 +1367,8 @@
           "red_r": 19.75,
           "glyph_size": 4.5,
           "pin_radius": 1.4,
-          "pin_head_radius": 2.8,
           "pin_z": [
             0.6,
-            9.0
-          ],
-          "pin_head_z": [
-            7.0,
             9.0
           ],
           "stop": {
@@ -1449,7 +1404,7 @@
         },
         "unit": "mm",
         "conf": "design",
-        "src": "the revolution counter on the carriage's lower right top, laid out like the Dresden replica's (Commons Die_Rechenmaschine_von_Leibniz_(Nachbau)_2001_06.jpg): a steel ring Ø69.5 / Ø45 (BADUR2026) with 10 holes turns 36 deg a crank turn, clockwise seen from above when adding; a fixed outer circle of black 0-9 on the plate, running anticlockwise from 0 at the stop; a fixed inner circle of red 0-9 on the brass centre, running clockwise; a stop bracket at the top between 0 and 9, over the ring into the pin's plane; a parking place for the pin at the bottom. The pin set at black m reaches the stop after m turns (LEUPOLD1727's procedure; WALSDORF2014: pin at 0, read the count). z from the cover's top; radii from the dial's centre. dial_plate_radius (design): the outer number circle is engraved in the carriage's top; the model cuts that part of the top out as a ring of the counter's fixed plate (from the drive sleeve's hole to just beyond the numbers, which end at 39.75; the hood's top ends 40.1 behind the centre), flush with the top, so that the numbers keep their plate when the case and frame are hidden. 2026-11-26 (owner; Badur's photo of the original, the Commons photo 'Die Rechenmaschine von Leibniz (Nachbau) 2001 06', Brandt's Abb. II 5): the centre is a turned tower of five rings with a small ball on top; the pin a flat cone on the ring with a neck and a big round head, its stem in the hole; the stop a tapered steel strip, its wide end held by two screws on the plate beyond the ring at the top, raised over the ring, its tip held by a screw on the brass centre beside the tower. Sizes by eye from the photos (design); the strip's width at the holes' circle sets where the pin stops. The strip's wide end stands on the dial plate (to 39.3): beyond it, behind the counter, the register begins. 2026-11-26 (owner, the same photos): the stop stands at the top, centred, half a step from the holes and the numbers on both sides (inner 9 on its left and 0 on its right, outer 0 on its left and 9 on its right): the holes at 72 + 36 k deg, the inner digit k at 72 - 36 k, the outer at 108 + 36 k. The strip is a wedge pointing at the centre, as wide where the holes' circle crosses it as the gap between two holes less the pin and the gap, so a pin in the hole beside it rests against it: after m turns adding (its right edge) and after 9 - m turned back (its left edge); its tip narrows to tip_width on the brass centre. Then narrowed (owner): its sides 10 deg from its middle line, as on the photos, clear of the pin's head in the hole beside it (about 1 mm) and of the inner 9 and 0; a pin beside it after m turns meets it part-way through the next turn, as the ring steps, so that turn is refused (and turned back likewise after 9 - m). Then (owner): the pin's head must hit it (Badur: the pin 'hits the stop at the top'): the strip stands at the height of the head's widest part (finger_z), its sides set so that a pin in the hole beside it rests with its head against it (0.15 off): 11.9 deg off its middle line. The inner (centre's) numbers stand as far inside the ring as the outer ones outside it (owner): radius 19.75. Put away (owner), it stands on the top at the ring's front right (46 out at -45 deg), not at the front edge, its cone on the top and its stem in a hole of the top like the ring's."
+        "src": "Current (v1.3.0): the centre's numbers are black (black_glyphs, at red_r: the key names are historical), the ring's outer ones red (at black_r); the ring turns anticlockwise seen from above when adding (js/scene/m2Pose.js); the stop is centred at the top (90 deg). History: the revolution counter on the carriage's lower right top, laid out like the Dresden replica's (Commons Die_Rechenmaschine_von_Leibniz_(Nachbau)_2001_06.jpg): a steel ring Ø69.5 / Ø45 (BADUR2026) with 10 holes turns 36 deg a crank turn, clockwise seen from above when adding; a fixed outer circle of black 0-9 on the plate, running anticlockwise from 0 at the stop; a fixed inner circle of red 0-9 on the brass centre, running clockwise; a stop bracket at the top between 0 and 9, over the ring into the pin's plane; a parking place for the pin at the bottom. The pin set at black m reaches the stop after m turns (LEUPOLD1727's procedure; WALSDORF2014: pin at 0, read the count). z from the cover's top; radii from the dial's centre. dial_plate_radius (design): the outer number circle is engraved in the carriage's top; the model cuts that part of the top out as a ring of the counter's fixed plate (from the drive sleeve's hole to just beyond the numbers, which end at 39.75; the hood's top ends 40.1 behind the centre), flush with the top, so that the numbers keep their plate when the case and frame are hidden. 2026-11-26 (owner; Badur's photo of the original, the Commons photo 'Die Rechenmaschine von Leibniz (Nachbau) 2001 06', Brandt's Abb. II 5): the centre is a turned tower of five rings with a small ball on top; the pin a flat cone on the ring with a neck and a big round head, its stem in the hole; the stop a tapered steel strip, its wide end held by two screws on the plate beyond the ring at the top, raised over the ring, its tip held by a screw on the brass centre beside the tower. Sizes by eye from the photos (design); the strip's width at the holes' circle sets where the pin stops. The strip's wide end stands on the dial plate (to 39.3): beyond it, behind the counter, the register begins. 2026-11-26 (owner, the same photos): the stop stands at the top, centred, half a step from the holes and the numbers on both sides (inner 9 on its left and 0 on its right, outer 0 on its left and 9 on its right): the holes at 72 + 36 k deg, the inner digit k at 72 - 36 k, the outer at 108 + 36 k. The strip is a wedge pointing at the centre, as wide where the holes' circle crosses it as the gap between two holes less the pin and the gap, so a pin in the hole beside it rests against it: after m turns adding (its right edge) and after 9 - m turned back (its left edge); its tip narrows to tip_width on the brass centre. Then narrowed (owner): its sides 10 deg from its middle line, as on the photos, clear of the pin's head in the hole beside it (about 1 mm) and of the inner 9 and 0; a pin beside it after m turns meets it part-way through the next turn, as the ring steps, so that turn is refused (and turned back likewise after 9 - m). Then (owner): the pin's head must hit it (Badur: the pin 'hits the stop at the top'): the strip stands at the height of the head's widest part (finger_z), its sides set so that a pin in the hole beside it rests with its head against it (0.15 off): 11.9 deg off its middle line. The inner (centre's) numbers stand as far inside the ring as the outer ones outside it (owner): radius 19.75. Put away (owner), it stands on the top at the ring's front right (46 out at -45 deg), not at the front edge, its cone on the top and its stem in a hole of the top like the ring's."
       },
       "counter_train": {
         "v": {
