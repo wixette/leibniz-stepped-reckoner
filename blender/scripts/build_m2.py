@@ -192,7 +192,9 @@ def build(p):
         jr = ssh["journal_radius"]
         half = ssh["square"] / 2.0
         mb.prism(geom.circle(jr, 20), "XZ", cp["store_shaft_front"], sq0 + 0.2, "steel", smooth=True)
-        mb.prism(geom.circle(jr, 20), "XZ", sq1 - 0.2, pb + 1.0, "steel", smooth=True)
+        # behind the square part a thinner journal: the ripple set's star s' sits on it, and its
+        # hollows reach down to radius 2.1
+        mb.prism(geom.circle(ssh["rear_journal_radius"], 20), "XZ", sq1 - 0.2, pb + 1.0, "steel", smooth=True)
         edges = [sq0] + [y for c_ in ssh["cuts_y"] for y in c_] + [sq1]
         for a, b in zip(edges[0::2], edges[1::2]):
             mb.prism(geom.rect(-half, -half, half, half), "XZ", a, b, "steel")    # the square ends
@@ -243,7 +245,7 @@ def build(p):
         ra, rb = cp["ripple_s"]
         mb = MeshBuilder()
         mb.prism(carry.ripple_star(p, cg["s_phase"]), "XZ", ra, rb, "steel")
-        mb.prism(geom.circle(2.4, 24), "XZ", rb, rb + 0.5, "brass_satin", smooth=True)
+        mb.prism(geom.circle(2.0, 24), "XZ", rb, rb + 0.5, "brass_satin", smooth=True)   # inside the hollows (r 2.1)
         s_node = mb.build(f"pi.five_horn_sr.{k}", col, (fx, 0, fz))
         bl.set_motion(s_node, "rotate", (0, 1, 0), f"Front five-horn {k} (ripple set)", f"Vorderes Fünfhorn {k} (Staffelsatz)")
         bl.parent(s_node, root)

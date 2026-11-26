@@ -1336,6 +1336,7 @@
             59.9
           ],
           "journal_radius": 2.5,
+          "rear_journal_radius": 1.8,
           "cuts_y": [
             [
               -8.8,
@@ -1350,7 +1351,7 @@
         },
         "unit": "mm",
         "conf": "doc",
-        "src": "BADUR2026 Pos. 23/24 ('Welle 6/7', the intermediate shafts, steel): Ø5 journals, a square middle part 6 across waisted to about 3.5 (R 100), an M3 end for the pentagon's nut. The TSD photos of Lehmann's replica show the same waisted steel bars between the result discs and the pentagons. Ours: the square part carries s, the five-horn p and the detent wheel (y -10.2 to 59.9), its four edges cut away by long concave cuts (the flats narrowing from 6 to 3.5 in the middle of each cut, as on the TSD and Commons photos of Lehmann's replica), short square ends left at the parts and the front bar (design: our register is longer than Badur's, so the square part is too); Ø5 journals through the frame bar, the ripple set's plane and the rear wall to the pentagon."
+        "src": "BADUR2026 Pos. 23/24 ('Welle 6/7', the intermediate shafts, steel): Ø5 journals, a square middle part 6 across waisted to about 3.5 (R 100), an M3 end for the pentagon's nut. The TSD photos of Lehmann's replica show the same waisted steel bars between the result discs and the pentagons. Ours: the square part carries s, the five-horn p and the detent wheel (y -10.2 to 59.9), its four edges cut away by long concave cuts (the flats narrowing from 6 to 3.5 in the middle of each cut, as on the TSD and Commons photos of Lehmann's replica), short square ends left at the parts and the front bar (design: our register is longer than Badur's, so the square part is too); a Ø5 front journal; behind the square part a Ø3.6 journal through the ripple set's plane, the frame bar and the rear wall to the pentagon (design, 2026-11-26: Badur's Ø5 covered the hollows of the ripple set's star s', whose bottom lies at radius 2.1)."
       },
       "setting_handle": {
         "v": {
