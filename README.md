@@ -26,7 +26,7 @@ The original is behind glass. This one you can turn: 8 setting knobs, a 16-digit
 1. **Set a number.** Type `2` in *Number on the knobs*, at the left of the toolbar. The units knob, the one on the right of the carriage, turns to 2.
 2. **Turn the crank.** Press **+**. The crank turns once, every drum turns with it, and the windows on top of the machine show `2` (so does *Result*, at the top left).
 3. **Add another number.** Type `3` in place of the 2 and press **+** again: `5`. You have just calculated on a machine from about 1700. **−** turns the crank backward and subtracts.
-4. **Look inside.** Open the **Views** menu at the top right, choose *Stepped drum* and press **+** once more. The frame disappears, the other parts fade, and you can watch the drum's teeth turn the result wheel.
+4. **Look inside.** Open the **Views** menu at the top right, choose *Stepped drum* and press **+** once more. The frame disappears, the other parts fade, and you can watch the drum's teeth turn the result wheel. Too fast? Switch on *Slow motion* in the same menu.
 
    <img src="images/readme/view-drum.jpg" alt="The Stepped drum view: the units knob set to 3, its stepped drum and the small gear of the result wheel, the rest of the machine faded" width="640">
 
@@ -117,6 +117,8 @@ Dividing is subtracting again and again. Put the pin beside the stop, at black 0
 Use **Reset** before each one.
 
 - **Eight carries in one turn.** Set 99999999 (the largest number the knobs hold) and press **+**. Then set 1, choose the *Carry* view, and press **+** again: every pentagon tilts, the carries run along, and the result is 100000000. Choose *Original* in the *Carry* box and try it again: now the carries wait, and each further turn with 0 on the knobs finishes two of them.
+- **A carry in slow motion.** Set 9999 with **+**, then set 1. Choose the *Carry* view, switch on *Slow motion* in the Views menu and press **+**: the turn takes about five seconds, so you can follow each carry store's pentagon tilting and each carry lever passing the carry on. Point at a part to see its name.
+- **Every part in its own colour.** Switch off *Show the frame* and switch on *Colour by part* in the Views menu: the drums turn orange, the result wheels blue, the carry stores green, the carry levers red, and so on. Then turn the crank and orbit the machine to see which parts move together.
 - **Times eleven without multiplying.** Set 12 and press **+**. Slide the carriage one place left (the carriage's left arrow) and press **+** again. 12 + 120 = 132 = 12 × 11.
 - **Times by the pin.** Set 25, put the pin at black 4 and press *Run to stop*: 100. Watch the revolution counter's ring carry the pin round to the stop, one hole a turn.
 - **Go below zero.** Set 1 and press **−**. What do the windows show, and why?
