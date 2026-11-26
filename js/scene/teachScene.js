@@ -102,7 +102,9 @@ export function viewSubjects(root) {
     // The whole machine as it is, taken apart (the stage frames it with the parts moved out).
     apart: of({ x: 0.35, y: 0.5, z: 0.62 }, () => [root]),
     register: view({ x: 0, y: 1, z: 0.12 }, ["pi.window"]),
-    knobs: view({ x: 0, y: 1.1, z: 0.8 }, ["pm.setting_dial.*", "pm.setting_plate.*"]),
+    // nearly from above: the C handles stand upright over the dials and would hide the windows
+    // behind them from a lower view (the owner)
+    knobs: view({ x: 0, y: 1, z: 0.15 }, ["pm.setting_dial.*", "pm.setting_plate.*"]),
     front: view({ x: 0.12, y: 0.15, z: 1 }, ["pm.magna_rota", "pm.main_crank"]),
     // the revolution counter on the carriage's top right, seen from above and the front
     // straight from the front (x 0): a sideways tilt turns the picture about the view axis, and
