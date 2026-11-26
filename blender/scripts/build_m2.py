@@ -25,7 +25,7 @@ Carriage pm.carriage (translate along +X), carriage digit j at x = -36.5 j (offs
   pm.counter_pin (rotate about +Z), pm.counter_pin_park (static),
   pm.main_crank (rotate about +Y, 360 deg per turn; sits in the middle of the Magna Rota)
 Casing (all static; the page hides them together to show the mechanism):
-  frame.base             brass base plate on four turned brass feet (hidden with the case)
+  frame.base             lower frame of beams on four turned brass feet and wooden blocks (hidden with the case)
   frame.register_cover   brass top plate over the register, openings over the 16 windows
   pm.carriage_cover      brass top plates and end walls of the carriage, counter dial plate (moves with it)
 """
@@ -351,14 +351,24 @@ def build(p):
     window["read_half_size_mm"] = dl["read_half_size"]
     bl.parent(window, root)
 
-    # frame: base (the replica's lower frame), side walls 610 apart, rear wall and front bar
-    # between them; the lead screw runs in a notch in each wall's low front part
+    # frame: side walls 610 apart, the rear beam and the register's front bar between them, the
+    # front beam in front of the lead screw (the lower frame of beams is frame.base); the lead
+    # screw runs in a notch in each wall's low front part
     ls = p.v(M2 + "lead_screw")
     fr = p.v(M2 + "frame")
     sw = fx_["side_wall"]
     base_x0, base_x1 = in_x0 - fx_["end_bar_left"], in_x1 + fx_["end_bar_right"]
     mb = MeshBuilder()
-    mb.prism(geom.rect(in_x0, 4.0, in_x1, 85.0), "XZ", wall0, wall1, "brass_satin")
+    # the rear beam (the rear wall slimmed, the owner 2026-11-26): it carries the result and
+    # intermediate shafts' rear bearings; a post at each end holds the window plate
+    rb0, rb1 = fr["rear_beam_z"]
+    mb.prism(geom.rect(in_x0, rb0, in_x1, rb1), "XZ", wall0, wall1, "brass_satin")
+    for px0 in (in_x0, in_x1 - 6.0):
+        mb.prism(geom.rect(px0, rb1, px0 + 6.0, 85.0), "XZ", wall0, wall1, "brass_satin")
+    # the front beam, just in front of the lead screw between the side walls, over the carriage's
+    # floor (TSD (13): the replica's frame has one)
+    fbm = fr["front_beam"]
+    mb.prism(geom.rect(in_x0, fbm["y"][0], in_x1, fbm["y"][1]), "XY", fbm["z"][0], fbm["z"][1], "brass_satin")
     fb0, fb1 = fr["register_front_bar_y"]
     mb.prism(geom.rect(in_x0, zs - 4.5, in_x1, zs + 4.5), "XZ", fb0, fb1, "brass_satin")
     for bx in (in_x0, in_x1 - 3.0):
@@ -391,16 +401,22 @@ def build(p):
     springs = static(mb.build("frame.springs", col))
     bl.parent(springs, root)
 
-    # the base plate under the mechanism (the replica's lower frame; the carriage slides on it),
-    # standing on four turned brass feet at its corners (NL183/465 p. 25 "Fuesse", photos of the
+    # the lower frame under the mechanism (the replica's), standing on four turned brass feet at its corners (NL183/465 p. 25 "Fuesse", photos of the
     # replica). A separate node, hidden with the case and frame.
     cs = p.v(M2 + "casing")
     ft_ = p.v(M2 + "feet")
     mb = MeshBuilder()
-    mb.prism(geom.rect(base_x0, fr["y"][0], base_x1, fr["y"][1]), "XY", 0.0, 4.0, "brass_satin")
+    # the lower frame as beams (TSD (02)): a side beam under each side wall, a middle and a back
+    # beam between them; the carriage slides on the middle beam
+    bw_ = fr["lower_beam_width"]
+    sbx = [(in_x0 - sw - 1.0, in_x0 - sw - 1.0 + bw_), (in_x1 + sw + 1.0 - bw_, in_x1 + sw + 1.0)]
+    for x0_, x1_ in sbx:
+        mb.prism(geom.rect(x0_, fr["y"][0], x1_, fr["y"][1]), "XY", 0.0, 4.0, "brass_satin")
+    for y0_, y1_ in (fr["middle_beam_y"], fr["back_beam_y"]):
+        mb.prism(geom.rect(sbx[0][1], y0_, sbx[1][0], y1_), "XY", 0.0, 4.0, "brass_satin")
     ins = ft_["inset"]
-    prof_ = [(r, -z) for r, z in ft_["profile"]]          # from the top (z 0, under the plate) down
-    feet_xy = [(fx_, fy_) for fx_ in (base_x0 + ins, base_x1 - ins) for fy_ in (fr["y"][0] + ins, fr["y"][1] - ins)]
+    prof_ = [(r, -z) for r, z in ft_["profile"]]          # from the top (z 0, under the beams) down
+    feet_xy = [((x0_ + x1_) / 2.0, fy_) for x0_, x1_ in sbx for fy_ in (fr["y"][0] + ins, fr["y"][1] - ins)]
     for fx_, fy_ in feet_xy:
         lathe(mb, [(0.0, prof_[-1][1])] + list(reversed(prof_)) + [(0.0, 0.0)], "brass_polished", (fx_, fy_, 0.0), 20)
     # a light wooden block under each foot (TSD (03): the replica stands on four), so that the
@@ -1206,7 +1222,7 @@ def build(p):
     # =========================================================== teaching extras (M3)
     labels = {
         "frame.static": ("Frame: side walls, rear wall and front bar", "Gestell: Seitenwände, Rückwand und Vorderleiste"),
-        "frame.base": ("Base plate and feet", "Grundplatte und Füße"),
+        "frame.base": ("Lower frame and feet", "Unterrahmen und Füße"),
         "frame.register_cover": ("Cover plate of the result register", "Deckplatte des Resultatwerks"),
         "pi.window": ("Reading windows of the result register", "Ablesefenster des Resultatwerks"),
         "pm.carriage_panel": ("Front panel of the carriage", "Vorderwand des Schlittens"),

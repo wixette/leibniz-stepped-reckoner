@@ -253,7 +253,7 @@ export default {
   "part.rippleStar": "Ripple-Stern",
   "part.zweihornRipple": "Ripple-Zweihorn (Übertragshebel)",
   "part.settingStop": "Anschlag des Stellknopfs",
-  "part.base": "Grundplatte und Füße",
+  "part.base": "Unterrahmen und Füße",
   "part.case": "Eichenkasten",
   "part.leadScrew": "Schraube und Seitenkurbel (verschiebt den Schlitten)",
   "part.registerCover": "Deckplatte des Resultatwerks",
