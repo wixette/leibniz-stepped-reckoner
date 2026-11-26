@@ -1134,6 +1134,46 @@
         "conf": "doc",
         "src": "BADUR2026 (measured on the original): pentagons 40 across the two side corners (BADUR2026 Pos. 22, \"Fuenfeck\", 1.5 thick), circumradius 21.03. Adjacent stores are only 36.5 apart, so the pentagons stand in two staggered rows, even digits in front, odd behind (Lange 1958 via NL183/466 PLAN p. 9: '15 pentagon plates in two staggered rows'; the GWLB CAD model shows the same). Behind the rear wall; their top edges (z 86.1) are level with the register cover (z 86-87.5), just behind its back edge, so the oak case hides them. On the original they appear to rise above the register (GWLB CAD model): their height there is not measured and is asked for v1.3.0 (decision 0002). 2026-11-25: placed as on Badur's assembly drawing (plan view, scaled by the 36.5 digit pitch): the two rows 10.5 apart, as his two intermediate shafts' lengths differ (Pos. 23/24: 82.5 and 93 from the front end to the pentagon's shoulder), the front row about 17.6 and the back row about 28.1 behind the middle of the rear wall the shafts come through; 1.5 thick (Pos. 22). The TSD photographs of Lehmann's replica show the same: the shafts stand well out of the rear wall, the two rows clearly apart."
       },
+      "end_crank": {
+        "v": {
+          "drawing": "design/drawings/end-crank-details.svg",
+          "axis_centre": [
+            521.0,
+            87.0
+          ],
+          "bar": "Crank",
+          "bar_half_width": 8.0,
+          "sleeve": {
+            "x": [
+              474.0,
+              509.0
+            ],
+            "radius": 26.0
+          },
+          "axis": {
+            "x": [
+              509.0,
+              521.0
+            ],
+            "radius": 20.0
+          },
+          "boss": {
+            "x": [
+              474.0,
+              489.0
+            ],
+            "radius": 22.1,
+            "centre_y": 98.9
+          },
+          "cap": "CrankHead1",
+          "wood": "HandleWoodPart",
+          "ball": "HandleMetalBallHead",
+          "handle_axis_y": 279.0
+        },
+        "unit": "drawing units (front view: x to the right, y down)",
+        "conf": "design",
+        "src": "The end crank as the owner drew it (design/drawings/end-crank-details.svg, after Brandt's Abb. II 5): a hub on the lead screw's end (Axis, AxisSleeve), a bent steel bar (Crank) from a boss under the hub (CrankHead2) down and outward to a rounded cap (CrankHead1), and the main crank's turned oak handle with its gold ball on an axis parallel to the screw, pointing away from the machine. No source gives its sizes: the drawing is at the Magna Rota drawing's scale (its handle is the same, 234.5 units long), so the crank's radius is 68 mm (was 55) and the handle the main crank's. The drawing's axis end (axis_centre) is the screw's end, inside the case's left wall; the side views give the bar's thickness (bar_half_width) and the boss's and the hub's circles."
+      },
       "magna_rota_crank": {
         "v": {
           "drawing": "design/drawings/magna-rota-details.svg",

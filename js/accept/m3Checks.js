@@ -289,12 +289,12 @@ export function runM3Checks(root) {
     expectThat("result wheel 5", down(read5), () => m.offset === 5);
     // the end crank shifts the carriage left
     pose();
-    // aim at the end crank's knob (its dark wood), outside the case's left wall
+    // aim at the end crank's handle (its oak), outside the case's left wall
     const knobBox = new THREE.Box3();
     findNodes(root, "frame.lead_screw")[0].traverse((o) => {
       const mesh = /** @type {THREE.Mesh} */ (o);
       const mats = mesh.isMesh ? (Array.isArray(mesh.material) ? mesh.material : [mesh.material]) : [];
-      if (mats.some((mt) => mt.name === "wood_dark")) knobBox.expandByObject(mesh);
+      if (mats.some((mt) => mt.name === "oak_handle")) knobBox.expandByObject(mesh);
     });
     expectThat("end crank", down(knobBox.getCenter(new THREE.Vector3())), () => m.offset === 6);
     expectThat("end crank, Shift-click", down(knobBox.getCenter(new THREE.Vector3()), -1), () => m.offset === 5);

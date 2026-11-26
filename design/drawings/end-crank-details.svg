@@ -1,0 +1,29 @@
+<svg width="950" height="388" viewBox="0 0 950 388" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="end_crank_details_by_wixette">
+<rect width="950" height="388" fill="white"/>
+<g id="FrontView">
+<path id="HandleWoodPart" d="M318 268.5C318 268.5 317 257.5 312 249.5C307 241.5 297 235.5 293.5 239C290 242.5 292.5 256 282 256H211.5C198.5 256 203 231 185.5 231H109C95.0803 231 83.5 239.786 83.5 268.5V289.5C83.5 318.214 95.0803 327 109 327H185.5C203 327 198.5 302 211.5 302H282C292.5 302 290 315.5 293.5 319C297 322.5 307 316.5 312 308.5C317 300.5 318 289.5 318 289.5V268.5Z" fill="#FFCC00"/>
+<path id="HandleMetalBallHead" d="M76 272.368C73.8504 269.133 70.1751 267 66 267C59.3726 267 54 272.373 54 279C54 285.627 59.3726 291 66 291C70.1754 291 73.8505 288.866 76 285.631V291H84V267H76V272.368Z" fill="#FF00DD"/>
+<path id="Crank" d="M341 206C328 213.506 329 228.5 329 282H313C313 226 312.454 206.55 328 196C342 186.5 369.501 179.5 388.5 174.5C407.5 169.5 421 166.5 447.5 157.5C474 148.5 473.979 146.5 473.979 113H488.978C488.978 148.5 487.978 157.5 457 168.5C426.022 179.5 410 183 393 187.5C376 192 356.013 197.333 341 206Z" fill="#D9D9D9"/>
+<path id="CrankHead1" d="M313 252V252C321.837 252 329 259.163 329 268V290C329 298.837 321.837 306 313 306V306V252Z" fill="#00B9B0"/>
+<rect id="CrankHead2" x="474" y="113" width="15" height="8" fill="#009400"/>
+<rect id="Axis" x="509" y="67" width="12" height="40" fill="#CC00CC"/>
+<rect id="AxisSleeve" x="474" y="61" width="35" height="52" fill="#0000CC"/>
+</g>
+<g id="LeftSideView">
+<rect id="Crank_2" x="662" y="113" width="16" height="169" fill="#D9D9D9"/>
+<circle id="HandleWoodPart_2" cx="670" cy="279" r="48" fill="#FFCC00"/>
+<circle id="HandleMetalBallHead_2" cx="670" cy="282" r="12" fill="#FF00DD"/>
+<path id="CrankHead2_2" d="M691.815 101C690.801 112.209 681.382 120.992 669.908 120.992C658.435 120.992 649.014 112.209 648 101C652.621 108.212 660.707 112.992 669.908 112.992C679.11 112.992 687.194 108.212 691.815 101Z" fill="#009400"/>
+<circle id="AxisSleeve_2" cx="670" cy="87" r="26" fill="#0000CC"/>
+</g>
+<g id="RightSideView">
+<circle id="HandleWoodPart_3" cx="848" cy="279" r="48" fill="#FFCC00"/>
+<circle id="CrankHead1_2" cx="848" cy="279" r="27" fill="#00B9B0"/>
+<rect id="Crank_3" x="840" y="113" width="16" height="169" fill="#D9D9D9"/>
+<path id="CrankHead2_3" d="M869.815 101C868.801 112.209 859.382 120.992 847.908 120.992C836.435 120.992 827.014 112.209 826 101C830.621 108.212 838.707 112.992 847.908 112.992C857.11 112.992 865.194 108.212 869.815 101Z" fill="#009400"/>
+<circle id="AxisSleeve_3" cx="848" cy="87" r="26" fill="#0000CC"/>
+<circle id="Axis_2" cx="848" cy="87" r="20" fill="#CC00CC"/>
+</g>
+</g>
+</svg>

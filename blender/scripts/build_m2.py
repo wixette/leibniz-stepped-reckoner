@@ -332,11 +332,61 @@ def build(p):
         xa = (sx1 - sx0) * i / nseg
         cy, cz = (ls["radius"] + 0.6) * math.cos(a), (ls["radius"] + 0.6) * math.sin(a)
         mb.prism(geom.rect(cy - 0.9, cz - 0.9, cy + 0.9, cz + 0.9), "YZ", xa, xa + (sx1 - sx0) / nseg + 0.3, "steel")
-    # crank arm (along +Y) outside the case: its knob sweeps z 20 +- 55, above the case's underside (z -42)
-    arm = 55.0
-    mb.prism(geom.rect(-4.0, -2.5, arm + 4.0, 2.5), "YZ", -6.0, -3.0, "brass_satin")
-    mb.prism(geom.circle(4.0, 20), "YZ", -6.0, 0.0, "brass_satin", smooth=True)
-    mb.prism([(u + arm, w) for u, w in geom.circle(4.0, 20)], "YZ", -32.0, -6.0, "wood_dark", smooth=True)
+    # the end crank (the owner's drawing, design/drawings/end-crank-details.svg, at the Magna Rota
+    # drawing's scale, so its handle is the main crank's): a hub on the screw's end, a bent bar
+    # down and outward to a rounded cap, and the turned oak handle with its gold ball pointing away
+    # from the machine. The drawing's front view: x right (the machine's x), y down; its axis end
+    # (axis_centre) is the screw's end. At rest the crank points down.
+    from lib.svgplate import _area as _ec_area, plate_frame as _ec_frame, shape_loops as _ec_loops
+    ec = p.v(M2 + "end_crank")
+    mcd = p.v(M2 + "magna_rota_crank")
+    root_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")
+    es, _, _ = _ec_frame(os.path.join(root_dir, mcd["drawing"]), mcd["front_ref"], 2.0 * p.v(M2 + "magna_rota_radius"))
+    edwg = os.path.join(root_dir, ec["drawing"])
+    ax0, ay0 = ec["axis_centre"]
+
+    def ex(xd):
+        return (xd - ax0) * es
+
+    def ez(yd):
+        return -(yd - ay0) * es
+
+    def turned_x(shape_id, oz, mat, n):
+        """A turned part on an axis along x at height oz (drawing y handle_axis_y): the upper half
+        of its front-view outline, in the outline's order, revolved."""
+        loop = max(_ec_loops(edwg, shape_id, es, 0.05), key=lambda lp: abs(_ec_area(lp)))
+        loop = [q for i, q in enumerate(loop) if i == 0 or q != loop[i - 1]]
+        if loop[0] == loop[-1]:
+            loop = loop[:-1]
+        hy, nn = ec["handle_axis_y"], len(loop)
+        upper = [q[1] <= hy + 1e-6 for q in loop]
+        i0 = next(i for i in range(nn) if upper[i] and not upper[i - 1])
+        chain = []
+        for k in range(nn):
+            if not upper[(i0 + k) % nn]:
+                break
+            q = loop[(i0 + k) % nn]
+            chain.append((max(0.0, (hy - q[1]) * es), ex(q[0])))
+        if chain[0][1] > chain[-1][1]:
+            chain.reverse()
+        prof = ([] if chain[0][0] == 0.0 else [(0.0, chain[0][1])]) + chain
+        prof += [] if prof[-1][0] == 0.0 else [(0.0, prof[-1][1])]
+        n0 = len(mb.verts)
+        lathe(mb, prof, mat, (0.0, 0.0, 0.0), n)
+        mb.verts[n0:] = [(vz, vx, vy + oz) for vx, vy, vz in mb.verts[n0:]]   # the lathe's axis along x
+
+    hz_ = ez(ec["handle_axis_y"])
+    sl, axs, bo_ = ec["sleeve"], ec["axis"], ec["boss"]
+    mb.prism(geom.circle(axs["radius"] * es, 24), "YZ", ex(axs["x"][0]) - 0.01, ex(axs["x"][1]), "steel", smooth=True)
+    mb.prism(geom.circle(sl["radius"] * es, 32), "YZ", ex(sl["x"][0]), ex(sl["x"][1]), "steel", smooth=True)
+    mb.prism([(u, w + ez(bo_["centre_y"])) for u, w in geom.circle(bo_["radius"] * es, 32)], "YZ", ex(bo_["x"][0]), ex(bo_["x"][1]), "steel", smooth=True)
+    bar = max(_ec_loops(edwg, ec["bar"], es, 0.03), key=lambda lp: abs(_ec_area(lp)))
+    hw_ = ec["bar_half_width"] * es
+    mb.prism([(ex(xd), ez(yd)) for xd, yd in bar], "XZ", -hw_, hw_, "steel")
+    turned_x(ec["cap"], hz_, "steel", 24)
+    turned_x(ec["wood"], hz_, "oak_handle", 32)
+    turned_x(ec["ball"], hz_, "brass_polished", 20)
+    mb.cylinder_uvs("oak_handle", (0.0, 0.0, hz_), (1.0, 0.0, 0.0), 10.0)
     screw = mb.build("frame.lead_screw", col, (sx0, ls["y"], ls["z"]))
     bl.set_motion(screw, "rotate", (1, 0, 0), "Lead screw and end crank (shifts the carriage)",
                   "Schraube und Seitenkurbel (verschiebt den Schlitten)")
