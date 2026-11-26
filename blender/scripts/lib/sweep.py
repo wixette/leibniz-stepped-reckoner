@@ -6,9 +6,14 @@ parts of the carriage together with the carriage) are not tested against each ot
 and designed contacts (journals, keyed or meshing parts) are listed in DESIGNED. The
 same list is in js/accept/collisions.js.
 
-World-space BVH trees are rebuilt only for parts that moved; pairs whose bounding boxes
-are apart are skipped, and a result is reused when a pair comes back to a relative
-transform it has already been tested at.
+Kept fast, as it runs often during development:
+- a pose only revisits the pairs with a part that moved since the pose before (the others
+  are where they were, already tested), unless the hidden parts changed;
+- a part's bounding box comes from its local box's 8 corners (a little larger than the
+  tight box, never smaller, so no contact is missed);
+- a part's world-space BVH tree is rebuilt (with numpy) only when a pair needs a mesh test
+  and the tree is not at the part's current place;
+- a result is reused when a pair comes back to a relative transform it was tested at.
 """
 
 import math
@@ -16,6 +21,7 @@ import re
 import time
 
 import bpy
+import numpy as np
 from mathutils import Quaternion, Vector
 from mathutils.bvhtree import BVHTree
 
@@ -83,7 +89,27 @@ def run(poses, tag):
     for o in objs.values():
         o.rotation_mode = "QUATERNION"
     pairs = all_pairs(objs, info)
-    local = {n: ([v.co.copy() for v in o.data.vertices], [tuple(p.vertices) for p in o.data.polygons]) for n, o in objs.items()}
+    names = sorted(objs)
+    # local geometry: vertices (numpy), faces, and the 8 corners of the local bounding box
+    local = {}
+    for n, o in objs.items():
+        co = np.empty(len(o.data.vertices) * 3, dtype=np.float64)
+        o.data.vertices.foreach_get("co", co)
+        co = co.reshape(-1, 3)
+        lo, hi = co.min(axis=0), co.max(axis=0)
+        corners = np.array([[x, y, z, 1.0] for x in (lo[0], hi[0]) for y in (lo[1], hi[1]) for z in (lo[2], hi[2])])
+        local[n] = (co, [tuple(p.vertices) for p in o.data.polygons], corners)
+    idx = {n: i for i, n in enumerate(names)}
+    pa = np.array([idx[a] for a, _ in pairs], dtype=np.int64)
+    pb = np.array([idx[b] for _, b in pairs], dtype=np.int64)
+    by_part = [[] for _ in names]
+    for i in range(len(pairs)):
+        by_part[pa[i]].append(i)
+        by_part[pb[i]].append(i)
+    by_part = [np.array(v, dtype=np.int64) for v in by_part]
+    every_pair = np.arange(len(pairs), dtype=np.int64)
+    lo_all = np.zeros((len(names), 3))
+    hi_all = np.zeros((len(names), 3))
 
     def apply(values):
         for name, value in values.items():
@@ -95,36 +121,60 @@ def run(poses, tag):
             else:
                 o.location = loc + ax * (value / 1000.0)
 
-    trees, boxes, mats = {}, {}, {}
+    mats, mnp, inv = {}, {}, {}
+    trees, tree_at = {}, {}
+
+    def tree(n):
+        if tree_at.get(n) is not mats[n]:
+            m = mnp[n]
+            verts = local[n][0] @ m[:3, :3].T + m[:3, 3]
+            trees[n] = BVHTree.FromPolygons(verts.tolist(), local[n][1], epsilon=MARGIN)
+            tree_at[n] = mats[n]
+        return trees[n]
+
     seen = {}
     fails, worst = {}, {}
     tested = 0
+    prev_hidden = None
     t0 = time.time()
     for k, pose in enumerate(poses):
         apply(pose["values"])
         bpy.context.view_layer.update()
         hidden = set(pose.get("hidden", []))
-        for n, o in objs.items():
-            mw = o.matrix_world.copy()
+        moved = []
+        for n in names:
+            mw = objs[n].matrix_world
             if n in mats and mats[n] == mw:
                 continue
-            mats[n] = mw
-            verts = [mw @ v for v in local[n][0]]
-            trees[n] = BVHTree.FromPolygons(verts, local[n][1], epsilon=MARGIN)
-            lo = Vector((min(v.x for v in verts), min(v.y for v in verts), min(v.z for v in verts)))
-            hi = Vector((max(v.x for v in verts), max(v.y for v in verts), max(v.z for v in verts)))
-            boxes[n] = (lo, hi)
-        for a, b in pairs:
-            if a in hidden or b in hidden:
-                continue
-            (la, ha), (lb, hb) = boxes[a], boxes[b]
-            if any(la[i] > hb[i] + MARGIN or lb[i] > ha[i] + MARGIN for i in range(3)):
-                continue
-            rel = mats[a].inverted() @ mats[b]
-            key = (a, b, tuple(round(x, 6) for row in rel for x in row))
+            mats[n] = mw.copy()
+            m = np.array(mats[n])
+            mnp[n] = m
+            inv[n] = np.linalg.inv(m)   # for the pairs' relative transforms
+            w = local[n][2] @ m.T
+            lo_all[idx[n]] = w[:, :3].min(axis=0)
+            hi_all[idx[n]] = w[:, :3].max(axis=0)
+            moved.append(idx[n])
+        if hidden != prev_hidden:
+            todo = every_pair
+            prev_hidden = hidden
+        elif moved:
+            todo = np.unique(np.concatenate([by_part[i] for i in moved]))
+        else:
+            continue
+        if hidden:
+            hid = np.zeros(len(names), dtype=bool)
+            hid[[idx[n] for n in hidden if n in idx]] = True
+            todo = todo[~(hid[pa[todo]] | hid[pb[todo]])]
+        # the pairs whose boxes touch, all at once
+        a_, b_ = pa[todo], pb[todo]
+        apart = ((lo_all[a_] > hi_all[b_] + MARGIN) | (lo_all[b_] > hi_all[a_] + MARGIN)).any(axis=1)
+        for i in todo[~apart].tolist():
+            a, b = pairs[i]
+            rel = inv[a] @ mnp[b]
+            key = (i, np.round(rel, 6).tobytes())
             hits = seen.get(key)
             if hits is None:
-                hits = len(trees[a].overlap(trees[b]))
+                hits = len(tree(a).overlap(tree(b)))
                 seen[key] = hits
                 tested += 1
             if hits:
@@ -135,6 +185,6 @@ def run(poses, tag):
 
     for (a, b), label in sorted(fails.items()):
         print(f"PAIR {a:22s} <-> {b:22s} FAIL first at {label} (max {worst[(a, b)]} tri pairs)")
-    print(f"checked {len(pairs)} pairs (all moving pairs) x {len(poses)} poses, {tested} distinct pair tests")
+    print(f"checked {len(pairs)} pairs (all moving pairs) x {len(poses)} poses, {tested} distinct pair tests, {time.time() - t0:.0f} s")
     print(f"{tag}_CLEARANCE_OK" if not fails else f"{tag}_CLEARANCE_FAIL {len(fails)} pairs")
     return not fails
