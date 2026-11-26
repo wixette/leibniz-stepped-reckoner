@@ -2,6 +2,7 @@
 
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 /**
@@ -191,7 +192,8 @@ export class Viewer {
    * @returns {Promise<THREE.Group>}
    */
   async load(url, onProgress) {
-    const gltf = await new GLTFLoader().loadAsync(url, (e) => onProgress?.(e.total ? e.loaded / e.total : 0));
+    // the model is packed with meshoptimizer (tools/compress-model.mjs)
+    const gltf = await new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).loadAsync(url, (e) => onProgress?.(e.total ? e.loaded / e.total : 0));
     gltf.scene.traverse((o) => {
       const m = /** @type {THREE.Mesh} */ (o);
       if (!m.isMesh) return;
@@ -246,9 +248,11 @@ export class Viewer {
    * Smoothly move the camera to look at target from position (metres).
    * @param {THREE.Vector3Like} position
    * @param {THREE.Vector3Like} target
+   * @param {number} [seconds]
+   * @param {() => void} [done] called when the camera arrives (not if another flight replaces this one)
    * @returns {void}
    */
-  flyTo(position, target, seconds = 0.8) {
+  flyTo(position, target, seconds = 0.8, done) {
     // A new flight replaces one under way, from wherever the camera is now.
     if (this.flight) this.endFlight(this.flight);
     const p0 = this.camera.position.clone();
@@ -263,7 +267,10 @@ export class Viewer {
       this.camera.position.lerpVectors(p0, p1, e);
       this.controls.target.lerpVectors(t0, t1, e);
       this.invalidate(false);
-      if (t >= 1) this.endFlight(step);
+      if (t >= 1) {
+        this.endFlight(step);
+        done?.();
+      }
     };
     this.flight = step;
     this.onFrame.push(step);

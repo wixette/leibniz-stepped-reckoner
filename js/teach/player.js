@@ -10,13 +10,13 @@ import { Machine } from "../sim/machine.js";
 /** @import { CarryMode } from "../sim/machine.js" */
 import { registerValue } from "../sim/operations.js";
 
-/** @typedef {"overview" | "apart" | "register" | "knobs" | "front" | "drum" | "carry"} ViewName */
+/** @typedef {"overview" | "apart" | "register" | "knobs" | "front" | "counter" | "drum" | "carry"} ViewName */
 
 /**
  * Every view, in the order of the Views menu (docs/ui-design.md, U15).
  * @type {readonly ViewName[]}
  */
-export const VIEWS = ["overview", "apart", "register", "knobs", "front", "drum", "carry"];
+export const VIEWS = ["overview", "apart", "register", "knobs", "front", "counter", "drum", "carry"];
 
 /**
  * The inside views (docs/ui-design.md, U11, U13): their subject sits inside the machine, so they
@@ -33,12 +33,14 @@ export const APART_VIEW = /** @type {const} */ ("apart");
  * A scripted machine action:
  * - reset: a fresh machine
  * - input: setting knobs
- * - pin: Magna Rota pin (also sets the ring back to 0)
+ * - pin: the revolution counter's pin, by its hole (black number; also sets the ring back to 0)
  * - shift: carriage to this offset
  * - theta: crank to this angle (a full turn completes at ±360)
  * - turn: whole crank turns
  * - toStop: forward turns until the pin reaches the stop
- * - divideDigit: subtract until overdrawn, then add back once
+ * - toStopBack: backward turns until the pin reaches the stop
+ * - divideDigit: subtract until overdrawn, then add back once; or, with the pin set at black 0
+ *   to count, until it reaches the stop after 9 (a quotient digit of 9: nothing to add back)
  * @typedef {(
  *   | { reset: { result?: number; input?: number; mode?: CarryMode } }
  *   | { input: number }
@@ -47,6 +49,7 @@ export const APART_VIEW = /** @type {const} */ ("apart");
  *   | { theta: number }
  *   | { turn: 1 | -1; times?: number }
  *   | { toStop: true }
+ *   | { toStopBack: true }
  *   | { divideDigit: true }
  * )} Action
  */
@@ -56,7 +59,7 @@ export const APART_VIEW = /** @type {const} */ ("apart");
  * @property {(m: Machine) => boolean} check Has the learner done it?
  * @property {(m: Machine) => void} solve Do it for them (Back/replay, tests).
  * @property {(m: Machine) => void} wrong A plausible mistake the check must reject (A3-4).
- * @property {("input" | "add" | "sub" | "shift" | "pin" | "toStop" | "carry")[]} controls Which controls the learner needs for it.
+ * @property {("input" | "add" | "sub" | "shift" | "pin" | "toStop" | "toStopBack" | "carry")[]} controls Which controls the learner needs for it.
  */
 
 /**
@@ -64,6 +67,7 @@ export const APART_VIEW = /** @type {const} */ ("apart");
  * @property {string} node
  * @property {string} text message key (js/l10n)
  * @property {false} [value] no live value: the callout names an area, not the part it is pinned to
+ * @property {string} [anchor] an anchor of the node to pin it to (e.g. the counter's "stop_point")
  */
 
 /**
@@ -112,11 +116,23 @@ export const APART_VIEW = /** @type {const} */ ("apart");
  */
 
 /**
+ * A lesson names the original's carry parts (s, the Zweihorn); with the ripple set
+ * fitted, the same roles are played by its parts (s', the long horns), which the page shows.
+ * @param {string} name node name or "prefix.*" pattern
+ * @param {"ripple" | "simultaneous"} mode
+ */
+export const fittedCarryPart = (name, mode) =>
+  mode === "ripple"
+    ? name.replace(/^pm\.zweihorn\./, "pm.zweihorn_r.").replace(/^pi\.five_horn_s\./, "pi.five_horn_sr.")
+    : name;
+
+/**
  * @param {Lesson} lesson
  * @param {number} i
+ * @param {"ripple" | "simultaneous"} [mode] the carry set fitted (lessons run with the ripple set)
  * @returns {Presentation}
  */
-export function presentation(lesson, i) {
+export function presentation(lesson, i, mode = "ripple") {
   /** @type {Presentation} */
   const p = { view: "overview", casing: true, cutaway: false, explode: 0, fade: false, highlight: [], context: [], callouts: [] };
   lesson.steps.slice(0, i + 1).forEach((s) => {
@@ -128,9 +144,9 @@ export function presentation(lesson, i) {
   p.fade = inside;
   p.explode = p.view === APART_VIEW ? 1 : 0;
   const s = lesson.steps[i];
-  p.highlight = s.highlight ?? [];
-  p.context = s.context ?? [];
-  p.callouts = s.callouts ?? [];
+  p.highlight = (s.highlight ?? []).map((n) => fittedCarryPart(n, mode));
+  p.context = (s.context ?? []).map((n) => fittedCarryPart(n, mode));
+  p.callouts = (s.callouts ?? []).map((c) => ({ ...c, node: fittedCarryPart(c.node, mode) }));
   return p;
 }
 
@@ -151,7 +167,7 @@ export const matches = (pattern, name) =>
 export function applyAction(m, a) {
   if ("reset" in a) {
     m.reset();
-    m.setMode(a.reset.mode ?? "ripple");
+    m.setMode(a.reset.mode ?? "ripple"); // the default, as in free play: the ripple carry
     m.setResult(a.reset.result ?? 0);
     m.setNumber(a.reset.input ?? 0);
     return true;
@@ -171,7 +187,12 @@ export function applyAction(m, a) {
     m.runToStop();
     return m.blocked;
   }
+  if ("toStopBack" in a) {
+    m.runBackToStop();
+    return m.blockedBack;
+  }
   for (;;) {
+    if (!m.canStart(-1)) return m.blockedBack; // the pin at the stop: the digit is 9
     if (!m.turn(-1)) return false;
     if (registerValue(m) < 0) return m.turn(1);
   }

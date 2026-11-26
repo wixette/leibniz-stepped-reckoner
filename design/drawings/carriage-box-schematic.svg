@@ -1,0 +1,52 @@
+<svg width="1520" height="1543" viewBox="0 0 1520 1543" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="carriage_box_schematic_by_wixette">
+<rect width="1520" height="1543" fill="white"/>
+<g id="FrontViewOfCarriageBox">
+<path id="FrontPanel" d="M1093 176H1371V314H1232V449H149V176H187V139H1093V176Z" fill="#FAC67D"/>
+<g id="RippleFrameCounterFront">
+<path d="M1371 314H1232V449H1093V176H1371V314ZM1099 182V443H1226V308H1365V182H1099Z" fill-rule="evenodd" clip-rule="evenodd" fill="#FFDCAB"/>
+<path d="M1365 308H1226V443H1099V182H1365V308ZM1105 188V437H1220V302H1359V188H1105Z" fill-rule="evenodd" clip-rule="evenodd" fill="#FFF3E2"/>
+<path d="M1359 302H1220V437H1105V188H1359V302ZM1111 194V431H1214V296H1353V194H1111Z" fill-rule="evenodd" clip-rule="evenodd" fill="#FFDCAB"/>
+<path d="M1353 296H1214V431H1111V194H1353V296ZM1117 200V425H1208V290H1347V200H1117Z" fill-rule="evenodd" clip-rule="evenodd" fill="#FFF3E2"/>
+<path d="M1347 290H1208V425H1117V200H1347V290ZM1123 206V419H1202V284H1341V206H1123Z" fill-rule="evenodd" clip-rule="evenodd" fill="#FFDCAB"/>
+<path d="M1341 284H1202V419H1123V206H1341V284ZM1129 212V413H1196V278H1335V212H1129Z" fill-rule="evenodd" clip-rule="evenodd" fill="#FFF3E2"/>
+</g>
+<g id="RippleFrameRight">
+<path d="M1093 449H744V139H1093V449ZM750 145V443H1087V145H750Z" fill-rule="evenodd" clip-rule="evenodd" fill="#FFDCAB"/>
+<path d="M1087 443H750V145H1087V443ZM756 151V437H1081V151H756Z" fill-rule="evenodd" clip-rule="evenodd" fill="#FFF3E2"/>
+<path d="M1081 437H756V151H1081V437ZM762 157V431H1075V157H762Z" fill-rule="evenodd" clip-rule="evenodd" fill="#FFDCAB"/>
+<path d="M1075 431H762V157H1075V431ZM768 163V425H1069V163H768Z" fill-rule="evenodd" clip-rule="evenodd" fill="#FFF3E2"/>
+<path d="M1069 425H768V163H1069V425ZM774 169V419H1063V169H774Z" fill-rule="evenodd" clip-rule="evenodd" fill="#FFDCAB"/>
+<path d="M1063 419H774V169H1063V419ZM780 175V413H1057V175H780Z" fill-rule="evenodd" clip-rule="evenodd" fill="#FFF3E2"/>
+</g>
+<g id="RippleFrameLeft">
+<path d="M396 449H187V139H396V449ZM193 145V443H390V145H193Z" fill-rule="evenodd" clip-rule="evenodd" fill="#FFDCAB"/>
+<path d="M390 443H193V145H390V443ZM199 151V437H384V151H199Z" fill-rule="evenodd" clip-rule="evenodd" fill="#FFF3E2"/>
+<path d="M384 437H199V151H384V437ZM205 157V431H378V157H205Z" fill-rule="evenodd" clip-rule="evenodd" fill="#FFDCAB"/>
+<path d="M378 431H205V157H378V431ZM211 163V425H372V163H211Z" fill-rule="evenodd" clip-rule="evenodd" fill="#FFF3E2"/>
+<path d="M372 425H211V163H372V425ZM217 169V419H366V169H217Z" fill-rule="evenodd" clip-rule="evenodd" fill="#FFDCAB"/>
+<path d="M366 419H217V169H366V419ZM223 175V413H360V175H223Z" fill-rule="evenodd" clip-rule="evenodd" fill="#FFF3E2"/>
+</g>
+<circle id="MagnaRota" cx="570" cy="309" r="164" fill="#51D95D"/>
+</g>
+<g id="TopViewOfCarriageBox">
+<rect id="TopCoverOfCarriageBox" x="149" y="623" width="1222" height="278" fill="#FAC67D"/>
+<g id="RippleFrameCounterTop">
+<path d="M1371 901H1093L1093 623L1371 623V901ZM1099 629V895H1365V629H1099Z" fill-rule="evenodd" clip-rule="evenodd" fill="#FFDCAB"/>
+<path d="M1365 895H1099V629H1365V895ZM1105 635V889H1359V635H1105Z" fill-rule="evenodd" clip-rule="evenodd" fill="#FFF3E2"/>
+<path d="M1359 889H1105V635H1359V889ZM1111 641V883H1353V641H1111Z" fill-rule="evenodd" clip-rule="evenodd" fill="#FFDCAB"/>
+<path d="M1353 883H1111V641H1353V883ZM1117 647V877H1347V647H1117Z" fill-rule="evenodd" clip-rule="evenodd" fill="#FFF3E2"/>
+<path d="M1347 877H1117V647H1347V877ZM1123 653V871H1341V653H1123Z" fill-rule="evenodd" clip-rule="evenodd" fill="#FFDCAB"/>
+<path d="M1341 871H1123V653H1341V871ZM1129 659V865H1335V659H1129Z" fill-rule="evenodd" clip-rule="evenodd" fill="#FFF3E2"/>
+</g>
+<circle id="Counter" cx="1232" cy="762" r="90" fill="#499EE4"/>
+<circle id="SettingDial_Example" cx="273" cy="742" r="70" fill="#DC69EE"/>
+<rect id="MagnaRota_2" x="406" y="901" width="328" height="17" fill="#51D95D"/>
+</g>
+<g id="LeftSideViewOfCarriageBox">
+<rect id="MagnaRota_3" x="427" y="1077" width="17" height="328" fill="#51D95D"/>
+<path id="LeftSideWall" d="M427 1378H149V1104H379V1068H427V1378Z" fill="#FAC67D"/>
+<rect id="SettingDial_Example_2" x="203" y="1068" width="140" height="36" fill="#DC69EE"/>
+</g>
+</g>
+</svg>

@@ -25,14 +25,15 @@ const V = new URL(import.meta.url).search;
  */
 const TASK_CONTROLS = {
   input: [{ id: "numInput", label: "strip.number" }],
-  add: [{ id: "addBtn", icon: "rotate_right", sign: "+", tip: "strip.add.tip" }],
-  sub: [{ id: "subBtn", icon: "rotate_left", sign: "−", tip: "strip.sub.tip" }],
+  add: [{ id: "addBtn", icon: "rotate_left", sign: "+", tip: "strip.add.tip" }],
+  sub: [{ id: "subBtn", icon: "rotate_right", sign: "−", tip: "strip.sub.tip" }],
   shift: [
     { id: "leftBtn", icon: "keyboard_double_arrow_left", tip: "strip.left.tip" },
     { id: "rightBtn", icon: "keyboard_double_arrow_right", tip: "strip.right.tip" },
   ],
   pin: [{ id: "pinBtn", icon: "keyboard_arrow_down", label: "strip.pin" }],
   toStop: [{ id: "toStopBtn", icon: "last_page", label: "strip.toStop" }],
+  toStopBack: [{ id: "toStopBackBtn", icon: "first_page", label: "strip.toStopBack" }],
   reset: [{ id: "resetBtn", icon: "restart_alt", label: "strip.reset" }],
   carry: [{ id: "carryBtn", icon: "keyboard_arrow_down", label: "strip.carry" }],
 };
@@ -100,7 +101,8 @@ export class CourseUI {
       ["videocam", "start.look.zoom"],
       ["info", "start.look.point"],
       ["radio_button_checked", "start.look.click"],
-      ["rotate_right", "start.look.crank"],
+      ["rotate_left", "start.look.crank"],
+      ["videocam", "start.look.views"],
       ["keyboard", "start.look.keys"],
     ];
     return el("div", {}, [

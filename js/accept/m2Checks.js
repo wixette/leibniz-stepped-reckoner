@@ -107,16 +107,24 @@ function worldX(o) {
 }
 
 /**
- * Digit (0-9) of the ring glyph nearest the top of the Magna Rota (where the stop is).
+ * The black digit (0-9) the counter's pin points at: the fixed black number nearest the pin,
+ * round the counter's centre (the counter lies flat, so in the horizontal plane).
  * @param {Ctx} c
- * @param {"black_glyphs" | "red_glyphs"} key
  * @returns {number}
  */
-function ringDigit(c, key) {
-  const g = anchors(node(c.root, "pm.magna_rota"), key);
+function pinDigit(c) {
+  c.root.updateMatrixWorld(true);
+  const plate = node(c.root, "pm.counter_plate");
+  const centre = new THREE.Vector3().setFromMatrixPosition(plate.matrixWorld);
+  const pin = new THREE.Box3().setFromObject(node(c.root, "pm.counter_pin")).getCenter(new THREE.Vector3());
+  /** @param {THREE.Vector3} v */
+  const ang = (v) => Math.atan2(v.z - centre.z, v.x - centre.x);
+  const g = anchors(plate, "black_glyphs");
+  /** @param {THREE.Vector3} q */
+  const d = (q) => Math.abs(Math.atan2(Math.sin(ang(q) - ang(pin)), Math.cos(ang(q) - ang(pin))));
   let best = 0;
-  g.forEach((p, i) => (p.y > g[best].y ? (best = i) : 0));
-  return key === "black_glyphs" ? best : (10 - best) % 10;
+  g.forEach((q, i) => (d(q) < d(g[best]) ? (best = i) : 0));
+  return best;
 }
 
 /**
@@ -135,6 +143,21 @@ function pointerDigit(c, j) {
   const diffs = g.map((p) => Math.abs(THREE.MathUtils.radToDeg(Math.atan2(Math.sin(flat(p) - a), Math.cos(flat(p) - a)))));
   const idx = diffs.indexOf(Math.min(...diffs));
   return diffs[idx] <= ANGLE_TOL_DEG ? idx : -1;
+}
+
+/**
+ * The digit of setting knob j's digit disc under the plate's window (-1: none within 1.5 mm).
+ * @param {Ctx} c
+ * @param {number} j
+ * @returns {number}
+ */
+function windowDigit(c, j) {
+  const w = anchors(part(c, "pm.setting_plate", j), "window")[0];
+  const g = anchors(part(c, "pm.setting_dial", j), "window_glyphs");
+  /** @param {THREE.Vector3} q */
+  const d = (q) => Math.hypot(q.x - w.x, q.z - w.z);
+  const idx = nearestIndex(g, w);
+  return d(g[idx]) <= 0.0015 ? idx : -1;
 }
 
 // ---- the spec ---------------------------------------------------------------------------------
@@ -195,20 +218,20 @@ export function runM2Checks(root, opts = {}) {
     }
     if (anchors(node(root, "pi.window"), "read_points").length !== R) bad.push("window read points");
     for (let j = 0; j < C; j++) {
-      for (const b of ["pm.drum", "pm.setting_dial", "pm.setting_plate", "pm.setting_stop", "pm.lever", "pm.zweihorn_add", "pm.zweihorn_sub"]) {
+      for (const b of ["pm.drum", "pm.setting_dial", "pm.setting_plate", "pm.setting_stop", "pm.lever", "pm.zweihorn"]) {
         if (!onCarriage(part(c, b, j))) bad.push(`${b}.${j} not on the carriage`);
       }
       if (anchors(part(c, "pm.setting_plate", j), "glyph_anchors").length !== 10) bad.push(`plate ${j} glyphs`);
     }
-    for (const n of ["pm.magna_rota", "pm.magna_pin", "pm.magna_plate", "pm.main_crank"]) if (!onCarriage(node(root, n))) bad.push(`${n} not on the carriage`);
+    for (const n of ["pm.magna_rota", "pm.counter_plate", "pm.counter_ring", "pm.counter_pin", "pm.counter_pin_park", "pm.main_crank"]) if (!onCarriage(node(root, n))) bad.push(`${n} not on the carriage`);
     if (onCarriage(node(root, "frame.lead_screw"))) bad.push("lead screw on the carriage");
-    if (anchors(node(root, "pm.magna_rota"), "black_glyphs").length !== 10) bad.push("ring black glyphs");
-    if (anchors(node(root, "pm.magna_rota"), "red_glyphs").length !== 10) bad.push("ring red glyphs");
-    if (anchors(node(root, "pm.magna_plate"), "stop_point").length !== 1) bad.push("stop point");
-    return { passed: bad.length === 0, detail: bad.join("; ") || `${R} register digits, ${C} carriage digits, Magna Rota, crank and lead screw present with anchors` };
+    if (anchors(node(root, "pm.counter_plate"), "black_glyphs").length !== 10) bad.push("counter black glyphs");
+    if (anchors(node(root, "pm.counter_plate"), "red_glyphs").length !== 10) bad.push("counter red glyphs");
+    if (anchors(node(root, "pm.counter_plate"), "stop_point").length !== 1) bad.push("stop point");
+    return { passed: bad.length === 0, detail: bad.join("; ") || `${R} register digits, ${C} carriage digits, Magna Rota, counter, crank and lead screw present with anchors` };
   });
 
-  run("A2-2", "All 16 windows read 0–9; all 8 pointers aim at their digit (offsets 0 and 7)", () => {
+  run("A2-2", "All 16 windows read 0–9; all 8 pointers aim at their digit and their windows show it (offsets 0 and 7)", () => {
     /** @type {string[]} */
     const bad = [];
     for (const offset of [0, c.m.maxOffset]) {
@@ -221,10 +244,12 @@ export function runM2Checks(root, opts = {}) {
         for (let j = 0; j < C; j++) {
           const p = pointerDigit(c, j);
           if (p !== d) bad.push(`offset ${offset}: pointer ${j} at ${p} for ${d}`);
+          const wd = windowDigit(c, j);
+          if (wd !== d) bad.push(`offset ${offset}: window ${j} shows ${wd} for ${d}`);
         }
       }
     }
-    return { passed: bad.length === 0, detail: bad.join("; ") || `16 windows × 10 digits and 8 pointers × 10 digits correct at offsets 0 and ${c.m.maxOffset}` };
+    return { passed: bad.length === 0, detail: bad.join("; ") || `16 windows × 10 digits and 8 pointers and setting windows × 10 digits correct at offsets 0 and ${c.m.maxOffset}` };
   });
 
   run("A2-3", "Every offset 0–7: drum j under gear o+j, lever j at store o+j, nothing intersecting at rest", () => {
@@ -254,22 +279,34 @@ export function runM2Checks(root, opts = {}) {
     return { passed: bad.length === 0, detail: bad.join("; ") || `aligned within ${fmt(worst, 4)} mm at offsets 0–${c.m.maxOffset}; no intersections at rest` };
   });
 
-  run("A2-4", "1709 × 365 with the Magna Rota reads 623785; the pin rests on the stop after each digit, and turned back clears the finger for 9 - m turns", () => {
+  run("A2-4", "1709 × 365 with the counter reads 623785; the pin set at black m rests against the stop after m turns, and turned back clears it for 9 - m turns", () => {
     /** @type {string[]} */
     const bad = [];
     state(c, { input: 1709 });
     [5, 6, 3].forEach((d, o) => {
       c.m.setOffset(o);
       c.m.setPin(d);
+      pose(c);
+      if (pinDigit(c) !== d) bad.push(`digit ${d}: the pin starts at black ${pinDigit(c)}`);
       const n = c.m.runToStop();
       pose(c);
-      const pin = node(root, "pm.magna_pin");
-      const plate = node(root, "pm.magna_plate");
-      const gap = minDistance(pin, plate);
+      const pin = node(root, "pm.counter_pin");
+      const plate = node(root, "pm.counter_plate");
       if (n !== d) bad.push(`digit ${d}: ${n} turns`);
+      const gap = minDistance(pin, plate);
       if (gap > CONTACT_PIN_MM || intersects(pin, plate)) bad.push(`digit ${d}: pin–stop ${fmt(gap)} mm`);
       if (c.m.turn(1)) bad.push(`digit ${d}: crank turned past the stop`);
-      if (ringDigit(c, "black_glyphs") !== d) bad.push(`digit ${d}: ring shows ${ringDigit(c, "black_glyphs")}`);
+      if (pinDigit(c) !== 0) bad.push(`digit ${d}: at the stop the pin points at black ${pinDigit(c)}`);
+      // the refused turn, followed by hand: as the ring steps, the pin meets the stop part-way
+      let meets = false;
+      for (let deg = 10; deg < 360 && !meets; deg += 5) {
+        /** @type {{ _theta: number }} */ (/** @type {unknown} */ (c.m))._theta = deg;
+        pose(c);
+        meets = intersects(pin, plate);
+      }
+      /** @type {{ _theta: number }} */ (/** @type {unknown} */ (c.m))._theta = 0;
+      pose(c);
+      if (!meets) bad.push(`digit ${d}: a further turn would not meet the stop`);
     });
     c.m.setPin(null);
     c.m.setOffset(0);
@@ -281,8 +318,8 @@ export function runM2Checks(root, opts = {}) {
     const back = new Machine();
     back.setPin(3);
     const cb = { ...c, m: back };
-    const pin = node(root, "pm.magna_pin");
-    const plate = node(root, "pm.magna_plate");
+    const pin = node(root, "pm.counter_pin");
+    const plate = node(root, "pm.counter_plate");
     let turnsBack = 0;
     while (back.turn(-1)) {
       turnsBack++;
@@ -300,10 +337,10 @@ export function runM2Checks(root, opts = {}) {
     pose(c);
     if (turnsBack !== 6) bad.push(`pin 3: ${turnsBack} turns back (want 6)`);
     if (!jam) bad.push("pin 3: the refused turn back would not meet the finger");
-    return { passed: bad.length === 0, detail: bad.join("; ") || `reads ${showNum(r)}; pin on the stop after 5, 6 and 3 turns; turned back, 6 clear turns from hole 3, the 7th meets the finger` };
+    return { passed: bad.length === 0, detail: bad.join("; ") || `reads ${showNum(r)}; pin against the stop after 5, 6 and 3 turns, a further turn meets it; turned back, 6 clear turns from hole 3, the 7th meets it` };
   });
 
-  run("A2-5", "623785 ÷ 1709: quotient 3, 6, 5 read on the Magna Rota, remainder 0", () => {
+  run("A2-5", "623785 ÷ 1709: quotient 3, 6, 5 counted by the counter's ring, remainder 0", () => {
     state(c, { result: 623_785, input: 1709 });
     /** @type {number[]} */
     const q = [];
@@ -317,14 +354,14 @@ export function runM2Checks(root, opts = {}) {
           break;
         }
       }
-      pose(c);
-      q.push(ringDigit(c, "red_glyphs"));
+      // the pin is out, so the model shows no number: the ring's turns give the digit
+      q.push(-c.m.ringTurns);
     }
     c.m.setOffset(0);
     pose(c);
     const r = readAll(c);
     const ok = q.join("") === "365" && r.every((x) => x === 0);
-    return { passed: ok, detail: `quotient digits on the ring ${q.join(", ")}; remainder ${showNum(r)}` };
+    return { passed: ok, detail: `quotient digits counted ${q.join(", ")}; remainder ${showNum(r)}` };
   });
 
   run("A2-6", "Ripple 999999999 + 1: carry for digit 8 waits (no lever); after a shift and an idle turn reads 1000000000", () => {
@@ -400,10 +437,10 @@ export function runM2Checks(root, opts = {}) {
     };
   });
 
-  run("A2-12", "Casing: case, base and cover plates are static, hold all the woodwork; all 16 windows read through the cover", () => {
+  run("A2-12", "Casing: the lower frame and the carriage's cover are static, no woodwork elsewhere; all 16 windows read through the window plate", () => {
     /** @type {string[]} */
     const bad = [];
-    const parts = ["frame.case", "frame.base", "frame.register_cover", "pm.carriage_cover"].map((n) => node(root, n));
+    const parts = ["frame.base", "pm.carriage_cover"].map((n) => node(root, n));
     // With the casing hidden only the mechanism remains: no woodwork (oak) left in the rest of the model.
     const casingSet = new Set(parts);
     root.traverse((o) => {
@@ -419,11 +456,14 @@ export function runM2Checks(root, opts = {}) {
     let onCarriage = false;
     for (let p = /** @type {THREE.Object3D | null} */ (node(root, "pm.carriage_cover")); p; p = p.parent) if (p === carriage) onCarriage = true;
     if (!onCarriage) bad.push("carriage cover does not move with the carriage");
-    const openings = anchors(node(root, "frame.register_cover"), "opening_centres");
-    if (openings.length !== R) bad.push(`${openings.length} cover openings`);
-    // Look down through each cover opening from above: the first part hit must be the
+    // (no cover over the register, as on the original: the window plate frames each digit)
+    const openings = anchors(node(root, "pi.window"), "read_points");
+    if (openings.length !== R) bad.push(`${openings.length} windows`);
+    // Look down through each window from above: the first part hit must be the
     // result wheel, showing a digit (no casing part in the way), at both carriage ends.
     const blockers = [...parts, node(root, "pi.window"), node(root, "frame.static")];
+    // the corners of each window's reading area (the window plate's own read_half_size)
+    const [rx, rz] = (/** @type {{ read_half_size_mm: number[] }} */ (node(root, "pi.window").userData)).read_half_size_mm.map((v) => v / 1000);
     for (const offset of [0, c.m.maxOffset]) {
       state(c, { offset, result: 0 });
       c.m.digits.fill(7);
@@ -431,7 +471,7 @@ export function runM2Checks(root, opts = {}) {
       for (let k = 0; k < R; k++) {
         const wheel = part(c, "pi.sum_wheel", k);
         const glyphs = anchors(wheel, "glyph_anchors");
-        for (const [dx, dz] of [[0, 0], [-0.003, -0.0015], [0.003, 0.0015]]) {
+        for (const [dx, dz] of [[0, 0], [-rx, -rz], [rx, rz]]) {
           const o = openings[k].clone().add(new THREE.Vector3(dx, 0.01, dz));
           const [first] = rayHits([...blockers, wheel], o, new THREE.Vector3(0, -1, 0));
           /** @type {THREE.Object3D | null} */
@@ -442,21 +482,16 @@ export function runM2Checks(root, opts = {}) {
         }
       }
     }
-    return { passed: bad.length === 0, detail: bad.join("; ") || `4 casing parts (no oak elsewhere); 16 windows clear through the cover at offsets 0 and ${c.m.maxOffset}` };
+    return { passed: bad.length === 0, detail: bad.join("; ") || `casing parts static (no oak elsewhere); 16 windows clear at offsets 0 and ${c.m.maxOffset}` };
   });
 
-  run("A2-13", "Both cranks can be turned by hand: knobs clear the case's front wall, floor and the table", () => {
-    // A knob is the crank's wood_dark mesh. Over a full turn, at both carriage ends, its
-    // lowest point must leave room for a hand above the front wall top and the case floor
-    // (main crank), and stay above the table the case stands on (end crank).
+  run("A2-13", "Both cranks can be turned by hand: their handles clear the table the feet stand on", () => {
+    // A handle is the crank's wooden mesh (oak_handle on both cranks). Over a full turn, at both
+    // carriage ends, its lowest point must leave room for a hand above the table (main crank) and
+    // stay above it (end crank). The table is under the wooden blocks the feet stand on.
     /** @type {string[]} */
     const bad = [];
-    const caseNode = node(root, "frame.case");
-    /** @param {string} key */
-    const up = (key) => anchors(caseNode, key)[0].y * 1000;
-    const wallTop = up("front_wall_top");
-    const floorTop = up("floor_top");
-    const table = up("underside");
+    const table = anchors(node(root, "frame.base"), "table")[0].y * 1000;
     /** @param {THREE.Object3D} part */
     const lowest = (part) => {
       let top = part;
@@ -468,7 +503,7 @@ export function runM2Checks(root, opts = {}) {
         const mesh = /** @type {THREE.Mesh} */ (o);
         if (!mesh.isMesh) return;
         const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
-        if (!mats.some((m) => m.name === "wood_dark")) return;
+        if (!mats.some((m) => m.name === "wood_dark" || m.name === "oak_handle")) return;
         const pos = mesh.geometry.attributes.position;
         for (let i = 0; i < pos.count; i++) min = Math.min(min, v.fromBufferAttribute(pos, i).applyMatrix4(mesh.matrixWorld).y * 1000);
       });
@@ -488,12 +523,11 @@ export function runM2Checks(root, opts = {}) {
       pose(c);
       endLow = Math.min(endLow, lowest(node(root, "frame.lead_screw")));
     }
-    if (mainLow - wallTop < HAND_MM) bad.push(`main crank knob ${fmt(mainLow - wallTop, 1)} mm above the front wall`);
-    if (mainLow - floorTop < HAND_MM) bad.push(`main crank knob ${fmt(mainLow - floorTop, 1)} mm above the case floor`);
-    if (endLow - table < CLEARANCE_TABLE_MM) bad.push(`end crank knob ${fmt(endLow - table, 1)} mm above the table`);
+    if (mainLow - table < HAND_MM) bad.push(`main crank handle ${fmt(mainLow - table, 1)} mm above the table`);
+    if (endLow - table < CLEARANCE_TABLE_MM) bad.push(`end crank handle ${fmt(endLow - table, 1)} mm above the table`);
     return {
       passed: bad.length === 0,
-      detail: bad.join("; ") || `main crank knob clears the front wall by ${fmt(mainLow - wallTop, 1)} mm and the floor by ${fmt(mainLow - floorTop, 1)} mm; end crank knob ${fmt(endLow - table, 1)} mm above the table`,
+      detail: bad.join("; ") || `main crank handle ${fmt(mainLow - table, 1)} mm above the table; end crank handle ${fmt(endLow - table, 1)} mm above it`,
     };
   });
 

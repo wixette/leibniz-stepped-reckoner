@@ -4,6 +4,7 @@
 // the page and the tests (A3-11, A3-15) share it.
 
 import * as THREE from "three";
+import { CRANK_FORWARD } from "../scene/m2Pose.js";
 import { anchors, gltfName } from "../scene/rig.js";
 /** @import { Machine } from "../sim/machine.js" */
 import { t } from "../l10n/l10n.js";
@@ -16,7 +17,7 @@ import { t } from "../l10n/l10n.js";
  * - setDigit: a digit on a setting dial
  * - nextDigit: the knob itself: next digit
  * - turn: the main crank: one turn forward (1, adds) or backward (-1, subtracts)
- * - pin: a hole of the Magna Rota (0 = pin out), or the pin
+ * - pin: a hole of the revolution counter by its black number, or the pin (out)
  * - shiftTo: a result wheel: carriage units under it
  * - shiftStep: the end crank: the carriage one place left (1) or right (-1)
  * @typedef {(
@@ -88,22 +89,32 @@ export function intentAt(hit, point, m, dir = 1) {
       return { kind: "shiftTo", offset: Math.min(nearest(reads, point), m.maxOffset) };
     }
     if (n.name === gltfName("pm.main_crank")) return { kind: "turn", dir };
-    if (n.name === gltfName("pm.magna_pin")) return { kind: "pin", hole: null };
-    if (n.name === gltfName("pm.magna_rota")) {
-      // Holes, black digits and red digits sit on the same spokes: the nearest black digit
-      // around the ring's centre gives the hole.
-      const centre = new THREE.Vector3().setFromMatrixPosition(n.matrixWorld);
+    // The Magna Rota is fixed to the crank: clicking it turns the crank.
+    if (n.name === gltfName("pm.magna_rota")) return { kind: "turn", dir };
+    if (n.name === gltfName("pm.counter_pin") || n.name === gltfName("pm.counter_pin_park")) return { kind: "pin", hole: null };
+    // the pin's hole in the carriage's top: a click there puts the pin away
+    if (n.name === gltfName("pm.carriage_cover") && m.pin !== null) {
+      const park = n.parent?.getObjectByName(gltfName("pm.counter_pin_park"));
+      if (park && anchors(park, "hole")[0].distanceTo(point) < PARK_HOLE_REACH) return { kind: "pin", hole: null };
+    }
+    if (n.name === gltfName("pm.counter_ring") || n.name === gltfName("pm.counter_plate")) {
+      // The ring's 10 holes line up with the black digits around it at rest (the ring turns
+      // by whole holes): the black digit nearest the click, round the counter's centre, gives
+      // the hole. The counter lies flat, so the angle is taken in the horizontal plane.
+      const plate = n.name === gltfName("pm.counter_plate") ? n : n.parent?.getObjectByName(gltfName("pm.counter_plate"));
+      if (!plate) return null;
+      const centre = new THREE.Vector3().setFromMatrixPosition(plate.matrixWorld);
       /** @param {THREE.Vector3} v */
-      const ang = (v) => Math.atan2(v.y - centre.y, v.x - centre.x);
+      const ang = (v) => Math.atan2(v.z - centre.z, v.x - centre.x);
       const a = ang(point);
-      const glyphs = anchors(n, "black_glyphs");
+      const glyphs = anchors(plate, "black_glyphs");
       let best = 0;
       glyphs.forEach((g, i) => {
         /** @param {THREE.Vector3} q */
         const d = (q) => Math.abs(Math.atan2(Math.sin(ang(q) - a), Math.cos(ang(q) - a)));
         if (d(g) < d(glyphs[best])) best = i;
       });
-      return { kind: "pin", hole: best === 0 ? null : best };
+      return { kind: "pin", hole: best }; // by its black number (the pin itself takes it out)
     }
     if (n.name === gltfName("frame.lead_screw")) return { kind: "shiftStep", dir };
   }
@@ -127,8 +138,8 @@ export function crankAt(hit) {
  * Dragging a crank round its axle (U16). The grabbed point moves on a circle round the axle, in
  * the plane through it across the axle; the pointer's ray meets that plane, and the angle it
  * sweeps there, signed by the crank's axis, is how far the reader has turned it. Positive is the
- * crank's forward way: the rig turns it about its axis (glTF extras) by +angle as the machine
- * adds, or as the carriage goes left.
+ * crank's forward way, the way it turns as the machine adds or the carriage goes left: the rig
+ * turns it about its axis (glTF extras) by CRANK_FORWARD[crank] x angle (js/scene/m2Pose.js).
  */
 export class CrankDrag {
   /** Turned angle so far (radians; + forward). */
@@ -141,6 +152,8 @@ export class CrankDrag {
    */
   constructor(node, grab, ray) {
     const ex = /** @type {{ axis?: number[] }} */ (node.userData);
+    /** @private */
+    this.forward = node.name === gltfName("pm.main_crank") ? CRANK_FORWARD["pm.main_crank"] : CRANK_FORWARD["frame.lead_screw"];
     node.updateWorldMatrix(true, false);
     /** The axle's direction (world). */
     this.axis = new THREE.Vector3().fromArray(ex.axis ?? [0, 0, 1]).applyQuaternion(node.getWorldQuaternion(new THREE.Quaternion())).normalize();
@@ -174,11 +187,14 @@ export class CrankDrag {
     const v = this.radial(ray);
     if (!v || v.lengthSq() < 1e-12) return this.angle;
     const cross = new THREE.Vector3().crossVectors(this.last, v).dot(this.axis);
-    this.angle += Math.atan2(cross, this.last.dot(v));
+    this.angle += this.forward * Math.atan2(cross, this.last.dot(v));
     this.last = v;
     return this.angle;
   }
 }
+
+/** How near the put-away pin's hole a click on the carriage's top puts the pin there (m): 5 mm. */
+const PARK_HOLE_REACH = 0.005;
 
 /** How far a crank must be dragged round to commit a full turn (or a shift): about 30°. */
 export const CRANK_COMMIT = THREE.MathUtils.degToRad(30);

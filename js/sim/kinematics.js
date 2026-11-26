@@ -5,6 +5,7 @@
 // v: continuous value of the result wheel (digit + fraction of a step).
 
 import machine from "../../params/machine.json" with { type: "json" };
+import tables from "../../params/carry-tables.json" with { type: "json" };
 
 /**
  * @template [T=number]
@@ -27,25 +28,13 @@ export const RIB_START = val(T.rest_free_arc_before_ribs); // 78.75
 export const CARRY_WINDOW_START = val(/** @type {Entry<number[]>} */ (T.carry_window))[0]; // 281.25
 export const PER_CARRY = val(T.per_carry_angle); // 9.8
 const STEP = val(G.drum.rib_length_step);
-const L = val(G.drum.length);
 const Y_GEAR = val(G.receiving_gear.y);
 export const SUM_STEP = val(machine.pars_immobilis.sum_wheel_step); // 36
 export const STORE_STEP = val(machine.pars_immobilis.einzahn_store_rotation); // 18
 export const STORE_PITCH = val(machine.pars_immobilis.fuenfhorn_pitch); // 72
-/** Knob rotation per setting digit (deg): the dial has 13 divisions, digits on ten of them. */
-export const DIAL_STEP = 360 / val(P.setting_dial.divisions); // 27.7
+/** Knob rotation per setting digit (deg): the dial has 12 divisions, digits on ten of them. */
+export const DIAL_STEP = 360 / val(P.setting_dial.divisions); // 30
 
-const RE = val(G.result.einzahn_radius);
-const RPIN = val(G.result.einzahn_pin_radius);
-const PSI_E = val(G.result.einzahn_angle);
-const [FX, FZ] = val(/** @type {Entry<number[]>} */ (G.carry_store.offset_xz));
-const HORN_LEN = val(G.carry_store.horn_length);
-const HORN_W = val(G.carry_store.horn_width);
-const HORNS = val(G.carry_store.horns);
-const H_REST = (Math.atan2(-FZ, -FX) * 180) / Math.PI;
-
-/** @param {number} d */
-const rad = (d) => (d * Math.PI) / 180;
 /** @param {number} x */
 const clamp01 = (x) => Math.min(1, Math.max(0, x));
 
@@ -55,7 +44,9 @@ const clamp01 = (x) => Math.min(1, Math.max(0, x));
  * @returns {number}
  */
 export function drumFrontY(s) {
-  return Y_GEAR - L + (9.5 - s) * STEP;
+  // the ribs start at the drum's front face (Abb. II 1): s of them lie under the receiving gear
+  // when it stands (9.5 - s) steps behind the front, so the drum moves back as s rises
+  return Y_GEAR - (9.5 - s) * STEP;
 }
 
 /**
@@ -64,7 +55,8 @@ export function drumFrontY(s) {
  * @returns {number}
  */
 export function dialAngle(s) {
-  return DIAL_STEP * s;
+  // clockwise seen from above: the pinion, right of its rack, then moves the drum back
+  return -DIAL_STEP * s;
 }
 
 /**
@@ -121,52 +113,10 @@ export function sumWheelAngle(v) {
   return -SUM_STEP * v;
 }
 
-// --- carry push: Einzahn pin against capsule-shaped horns (see the Python twin) ---
-
-/**
- * @param {number} h
- * @param {number} v
- * @returns {number}
- */
-function clearance(h, v) {
-  const a = rad(PSI_E + SUM_STEP * v);
-  const px = RE * Math.cos(a);
-  const pz = RE * Math.sin(a);
-  let best = Infinity;
-  for (let j = 0; j < HORNS; j++) {
-    const ha = rad(h + (360 / HORNS) * j);
-    const vx = HORN_LEN * Math.cos(ha);
-    const vz = HORN_LEN * Math.sin(ha);
-    const t = clamp01(((px - FX) * vx + (pz - FZ) * vz) / (vx * vx + vz * vz));
-    best = Math.min(best, Math.hypot(px - (FX + t * vx), pz - (FZ + t * vz)));
-  }
-  return best - (RPIN + HORN_W / 2);
-}
-
-const TABLE_STEP = 0.0025;
-/** @type {number[]} */
-const PUSH_TABLE = (() => {
-  let h = H_REST;
-  /** @type {number[]} */
-  const table = [];
-  const n = Math.round(1 / TABLE_STEP);
-  for (let i = 0; i <= n; i++) {
-    const v = 9 + i * TABLE_STEP;
-    if (clearance(h, v) < 0) {
-      let lo = h - 60;
-      let hi = h;
-      for (let it = 0; it < 40; it++) {
-        const mid = (lo + hi) / 2;
-        if (clearance(mid, v) >= 0) lo = mid;
-        else hi = mid;
-      }
-      h = lo;
-    }
-    table.push(Math.min(STORE_STEP, H_REST - h));
-  }
-  table[table.length - 1] = STORE_STEP; // the detent completes the store exactly
-  return table;
-})();
+// --- carry push: the Einzahn's tooth against the five-horn, solved from the parts' outlines
+// (blender/scripts/lib/carry_solve.py -> params/carry-tables.json); past the detent wheel's
+// point the detent spring completes the store to 18 deg.
+const PUSH = tables.push;
 
 /**
  * Carry-store deflection (deg, 0..18) caused by the Einzahn for v in [9, 10].
@@ -174,10 +124,10 @@ const PUSH_TABLE = (() => {
  * @returns {number}
  */
 export function push(v) {
-  const x = (Math.min(Math.max(v, 9), 10) - 9) / TABLE_STEP;
-  const i = Math.min(Math.floor(x), PUSH_TABLE.length - 2);
+  const x = (Math.min(Math.max(v, 9), 10) - PUSH.v0) / PUSH.step;
+  const i = Math.min(Math.floor(x), PUSH.store.length - 2);
   const f = x - i;
-  return PUSH_TABLE[i] * (1 - f) + PUSH_TABLE[i + 1] * f;
+  return PUSH.store[i] * (1 - f) + PUSH.store[i + 1] * f;
 }
 
 /**

@@ -11,7 +11,7 @@ import { applyIntentNow, controlOf, possible, shiftDir } from "../teach/partActi
 import { APART_VIEW, INSIDE_VIEWS, presentation, replayTo, VIEWS } from "../teach/player.js";
 /** @import { Lesson, ViewName } from "../teach/player.js" */
 import { placeWord } from "../teach/partInfo.js";
-import { Animator } from "./animator.js";
+import { Animator, SLOW_SPEED } from "./animator.js";
 import { Stage } from "./stage.js";
 import { CourseUI } from "./course.js";
 import { showAbout } from "./about.js";
@@ -73,7 +73,14 @@ export const group3 = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 /** @typedef {Control | "reset" | "carry"} StripControl */
 
 export class App {
-  machine = new Machine();
+  machine = (() => {
+    // free play starts with the ripple carry (a modern pair of carry parts of our design, a chain
+    // of carries in one turn), the friendlier for newcomers; the Carry switch fits the original's
+    // carry instead (design/v1.3-notes.md)
+    const m = new Machine();
+    m.setMode("ripple");
+    return m;
+  })();
   /** @type {Course | null} */
   course = null;
   /**
@@ -172,12 +179,14 @@ export class App {
     if (!this.stage.root) return no("status.notReady");
     if (allowed && !allowed.has(control)) return no(this.course?.playing ? "course.watching" : "status.notNow");
     if (this.busy) return no("status.busy");
-    if (this.stage.apart && control !== "reset") return no("status.apart");
+    if (this.stage.apart) return no("status.apart"); // Reset too: choose another view to put it together
     if (control === "shift" && dir === 1 && m.offset >= m.maxOffset) return no("status.carriageEnd");
     if (control === "shift" && dir === -1 && m.offset <= 0) return no("status.carriageEnd");
     if (control === "carry" && !m.atRest) return no("status.busy");
     if (control === "toStop" && m.pin === null) return no("status.noPin");
     if (control === "toStop" && m.blocked) return no("status.blockedPin");
+    if (control === "toStopBack" && m.pin === null) return no("status.noPin");
+    if (control === "toStopBack" && m.blockedBack) return no("status.blockedPinSub");
     return { enabled: true, reason: null, wanted };
   }
 
@@ -251,20 +260,74 @@ export class App {
     });
   }
 
-  /** @param {number | null} hole */
-  setPin(hole) {
-    this.machine.setPin(hole);
-    this.say(() => (hole === null ? t("status.pinOut") : t("status.pin", { n: hole })));
+  /** Turn back until the pin reaches the stop (subtracting its red number of times). */
+  toStopBack() {
+    const before = this.machine.turns;
+    this.animator.play(this.animator.expand([{ toStopBack: true }]), () => {
+      const n = before - this.machine.turns;
+      if (!this.machine.blockedBack) {
+        this.sound.play("refuse");
+        this.say(this.blockText(-1), true);
+        return this.afterLearner();
+      }
+      if (n !== 0) this.sound.play("stop");
+      this.say(() => tn("status.ranToStopBack", n));
+      this.afterLearner();
+    });
+  }
+
+  /**
+   * Which number circle the pin was set by: the black (adding) or the red (turning back). A hole
+   * has one of each: black m and red 9 - m.
+   */
+  pinRed = false;
+
+  /**
+   * The pin's number as the reader set it (black, or red when set by the red circle: black m's
+   * hole is red 9 - m), or null when it is out.
+   * @returns {number | null}
+   */
+  pinNumber() {
+    const p = this.machine.pin;
+    if (p === null) return null;
+    return this.pinRed ? 9 - p : p;
+  }
+
+  /**
+   * Count the holes by the black circle (adding) or the red one (turning back); a pin already in
+   * moves to the same number in the other circle.
+   * @param {boolean} red
+   */
+  setPinCircle(red) {
+    const n = this.pinNumber();
+    if (n === null || red === this.pinRed) {
+      this.pinRed = red;
+      this.render();
+      return;
+    }
+    this.setPin(red ? 9 - n : n, red);
+  }
+
+  /**
+   * @param {number | null} hole the hole, by its black number
+   * @param {boolean} [red] set by the red number (9 - hole): for turning back; taking the pin
+   *   out keeps the circle chosen
+   */
+  setPin(hole, red = this.pinRed) {
+    if (!this.machine.setPin(hole)) return;
+    if (hole !== null) this.pinRed = red;
+    this.say(() => (hole === null ? t("status.pinOut") : this.pinRed ? t("status.pinRed", { n: 9 - hole }) : t("status.pin", { n: hole })));
     this.afterLearner();
   }
 
   /**
-   * Choose how the carry levers act (decision 0001): as on Lehmann's Dresden replica or as on the
-   *  original in Hannover. The Zweihörner turn to their new phases at once.
+   * Choose the carry (decision 0001, design/v1.3-notes.md): the ripple carry (our modern pair of
+   *  carry parts, levers staggered units first) or the original's (all levers at once).
    * @param {CarryMode} mode
    */
   setCarryMode(mode) {
     if (!this.machine.setMode(mode)) return;
+    if (this.stage.fitted === "carry") this.stage.fly("carry"); // the two sets stand apart
     this.say(() => t(`status.carry.${mode}`));
     this.afterLearner();
   }
@@ -278,7 +341,8 @@ export class App {
 
   reset() {
     this.animator.stop();
-    this.machine.reset();
+    this.machine.reset(); // the carry stays as chosen (U30)
+    this.pinRed = false; // and the pin, out, counts by the black numbers again
     // the wheels and knobs going back to zero: a quick ratchet, not a tick per knob
     this.sound.resync(this.machine);
     for (let k = 0; k < 3; k++) this.sound.play("step", { delay: k * 0.07 });
@@ -321,6 +385,7 @@ export class App {
       return;
     }
     applyIntentNow(i, this.machine);
+    if (i.kind === "pin" && i.hole !== null) this.pinRed = false; // a hole clicked on the model: by its black number
     if (i.kind === "pin") this.say(() => (i.hole === null ? t("status.pinOut") : t("status.pin", { n: /** @type {number} */ (i.hole) })));
     else this.say(() => t("status.set", { n: group3(this.inputNumber()) }));
     this.afterLearner();
@@ -360,9 +425,11 @@ export class App {
     const c = this.course;
     if (!c) return;
     this.animator.stop();
+    this.pinRed = false; // a lesson sets its pin by the black number
     if (replay) {
       replayTo(c.lesson, i, this.machine);
       this.sound.resync(this.machine); // set up for the step, not operated: silent
+      this.changed(); // pose the model before the view frames it (a carriage moved by the replay)
     }
     c.i = i;
     c.playing = true;
@@ -405,7 +472,7 @@ export class App {
       this.stage.casing = false;
       this.stage.cutaway = true;
       this.stage.applyToggles();
-      this.stage.highlight(subject.parts, true, subject.context);
+      this.stage.highlight(subject.parts, true, subject.context, view);
       this.say(() => t("status.inside"));
     }
     if (view === APART_VIEW) this.say(() => t("status.apart"));
@@ -425,7 +492,7 @@ export class App {
   insideSubject(view) {
     const c = this.course;
     if (c && !c.finished) {
-      const p = presentation(c.lesson, c.i);
+      const p = presentation(c.lesson, c.i, this.machine.mode);
       if (p.view === view && p.highlight.length > 0) return { parts: p.highlight, context: p.context };
     }
     const parts = this.stage.views?.[view].inside;
@@ -452,7 +519,7 @@ export class App {
   subject() {
     const c = this.course;
     if (!c || c.finished) return { parts: [], context: [] };
-    const p = presentation(c.lesson, c.i);
+    const p = presentation(c.lesson, c.i, this.machine.mode);
     return { parts: p.highlight, context: p.context };
   }
 
@@ -466,14 +533,14 @@ export class App {
   showPresentation(fly = false) {
     const c = this.course;
     if (!c) return;
-    const p = presentation(c.lesson, c.i);
+    const p = presentation(c.lesson, c.i, this.machine.mode);
     this.inside = INSIDE_VIEWS.has(p.view) && p.highlight.length > 0 ? { view: p.view, parts: p.highlight, context: p.context, casing: true } : null;
     this.stage.casing = p.casing;
     this.stage.cutaway = p.cutaway;
     this.stage.setExplode(p.explode);
     this.stage.applyToggles();
-    this.stage.highlight(p.highlight, this.inside !== null, p.context);
-    this.stage.setCallouts(p.callouts.map((x) => ({ node: x.node, text: () => t(x.text), value: x.value })));
+    this.stage.highlight(p.highlight, this.inside !== null, p.context, this.inside ? p.view : undefined);
+    this.stage.setCallouts(p.callouts.map((x) => ({ node: x.node, text: () => t(x.text), value: x.value, anchor: x.anchor })));
     if (fly || p.view !== this.lastView) this.stage.fly(p.view);
     this.lastView = p.view;
   }
@@ -691,6 +758,20 @@ export class App {
     this.render();
   }
 
+  /** Draw every kind of part in its own colour, or in its metal (the Views menu's switch). */
+  toggleColours() {
+    this.stage.setPartColours(!this.stage.partColours);
+    this.say(() => t(this.stage.partColours ? "status.colours.on" : "status.colours.off"));
+    this.render();
+  }
+
+  /** Play every motion at a quarter speed, or at the normal one (the Views menu's switch, U33). */
+  toggleSlow() {
+    this.animator.speed = this.animator.speed === 1 ? SLOW_SPEED : 1;
+    this.say(() => t(this.animator.speed === 1 ? "status.slow.off" : "status.slow.on"));
+    this.render();
+  }
+
   /**
    * Back to where the reader should be (⌂, or Home on the 3D view): in a lesson step, the step's
    * own view and presentation; in free play, the whole machine as it first shows, case on.
@@ -720,6 +801,8 @@ export class App {
         run: () => this.chooseView(v),
       }));
       items.push({ label: t("view.case"), toggle: true, checked: this.stage.casing, divider: true, run: () => this.toggleCase() });
+      items.push({ label: t("view.colours"), toggle: true, checked: this.stage.partColours, run: () => this.toggleColours() });
+      items.push({ label: t("view.slow"), toggle: true, checked: this.animator.speed !== 1, run: () => this.toggleSlow() });
       showMenu(viewsBtn, items);
     });
     $("resetViewBtn").addEventListener("click", () => this.resetView());
@@ -830,6 +913,7 @@ export class App {
     $("leftBtn").addEventListener("click", () => this.use("shift", () => this.shift(1), 1));
     $("rightBtn").addEventListener("click", () => this.use("shift", () => this.shift(-1), -1));
     $("toStopBtn").addEventListener("click", () => this.use("toStop", () => this.toStop()));
+    $("toStopBackBtn").addEventListener("click", () => this.use("toStopBack", () => this.toStopBack()));
     $("resetBtn").addEventListener("click", () => this.use("reset", () => this.reset()));
     // the machine's sound, on or off, remembered (U29)
     const soundBtn = $("soundBtn");
@@ -846,12 +930,19 @@ export class App {
       this.use("pin", () =>
         showMenu(
           pinBtn,
-          [null, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((h) => ({
-            label: h === null ? t("strip.pin.out") : String(h),
-            checked: this.machine.pin === h,
-            divider: h === 1 ? t("strip.pin.hole") : undefined,
-            run: () => this.use("pin", () => this.setPin(h)),
-          })),
+          [
+            // which number circle the holes are counted by: black for adding, red for turning back
+            { label: t("strip.pin.adding"), checked: !this.pinRed, run: () => this.use("pin", () => this.setPinCircle(false)) },
+            { label: t("strip.pin.subtracting"), checked: this.pinRed, run: () => this.use("pin", () => this.setPinCircle(true)) },
+            { label: t("strip.pin.out"), checked: this.machine.pin === null, divider: true, run: () => this.use("pin", () => this.setPin(null)) },
+            // 0 too: the hole beside the stop, where a pin counts the turns from (dividing)
+            ...[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => ({
+              label: String(n),
+              checked: this.pinNumber() === n,
+              divider: n === 0 ? t("strip.pin.hole") : undefined,
+              run: () => this.use("pin", () => this.setPin(this.pinRed ? 9 - n : n, this.pinRed)),
+            })),
+          ],
         ),
       ),
     );
@@ -899,7 +990,7 @@ export class App {
     const m = this.machine;
     // readouts
     $("resultOut").textContent = group3(m.shownText());
-    const ring = Math.trunc(m.ringTurns + m.theta / 360);
+    const ring = m.countedTurns(); // as the counter shows them (it steps part-way through a turn)
     const turns = $("turnsOut");
     turns.textContent = String(Math.abs(ring));
     turns.classList.toggle("red", ring < 0);
@@ -926,8 +1017,12 @@ export class App {
     show("subBtn", "sub");
     show("leftBtn", "shift", 1);
     show("rightBtn", "shift", -1);
+    // the carriage's place box greys when neither arrow can be used (taken apart, busy, a lesson)
+    const shiftOff = !this.controlState("shift", 1).enabled && !this.controlState("shift", -1).enabled;
+    /** @type {HTMLElement} */ ($("placeStrip").parentElement).setAttribute("aria-disabled", String(shiftOff));
     show("pinBtn", "pin");
     show("toStopBtn", "toStop");
+    show("toStopBackBtn", "toStopBack");
     show("resetBtn", "reset");
     show("carryBtn", "carry");
     const input = /** @type {HTMLInputElement} */ ($("numInput"));
@@ -936,9 +1031,15 @@ export class App {
     input.setAttribute("aria-disabled", String(!inputState.enabled));
     $("numberField").classList.toggle("wanted", inputState.wanted && inputState.enabled);
     if (document.activeElement !== input) input.value = String(this.inputNumber());
-    $("pinValue").textContent = m.pin === null ? "–" : String(m.pin);
-    // its name says the hole (U22); the tooltip keeps what the pin does
-    $("pinBtn").setAttribute("aria-label", m.pin === null ? t("strip.pin.nameOut") : t("strip.pin.name", { n: m.pin }));
+    // the number the pin was set by: black (adding) or red (turning back, the hole's other number)
+    const red = m.pin !== null && this.pinRed;
+    $("pinValue").textContent = m.pin === null ? "–" : String(this.pinNumber());
+    $("pinValue").classList.toggle("red", red);
+    // its name says the number it was set by, black or red (U22); the tooltip keeps what the pin does
+    $("pinBtn").setAttribute(
+      "aria-label",
+      m.pin === null ? t("strip.pin.nameOut") : red ? t("status.pinRed", { n: 9 - m.pin }) : t("status.pin", { n: m.pin }),
+    );
     $("carryValue").textContent = t(`strip.carry.${m.mode}.short`);
     $("carryBtn").setAttribute("aria-label", t("strip.carry.name", { mode: t(`strip.carry.${m.mode}`) }));
     // the view on show, on the Views menu's button

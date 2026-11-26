@@ -12,11 +12,19 @@ import { Viewer } from "../scene/viewer.js";
 /** @import { Machine } from "../sim/machine.js" */
 import { CRANK_COMMIT, CrankDrag, crankAt, intentAt, intentHint } from "../teach/partActions.js";
 /** @import { Intent } from "../teach/partActions.js" */
-import { partInfo, partName } from "../teach/partInfo.js";
+import { partInfo, partName, zoneKey, zoneName } from "../teach/partInfo.js";
 /** @import { ViewName } from "../teach/player.js" */
 
-/** Parts hidden by "Case" (the oak case, base and the brass cover plates). */
-const CASING = ["frame.case", "frame.base", "frame.register_cover", "pm.carriage_cover"];
+/** Parts hidden by "Case": the feet with their blocks and board, and the carriage's cover. */
+const CASING = ["frame.base", "pm.carriage_cover"];
+/**
+ * The structure that goes with the case (U32): the frame, the carriage's front panel, its own floor,
+ * bearing bar and post (the carriage node's own mesh, not the parts riding on it), the counter drive's
+ * bracket. The working springs are nodes of their own and stay.
+ */
+const STRUCTURE = ["frame.static", "pm.carriage_panel", "pm.counter_frame"];
+/** How far the camera may go from the machine (m), unless a view needs it farther. */
+const MAX_DISTANCE = 2.2;
 const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 export class Stage {
@@ -54,7 +62,7 @@ export class Stage {
   /**
    * The callouts' texts (message keys), kept to translate them again.
    * @private
-   * @type {{ node: string; text: () => string; value?: false }[]}
+   * @type {{ node: string; text: () => string; value?: false; anchor?: string }[]}
    */
   calloutItems = [];
 
@@ -90,7 +98,7 @@ export class Stage {
     }
     const c = this.viewer.controls;
     c.minDistance = 0.12;
-    c.maxDistance = 2.2;
+    c.maxDistance = MAX_DISTANCE;
     c.maxPolarAngle = Math.PI * 0.62; // a little below the table, never from underneath
     c.screenSpacePanning = true;
     c.addEventListener("start", () => (this.fitted = null)); // the reader took the camera
@@ -134,7 +142,11 @@ export class Stage {
     if (ex && factor !== this.explodeTarget) ex.apply(factor);
     const w = this.host.clientWidth;
     const h = this.host.clientHeight;
-    return frame(this.viewer.camera, points, v.dir, w, h, this.insets(), 0.9);
+    const dir = this.machine.mode === "ripple" && v.dirRipple ? v.dirRipple : v.dir;
+    const f = frame(this.viewer.camera, points, dir, w, h, this.insets(), 0.9);
+    // a narrow screen needs the camera farther than the usual limit to show a whole view (a
+    // phone upright: about 3 m for the whole machine); let it, with room to zoom out a little
+    return { ...f, maxDistance: Math.max(MAX_DISTANCE, f.position.distanceTo(f.target) * 1.25) };
   }
 
   /** The canvas changed size (or the bands did): centre on the free area, refit a fitted view. */
@@ -145,6 +157,7 @@ export class Stage {
     centreOnFreeArea(this.viewer.camera, w, h, this.insets());
     if (this.fitted && this.views && !this.viewer.isFlying) {
       const f = this.framing(this.fitted);
+      this.viewer.controls.maxDistance = f.maxDistance;
       this.viewer.camera.position.copy(f.position);
       this.viewer.controls.target.copy(f.target);
       this.viewer.camera.lookAt(f.target); // now, not at the next frame's controls update
@@ -179,6 +192,7 @@ export class Stage {
     this.rig = /** @type {Rig<string>} */ (new Rig(r, m2NodeNames(m.registerDigits, m.carriageDigits)));
     this.exploder = new Exploder(r);
     this.highlighter = new Highlighter(r);
+    this.highlighter.setColours(this.partColours);
     this.callouts = new Callouts(this.host, this.viewer.camera, r);
     this.callouts.valueOf = (node) => partInfo(node, this.machine);
     this.views = viewSubjects(r);
@@ -211,13 +225,46 @@ export class Stage {
     return true;
   }
 
-  /** Show or hide the case and the carriage front, as set. */
+  /**
+   * Show or hide the case (the board, the carriage's top, and the frame's and the carriage's
+   * structure, concealed) and the carriage's front panel, as set.
+   */
   applyToggles() {
     if (!this.root) return;
     for (const n of CASING) for (const o of findNodes(this.root, n)) o.visible = this.casing;
     for (const o of findNodes(this.root, "pm.carriage_panel")) o.visible = !this.cutaway;
+    this.highlighter?.setConcealed(this.casing ? new Set() : this.structure());
     this.viewer.invalidate();
     this.refreshHover();
+  }
+
+  /**
+   * The meshes of the frame and the carriage's structure (STRUCTURE, and the carriage node's own
+   * mesh without the parts riding on it).
+   * @private
+   * @returns {Set<THREE.Object3D>}
+   */
+  structure() {
+    /** @type {Set<THREE.Object3D>} */
+    const out = new Set();
+    if (!this.root) return out;
+    for (const n of STRUCTURE) for (const o of findNodes(this.root, n)) o.traverse((x) => (/** @type {THREE.Mesh} */ (x)).isMesh && out.add(x));
+    for (const c of findNodes(this.root, "pm.carriage")) {
+      if ((/** @type {THREE.Mesh} */ (c)).isMesh) out.add(c);
+      // a carriage drawn as several meshes: its own are the unnamed primitives beside the parts
+      else for (const x of c.children) if ((/** @type {THREE.Mesh} */ (x)).isMesh && x.name.startsWith(c.name + "_")) out.add(x);
+    }
+    return out;
+  }
+
+  /** Every kind of part in its own colour (the Views menu's "Colour by part"). */
+  partColours = false;
+
+  /** @param {boolean} on */
+  setPartColours(on) {
+    this.partColours = on;
+    this.highlighter?.setColours(on);
+    this.viewer.invalidate();
   }
 
   /**
@@ -225,22 +272,23 @@ export class Stage {
    * @param {string[]} names
    * @param {boolean} fade
    * @param {string[]} [context]
+   * @param {ViewName} [view] the inside view on show, whose veiled materials go half-transparent
    */
-  highlight(names, fade, context) {
-    this.highlighter?.set(names, fade, context);
+  highlight(names, fade, context, view) {
+    this.highlighter?.set(names, fade, context, (view && this.views?.[view].veil) || []);
     this.viewer.invalidate();
   }
 
   /**
    * Callouts: labels pinned to parts, with their texts as functions (they follow the language).
    * A callout with value: false names an area and shows no live value.
-   * @param {{ node: string; text: () => string; value?: false }[]} items
+   * @param {{ node: string; text: () => string; value?: false; anchor?: string }[]} items
    */
   setCallouts(items) {
     this.calloutItems = items;
     const quiet = new Set(items.filter((c) => c.value === false).map((c) => gltfName(c.node)));
     if (this.callouts) this.callouts.valueOf = (node) => (quiet.has(node) ? null : partInfo(node, this.machine));
-    this.callouts?.set(items.map((c) => ({ node: c.node, text: c.text() })));
+    this.callouts?.set(items.map((c) => ({ node: c.node, text: c.text(), anchor: c.anchor })));
     this.viewer.invalidate();
   }
 
@@ -265,7 +313,11 @@ export class Stage {
     centreOnFreeArea(this.viewer.camera, this.host.clientWidth, this.host.clientHeight, this.insets());
     const f = this.framing(view);
     this.fitted = view;
-    this.viewer.flyTo(f.position, f.target, reducedMotion() ? 0.001 : 0.8);
+    // the limit comes down only once the camera is there: lowered now, the controls would pull
+    // a far camera (a phone's whole machine) in at once, then fly on from there
+    const { camera, controls } = this.viewer;
+    controls.maxDistance = Math.max(f.maxDistance, camera.position.distanceTo(controls.target));
+    this.viewer.flyTo(f.position, f.target, reducedMotion() ? 0.001 : 0.8, () => (controls.maxDistance = f.maxDistance));
   }
 
   // ---- moving the camera by keys and buttons (U24) ----------------------------------------------
@@ -362,17 +414,19 @@ export class Stage {
   }
 
   /**
-   * Name and live value of a part (walking up to the nearest named node).
+   * Name and live value of a part (walking up to the nearest named node), named for the part
+   * of it at the point where the node holds several (its zones).
    * @private
    * @param {THREE.Object3D} o
+   * @param {THREE.Vector3} point world
    * @returns {{ name: string; value: string | null; red?: boolean } | null}
    */
-  labelFor(o) {
+  labelFor(o, point) {
     for (let n = /** @type {THREE.Object3D | null} */ (o); n; n = n.parent) {
-      const info = partInfo(n.name, this.machine);
-      if (info) return info;
-      const name = partName(n.name);
-      if (name) return { name, value: null };
+      const info = partInfo(n.name, this.machine) ?? (partName(n.name) ? { name: /** @type {string} */ (partName(n.name)), value: null } : null);
+      if (!info) continue;
+      const key = zoneKey(n, point);
+      return key ? { ...info, name: zoneName(info.name, key) } : info;
     }
     return null;
   }
@@ -411,7 +465,7 @@ export class Stage {
   showHover(x, y) {
     const canvas = this.viewer.renderer.domElement;
     const hit = this.pick(x, y);
-    const label = hit ? this.labelFor(hit.object) : null;
+    const label = hit ? this.labelFor(hit.object, hit.point) : null;
     const intent = this.intentAtHit(hit, this.shift ? -1 : 1);
     canvas.style.cursor = !intent ? "" : intent.kind === "turn" || intent.kind === "shiftStep" ? "grab" : "pointer";
     this.hoverBox.hidden = !label;

@@ -433,6 +433,7 @@ a { color: var(--md-primary); }
 /* the carriage's place: a value in its box, like the pin's hole (U21) */
 .value-field { justify-content: center; min-width: 76px; padding: 0 12px; }
 .carriage-place { min-width: 2ch; text-align: center; font-size: 18px; font-weight: 560; }
+.value-field[aria-disabled="true"] .carriage-place, .value-field[aria-disabled="true"] .field-label { color: color-mix(in srgb, var(--md-on-surface) 38%, transparent); }
 /* The pin's hole: a dropdown, boxed and named like the other settings (U22). What is set is a
    box with its name on the border; what is done is a button. */
 .select-field { align-items: center; justify-content: space-between; gap: 6px; min-width: 78px; padding: 0 6px 0 14px; color: var(--md-on-surface); font: inherit; cursor: pointer; }
@@ -442,6 +443,8 @@ a { color: var(--md-primary); }
 .select-field[aria-expanded="true"] { border-color: var(--md-primary); box-shadow: inset 0 0 0 1px var(--md-primary); }
 .select-field[aria-expanded="true"] .field-label { color: var(--md-primary); }
 .select-field[aria-disabled="true"] { opacity: 0.45; cursor: default; }
+/* the pin set by a red number (for turning back), as on the counter */
+.select-value.red { color: var(--red); }
 /* A value's box with the buttons that act on it joined to its edges, full height, one outer
    corner shape (U21, U23): the pin's box and Run to stop (→|), the carriage's place between
    its arrows. Icon-only buttons; their names are in their tooltips. */
@@ -740,6 +743,12 @@ dialog::backdrop { background: var(--md-scrim); }
   .brand { font-size: 15px; }
 }
 @media (max-width: 599px) {
+  /* a phone (owner): the dock starts lower, its tabs show their icons alone (the labels stay for
+     screen readers), so the machine and its toolbar keep the height */
+  .workspace { grid-template-rows: minmax(0, 1fr) var(--dock-h, 36%); }
+  .tab { padding: 9px 6px 7px; }
+  .tab > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .tab .dot { top: 6px; }
   .chip .txt { display: none; }
   .chip { padding: 0 8px; }
   /* the top bar on a phone (U27): the logo without the title, the language by its 文A alone,

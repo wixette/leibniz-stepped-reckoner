@@ -27,11 +27,17 @@ MATERIALS = {
     "brass_satin": ((0.78, 0.58, 0.26), 1.0, 0.38, "brushed"),
     "steel": ((0.55, 0.56, 0.58), 1.0, 0.28, "brushed"),
     "steel_dark": ((0.10, 0.11, 0.13), 1.0, 0.35, "brushed"),
+    "bronze": ((0.36, 0.25, 0.13), 1.0, 0.42, "brushed"),
+    # the pentagons: steel, named apart so the Carry view can draw them half-transparent
+    # (js/scene/teachScene.js, veil)
+    "steel_pentagon": ((0.55, 0.56, 0.58), 1.0, 0.28, "brushed"),
     "enamel_white": ((0.85, 0.83, 0.76), 0.0, 0.30, None),
     "ink_black": ((0.02, 0.02, 0.02), 0.0, 0.6, None),
     "ink_red": ((0.62, 0.06, 0.04), 0.0, 0.55, None),
     "wood_dark": ((0.035, 0.022, 0.016), 0.0, 0.35, None),
     "oak": ((0.16, 0.085, 0.04), 0.0, 0.55, "oak"),
+    "oak_handle": ((0.16, 0.085, 0.04), 0.0, 0.5, "oak"),   # the cranks' handles: a lighter oak than the board's (owner), not the casing's (A2-12)
+    "oak_dark": ((0.045, 0.021, 0.01), 0.0, 0.9, "oak"),   # the board and blocks the machine stands on: dark and matte, so no sheen makes it look as light as the handles (owner)
 }
 
 # Textures repeat every UV_MM millimetres (box-projected UVs, see MeshBuilder.build).
@@ -174,6 +180,16 @@ class MeshBuilder:
         self.mat_idx = []
         self.smooth = []
         self.mats = []
+        self.cyl_uv = {}
+
+    def cylinder_uvs(self, mat, origin, axis, radius):
+        """Map the faces of material `mat` round an axis (origin and direction, mm) rather than
+        by box projection: u along the axis, v round it (a turned part's grain runs along it).
+        v is the angle times a reference radius chosen so a full turn holds a whole number of
+        texture repeats (at least one), which hides the seam: for a part much smaller round than
+        a texture repeat (UV_MM), one repeat fills the turn, so its grain is finer than on a
+        board (the handles: r about 10, the grain about 4x finer)."""
+        self.cyl_uv[mat] = (origin, axis, radius)
 
     def _mat(self, name):
         if name not in self.mats:
@@ -207,6 +223,43 @@ class MeshBuilder:
             c, d = b + n, a + n
             self._add([a, d, c, b] if flip else [a, b, c, d], mi, smooth)
 
+    def prism_holes(self, rim, holes, plane, t0, t1, mat, offset=(0.0, 0.0, 0.0)):
+        """Extrude a plate: the closed outline `rim` with the closed outlines `holes` cut out,
+        from t0 to t1 along the plane's normal axis. The faces are triangulated with Blender's
+        polygon filler, which takes the holes as loops inside the rim."""
+        from mathutils import Vector
+        from mathutils.geometry import tessellate_polygon
+
+        rim = rim if _signed_area(rim) > 0 else list(reversed(rim))
+        holes = [h if _signed_area(h) < 0 else list(reversed(h)) for h in holes]
+        loops = [rim] + holes
+        pts = [p for lp in loops for p in lp]
+        tris = tessellate_polygon([[Vector((u, w, 0.0)) for u, w in lp] for lp in loops])
+        mi = self._mat(mat)
+        n = len(pts)
+        base = len(self.verts)
+        ox, oy, oz = offset
+        for t in (t0, t1):
+            for u, w in pts:
+                x, y, z = _map(plane, u, w, t)
+                self.verts.append((x + ox, y + oy, z + oz))
+        flip = plane == "XZ"
+        for a, b, c in tris:
+            if _signed_area([pts[a], pts[b], pts[c]]) < 0:
+                b, c = c, b
+            top = [base + n + a, base + n + b, base + n + c]
+            bottom = [base + c, base + b, base + a]
+            self._add(list(reversed(top)) if flip else top, mi, False)
+            self._add(list(reversed(bottom)) if flip else bottom, mi, False)
+        start = 0
+        for lp in loops:
+            m = len(lp)
+            for i in range(m):
+                a, b = base + start + i, base + start + (i + 1) % m
+                c, d = b + n, a + n
+                self._add([a, d, c, b] if flip else [a, b, c, d], mi, False)
+            start += m
+
     def _add(self, face, mi, smooth):
         self.faces.append(face)
         self.mat_idx.append(mi)
@@ -233,12 +286,56 @@ class MeshBuilder:
         me.validate()
         if any(is_textured(m) for m in self.mats):
             _box_uvs(me)
+            if self.cyl_uv:
+                self._cylinder_uvs(me)
         if hasattr(me, "set_sharp_from_angle"):
             me.set_sharp_from_angle(angle=math.radians(40))
         obj = bpy.data.objects.new(name, me)
         obj.location = tuple(c * MM for c in location_mm)
         collection.objects.link(obj)
         return obj
+
+    def _cylinder_uvs(self, me):
+        """Overwrite the box-projected UVs of the faces whose material was mapped round an axis."""
+        uv = me.uv_layers["UVMap"].data
+        for poly in me.polygons:
+            mname = self.mats[poly.material_index]
+            if mname not in self.cyl_uv:
+                continue
+            origin, axis, radius = self.cyl_uv[mname]
+            pts = [self.verts[me.loops[li].vertex_index] for li in poly.loop_indices]
+            for li, (u, v) in zip(poly.loop_indices, _cyl_face_uvs(pts, origin, axis, radius)):
+                uv[li].uv = (u, v)
+
+
+def _cyl_face_uvs(pts, origin, axis, radius):
+    """u, v (UV units) of one face's points (mm) mapped round an axis; see cylinder_uvs."""
+    ax = Vector(axis).normalized()
+    ref = Vector((1.0, 0.0, 0.0)) if abs(ax.x) < 0.9 else Vector((0.0, 1.0, 0.0))
+    e1 = (ref - ax * ref.dot(ax)).normalized()
+    e2 = ax.cross(e1)
+    turns = max(1, round(2.0 * math.pi * radius / UV_MM))
+    r_ref = turns * UV_MM / (2.0 * math.pi)
+    o = Vector(origin)
+    along, ang = [], []
+    for q in pts:
+        d = Vector(q) - o
+        along.append(d.dot(ax))
+        x, y = d.dot(e1), d.dot(e2)
+        ang.append(math.atan2(y, x) if x * x + y * y > 1e-8 else None)
+    known = [a for a in ang if a is not None]
+    if not known:
+        known = [0.0]
+    base = known[0]
+    # unwrap round the face's first known angle, so a face across the seam does not span the turn
+    unwrapped = [base + math.remainder(a - base, 2.0 * math.pi) for a in known]
+    mean = sum(unwrapped) / len(unwrapped)
+    it = iter(unwrapped)
+    out = []
+    for a, t in zip(ang, along):
+        a2 = next(it) if a is not None else mean            # a point on the axis takes its face's angle
+        out.append((t / UV_MM, a2 * r_ref / UV_MM))
+    return out
 
 
 def _box_uvs(me):
@@ -321,6 +418,27 @@ def gltf_point(p_mm):
     """Blender-local point (mm) -> glTF-local point (m, Y-up)."""
     x, y, z = p_mm
     return [x * MM, z * MM, -y * MM]
+
+
+def zone(mb, start, key, pad=0.3):
+    """A named part of a node's mesh, for its hover label: the box (node-local mm, padded) round
+    the vertices added to mb since start (mb.verts length then)."""
+    vs = mb.verts[start:]
+    lo = tuple(min(v[i] for v in vs) - pad for i in range(3))
+    hi = tuple(max(v[i] for v in vs) + pad for i in range(3))
+    return (key, lo, hi)
+
+
+def set_zones(obj, zones):
+    """Named parts of a node (zone() boxes, the first that holds a point wins): extras zone_keys
+    (comma-separated message keys) and zone_boxes (6 glTF-local numbers each, min then max)."""
+    keys, flat = [], []
+    for key, lo, hi in zones:
+        a, b = gltf_point(lo), gltf_point(hi)
+        keys.append(key)
+        flat += [min(a[i], b[i]) for i in range(3)] + [max(a[i], b[i]) for i in range(3)]
+    obj["zone_keys"] = ",".join(keys)
+    obj["zone_boxes"] = flat
 
 
 def set_anchors(obj, key, points_mm):

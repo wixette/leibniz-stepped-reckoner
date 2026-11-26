@@ -122,7 +122,7 @@ if __name__ == "__main__":
     car = bpy.data.objects["pm.carriage"]
     car.location.x -= params.load().v("layout.digit_pitch") * offset * MM
     if "--no-case" in argv:
-        for n in ("frame.case", "frame.register_cover", "pm.carriage_cover"):
+        for n in ("frame.base", "pm.carriage_cover"):
             bpy.data.objects[n].hide_render = True
     model_png = os.path.join(OUT, f"m2-front-offset{offset}.png")
     render_elevation(model_png)

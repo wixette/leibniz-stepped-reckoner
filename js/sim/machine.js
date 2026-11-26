@@ -8,17 +8,20 @@
 //                a Zweihorn horn executes it when it passes the store - but only stores
 //                under the carriage have a lever. A carry stored above the top lever stays
 //                stored (pentagon tilted) until the carriage is shifted over it.
-// Ripple mode (Lehmann's Dresden replica) staggers the levers units-first, so a secondary
-// carry is stored before the next lever arrives. Simultaneous mode (the original, all levers
+// Ripple mode (the ripple carry set, our design: a long Zweihorn and a small star s' behind the
+// drums) staggers the levers units-first, so a secondary carry is stored, or caught on its way,
+// before the next lever arrives. Simultaneous mode (the original, all levers
 // at one phase) leaves it stored for the next horn pass: each lever passes its store twice a
 // turn (both horns), so a waiting chain moves on two places per idle turn (decision 0001).
-// Magna Rota: geared 10:1 to the crank; its ring with 10 holes doubles as the
-// revolution counter (black numbers count additions, red ones subtractions). A pin in
-// hole m stops the crank after m forward turns (Leupold) - multiplication. Turned back, the
+// Revolution counter (on the carriage, as on the original; the Magna Rota is the crank's
+// disc): its ring with 10 holes turns one hole a turn (the centre's numbers count additions,
+// the outer ones subtractions). A pin in hole m stops the crank after m forward turns -
+// multiplication. Turned back, the
 // pin goes round the other way and meets the stop finger's far face: the finger's width
 // (about 0.22 of a crank turn) leaves 9 - m whole backward turns, and the next would jam
 // part-way, so it is refused. (The sources describe no one-way catch; the model measures
-// where the pin meets the finger.) Division uses the ring as a counter with the pin out.
+// where the pin meets the finger.) Dividing counts the subtractions with the pin set at black 0
+// (K. Badur), which allows 9 backward turns: a quotient digit of 9 ends at the stop, not overdrawn.
 // A carry store holds one carry. A turn that would store a second carry in a store whose
 // first carry is still waiting is refused: one waiting above the carriage, with no lever over
 // it (the operator must shift the carriage over that digit first), or one whose wheel would
@@ -40,6 +43,7 @@ import * as M from "./kinematicsM1.js";
  * @typedef {object} Exec
  * @property {number} start |theta| of first contact
  * @property {1 | -1} sign
+ * @property {number} origin store angle at first contact less one carry (the store's rest)
  */
 /**
  * @typedef {object} DigitTrace
@@ -70,7 +74,8 @@ import * as M from "./kinematicsM1.js";
  * @property {number} carriageX mm along +X (negative = shifted left)
  * @property {number} endCrank deg
  * @property {number} mainCrank deg (the operator's crank, = theta)
- * @property {number} magnaRota deg (ring)
+ * @property {number} magnaRota deg (turns with the crank)
+ * @property {number} counterRing deg about the vertical (the revolution counter's ring; stepped a tenth of a turn once a turn by the 17th shaft's train, M.counterStep)
  */
 
 export const DIGIT_PITCH = machine.layout.digit_pitch.v; // mm
@@ -120,7 +125,8 @@ export class Machine {
   /** Carriage position used for drawing; equals offset at rest, fractional while shifting. */
   carriagePos = 0;
   /**
-   * Magna Rota: pin hole (0..9) or null, and turns counted since the ring was last set.
+   * Revolution counter: the pin's hole (0..9, by its black number) or null, and turns counted
+   * since the pin was last set.
    * @type {number | null}
    */
   pin = null;
@@ -239,16 +245,6 @@ export class Machine {
   }
 
   /**
-   * Set the ring back to 0 at the stop (keeps the pin).
-   * @returns {boolean}
-   */
-  resetRing() {
-    if (!this.atRest) return false;
-    this.ringTurns = 0;
-    return true;
-  }
-
-  /**
    * True when the pin has reached the stop: the crank cannot start another forward turn.
    * @returns {boolean}
    */
@@ -340,6 +336,17 @@ export class Machine {
     return n;
   }
 
+  /**
+   * Turn back until the pin reaches the stop from the other side (division, or subtracting the
+   * pin's red number of times: a pin at red m sits in the hole of black 9 - m).
+   * @returns {number}
+   */
+  runBackToStop() {
+    let n = 0;
+    while (this.pin !== null && !this.blockedBack && this.turn(-1)) n++;
+    return n;
+  }
+
   // ---------------------------------------------------------------------------------------
   /**
    * Carriage digit working on register digit k, or -1 if k is outside the carriage (no lever
@@ -373,7 +380,7 @@ export class Machine {
         if (!from) return 0;
         let sum = 0;
         for (const e of from.executions) {
-          if (t >= e.start) sum += e.sign * M.transferProgress(M.executionCurve(t - e.start));
+          if (t >= e.start) sum += e.sign * M.transferProgress(M.executionCurve(t - e.start, this.mode));
         }
         return sum;
       };
@@ -386,7 +393,13 @@ export class Machine {
       const store = (t) => {
         let a = K.storeAngle(p, v(t));
         for (const e of executions) {
-          if (t >= e.start) a += e.sign * (M.executionCurve(t - e.start) - K.STORE_STEP);
+          if (t >= e.start) a += e.sign * (M.executionCurve(t - e.start, this.mode) - K.STORE_STEP);
+          else {
+            // a horn arriving while its store is still being stored catches it from behind
+            const c = M.catchCurve(t - e.start, this.mode);
+            const rel = e.sign * (a - e.origin);
+            if (c !== null && rel >= M.catchFrom(this.mode) && rel < c) a = e.origin + e.sign * c;
+          }
         }
         return a;
       };
@@ -395,7 +408,7 @@ export class Machine {
         for (const start of M.leverPasses(j, this.mode, dir)) {
           const r = dir * store(start);
           const inPitch = ((r % K.STORE_PITCH) + K.STORE_PITCH) % K.STORE_PITCH;
-          if (Math.abs(inPitch - K.STORE_STEP) < 1e-6) executions.push({ start, sign: dir });
+          if (Math.abs(inPitch - K.STORE_STEP) < 1e-6) executions.push({ start, sign: dir, origin: store(start) - dir * K.STORE_STEP });
         }
       }
       /** @type {DigitTrace} */
@@ -452,7 +465,8 @@ export class Machine {
       carriageX: -DIGIT_PITCH * this.carriagePos,
       endCrank: 360 * this.carriagePos,
       mainCrank: th,
-      magnaRota: 36 * (this.ringTurns + th / 360),
+      magnaRota: th,
+      counterRing: -36 * (this.ringTurns + M.counterStep(th)),
     };
   }
 
@@ -482,11 +496,12 @@ export class Machine {
   }
 
   /**
-   * Digit the Magna Rota ring shows at the stop (the revolution counter).
+   * The turns the revolution counter's ring has counted, as it shows them: the ring steps a hole
+   * part-way through a turn (counterStep), not when the turn ends. Negative when turned back.
    * @returns {number}
    */
-  counterDigit() {
-    return ((Math.round(this.ringTurns + this._theta / 360) % 10) + 10) % 10;
+  countedTurns() {
+    return Math.trunc(Math.round((this.ringTurns + M.counterStep(this._theta)) * 1e6) / 1e6);
   }
 
   /**
@@ -507,42 +522,4 @@ export class Machine {
     return this.carryStates().map((s) => s !== "idle");
   }
 
-  /**
-   * Carries that have left the top digit so far, including those completed in this turn.
-   * @returns {number}
-   */
-  carryOutLive() {
-    const th = this._theta;
-    if (th === 0) return this.carryOut;
-    /** @type {1 | -1} */
-    const dir = th < 0 ? -1 : 1;
-    const top = this.traces(dir)[this.registerDigits - 1];
-    const done = top.executions.filter((e) => Math.abs(th) >= e.start + M.TRANSFER_TRAVEL - 1e-9);
-    return this.carryOut + done.reduce((a, e) => a + e.sign, 0);
-  }
-
-  /**
-   * Step stops (docs/conventions.md): only where a visible change has just completed.
-   * @param {1 | -1} dir
-   * @returns {number[]}
-   */
-  stepStops(dir) {
-    /** @type {number[]} */
-    const ev = [];
-    for (const s of this.settings) {
-      for (let k = 10 - s; k <= 9; k++) ev.push(K.ribWindowStart(K.ribWindowIndex(k, dir)) + K.RIB_PITCH);
-    }
-    for (const x of this.traces(dir)) {
-      for (const e of x.executions) ev.push(e.start + M.TRANSFER_TRAVEL, e.start + M.EXECUTION_TRAVEL);
-    }
-    ev.push(360);
-    const sorted = ev.map((a) => Math.min(360, a)).filter((a) => a > 0).sort((a, b) => a - b);
-    /** @type {number[]} */
-    const merged = [];
-    for (const a of sorted) {
-      if (merged.length && a - merged[merged.length - 1] < 0.5) merged[merged.length - 1] = a;
-      else merged.push(a);
-    }
-    return merged;
-  }
 }

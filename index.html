@@ -6,12 +6,12 @@
     <title>Leibniz's Stepped Reckoner: a 3D simulator with lessons</title>
     <meta name="description" content="Interactive 3D simulator of Leibniz's stepped reckoner, the first mechanical calculator to add, subtract, multiply and divide. Lessons in 10 languages, in the browser." />
     <meta name="theme-color" content="#0f1317" />
-    <link rel="icon" href="images/favicon.ico?v=1.2.0" sizes="16x16 32x32 48x48" />
-    <link rel="icon" href="images/favicon.svg?v=1.2.0" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=1.2.0" />
-    <link rel="manifest" href="manifest.webmanifest?v=1.2.0" />
-    <link rel="stylesheet" href="css/fonts.css?v=1.2.0" />
-    <link rel="stylesheet" href="css/style.css?v=1.2.0" />
+    <link rel="icon" href="images/favicon.ico?v=1.3.0" sizes="16x16 32x32 48x48" />
+    <link rel="icon" href="images/favicon.svg?v=1.3.0" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=1.3.0" />
+    <link rel="manifest" href="manifest.webmanifest?v=1.3.0" />
+    <link rel="stylesheet" href="css/fonts.css?v=1.3.0" />
+    <link rel="stylesheet" href="css/style.css?v=1.3.0" />
     <!-- Every file name here carries the version (?v=), and so does each module the
          scripts import, through this map: bare names ("three") lead to the copies in
          vendor/ (pnpm vendor), and a release asks for new names, so no cache can serve
@@ -20,65 +20,68 @@
     <script type="importmap">
     {
       "imports": {
-        "three": "./vendor/three/build/three.module.js?v=1.2.0",
-        "three-mesh-bvh": "./vendor/three-mesh-bvh/build/index.module.js?v=1.2.0",
-        "three/addons/controls/OrbitControls.js": "./vendor/three/examples/jsm/controls/OrbitControls.js?v=1.2.0",
-        "three/addons/loaders/GLTFLoader.js": "./vendor/three/examples/jsm/loaders/GLTFLoader.js?v=1.2.0",
-        "three/addons/utils/BufferGeometryUtils.js": "./vendor/three/examples/jsm/utils/BufferGeometryUtils.js?v=1.2.0",
-        "three/addons/utils/SkeletonUtils.js": "./vendor/three/examples/jsm/utils/SkeletonUtils.js?v=1.2.0",
-        "./js/accept/collisions.js": "./js/accept/collisions.js?v=1.2.0",
-        "./js/accept/harness.js": "./js/accept/harness.js?v=1.2.0",
-        "./js/accept/m2Checks.js": "./js/accept/m2Checks.js?v=1.2.0",
-        "./js/accept/m3Checks.js": "./js/accept/m3Checks.js?v=1.2.0",
-        "./js/accept/selftestPanel.js": "./js/accept/selftestPanel.js?v=1.2.0",
-        "./js/app/about.js": "./js/app/about.js?v=1.2.0",
-        "./js/app/animator.js": "./js/app/animator.js?v=1.2.0",
-        "./js/app/app.js": "./js/app/app.js?v=1.2.0",
-        "./js/app/course.js": "./js/app/course.js?v=1.2.0",
-        "./js/app/dockHandle.js": "./js/app/dockHandle.js?v=1.2.0",
-        "./js/app/references.js": "./js/app/references.js?v=1.2.0",
-        "./js/app/sound.js": "./js/app/sound.js?v=1.2.0",
-        "./js/app/stage.js": "./js/app/stage.js?v=1.2.0",
-        "./js/l10n/all.js": "./js/l10n/all.js?v=1.2.0",
-        "./js/l10n/de.js": "./js/l10n/de.js?v=1.2.0",
-        "./js/l10n/en.js": "./js/l10n/en.js?v=1.2.0",
-        "./js/l10n/es.js": "./js/l10n/es.js?v=1.2.0",
-        "./js/l10n/fr.js": "./js/l10n/fr.js?v=1.2.0",
-        "./js/l10n/it.js": "./js/l10n/it.js?v=1.2.0",
-        "./js/l10n/ja.js": "./js/l10n/ja.js?v=1.2.0",
-        "./js/l10n/ko.js": "./js/l10n/ko.js?v=1.2.0",
-        "./js/l10n/l10n.js": "./js/l10n/l10n.js?v=1.2.0",
-        "./js/l10n/pt-BR.js": "./js/l10n/pt-BR.js?v=1.2.0",
-        "./js/l10n/zh-TW.js": "./js/l10n/zh-TW.js?v=1.2.0",
-        "./js/l10n/zh.js": "./js/l10n/zh.js?v=1.2.0",
-        "./js/main.js": "./js/main.js?v=1.2.0",
-        "./js/scene/framing.js": "./js/scene/framing.js?v=1.2.0",
-        "./js/scene/m2Pose.js": "./js/scene/m2Pose.js?v=1.2.0",
-        "./js/scene/rig.js": "./js/scene/rig.js?v=1.2.0",
-        "./js/scene/teachScene.js": "./js/scene/teachScene.js?v=1.2.0",
-        "./js/scene/viewer.js": "./js/scene/viewer.js?v=1.2.0",
-        "./js/sim/kinematics.js": "./js/sim/kinematics.js?v=1.2.0",
-        "./js/sim/kinematicsM1.js": "./js/sim/kinematicsM1.js?v=1.2.0",
-        "./js/sim/machine.js": "./js/sim/machine.js?v=1.2.0",
-        "./js/sim/narrate.js": "./js/sim/narrate.js?v=1.2.0",
-        "./js/sim/operations.js": "./js/sim/operations.js?v=1.2.0",
-        "./js/teach/lessons.js": "./js/teach/lessons.js?v=1.2.0",
-        "./js/teach/partActions.js": "./js/teach/partActions.js?v=1.2.0",
-        "./js/teach/partInfo.js": "./js/teach/partInfo.js?v=1.2.0",
-        "./js/teach/player.js": "./js/teach/player.js?v=1.2.0",
-        "./js/teach/tutorial.js": "./js/teach/tutorial.js?v=1.2.0",
-        "./js/tools/m2Scenarios.js": "./js/tools/m2Scenarios.js?v=1.2.0",
-        "./js/ui/components.js": "./js/ui/components.js?v=1.2.0",
-        "./package.json": "./package.json?v=1.2.0",
-        "./params/machine.json": "./params/machine.json?v=1.2.0",
-        "./vendor/material-symbols/icons.js": "./vendor/material-symbols/icons.js?v=1.2.0",
-        "./vendor/three-mesh-bvh/build/index.module.js": "./vendor/three-mesh-bvh/build/index.module.js?v=1.2.0",
-        "./vendor/three/build/three.core.js": "./vendor/three/build/three.core.js?v=1.2.0",
-        "./vendor/three/build/three.module.js": "./vendor/three/build/three.module.js?v=1.2.0",
-        "./vendor/three/examples/jsm/controls/OrbitControls.js": "./vendor/three/examples/jsm/controls/OrbitControls.js?v=1.2.0",
-        "./vendor/three/examples/jsm/loaders/GLTFLoader.js": "./vendor/three/examples/jsm/loaders/GLTFLoader.js?v=1.2.0",
-        "./vendor/three/examples/jsm/utils/BufferGeometryUtils.js": "./vendor/three/examples/jsm/utils/BufferGeometryUtils.js?v=1.2.0",
-        "./vendor/three/examples/jsm/utils/SkeletonUtils.js": "./vendor/three/examples/jsm/utils/SkeletonUtils.js?v=1.2.0"
+        "three": "./vendor/three/build/three.module.js?v=1.3.0",
+        "three-mesh-bvh": "./vendor/three-mesh-bvh/build/index.module.js?v=1.3.0",
+        "three/addons/controls/OrbitControls.js": "./vendor/three/examples/jsm/controls/OrbitControls.js?v=1.3.0",
+        "three/addons/libs/meshopt_decoder.module.js": "./vendor/three/examples/jsm/libs/meshopt_decoder.module.js?v=1.3.0",
+        "three/addons/loaders/GLTFLoader.js": "./vendor/three/examples/jsm/loaders/GLTFLoader.js?v=1.3.0",
+        "three/addons/utils/BufferGeometryUtils.js": "./vendor/three/examples/jsm/utils/BufferGeometryUtils.js?v=1.3.0",
+        "three/addons/utils/SkeletonUtils.js": "./vendor/three/examples/jsm/utils/SkeletonUtils.js?v=1.3.0",
+        "./js/accept/collisions.js": "./js/accept/collisions.js?v=1.3.0",
+        "./js/accept/harness.js": "./js/accept/harness.js?v=1.3.0",
+        "./js/accept/m2Checks.js": "./js/accept/m2Checks.js?v=1.3.0",
+        "./js/accept/m3Checks.js": "./js/accept/m3Checks.js?v=1.3.0",
+        "./js/accept/selftestPanel.js": "./js/accept/selftestPanel.js?v=1.3.0",
+        "./js/app/about.js": "./js/app/about.js?v=1.3.0",
+        "./js/app/animator.js": "./js/app/animator.js?v=1.3.0",
+        "./js/app/app.js": "./js/app/app.js?v=1.3.0",
+        "./js/app/course.js": "./js/app/course.js?v=1.3.0",
+        "./js/app/dockHandle.js": "./js/app/dockHandle.js?v=1.3.0",
+        "./js/app/references.js": "./js/app/references.js?v=1.3.0",
+        "./js/app/sound.js": "./js/app/sound.js?v=1.3.0",
+        "./js/app/stage.js": "./js/app/stage.js?v=1.3.0",
+        "./js/l10n/all.js": "./js/l10n/all.js?v=1.3.0",
+        "./js/l10n/de.js": "./js/l10n/de.js?v=1.3.0",
+        "./js/l10n/en.js": "./js/l10n/en.js?v=1.3.0",
+        "./js/l10n/es.js": "./js/l10n/es.js?v=1.3.0",
+        "./js/l10n/fr.js": "./js/l10n/fr.js?v=1.3.0",
+        "./js/l10n/it.js": "./js/l10n/it.js?v=1.3.0",
+        "./js/l10n/ja.js": "./js/l10n/ja.js?v=1.3.0",
+        "./js/l10n/ko.js": "./js/l10n/ko.js?v=1.3.0",
+        "./js/l10n/l10n.js": "./js/l10n/l10n.js?v=1.3.0",
+        "./js/l10n/pt-BR.js": "./js/l10n/pt-BR.js?v=1.3.0",
+        "./js/l10n/zh-TW.js": "./js/l10n/zh-TW.js?v=1.3.0",
+        "./js/l10n/zh.js": "./js/l10n/zh.js?v=1.3.0",
+        "./js/main.js": "./js/main.js?v=1.3.0",
+        "./js/scene/framing.js": "./js/scene/framing.js?v=1.3.0",
+        "./js/scene/m2Pose.js": "./js/scene/m2Pose.js?v=1.3.0",
+        "./js/scene/rig.js": "./js/scene/rig.js?v=1.3.0",
+        "./js/scene/teachScene.js": "./js/scene/teachScene.js?v=1.3.0",
+        "./js/scene/viewer.js": "./js/scene/viewer.js?v=1.3.0",
+        "./js/sim/kinematics.js": "./js/sim/kinematics.js?v=1.3.0",
+        "./js/sim/kinematicsM1.js": "./js/sim/kinematicsM1.js?v=1.3.0",
+        "./js/sim/machine.js": "./js/sim/machine.js?v=1.3.0",
+        "./js/sim/operations.js": "./js/sim/operations.js?v=1.3.0",
+        "./js/teach/lessons.js": "./js/teach/lessons.js?v=1.3.0",
+        "./js/teach/partActions.js": "./js/teach/partActions.js?v=1.3.0",
+        "./js/teach/partInfo.js": "./js/teach/partInfo.js?v=1.3.0",
+        "./js/teach/player.js": "./js/teach/player.js?v=1.3.0",
+        "./js/teach/tutorial.js": "./js/teach/tutorial.js?v=1.3.0",
+        "./js/tools/m2Scenarios.js": "./js/tools/m2Scenarios.js?v=1.3.0",
+        "./js/ui/components.js": "./js/ui/components.js?v=1.3.0",
+        "./package.json": "./package.json?v=1.3.0",
+        "./params/carry-tables.json": "./params/carry-tables.json?v=1.3.0",
+        "./params/lever-phases.json": "./params/lever-phases.json?v=1.3.0",
+        "./params/machine.json": "./params/machine.json?v=1.3.0",
+        "./vendor/material-symbols/icons.js": "./vendor/material-symbols/icons.js?v=1.3.0",
+        "./vendor/three-mesh-bvh/build/index.module.js": "./vendor/three-mesh-bvh/build/index.module.js?v=1.3.0",
+        "./vendor/three/build/three.core.js": "./vendor/three/build/three.core.js?v=1.3.0",
+        "./vendor/three/build/three.module.js": "./vendor/three/build/three.module.js?v=1.3.0",
+        "./vendor/three/examples/jsm/controls/OrbitControls.js": "./vendor/three/examples/jsm/controls/OrbitControls.js?v=1.3.0",
+        "./vendor/three/examples/jsm/libs/meshopt_decoder.module.js": "./vendor/three/examples/jsm/libs/meshopt_decoder.module.js?v=1.3.0",
+        "./vendor/three/examples/jsm/loaders/GLTFLoader.js": "./vendor/three/examples/jsm/loaders/GLTFLoader.js?v=1.3.0",
+        "./vendor/three/examples/jsm/utils/BufferGeometryUtils.js": "./vendor/three/examples/jsm/utils/BufferGeometryUtils.js?v=1.3.0",
+        "./vendor/three/examples/jsm/utils/SkeletonUtils.js": "./vendor/three/examples/jsm/utils/SkeletonUtils.js?v=1.3.0"
       }
     }
     </script>
@@ -89,7 +92,7 @@
          screen-reader name); data-icon is replaced by the inline SVG icon. -->
     <header class="topbar">
       <a class="brand" href="./" draggable="false">
-        <img src="images/logo-wide.svg?v=1.2.0" alt="" width="64" height="34" draggable="false" />
+        <img src="images/logo-wide.svg?v=1.3.0" alt="" width="64" height="34" draggable="false" />
         <span data-l10n="app.name">Leibniz's Stepped Reckoner</span>
       </a>
       <div class="mode" id="modeBox">
@@ -134,8 +137,8 @@
               </div>
               <span class="sep"></span>
               <div class="pair" role="group">
-                <button class="btn tonal has-icon" id="addBtn" data-control="add" data-l10n-tip="strip.add.tip"><i data-icon="rotate_right"></i><span class="sym" aria-hidden="true">+</span></button>
-                <button class="btn tonal has-icon" id="subBtn" data-control="sub" data-l10n-tip="strip.sub.tip"><i data-icon="rotate_left"></i><span class="sym" aria-hidden="true">−</span></button>
+                <button class="btn tonal has-icon" id="addBtn" data-control="add" data-l10n-tip="strip.add.tip"><i data-icon="rotate_left"></i><span class="sym" aria-hidden="true">+</span></button>
+                <button class="btn tonal has-icon" id="subBtn" data-control="sub" data-l10n-tip="strip.sub.tip"><i data-icon="rotate_right"></i><span class="sym" aria-hidden="true">−</span></button>
               </div>
               <span class="sep"></span>
               <div class="split" id="carriageGroup" role="group" aria-labelledby="carriageLabel">
@@ -145,12 +148,13 @@
               </div>
               <span class="sep"></span>
               <div class="split" role="group">
+                <button class="btn tonal icon-only" id="toStopBackBtn" data-control="toStopBack" data-l10n-tip="strip.toStopBack.tip"><i data-icon="first_page"></i></button>
                 <button class="field-group select-field" id="pinBtn" data-control="pin" aria-haspopup="menu" aria-expanded="false" data-l10n-tip="strip.pin.tip"><span class="field-label" data-l10n="strip.pin">Pin</span><b class="select-value" id="pinValue">–</b><i data-icon="keyboard_arrow_down"></i></button>
                 <button class="btn tonal icon-only" id="toStopBtn" data-control="toStop" data-l10n-tip="strip.toStop.tip"><i data-icon="last_page"></i></button>
               </div>
               <span class="sep"></span>
               <div class="strip-tail">
-                <button class="field-group select-field carry-field" id="carryBtn" data-control="carry" aria-haspopup="menu" aria-expanded="false" data-l10n-tip="strip.carry.tip"><span class="field-label" data-l10n="strip.carry">Carry</span><b class="select-value" id="carryValue">Lehmann</b><i data-icon="keyboard_arrow_down"></i></button>
+                <button class="field-group select-field carry-field" id="carryBtn" data-control="carry" aria-haspopup="menu" aria-expanded="false" data-l10n-tip="strip.carry.tip"><span class="field-label" data-l10n="strip.carry">Carry</span><b class="select-value" id="carryValue">Ripple</b><i data-icon="keyboard_arrow_down"></i></button>
                 <span class="sep"></span>
                 <button class="btn has-icon" id="resetBtn" data-control="reset" data-l10n-tip="strip.reset.tip" data-tip-describes><i data-icon="restart_alt"></i><span class="txt" data-l10n="strip.reset">Reset</span></button>
               </div>
@@ -169,9 +173,9 @@
       <aside class="dock" id="dock">
         <div class="dock-handle" id="dockHandle" role="separator" tabindex="0" aria-controls="dock" data-l10n-tip="dock.resize"></div>
         <div class="tabs" role="tablist" id="tabs">
-          <button class="tab" role="tab" id="tab-start" aria-controls="panel-start" aria-selected="true"><i data-icon="explore"></i><span data-l10n="tab.start">Get started</span><i class="dot" hidden></i></button>
-          <button class="tab" role="tab" id="tab-lessons" aria-controls="panel-lessons" aria-selected="false" tabindex="-1"><i data-icon="school"></i><span data-l10n="tab.lessons">Lessons</span><i class="dot" hidden></i></button>
-          <button class="tab" role="tab" id="tab-refs" aria-controls="panel-refs" aria-selected="false" tabindex="-1"><i data-icon="menu_book"></i><span data-l10n="tab.refs">References</span></button>
+          <button class="tab" role="tab" id="tab-start" data-l10n-tip="tab.start" data-tip-unlabelled aria-controls="panel-start" aria-selected="true"><i data-icon="explore"></i><span data-l10n="tab.start">Get started</span><i class="dot" hidden></i></button>
+          <button class="tab" role="tab" id="tab-lessons" data-l10n-tip="tab.lessons" data-tip-unlabelled aria-controls="panel-lessons" aria-selected="false" tabindex="-1"><i data-icon="school"></i><span data-l10n="tab.lessons">Lessons</span><i class="dot" hidden></i></button>
+          <button class="tab" role="tab" id="tab-refs" data-l10n-tip="tab.refs" data-tip-unlabelled aria-controls="panel-refs" aria-selected="false" tabindex="-1"><i data-icon="menu_book"></i><span data-l10n="tab.refs">References</span></button>
         </div>
         <section class="panel" role="tabpanel" id="panel-start" aria-labelledby="tab-start"></section>
         <section class="panel" role="tabpanel" id="panel-lessons" aria-labelledby="tab-lessons" hidden></section>
@@ -199,6 +203,6 @@
         if (text && text.textContent === "…") text.textContent = "This browser cannot run the simulator. Please use a current version of Chrome, Edge, Firefox or Safari.";
       });
     </script>
-    <script type="module" src="js/main.js?v=1.2.0"></script>
+    <script type="module" src="js/main.js?v=1.3.0"></script>
   </body>
 </html>

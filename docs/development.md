@@ -11,7 +11,7 @@ python3 -m http.server 8000
 ```
 
 - <http://localhost:8000/> is the simulator (`index.html`).
-- <http://localhost:8000/dev/> lists the developer page, `dev/03-full-machine/`: the whole mechanism step by step, with worked examples. It is not linked from the simulator. (The pages of the earlier milestones, one digit and a three-digit carry slice, were removed in 1.2.0; their notes are in `design/`.)
+- The developer pages are gone: the slice pages of the earlier milestones in 1.2.0, the full machine's (`dev/03-full-machine/`, its crank-angle slider and step mode) in 1.3.0, which was checked in the simulator itself, with `?selftest`, the acceptance tests and the Blender collision sweep. Their notes are in `design/`.
 
 Pages cannot be opened from `file://`, because browsers do not load modules from there.
 
@@ -21,7 +21,7 @@ Pages cannot be opened from `file://`, because browsers do not load modules from
 |---|---|
 | `?lang=de` | Start in that language (`en`, `es`, `fr`, `de`, `it`, `pt-BR`, `zh`, `zh-TW`, `ja`, `ko`) |
 | `?quality=lite` or `?quality=high` | Force the rendering quality (by default it drops to lite by itself on a slow device) |
-| `?selftest` | Run the page's acceptance checks on the loaded model and show the results (every page, `dev/` included) |
+| `?selftest` | Run the page's acceptance checks on the loaded model and show the results |
 | `?perf` | Show the frame rate, draw calls and triangles |
 | `?debug` | Expose the page's state to the console as `app` |
 
@@ -43,13 +43,13 @@ pnpm test         # simulator logic, kinematics, acceptance tests on the .glb, v
 
 CI runs them on every push and pull request, together with the REUSE lint ([licensing.md](licensing.md)). How the code is typed, tested and vendored, and what the acceptance tests check: [conventions.md](conventions.md).
 
-**Model changes** (`params/`, `blender/scripts/`) need Blender: `pnpm build:model` rebuilds the `.glb` files, and `pnpm check:model` runs the slow collision sweep, which must pass before a model change is committed. Commit the new `.glb` together with the params.
+**Model changes** (`params/`, `blender/scripts/`) need Blender: `pnpm build:model` rebuilds the `.glb` files (Blender exports them, then [tools/compress-model.mjs](../tools/compress-model.mjs) packs them with meshoptimizer: the page and the tests decode them with three.js's meshopt decoder), and `pnpm check:model` runs the slow collision sweep, which must pass before a model change is committed. Commit the new `.glb` together with the params.
 
 ## Versions and releases
 
-The version is kept in one place, `package.json`. Set it with `pnpm version <x.y.z>`, which also writes it into the pages' file names (see *Deploying behind a cache*) and does not commit or tag ([.npmrc](../.npmrc)). A release is a pull request named for its version; it is tagged `vX.Y.Z` on GitHub, on the merge commit, and its changes are listed in [CHANGELOG.md](../CHANGELOG.md). Each push to `main` deploys the site to GitHub Pages once its tests have passed ([.github/workflows/pages.yml](../.github/workflows/pages.yml)).
+The version is kept in one place, `package.json`. Set it with `pnpm version <x.y.z>`, which also writes it into the pages' file names (see *Deploying behind a cache*) and does not commit or tag ([.npmrc](../.npmrc)). A release is developed on a branch named `dev-vX.Y.Z` (not `vX.Y.Z`, which would share its name with the release's tag) and merged by a pull request named for its version; it is tagged `vX.Y.Z` on GitHub, on the merge commit, and its changes are listed in [CHANGELOG.md](../CHANGELOG.md). Its discussions and decisions are logged on the branch, in `design/` (for 1.3.0, [v1.3-notes.md](../design/v1.3-notes.md)). Each push to `main` deploys the site to GitHub Pages once its tests have passed ([.github/workflows/pages.yml](../.github/workflows/pages.yml)).
 
-**Screenshots.** `pnpm shots` takes the release pictures ([tools/shots.mjs](../tools/shots.mjs)): the README's six (`view-whole`, `view-apart`, `view-drum`, `view-magna`, `free-play` and `lesson-carry`, copied by hand into `images/readme/`), and a set for posts: the Taken apart view from several sides and distances, the drum and carry views from several sides, and the multiplication lesson step by step. It serves the repository itself and drives headless Chrome, at 1600 × 900; view shots are the stage alone, with the dock hidden. `--lang en,zh` takes them in each language given, into `~/Downloads/leibniz-v<version>-media/shots/<lang>/` (or `--out <folder>`), and `--only <text>` only those whose name contains it. Chrome is found at its usual place, or set `CHROME` to its path.
+**Screenshots.** `pnpm shots` takes the release pictures ([tools/shots.mjs](../tools/shots.mjs)): the README's six (`view-whole`, `view-apart`, `view-drum`, `view-counter`, `free-play` and `lesson-carry`, copied by hand into `images/readme/`), and a set for posts: the Taken apart view from several sides and distances, the drum and carry views from several sides, the Magna Rota, and the multiplication lesson step by step. It serves the repository itself and drives headless Chrome, at 1600 × 900; view shots are the stage alone, with the dock hidden. `--lang en,zh` takes them in each language given, into `~/Downloads/leibniz-v<version>-media/shots/<lang>/` (or `--out <folder>`), and `--only <text>` only those whose name contains it. Chrome is found at its usual place, or set `CHROME` to its path.
 
 **Videos.** `pnpm video` makes the release clips ([tools/video.mjs](../tools/video.mjs)), 1920 × 1080 MP4 with the machine's sound: the machine taken apart and looked round, the stepped drum and the carry in slow motion, an addition and a multiplication from start to finish. They are made frame by frame, not recorded in real time: the tool replaces the page's clock and advances it one frame at a time, so the video is smooth however slow the rendering, and nothing on the screen or the sound card is recorded. The soundtrack is mixed afterwards from `audio/`, from a log of every sound the app played. It takes the same `--lang`, `--out` (default `~/Downloads/leibniz-v<version>-media/videos/<lang>/`) and `--only`, and `--fps` (30). It needs ffmpeg, and takes a few minutes for each language.
 
@@ -59,11 +59,11 @@ Release media are never kept in the repository: both tools write outside it by d
 
 To deploy, copy the whole directory to a web server, with the Git LFS files checked out.
 
-Every file a page names carries the version, `css/style.css?v=1.0.0`, and so does every module the scripts import, through the page's import map, and every model they load. A release asks for new names, so a cache can keep each file as long as it likes and still never give an old one to a new page. Only the pages themselves (`index.html` and the `index.html` files in `dev/`) must not be kept. On a server or a CDN that lets you set the headers:
+Every file a page names carries the version, `css/style.css?v=1.0.0`, and so does every module the scripts import, through the page's import map, and every model they load. A release asks for new names, so a cache can keep each file as long as it likes and still never give an old one to a new page. Only the page itself (`index.html`) must not be kept. On a server or a CDN that lets you set the headers:
 
 | What | `Cache-Control` |
 | --- | --- |
-| The pages (`index.html`, `/`, `dev/…/`) | `no-cache`: kept, but checked with the server each time |
+| The page (`index.html`, `/`) | `no-cache`: kept, but checked with the server each time |
 | Everything asked for with `?v=` | `public, max-age=31536000, immutable` |
 
 A CDN must count the query string in its cache key (most do unless told not to). GitHub Pages sets no headers you can change and keeps everything for 10 minutes, so there a release reaches everyone within 10 minutes. The stamps are written by `pnpm version` (or `pnpm stamp`, [tools/stamp.mjs](../tools/stamp.mjs)); `pnpm test` fails while a page and `package.json` disagree.
@@ -75,9 +75,11 @@ A CDN must count the query string in its cache key (most do unless told not to).
 | [research/REPORT.md](../research/REPORT.md) | Feasibility, confidence and the value check against existing resources |
 | [design/modelling-and-animation-plan.md](../design/modelling-and-animation-plan.md) | How the model is built and animated, with milestones M0–M4 and their acceptance tests |
 | [design/m0-notes.md](../design/m0-notes.md) … [m3-notes.md](../design/m3-notes.md) | What each milestone built and found, as recorded at the time |
+| [design/m4-notes.md](../design/m4-notes.md), [v1.3-notes.md](../design/v1.3-notes.md) | The releases after the milestones: 1.1.0, the dimensions from Lehmann's drawings; 1.3.0, the original after Badur's measurements, and the page around it (its discussions and decisions, as logged) |
 | [design/decisions/0001-carry-interpretation.md](../design/decisions/0001-carry-interpretation.md) | Which carry behaviour the simulator shows, and why |
+| [design/decisions/0002-original-replica-and-releases.md](../design/decisions/0002-original-replica-and-releases.md) | Which machine the model follows, the original or Lehmann's replica, part by part, and what each release changes |
 | [params/machine.json](../params/machine.json) | Every dimension and angle, with its source and confidence |
-| [conventions.md](conventions.md) | Units, axes, part names, export, developer pages, testing, references |
+| [conventions.md](conventions.md) | Units, axes, part names, export, the self-test, testing, references |
 | [ui-design.md](ui-design.md) | The principles the page is laid out by, and its decisions (U1, U2, …) |
 | [licensing.md](licensing.md) | Licences and attribution |
 
@@ -93,7 +95,6 @@ A CDN must count the query string in its cache key (most do unless told not to).
 | `index.html`, `css/`, `js/` | The simulator's main page and its code: `js/app/` (the page: stage, machine strip, dock, course player), `js/ui/` (components), `js/l10n/` (one file per language), `js/sim/` (the machine), `js/scene/` (three.js), `js/teach/` (tutorial, lessons, part names), `js/accept/` (acceptance checks), `js/tools/` (scenarios for the pose exports) |
 | `audio/` | The machine's sounds |
 | `images/` | The logo, the icons (`pnpm icons`), the tutorial's pictures and the README's screenshots |
-| `dev/` | The developer page of the full machine |
 | `vendor/` | three.js, three-mesh-bvh, the Roboto Flex font and the Material Symbols icons, copied from npm (`pnpm vendor`) |
 | `tests/` | `node --test` tests |
 | `tools/` | Reference check, vendoring, version stamps, icons, screenshots, videos and pose export scripts |

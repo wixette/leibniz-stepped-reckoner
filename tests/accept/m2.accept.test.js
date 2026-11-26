@@ -1,6 +1,4 @@
 // M2 acceptance spec (plan §10.1): runs on assets/m2-full-machine.glb in Node.
-// A2-10 (M0 and M1 still pass) is m0.accept.test.js and m1.accept.test.js, which run in
-// the same `pnpm test`.
 
 import { statSync } from "node:fs";
 import { fileURLToPath } from "node:url";

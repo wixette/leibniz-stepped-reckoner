@@ -4,6 +4,7 @@
 // the name (A3-10). Names come from the message files (js/l10n), in every language (A3-1).
 // Pure logic: the page renders it, the tests check it.
 
+/** @import * as THREE from "three" */
 import { gltfName } from "../scene/rig.js";
 import { locale, t, tn } from "../l10n/l10n.js";
 /** @import { Locale } from "../l10n/l10n.js" */
@@ -37,25 +38,96 @@ export function placeWord(k, loc = locale()) {
 const PLACED = /** @type {const} */ ([
   ["pm.drum_shaft.", "part.drumShaft"],
   ["pm.lever.", "part.lever"],
-  ["pm.zweihorn_add.", "part.zweihornAdd"],
-  ["pm.zweihorn_sub.", "part.zweihornSub"],
+  ["pm.zweihorn_r.", "part.zweihornRipple"],
+  ["pm.zweihorn.", "part.zweihorn"],
+  ["pi.five_horn_s.", "part.store"],
+  ["pi.five_horn_sr.", "part.rippleStar"],
   ["pm.setting_stop.", "part.settingStop"],
 ]);
 const SINGLE = /** @type {const} */ ([
   ["frame.base", "part.base"],
-  ["frame.case", "part.case"],
   ["frame.lead_screw", "part.leadScrew"],
-  ["frame.register_cover", "part.registerCover"],
   ["frame.static", "part.frame"],
   ["pi.window", "part.windows"],
   ["pm.carriage_cover", "part.carriageCover"],
   ["pm.carriage_panel", "part.carriagePanel"],
-  ["pm.magna_plate", "part.magnaPlate"],
   ["pm.main_crank", "part.mainCrank"],
+  ["pm.large_gear_a", "part.largeGear"],
+  ["pm.large_gear_b", "part.largeGear"],
+  ["pm.large_gear_c", "part.largeGear"],
+  ["pm.counter_shaft", "part.counterShaft"],
+  ["pm.counter_k", "part.counterStarWheel"],
+  ["pm.counter_l", "part.counterCrownWheel"],
+  ["pm.counter_n", "part.counterGearN"],
+  ["pm.counter_frame", "part.counterFrame"],
+  ["pm.counter_leaf", "part.counterLeaf"],
+  ["frame.springs", "part.detentSprings"],
+  ["pm.magna_rota_detent", "part.magnaDetent"],
 ]);
+
+/** The named parts within a part's node (the build's zones, glTF extras), by message key. */
+export const ZONE_KEYS = /** @type {const} */ ([
+  "part.counterStop",
+  "part.pentagon",
+  "part.fiveHornP",
+  "part.detentWheel",
+  "part.einzahn",
+  "part.tenWheel",
+  "part.receivingGear",
+  "part.fingerLever",
+  "part.digitDisc",
+  "part.settingPinion",
+  "part.drumGear",
+  "part.longGear",
+  "part.bearingBar",
+  "part.leadNut",
+  "part.detentCatch",
+  "part.slideShoe",
+  "part.rearBearings",
+  "part.beamFront",
+  "part.beamMiddle",
+  "part.beamBack",
+  "part.registerBar",
+  "part.rearBeam",
+  "part.registerFrameBar",
+]);
+
+/**
+ * The message key of the named part of a node at a world point (the first of its zones that
+ * holds the point), or null: one node can hold several parts that move together, such as a
+ * carry store's shaft, five-horn, detent wheel and pentagon.
+ * @param {THREE.Object3D} node
+ * @param {THREE.Vector3} point world
+ * @returns {string | null}
+ */
+export function zoneKey(node, point) {
+  const ex = /** @type {{ zone_keys?: string; zone_boxes?: number[] }} */ (node.userData);
+  if (!ex.zone_keys || !ex.zone_boxes) return null;
+  const p = node.worldToLocal(point.clone());
+  const keys = ex.zone_keys.split(",");
+  const b = ex.zone_boxes;
+  for (let i = 0; i < keys.length; i++) {
+    const o = i * 6;
+    if (p.x >= b[o] && p.y >= b[o + 1] && p.z >= b[o + 2] && p.x <= b[o + 3] && p.y <= b[o + 4] && p.z <= b[o + 5]) return keys[i];
+  }
+  return null;
+}
+
+/**
+ * A part's label renamed for the named part at a point: its place, if any, kept.
+ * @param {string} name the part's label name ("Carry store · tens")
+ * @param {string} key the named part's message key
+ * @param {Locale} [loc]
+ * @returns {string}
+ */
+export function zoneName(name, key, loc = locale()) {
+  const at = name.indexOf(" · ");
+  return t(key, {}, loc) + (at >= 0 ? name.slice(at) : "");
+}
 
 /** Every message key a part name can use (A3-1). */
 export const PART_KEYS = [
+  ...ZONE_KEYS,
   ...PLACED.map(([, k]) => k),
   ...SINGLE.map(([, k]) => k),
   "part.wheel",
@@ -66,6 +138,7 @@ export const PART_KEYS = [
   "part.rack",
   "part.magna",
   "part.pin",
+  "part.counter",
   "part.carriage",
 ];
 
@@ -102,12 +175,13 @@ export function partInfo(node, m, loc = locale()) {
   if ((k = index(node, "pm.setting_plate.")) !== null) return { name: named("part.plate", k), value: String(m.settings[k]) };
   if ((k = index(node, "pm.drum.")) !== null) return { name: named("part.drum", k), value: String(m.settings[k]) };
   if ((k = index(node, "pm.setting_rack.")) !== null) return { name: named("part.rack", k), value: String(m.settings[k]) };
-  if (node === gltfName("pm.magna_rota")) {
-    const turns = Math.trunc(m.ringTurns + m.theta / 360);
+  if (node === gltfName("pm.magna_rota")) return { name: t("part.magna", {}, loc), value: null };
+  if (node === gltfName("pm.counter_ring") || node === gltfName("pm.counter_plate")) {
+    const turns = m.countedTurns();
     const n = Math.abs(turns);
-    return { name: t("part.magna", {}, loc), value: turns < 0 ? tn("value.back", n, {}, loc) : tn("value.turns", n, {}, loc), red: turns < 0 };
+    return { name: t("part.counter", {}, loc), value: turns < 0 ? tn("value.back", n, {}, loc) : tn("value.turns", n, {}, loc), red: turns < 0 };
   }
-  if (node === gltfName("pm.magna_pin")) {
+  if (node === gltfName("pm.counter_pin") || node === gltfName("pm.counter_pin_park")) {
     return { name: t("part.pin", {}, loc), value: m.pin === null ? null : t("value.hole", { n: m.pin }, loc) };
   }
   if (node === gltfName("pm.carriage")) {

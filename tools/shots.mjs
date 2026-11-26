@@ -67,15 +67,18 @@ const CARRY = `await hideDock(); app.machine.setResult(9999); app.setNumber(1); 
 const SHOTS = [
   // The README's pictures.
   { name: "free-play", page: true, setup: "", wait: 3000 },
-  { name: "lesson-carry", page: true, setup: `await lesson("carry", 3, false);`, wait: 3000 },
+  { name: "lesson-carry", page: true, setup: `await lesson("carry", 4, false);`, wait: 3000 }, // the carry levers, 9999 + 1 = 10000
   // from the front, as the photo of the original beside it; the machine alone (crop: x, y, width, height in the stage)
   { name: "view-whole", setup: `await hideDock(); await view("overview"); await cam(-40, 12, 0.9);`, crop: [90, 75, 1310, 615] },
   { name: "view-apart", setup: APART },
   { name: "view-drum", setup: DRUM },
+  // the revolution counter two turns into 1709 × 5: the pin set at black 5, three holes from the stop
   {
-    name: "view-magna",
-    setup: `await hideDock(); app.setNumber(1709); app.setPin(5); app.machine.turn(1); app.machine.turn(1); app.changed(); await view("front");`,
+    name: "view-counter",
+    setup: `await hideDock(); app.setNumber(1709); app.setPin(5); app.machine.turn(1); app.machine.turn(1); app.changed(); await view("counter");`,
   },
+  // The Magna Rota and its crank, from the front.
+  { name: "magna-front", setup: `await hideDock(); await view("front");` },
   // Taken apart, from several sides and distances.
   { name: "apart-wide-front", setup: `${APART} await cam(-35, 10);` },
   { name: "apart-wide-left", setup: `${APART} await cam(-75, 5, 1.05);` },

@@ -105,6 +105,17 @@ def radial_bar(r0, r1, width, angle_deg):
     ]
 
 
+def pointer_outline(r0, length, width, angle_deg):
+    """A flat pointer arm from r0 out to length along angle_deg, width wide, ending in a 90 deg
+    point at length (Lehmann's 'Fingerhebel', NL183/465 p. 23)."""
+    a = math.radians(angle_deg)
+    ux, uw = math.cos(a), math.sin(a)
+    nx, nw = -uw, ux
+    h = width / 2.0
+    pts = [(r0, -h), (length - h, -h), (length, 0.0), (length - h, h), (r0, h)]
+    return [(ux * s + nx * q, uw * s + nw * q) for s, q in pts]
+
+
 def stop_lug(r_in, r_out, a_from, a_to, offset, n=16):
     """Annular sector from a_from to a_to (CCW) whose two side faces are straight lines
     `offset` inside the radial lines at a_from and a_to: a bar of half-width `offset` lying

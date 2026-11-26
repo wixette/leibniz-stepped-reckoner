@@ -229,7 +229,7 @@ M2 design decisions:
 | ID | Statement | Kind |
 |---|---|---|
 | A2-1 | Contract: 16 result wheels and 16 stores on the register; 8 drums, knobs and levers plus the Magna Rota on `pm.carriage`. Anchors are present. | contract |
-| A2-2 | All 16 windows read 0–9 correctly, and all 8 setting pointers aim at their digit (both at offsets 0 and 8). | readout |
+| A2-2 | All 16 windows read 0–9 correctly, all 8 setting pointers aim at their digit, and each setting window shows it (both at offsets 0 and 7). | readout |
 | A2-3 | For every carriage offset 0–7 (0–8 before M4), drum j sits under the receiving gear of register digit o + j and lever j lines up with store o + j, with nothing intersecting at rest. | geometry |
 | A2-4 | **1709 × 365** with the Magna Rota (pins 5, 6, 3 at offsets 0, 1, 2) reads **623785**, and the pin rests against the stop after each multiplier digit. | readout |
 | A2-5 | **623785 ÷ 1709** by repeated subtraction and shifting gives quotient digits 3, 6, 5 (read on the Magna Rota) and remainder 0. | readout |

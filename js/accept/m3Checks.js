@@ -4,7 +4,7 @@
 // view are the same code the main page runs.
 
 import * as THREE from "three";
-import { applyM2Pose, m2NodeNames } from "../scene/m2Pose.js";
+import { applyM2Pose, CRANK_FORWARD, m2NodeNames, m2NodeValues } from "../scene/m2Pose.js";
 import { gltfName, Rig } from "../scene/rig.js";
 import { centreOnFreeArea, frame } from "../scene/framing.js";
 import { Exploder, Highlighter, findNodes, isShown, viewSubjects } from "../scene/teachScene.js";
@@ -12,11 +12,13 @@ import { Machine } from "../sim/machine.js";
 import { MESSAGES } from "../l10n/all.js";
 import { LOCALES } from "../l10n/l10n.js";
 import { LESSONS } from "../teach/lessons.js";
-import { PART_KEYS, partInfo, partName } from "../teach/partInfo.js";
+import { PART_KEYS, partInfo, partName, ZONE_KEYS, zoneKey } from "../teach/partInfo.js";
 import { TUTORIAL } from "../teach/tutorial.js";
 import { applyIntentNow, CrankDrag, intentAt } from "../teach/partActions.js";
 import { anchors, rayHits, result } from "./harness.js";
 import { INSIDE_VIEWS, matches, presentation, replayTo, runLesson, VIEWS } from "../teach/player.js";
+/** @import { Lesson } from "../teach/player.js" */
+/** @import { CarryMode } from "../sim/kinematicsM1.js" */
 /** @import { CheckResult } from "./harness.js" */
 
 /** Exploded offsets and the rest pose must agree to this (m). */
@@ -24,17 +26,29 @@ export const EXPLODE_TOL_M = 1e-6;
 /** Exploding must not rotate anything; recomputing a rotation differs by float noise (~1e-8 rad). */
 export const EXPLODE_TOL_RAD = 1e-6;
 
-const CASING = ["frame.case", "frame.base", "frame.register_cover", "pm.carriage_cover"];
+const CASING = ["frame.base", "pm.carriage_cover"];
 /** Parts that can be seen with the case on (through the windows, on top, at the front). */
 const EXTERIOR = [
-  "pi.window", "pi.sum_wheel.*", "pm.setting_dial.*", "pm.setting_plate.*", "pm.magna_rota", "pm.magna_pin",
-  "pm.magna_plate", "pm.main_crank", "pm.carriage", "pm.carriage_panel", "frame.lead_screw", ...CASING,
+  "pi.window", "pi.sum_wheel.*", "pm.setting_dial.*", "pm.setting_plate.*", "pm.magna_rota", "pm.counter_plate",
+  "pm.counter_ring", "pm.counter_pin", "pm.counter_pin_park", "pm.main_crank", "pm.carriage", "pm.carriage_panel", "frame.lead_screw", ...CASING,
 ];
 /** Part groups the exploded view must move. */
-const EXPLODED_GROUPS = ["frame.case", "frame.register_cover", "pm.carriage", "pm.magna_rota", "pi.carry_store.*", "pm.setting_dial.*"];
+const EXPLODED_GROUPS = ["frame.base", "pi.window", "pm.carriage", "pm.magna_rota", "pi.carry_store.*", "pm.setting_dial.*"];
 
 /** The tutorial and the lessons: everything the step player runs. */
 const COURSES = [TUTORIAL, ...LESSONS];
+
+/**
+ * The carry mode the machine is in at the start of a course's step (the page shows that carry set).
+ * @param {Lesson} l
+ * @param {number} i
+ * @returns {CarryMode}
+ */
+function stepMode(l, i) {
+  const m = new Machine();
+  replayTo(l, i, m);
+  return m.mode;
+}
 
 /**
  * @param {THREE.Object3D} root
@@ -190,7 +204,7 @@ export function runM3Checks(root) {
       l.steps.forEach((_, i) => {
         replayTo(l, i + 1, m);
         applyM2Pose(rig, root, m);
-        const p = presentation(l, i);
+        const p = presentation(l, i, m.mode);
         set(CASING, p.casing);
         set(["pm.carriage_panel"], !p.cutaway);
         for (const n of [...p.highlight, ...p.callouts.map((c) => c.node)]) {
@@ -271,11 +285,11 @@ export function runM3Checks(root) {
     const knob = new THREE.Vector3().setFromMatrixPosition(findNodes(root, "pm.setting_dial.2")[0].matrixWorld);
     knob.y = glyph7.y + 0.006;
     expectThat("knob 2", down(knob), () => m.settings[2] === 8);
-    // a hole of the Magna Rota (here by its black digit) sets the pin
+    // a hole of the counter (here by its black digit) sets the pin
     pose();
-    const black4 = anchors(findNodes(root, "pm.magna_rota")[0], "black_glyphs")[4];
-    expectThat("Magna Rota, hole 4", front(black4), () => m.pin === 4);
-    expectThat("the pin", intentAt(findNodes(root, "pm.magna_pin")[0], new THREE.Vector3(), m), () => m.pin === null);
+    const black4 = anchors(findNodes(root, "pm.counter_plate")[0], "black_glyphs")[4];
+    expectThat("counter, hole 4", down(black4), () => m.pin === 4);
+    expectThat("the pin", intentAt(findNodes(root, "pm.counter_pin")[0], new THREE.Vector3(), m), () => m.pin === null);
     // the main crank turns once
     pose();
     const crank = findNodes(root, "pm.main_crank")[0];
@@ -289,12 +303,12 @@ export function runM3Checks(root) {
     expectThat("result wheel 5", down(read5), () => m.offset === 5);
     // the end crank shifts the carriage left
     pose();
-    // aim at the end crank's knob (its dark wood), outside the case's left wall
+    // aim at the end crank's handle (its oak), outside the case's left wall
     const knobBox = new THREE.Box3();
     findNodes(root, "frame.lead_screw")[0].traverse((o) => {
       const mesh = /** @type {THREE.Mesh} */ (o);
       const mats = mesh.isMesh ? (Array.isArray(mesh.material) ? mesh.material : [mesh.material]) : [];
-      if (mats.some((mt) => mt.name === "wood_dark")) knobBox.expandByObject(mesh);
+      if (mats.some((mt) => mt.name === "oak_handle")) knobBox.expandByObject(mesh);
     });
     expectThat("end crank", down(knobBox.getCenter(new THREE.Vector3())), () => m.offset === 6);
     expectThat("end crank, Shift-click", down(knobBox.getCenter(new THREE.Vector3()), -1), () => m.offset === 5);
@@ -326,7 +340,7 @@ export function runM3Checks(root) {
       ...context,
       ...(parts.includes("pi.window") ? ["pi.sum_wheel.*"] : []),
       ...parts.flatMap((n) => (n.startsWith("pm.setting_dial.") ? [n.replace("setting_dial", "setting_plate")] : [])),
-      ...(parts.includes("pm.magna_rota") ? ["pm.magna_plate"] : []),
+      ...(parts.some((n) => /^pm\.counter_(ring|pin)$/.test(n)) ? ["pm.counter_plate"] : []),
     ];
     let checked = 0;
     /**
@@ -342,7 +356,7 @@ export function runM3Checks(root) {
       for (const n of mustStay(parts, context)) if (fadedPart(n)) bad.push(`${what}: ${n} faded`);
     };
     for (const l of COURSES) l.steps.forEach((_, i) => {
-      const p = presentation(l, i);
+      const p = presentation(l, i, stepMode(l, i)); // the carry set the page shows (A3-6)
       check(`${l.id} step ${i + 1}`, p.highlight, p.context);
     });
     const views = viewSubjects(root);
@@ -359,7 +373,7 @@ export function runM3Checks(root) {
     let interior = 0;
     for (const l of COURSES) {
       l.steps.forEach((_, i) => {
-        const p = presentation(l, i);
+        const p = presentation(l, i, stepMode(l, i));
         const inside = INSIDE_VIEWS.has(p.view);
         if (p.casing === inside || p.cutaway !== inside || p.fade !== inside) bad.push(`${l.id} step ${i + 1}: case, front or fading does not follow the ${p.view} view`);
         if (inside && p.highlight.length === 0) bad.push(`${l.id} step ${i + 1}: the ${p.view} view with nothing to show`);
@@ -379,12 +393,17 @@ export function runM3Checks(root) {
     const insets = { top: 80, right: 8, bottom: 8, left: 8 };
     const v = new THREE.Vector3();
     let worst = 1;
+    // every view, and the carry view also from where it looks with the ripple set fitted
+    const cases = VIEWS.flatMap((n) => {
+      const d = views[n].dirRipple;
+      return [{ name: n, label: n, dir: views[n].dir }, ...(d ? [{ name: n, label: `${n} (ripple set)`, dir: d }] : [])];
+    });
     for (const [w, h] of [[900, 600], [700, 900]]) {
-      for (const name of VIEWS) {
+      for (const { name, label, dir } of cases) {
         ex.apply(name === "apart" ? 1 : 0);
         const cam = new THREE.PerspectiveCamera(35, w / h, 0.002, 10);
         centreOnFreeArea(cam, w, h, insets);
-        const f = frame(cam, views[name].points(), views[name].dir, w, h, insets, 0.9);
+        const f = frame(cam, views[name].points(), dir, w, h, insets, 0.9);
         cam.position.copy(f.position);
         cam.lookAt(f.target);
         cam.updateMatrixWorld(true);
@@ -413,12 +432,12 @@ export function runM3Checks(root) {
         const fill = Math.max((r - l) / fw, (b - t) / fh);
         const off = Math.max(Math.abs((l + r) / 2 - (insets.left + fw / 2)) / fw, Math.abs((t + b) / 2 - (insets.top + fh / 2)) / fh);
         worst = Math.min(worst, fill);
-        if (fill < 0.8 || fill > 0.905) bad.push(`${name} at ${w}×${h}: fills ${fill.toFixed(2)}`);
-        if (off > 0.03) bad.push(`${name} at ${w}×${h}: ${(off * 100).toFixed(1)}% off-centre`);
+        if (fill < 0.8 || fill > 0.905) bad.push(`${label} at ${w}×${h}: fills ${fill.toFixed(2)}`);
+        if (off > 0.03) bad.push(`${label} at ${w}×${h}: ${(off * 100).toFixed(1)}% off-centre`);
       }
     }
     ex.apply(0);
-    return { passed: bad.length === 0, detail: bad.join("; ") || `${VIEWS.length} views at two canvas shapes; the least filled fills ${worst.toFixed(2)}` };
+    return { passed: bad.length === 0, detail: bad.join("; ") || `${cases.length} views at two canvas shapes; the least filled fills ${worst.toFixed(2)}` };
   });
 
   run("A3-15", "Dragging a crank round reads as the way the machine turns it: forward adds (or shifts left), backward the other way", () => {
@@ -464,10 +483,11 @@ export function runM3Checks(root) {
           rig.set(key, 0);
           const start = at();
           const drag = new CrankDrag(node, start, ray(start));
-          // the rig turns the crank by +deg as the machine does when it adds (or shifts left)
-          rig.set(key, deg / 2);
+          // the rig turns the crank as the machine does when it adds (or shifts left): by
+          // CRANK_FORWARD x deg, the sign m2NodeValues gives it (checked below)
+          rig.set(key, (CRANK_FORWARD[key] * deg) / 2);
           drag.move(ray(at()));
-          rig.set(key, deg);
+          rig.set(key, CRANK_FORWARD[key] * deg);
           const got = THREE.MathUtils.radToDeg(drag.move(ray(at())));
           n++;
           if (Math.abs(got - deg) > 2) bad.push(`${key} turned ${deg}° from (${dir.x}, ${dir.y}, ${dir.z}) reads as ${got.toFixed(1)}°`);
@@ -475,6 +495,14 @@ export function runM3Checks(root) {
       }
       rig.set(key, 0);
     }
+    // the signs are the pose's: a forward turn and a shift to the left as the rig shows them
+    const fm = new Machine();
+    fm.setNumber(1);
+    fm.setTheta(30);
+    if (Math.sign(m2NodeValues(fm)["pm.main_crank"]) !== CRANK_FORWARD["pm.main_crank"]) bad.push("main crank: CRANK_FORWARD disagrees with m2NodeValues");
+    const sm = new Machine();
+    sm.setCarriagePos(0.25);
+    if (Math.sign(m2NodeValues(sm)["frame.lead_screw"]) !== CRANK_FORWARD["frame.lead_screw"]) bad.push("end crank: CRANK_FORWARD disagrees with m2NodeValues");
     applyM2Pose(rig, root, m);
     return { passed: bad.length === 0, detail: bad.join("; ") || `${n} drags of the two cranks, both ways, from two views, read as turned` };
   });
@@ -516,13 +544,45 @@ export function runM3Checks(root) {
     }
     for (let k = 0; k < 16; k++) expectPart(`pi.carry_store.${k}`, null);
     expectPart("pm.magna_rota", null);
+    expectPart("pm.counter_ring", null);
     expectPart("pm.carriage", null);
     for (const lang of LOCALES) {
-      if (!partInfo(gltfName("pm.magna_rota"), m, lang)?.value?.includes("4")) bad.push(`${lang}: Magna Rota value is not its 4 turns`);
+      if (!partInfo(gltfName("pm.counter_ring"), m, lang)?.value?.includes("4")) bad.push(`${lang}: counter value is not its 4 turns`);
       if (!partInfo(gltfName("pm.carriage"), m, lang)?.value?.includes("2")) bad.push(`${lang}: carriage value is not its shift of 2`);
-      if (!partInfo(gltfName("pm.magna_pin"), m, lang)?.value?.includes("4")) bad.push(`${lang}: pin value is not hole 4`);
+      if (!partInfo(gltfName("pm.counter_pin"), m, lang)?.value?.includes("4")) bad.push(`${lang}: pin value is not hole 4`);
     }
     return { passed: bad.length === 0, detail: bad.join("; ") || `${n} labels: names in words, values match the machine` };
+  });
+
+  run("A3-16", "Parts within a part's node have labels of their own: each named zone is a known part, and the label at its centre names it", () => {
+    // e.g. the counter's stop within the counter's plate, the pentagon within a carry store
+    /** @type {string[]} */
+    const bad = [];
+    const known = new Set(/** @type {readonly string[]} */ (ZONE_KEYS));
+    root.updateMatrixWorld(true);
+    let n = 0;
+    root.traverse((o) => {
+      const ex = /** @type {{ zone_keys?: string; zone_boxes?: number[] }} */ (o.userData);
+      if (!ex.zone_keys || !ex.zone_boxes) return;
+      const keys = ex.zone_keys.split(",");
+      const boxes = ex.zone_boxes;
+      if (boxes.length !== keys.length * 6) bad.push(`${o.name}: ${keys.length} zones, ${boxes.length} box numbers`);
+      if (!partInfo(o.name, new Machine()) && !partName(o.name)) bad.push(`${o.name}: zones on a part without a label`);
+      keys.forEach((k, i) => {
+        n++;
+        if (!known.has(k)) bad.push(`${o.name}: unknown zone ${k}`);
+        const b = boxes.slice(i * 6, i * 6 + 6);
+        const c = o.localToWorld(new THREE.Vector3((b[0] + b[3]) / 2, (b[1] + b[4]) / 2, (b[2] + b[5]) / 2));
+        const got = zoneKey(o, c);
+        if (got !== k) bad.push(`${o.name}: the centre of ${k} reads ${got}`);
+      });
+    });
+    for (const k of ["part.counterStop", "part.pentagon", "part.einzahn", "part.fingerLever", "part.detentCatch", "part.beamFront"]) {
+      let found = false;
+      root.traverse((o) => (found ||= (/** @type {{ zone_keys?: string }} */ (o.userData)).zone_keys?.split(",").includes(k) ?? false));
+      if (!found) bad.push(`no zone ${k}`);
+    }
+    return { passed: bad.length === 0, detail: bad.join("; ") || `${n} named parts within nodes, each labelled at its centre` };
   });
 
   return out.sort((a, b) => a.id.localeCompare(b.id, undefined, { numeric: true }));

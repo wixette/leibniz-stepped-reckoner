@@ -1,6 +1,6 @@
 {
   "_schema": "Every numeric entry is {v, unit, conf, src, note?}. conf: doc = documented in a source; est = photo-scaled estimate; design = our own choice where sources are silent. Units: mm and deg (see docs/conventions.md). Source tags: research/sources/bibliography.md. Photo scaling (the est values): the 37 mm digit pitch of BURKHARDT1897 was used as the ruler. NL183/465 and /466 are Lehmann's drawings of the Dresden replica (Deutsches Museum München); page = PDF page of the delivered scan. version is the parameter set's own (each .glb records it as params_version), not the release's.",
-  "version": "0.3.0",
+  "version": "0.11.0",
   "fidelity_target": "B",
   "reference_machine": "The original in Hannover (GWLB; 8/16/1 digits) where Klaus Badur measured it (BADUR2026: result and setting discs, pentagons, revolution counter, carriage hood and frame, oak case; the Zweihorn angle); elsewhere N. J. Lehmann's Dresden replica (TU Dresden, 1988-90), after its workshop drawings (NL183/465), which copies the original; otherwise proportions read from photos (decision 0002, amending D1 in design/m4-notes.md).",
   "layout": {
@@ -123,29 +123,29 @@
         "src": "LUDWIG2006 (9/16 of circumference)"
       },
       "core_diameter": {
-        "v": 27.33,
+        "v": 27.76,
         "unit": "mm",
-        "conf": "doc",
-        "src": "NL183/465 p. 55, 56 (root of m 2, z 16: d0 32 - 2 x 7/6 m)"
+        "conf": "design",
+        "src": "root of m 2.03125, z 16 with the replica's dedendum 7/6 m (not measured on the original)"
       },
       "outer_diameter": {
-        "v": 36,
+        "v": 35,
         "unit": "mm",
         "conf": "doc",
-        "src": "NL183/465 p. 55, 63 (tip diameter dk 36)"
+        "src": "BADUR2026 (measured on the original): over the teeth; pitch circle 32.5"
       },
       "length": {
-        "v": 27.2,
+        "v": 28.5,
         "unit": "mm",
         "conf": "doc",
-        "src": "NL183/465 p. 55, 63, 64 (toothed length)",
+        "src": "BADUR2026 (measured on the original)",
         "note": "The rib for digit 1 has the full length; the length steps down for higher digits. A 14 mm boss 5 mm long follows the full-length end (geometry.drum.boss)."
       },
       "rib_length_step": {
-        "v": 3.02,
+        "v": 3.15,
         "unit": "mm",
         "conf": "doc",
-        "src": "NL183/465 p. 63 (milling dimensions 3.02, 6.04 ... 27.18)",
+        "src": "BADUR2026 (measured on the original)",
         "note": "This is also the axial travel of the drum per setting digit (p. 57: 39.25 mm pinion circumference / 13)."
       },
       "axial_setting": {
@@ -170,18 +170,18 @@
         "src": "LEUPOLD1727; NL183/465 p. 35"
       },
       "divisions": {
-        "v": 13,
+        "v": 12,
         "unit": "count",
         "conf": "doc",
-        "src": "NL183/465 p. 35 ('13 Teile auf Umfang a 27,7 Grad'); photo of the original (design/m4-notes.md, D2)",
-        "note": "Digits 0-9 on ten of the 13 divisions; the other 110.7 deg is a blank sector where the finger lever meets its stop."
+        "src": "BADUR2026 Pos. 35 (Einstellscheibe, sheet 'Einzelteile 5'): digits 0-9 30 deg apart on a 31 circle, a 60 deg blank between 9 and 0. Before 0.8.0: 13 (Lehmann's replica, NL183/465 p. 35).",
+        "note": "Digits 0-9 on ten of the 12 divisions; the other 60 deg is a blank sector with the stop."
       },
       "stop_sector": {
-        "v": 110.7,
+        "v": 60.0,
         "unit": "deg",
         "conf": "doc",
-        "src": "NL183/465 p. 38 (Anschlag f. Fingerhebel)",
-        "note": "= 360 - 9 x 27.7: the knob turns from 0 to 9 between the stop's two faces."
+        "src": "BADUR2026 Pos. 35 (360 - 10 x 30). Before 0.8.0: 110.7 (NL183/465 p. 38).",
+        "note": "= 360 - 9 x 30 - 30: the knob turns from 0 to 9 between the stop's two faces."
       },
       "linkage": {
         "v": "knob on vertical axis -> pinion -> rack slider -> drum axial position",
@@ -192,16 +192,16 @@
     },
     "magna_rota": {
       "diameter": {
-        "v": 126,
+        "v": 116.5,
         "unit": "mm",
-        "conf": "est",
-        "src": "photo Nachbau 03 (front elevation); 128 in DD-TS, 127 in the 1690 photo, 124 in Nachbau 08"
+        "conf": "doc",
+        "src": "BADUR2026 (measured on the original); 126 estimated before from photos of the replica"
       },
       "holes": {
         "v": 10,
         "unit": "count",
         "conf": "doc",
-        "src": "LEUPOLD1727, WIKI"
+        "src": "LEUPOLD1727, WIKI: on the revolution counter (pars_mobilis.revolution_counter_dial), not on the Magna Rota, which is a pierced disc on the crank (photo of the original; WALSDORF2014; design/v1.3-notes.md)"
       },
       "handle_radius": {
         "v": 62,
@@ -213,7 +213,7 @@
         "v": "top, between 0 and 9",
         "unit": "-",
         "conf": "doc",
-        "src": "LEUPOLD1727"
+        "src": "LEUPOLD1727; on the original the stop is on the revolution counter (photo of the Dresden replica, Commons Die_Rechenmaschine_von_Leibniz_(Nachbau)_2001_06.jpg)"
       },
       "drum_ratio": {
         "v": 1.0,
@@ -353,7 +353,7 @@
       "v": 40,
       "unit": "mm",
       "conf": "doc",
-      "src": "BADUR2026 (measured on the original): across the corners (circumradius 20)",
+      "src": "BADUR2026 (measured on the original; Pos. 22): 40 across the two side corners, circumradius 21.03",
       "note": "geometry.m2.pentagon."
     },
     "carry_stores": {
@@ -394,10 +394,10 @@
     "_note": "DESIGN values that make the parts mesh and stay clear of each other. They are derived from the documented angles and the photo estimates above; where they differ from an estimate, the geometry wins and the estimate stays for reference. All in mm/deg. Frame: shafts along +Y (toward the back), +Z up; slice origin at the base centre.",
     "drum": {
       "module": {
-        "v": 2,
+        "v": 2.03125,
         "unit": "mm",
         "conf": "doc",
-        "src": "NL183/465 p. 55, 64 (Staffelwalze: m 2, z 16)"
+        "src": "BADUR2026 (measured on the original): pitch circle 32.5 over the 16 virtual teeth (rib pitch 22.5 deg); NL183/465 p. 55, 64 gives m 2 for the replica"
       },
       "virtual_teeth": {
         "v": 16,
@@ -406,17 +406,17 @@
         "src": "NL183/465 p. 55, 64; rib pitch 22.5 deg = 360/16 (BURKHARDT1897)"
       },
       "length": {
-        "v": 27.2,
+        "v": 28.5,
         "unit": "mm",
         "conf": "doc",
-        "src": "NL183/465 p. 55, 63"
+        "src": "BADUR2026 (measured on the original): toothed length; 27.2 on the replica (NL183/465 p. 55, 63)"
       },
       "rib_length_step": {
-        "v": 3.02,
+        "v": 3.15,
         "unit": "mm",
         "conf": "doc",
-        "src": "NL183/465 p. 63",
-        "note": "rib k spans the last k x step of the drum; the gear plane sits at L - (9.5 - s) x step"
+        "src": "BADUR2026 (measured on the original); his drawing gives the ribs as 3.2, 6.3, 9.5 ... 25.2, 28.5 long: 3.15 a digit, the longest 0.15 over. 3.02 on the replica (NL183/465 p. 63)",
+        "note": "rib k spans the first k x step from the drum's front face (Abb. II 1, WALSDORF2014: all ribs start at the front); the gear plane sits at front + (9.5 - s) x step, so the drum moves back as the setting rises. Before 0.9.0 the ribs were aligned to the rear."
       },
       "rib_thickness_factor": {
         "v": 0.9,
@@ -437,16 +437,16 @@
         "src": "result shaft height (64.375) - centre distance 26.5: lowering the drum keeps the register, its windows and covers where they were"
       },
       "tooth_addendum": {
-        "v": 1.0,
+        "v": 0.6154,
         "unit": "module",
         "conf": "doc",
-        "src": "NL183/465 p. 55, 63 (tip diameter 36 = m (z + 2))"
+        "src": "BADUR2026 (measured on the original): tip diameter 35 = m (z + 2 x addendum); 1.0 for the replica (Ø36)"
       },
       "tooth_dedendum": {
         "v": 1.1667,
         "unit": "module",
-        "conf": "doc",
-        "src": "NL183/465 p. 56 (hf = 7/6 m)"
+        "conf": "design",
+        "src": "NL183/465 p. 56 (hf = 7/6 m); the original's root is not measured, so the replica's ratio is kept"
       },
       "boss": {
         "v": {
@@ -456,7 +456,7 @@
         "unit": "mm",
         "conf": "doc",
         "src": "NL183/465 p. 63, 64",
-        "note": "at the full-length end of the ribs, the end facing the rear"
+        "note": "at the drum's rear end"
       }
     },
     "receiving_gear": {
@@ -506,105 +506,123 @@
         "note": "tip clearance 0.67 mm against the drum's tip (p. 93)"
       },
       "y": {
-        "v": 20,
+        "v": 25.0,
         "unit": "mm",
         "conf": "design",
-        "src": "layout of one digit along Y (front to back), shared by every digit"
+        "src": "layout of one digit along Y (front to back), shared by every digit 2026-11-25 (owner: readable digits): the result dish is 8 deep, not Badur's 3, with digits 6.6 high on its rim (as on the setting dials), facing up at the window; everything behind the dishes (s and the Zweihorn, the drums through the receiving gear, the carry's planes, the frame bar, the ripple set, the rear wall, the pentagons, the register cover's end, the carriage's rear bearings and floor) moved 5 mm back to make room. No contact or mesh changes: only distances along the shafts (design/v1.3-notes.md)."
       }
     },
     "setting": {
       "pinion_teeth": {
-        "v": 10,
+        "v": 12,
         "unit": "count",
         "conf": "doc",
-        "src": "NL183/465 p. 58, 66 (part O)"
+        "src": "BADUR2026 Pos. 28 (Zahnrad G, steel): z 12, m 1 (the label reads 'z = 12', 'd = 12'). Before 0.8.0: 10 (NL183/465 p. 58, 66)."
       },
       "pinion_module": {
-        "v": 1.25,
+        "v": 1.00268,
         "unit": "mm",
-        "conf": "doc",
-        "src": "NL183/465 p. 58, 66",
-        "note": "pitch circumference 39.25; a 27.7 deg division moves the rack 3.02 mm"
+        "conf": "design",
+        "src": "BADUR2026 Pos. 28 / 26-27 give m 1: one 30 deg division then moves the rack pi = 3.14 mm; the model uses 3.15 / pi = 1.00268 so a division moves the drum exactly one rib step (3.15, BADUR2026)."
       },
       "pinion_y": {
-        "v": -30,
+        "v": -63.13,
         "unit": "mm",
-        "conf": "design",
-        "src": "layout of one digit along Y (front to back), shared by every digit"
+        "conf": "doc",
+        "src": "Front to back as on the original (design/drawings/digit-section-proposal.svg, design/v1.3-notes.md): the knobs' pinions in front of the drive row, which ends in front of the result discs; with the rack meshing over settings 0-9 with 1.5 pitches to spare. BADUR2026's plan view puts the knobs and the revolution counter on one line, roughly 45 mm in front of the result display (here 42). Before 0.9.0: -52.5."
       },
       "rack_pitch_line_x": {
-        "v": 16.9,
+        "v": 3.4839,
         "unit": "mm",
-        "conf": "design",
-        "src": "the rack of digit i + 1 stays outside drum i's 18 mm rib-tip circle (16.9 + 1.25 - 36.5 = -18.35)"
-      }
-    },
-    "result": {
-      "einzahn_radius": {
-        "v": 10,
-        "unit": "mm",
-        "conf": "design",
-        "src": "capsule-contact solve"
-      },
-      "einzahn_pin_radius": {
-        "v": 1.5,
-        "unit": "mm",
-        "conf": "design",
-        "src": "contact solve"
-      },
-      "einzahn_angle": {
-        "v": 180,
-        "unit": "deg",
-        "conf": "design",
-        "src": "pin crosses the S-F line at v = 9.5"
-      },
-      "einzahn_pin_y": {
-        "v": [
-          72,
-          79
-        ],
-        "unit": "mm",
-        "conf": "design",
-        "src": "layout of one digit along Y (front to back), shared by every digit"
+        "conf": "doc",
+        "src": "The knob's spindle (and its pinion) stands 9.5 from the drum axis: BADUR2026 Pos. 28 'Achsabstand mit Zahnstange H, A = 9.5' (the plan view measured 8.7); pitch line = 9.5 - pinion pitch radius 6.016. The rack teeth are cut along the top of an upright wall on the drum axis's head (Abb. II 9 'v' in WALSDORF2014; NL183/466 PLAN p. 9). Before 0.7.0: 16.9, a rack beside the drum."
       }
     },
     "carry_store": {
       "offset_xz": {
         "v": [
-          -17.119,
-          5.562
+          -18.25,
+          0.0
         ],
         "unit": "mm",
-        "conf": "design",
-        "src": "18 mm from the result shaft at 162 deg (toward the next higher digit, -X); capsule-contact solve (sandbox/2026-10-17 notes in design/m0-notes.md)"
-      },
-      "horns": {
-        "v": 5,
-        "unit": "count",
         "conf": "doc",
-        "src": "Fünfhorn (LUDWIG2006, STEIN16)"
-      },
-      "horn_width": {
-        "v": 2.0,
-        "unit": "mm",
-        "conf": "design",
-        "src": "contact solve"
-      },
-      "horn_y": {
-        "v": [
-          75,
-          78
-        ],
-        "unit": "mm",
-        "conf": "design",
-        "src": "layout of one digit along Y (front to back), shared by every digit"
-      },
-      "horn_length": {
-        "v": 5.925,
-        "unit": "mm",
-        "conf": "design",
-        "src": "capsule horn (segment length from the store axis, radius horn_width/2) solved for an exact 18 deg push; min clearance 0.61 mm at rest and during completion"
+        "src": "BADUR2026 'Einzelteile 2' (register frame: the 15 intermediate shafts half-way between the 16 result shafts, at the same height) and Detail E (centre distance 18.25). Before 0.8.0: 18 mm at 162 deg (17.119 across, 5.562 up), a contact solve."
       }
+    },
+    "carry": {
+      "v": {
+        "module": 1.25,
+        "profile_shift": -0.2,
+        "centre_distance": 18.25,
+        "lever_below_store": 21.6,
+        "five_horn": {
+          "thickness_factor": 1.0,
+          "addendum": 0.0,
+          "hollow_radius": 6.5,
+          "join_radius": 10.5,
+          "hub_radius": 5.0,
+          "thickness": 2.0
+        },
+        "ten_wheel": {
+          "thickness_factor": 0.9,
+          "addendum": 0.6,
+          "dedendum": 1.25,
+          "thickness": 2.5,
+          "first_tooth": 0.0
+        },
+        "einzahn": {
+          "ring_radius": 4.6,
+          "tooth_radius": 6.25,
+          "tip_half_width": 0.25,
+          "included_angle": 30.0,
+          "thickness": 2.5,
+          "tooth_local": 198.0
+        },
+        "zweihorn": {
+          "hub_radius": 4.5,
+          "neck_radius": 9.0,
+          "tip_radius": 11.8,
+          "root_half_width": 2.4,
+          "neck_half_width": 1.3,
+          "tip_half_width": 0.8,
+          "tip_corner_radius": 0.2,
+          "thickness": 1.8
+        },
+        "detent": {
+          "radius": 10.5,
+          "middle_depth": 2.4,
+          "outer_depth": 2.9,
+          "point_width": 0.1,
+          "thickness": 4.0,
+          "spring_gap": 0.15
+        },
+        "p_phase": 0.0,
+        "s_phase": 18.0,
+        "transfer_crossing": 36.0,
+        "ripple_star": {
+          "tip_radius": 4.8,
+          "tip_half_width": 0.2,
+          "tip_corner_radius": 0.08,
+          "root_radius": 2.6,
+          "root_half_width": 1.2,
+          "hollow_radius": 2.1
+        },
+        "ripple_zweihorn": {
+          "hub_radius": 4.5,
+          "neck_radius": 11.0,
+          "tip_radius": 17.65,
+          "root_half_width": 2.0,
+          "neck_half_width": 0.9,
+          "tip_half_width": 0.2,
+          "tip_corner_radius": 0.08,
+          "thickness": 1.8
+        },
+        "ripple_stage_margin": 0.2
+      },
+      "unit": "mm",
+      "conf": "doc",
+      "src": "BADUR2026, part drawings 'Einzelteile 3' (Pos. 17 Zahnrad B, the small ten-wheel: z 10; Pos. 18 Ein-Horn: z 1 of 10; Pos. 19 5-Horn: z 5 of 20, tip 24.5, hollows R 6.5, 2 thick; Pos. 20 Rastrad: 21 across, notches 18 deg apart, middle 2.4 and outer 2.9 deep, points 0.1; Pos. 21 2-Horn: 25.2 across the horns, tips shaped like the five-horn's teeth with R 0.2 corners, hub R 4.5, 2 thick), all m 1.25, alpha 20 deg, profile shift about -0.25 mm; Detail E: centre distance five-horn to ten-wheel 18.25. 'Einzelteile 2' (register frame): result and intermediate shafts alternate every 18.25 at one height. Assembly drawing, section L-M: the Zweihorn's axis 21.6 below the five-horn's (the lever 4.9 above the drum axis, as on sheet 9), and section N-O (ten-wheel, five-horn, detent wheel and spring, Einzahn). Design values: join_radius (where a horn's tooth flank meets its hollow), the ten-wheel's and the five-horn's tooth thickness factors (backlash), the Einzahn's ring radius, the Zweihorn horn's neck and root widths, the horns' thickness (two horns in two planes, see geometry.m2.carry_planes). Phases: p_phase 0 (at rest a horn of p points at its own result shaft), s_phase 18 (s's hollow faces the Zweihorn, as in section L-M), the Einzahn's tooth at 198 deg in its wheel's frame (18 deg past the line to its store at digit 0, 18 deg before it at digit 9), the ten-wheel's first tooth at 0; transfer_crossing 36: a horn of p crosses the line to the next result shaft at store 36 deg, turning the ten-wheel 36 deg while the store turns 27..45. These are design values chosen so that every part clears every other in every state (2D check and the collision sweep): Badur's section N-O draws the Einzahn on the line at digit 0, which leaves a stored horn in the tooth's path when the wheel turns on. Deviation: the Zweihorn's horns reach 11.8 (Ø23.6, not Badur's 25.2) with tips 1.6 wide, so that they pass 0.25 mm under a stored five-horn when the carriage shifts with a carry waiting (the original shifts over waiting carries, decision 0002); with our approximated horn outline the full 12.6 would touch it. The ripple set (our design, 2026-11-25, design/v1.3-notes.md): for the ripple carry the Zweihorn and the front five-horn s are exchanged for a long thin Zweihorn (reach 17.65, tip 0.4 wide) and a small five-horned star s' (horns 4.8 long, tapering from 2.4 at the root to a 0.4 tooth tip, R hollows between them), on the same shafts but behind the drum axes' rear end (geometry.m2.carry_planes.ripple_*): at the front the long horn would pass 1.25 mm from each drum axis. The horn strikes s' near its hub, so a carry stage (first touch to the next wheel's step done) takes 5.8 deg of crank instead of 27; eight levers staggered by that plus ripple_stage_margin (7.3 deg) fit between the ribs and the end of the turn. The margin (1.5 deg, unit deg) lets the Einzahn and the detent spring bring the next store to 18 before the next lever's horn comes near: a store still turning (0..18) lies in that horn's path, and with 0.2 deg the horn met it 0.2 mm deep (collision sweep); 1.5 leaves 0.17 mm (2D check against the simulated store). A horn passes a resting s' with 0.19 mm, and every lever's resting horns clear resting and waiting stores when the carriage shifts (2D study).",
+      "note": "Replaces the M1 carry of our own solving (capsule horns, Einzahn pin, Zweihorn pins; 2026-10, design/m1-notes.md) in params 0.8.0."
     },
     "m1": {
       "_note": "The carry parts of every digit, shared by the full machine (build_m2.py and kinematicsM1.js read them under this M1 prefix, after the milestone that introduced them): carry execution (Zweihorn -> Fünfhorn), carry transfer (Muldenrad teeth -> star on the next result shaft) and the drive chain. Digit i sits at x = -digit_pitch * i. Values solved numerically (design/m1-notes.md). The full machine's planes along Y are in geometry.m2.",
@@ -615,18 +633,18 @@
         "src": "NL183/465 p. 87, 120; /466 PLAN p. 6 (Bild 1: half a digit pitch from the result axis)"
       },
       "lever_axis_z": {
-        "v": 44.0,
+        "v": 42.775,
         "unit": "mm",
-        "conf": "design",
-        "src": "Zweihorn solve: rest clearance 1.39 mm, push 18->40 deg in 5.2 deg of crank, release at 54 deg",
-        "note": "NL183/465 p. 87 puts the lever 4.9 mm above the drum axis, with fingers on radius 14.65; that moves the carry geometry and its timing, which stay as designed until decision 0001 is revisited (design/m4-notes.md, D3, phase 3)."
+        "conf": "doc",
+        "src": "drum axis + 4.9 (BADUR2026 sheet 9: lever holes 4.9 above the drum holes; assembly drawing section L-M: 21.6 below the five-horn = 26.5 - 4.9; NL183/465 p. 87, the replica alike). Before 0.8.0: 44 (6.125 above, from the M1 Zweihorn solve).",
+        "note": "The lever shaft passes the drums' rib tips 18.9 from their axes: shaft radius 1.2 leaves 0.2 mm (geometry.m2.lever_shaft_radius)."
       },
       "drive_gear_teeth": {
         "v": 10,
         "unit": "count",
         "conf": "doc",
         "src": "NL183/465 p. 53, 64 (gears V and S, z 10, m 2)",
-        "note": "Equal drum and lever gears, module = centre distance / 10: 1.925 at our 19.25 mm (the replica's 18.9 mm comes with the lever 4.9 mm above the drum axis, phase 3 of design/m4-notes.md). Lehmann likewise takes the pitch diameter equal to the centre distance (\"d0 = a\")."
+        "note": "Equal drum and lever gears, module = centre distance / 10: 1.925 at our 19.25 mm (the replica's 18.9 mm comes with the lever 4.9 mm above the drum axis, phase 3 of design/m4-notes.md). Lehmann likewise takes the pitch diameter equal to the centre distance (\"d0 = a\"). Since 0.6.0 the row stands at the front (geometry.m2.drive_row)."
       },
       "drive_gear_tip_diameter": {
         "v": 22.9,
@@ -639,82 +657,6 @@
         "unit": "-",
         "conf": "design",
         "src": "tooth thickness at the pitch circle / half the pitch; with 10 teeth and a 22.9 tip, 1.0 leaves no backlash and 0.95 leaves 0.14 mm at the tightest point of a turn (2D sweep, 2026-10-29)"
-      },
-      "drum_gear_collar": {
-        "v": {
-          "diameter": 14.0,
-          "length": 5.0
-        },
-        "unit": "mm",
-        "conf": "doc",
-        "src": "NL183/465 p. 53, 64 (gear S: 7 wide plus a 5 mm collar, hub 14, on the 8 mm drum axle)",
-        "note": "In M2 it stops 0.5 mm short of the Zweihorn pins (y 91.5), so it is 4 mm long there."
-      },
-      "zweihorn_pin_path_radius": {
-        "v": 17.0,
-        "unit": "mm",
-        "conf": "design",
-        "src": "Zweihorn solve"
-      },
-      "zweihorn_pin_radius": {
-        "v": 1.0,
-        "unit": "mm",
-        "conf": "design",
-        "src": "Zweihorn solve"
-      },
-      "zweihorn_arm_width": {
-        "v": 3.0,
-        "unit": "mm",
-        "conf": "design",
-        "src": "visual"
-      },
-      "fuenfhorn_horn_length": {
-        "v": 7.5,
-        "unit": "mm",
-        "conf": "design",
-        "src": "Zweihorn solve (capsule segment length)"
-      },
-      "fuenfhorn_horn_radius": {
-        "v": 1.0,
-        "unit": "mm",
-        "conf": "design",
-        "src": "Zweihorn solve (capsule radius)"
-      },
-      "fuenfhorn_hub_radius": {
-        "v": 2.0,
-        "unit": "mm",
-        "conf": "design",
-        "src": "Zweihorn solve"
-      },
-      "muldenrad_module": {
-        "v": 1.34422,
-        "unit": "mm",
-        "conf": "design",
-        "src": "virtual 20-tooth wheel meshing a 10-tooth star: centre distance 20.163 (store to the next result shaft at the 36.5 mm pitch) = 3 x star pitch radius; 2:1 (18 deg store -> 36 deg wheel, LUDWIG2006)"
-      },
-      "muldenrad_virtual_teeth": {
-        "v": 20,
-        "unit": "count",
-        "conf": "design",
-        "src": "see module"
-      },
-      "muldenrad_crossing_store_angle": {
-        "v": 36,
-        "unit": "deg",
-        "conf": "design",
-        "src": "teeth cross the line to the next result shaft at store 36 (+72k), symmetric for carry (+) and borrow (-); stub teeth keep contact within store 27..45"
-      },
-      "star_teeth": {
-        "v": 10,
-        "unit": "count",
-        "conf": "design",
-        "src": "one tooth per digit step"
-      },
-      "transfer_tooth_addendum": {
-        "v": 0.5,
-        "unit": "module",
-        "conf": "design",
-        "src": "Muldenrad/star teeth: with 0.6 a stored (18 deg) Muldenrad tooth flank dips into the next star's swept circle while that star still turns under its ribs (M1 sweep). 0.5 gives 0.4 mm clearance; contact ratio 0.82"
       }
     },
     "m2": {
@@ -731,79 +673,136 @@
         "conf": "doc",
         "src": "STEIN16, TUD"
       },
-      "drive_gear_y": {
-        "v": [
-          80.0,
-          87.0
-        ],
-        "unit": "mm",
-        "conf": "design",
-        "src": "as M1"
-      },
-      "muldenrad_y_planes": {
-        "v": [
-          [
-            84.0,
-            87.0
+      "drive_row": {
+        "v": {
+          "drum_gear_width": 4.0,
+          "drum_gear_y_at_9": -26.675,
+          "long_gear_y": [
+            -55.28,
+            -22.43
           ],
-          [
-            88.0,
-            91.0
+          "drum_sleeve_radius": 4.5,
+          "shaft_front_y": -103.5,
+          "bearing_bar_y": [
+            -104.0,
+            -101.0
+          ],
+          "bearing_bar_z": [
+            25.375,
+            51.875
+          ],
+          "counter_shaft_back_y": -22.93,
+          "bearing_bar_x_margins": [
+            33.0,
+            44.5
           ]
-        ],
+        },
         "unit": "mm",
         "conf": "design",
-        "src": "alternate by digit parity"
+        "src": "The 17-gear drive row at the front of the carriage (design/v1.3-notes.md, 2026-11-24): BADUR2026 sheet 9 (17 bearing holes in the carriage frame, half a place apart: 8 drum shafts, 8 carry-lever shafts, a 17th shaft half a place right of the units drum), Abb. II 9 in WALSDORF2014 (a long drive gear on the lever's shaft, the drum's gear beside the setting rack), BURKHARDT1897 (17 gears; the drums' gears slide along long 'drive cylinders'), NL183/466 PLAN p. 9 (Lange 1958, drawn from the original: upright gears meshing in the carriage's front trough). The gears, tooth for tooth, are the replica's (geometry.m1.drive_gear_*). Each drum's gear sits on a sleeve in front of the drum and slides with it (drum_gear_y_at_9: its front face at setting 9; 28.35 mm further back at 0) along the long gear on the lever shaft to its left; the 17th shaft has a long gear too. The bearing bar is the carriage frame's front wall (sheet 9, 333 long: drum 7's hole 33 from its left end, the units drum's 288.5, so it reaches 44.5 right of the units drum; drum holes 12.5 above its lower edge, about 26.5 high); its thickness and y are design values. Front to back (Abb. II 9, Lange 1958, the Dresden replica photo): large gears, the drum axes' heads with the setting racks and the knobs' pinions, the drive row, the drums: the long gears end just in front of the drums.",
+        "note": "The y planes: front panel -112..-109, large gears -108.6..-104.6, bearing bar -104..-101, setting heads (sliding, front -99.3 at setting 0), the knobs' pinions at -63.1, long gears -55.3..-22.4 with the drums' gears, the result discs -21.9..-18.9, s and the Zweihorn -18.4..-14.4, the drums (front -9.9 at setting 0 .. 18.4 at 9)."
       },
-      "fuenfhorn_y": {
-        "v": [
-          92.0,
-          95.0
-        ],
+      "setting_head": {
+        "v": {
+          "sleeve_radius": 5.5,
+          "wall_x0": -2.0,
+          "teeth_z": [
+            56.5,
+            61.5
+          ],
+          "gap_to_drum_gear": 0.3
+        },
         "unit": "mm",
         "conf": "design",
-        "src": "plane C"
+        "src": "The head of each drum axis (Abb. II 9 'v', WALSDORF2014; Lange's cut-away, NL183/466 PLAN p. 9): a brass sleeve on the front of the axis, sliding with the drum, with an upright wall whose top carries the rack teeth, pointing right; the knob's pinion lies flat beside the top of the wall. Its teeth sit above the lever shafts (z 42.5-45.5) and the long gears (tips to 55.5). Sizes are design values."
       },
-      "zweihorn_add_arm_y": {
-        "v": [
-          95.6,
-          96.6
-        ],
+      "carry_planes": {
+        "v": {
+          "pair": [
+            [
+              38.0,
+              40.0
+            ],
+            [
+              52.0,
+              54.0
+            ]
+          ],
+          "mesh_overhang": 0.25,
+          "detent": [
+            56.0,
+            60.0
+          ],
+          "s": [
+            -13.43,
+            -11.43
+          ],
+          "zweihorn": [
+            -13.33,
+            -11.53
+          ],
+          "ripple_s": [
+            63.0,
+            65.0
+          ],
+          "ripple_zweihorn": [
+            63.1,
+            64.9
+          ],
+          "store_shaft_front": -13.3,
+          "lever_shaft_radius": 1.2,
+          "frame_bar": {
+            "y": [
+              60.3,
+              62.5
+            ],
+            "z": [
+              50.0,
+              78.0
+            ]
+          }
+        },
         "unit": "mm",
         "conf": "design",
-        "src": "adding horn arm plane"
+        "src": "Planes along Y (front to back) of the carry, behind the result discs (to 73.7): the five-horn p of store k with the Einzahn of wheel k and the ten-wheel of wheel k+1 in pair[k % 2] (the three meshing parts in one plane, neighbours alternating, as the replica's Muldenrad planes did); the detent wheel; the five-horn s with the Zweihorn's two horns, each in its own plane so the carry switch can turn them apart (the original's Zweihorn is one 2 mm part). Abb. II 9 (WALSDORF2014) draws s and the Zweihorn at the front, in front of the drums: in our layout the Zweihorn's 25.2 sweep would reach the drum's axis there (18.9 from the lever), so they stand behind the drum axes' rear end (80.5), as all the carry parts did before. The lever shaft is 1.2 in radius where it passes the drums' rib tips (0.2 mm). 2026-11-25: the two pair planes spread to 6 mm apart (Abb. II 9 draws o and r well apart on a shaft), and a bar of the register frame (BADUR2026 'Einzelteile 2', Zaehlwerkrahmen Pos. 3: one hole per shaft, 18.25 apart, and small holes for studs) between the detent wheels and s, through which the result and intermediate shafts pass and which carries the detent springs' studs; its section here (3 thick, 28 high) is a design value. 2026-11-25: s and the Zweihorn moved to the front, just behind the result discs and in front of the drums at their most forward (setting 0), as Abb. II 9 draws them; the intermediate shaft runs from s to the pentagon. 2026-11-25: the register made about as deep as the carriage (the TSD photo of Lehmann's replica, Brandt's Abb. II 5), the two depths 14 mm apart as Abb. II 9 spaces o and r, over the drums (p clears a drum's rib tips by 2.4 mm across the digit, the Einzahn and ten-wheel by 2.2). 2026-11-25: the ripple set (our design, design/v1.3-notes.md) stands behind the drum axes' rear end (57.5), where its long Zweihorn (17.65) turns clear of them: at the front it would pass 1.25 mm from each drum axis, through the sleeve and the shaft. The frame bar moved forward for it from 57-60 to 55.3-57.5 (0.3 behind the detent wheels, 7 above the carriage's rear bearings, which reach z 42.9). 2026-11-25 (owner: readable digits): the result dish is 8 deep, not Badur's 3, with digits 6.6 high on its rim (as on the setting dials), facing up at the window; everything behind the dishes (s and the Zweihorn, the drums through the receiving gear, the carry's planes, the frame bar, the ripple set, the rear wall, the pentagons, the register cover's end, the carriage's rear bearings and floor) moved 5 mm back to make room. No contact or mesh changes: only distances along the shafts (design/v1.3-notes.md). 2026-11-25: each lever's Zweihorn is one part with its two horns (BADUR2026 Pos. 21, Abb. II 9 't'), in one plane inside its five-horn's (s 2 thick, the Zweihorn 1.8, 0.1 inside each face), for both carry sets; the horns were two parts in two planes since v1.2.0, when switching the carry turned them apart. The 2 mm freed behind s and s' stay free."
       },
-      "zweihorn_sub_arm_y": {
-        "v": [
-          97.2,
-          98.2
-        ],
+      "large_gears": {
+        "v": {
+          "teeth": 61,
+          "y": [
+            -108.6,
+            -104.6
+          ],
+          "lever_shafts": {
+            "A": 6,
+            "C": 1
+          },
+          "spokes": 3,
+          "rim_width": 5.0,
+          "hub_radius": 8.0,
+          "spoke_width": 7.0
+        },
         "unit": "mm",
-        "conf": "design",
-        "src": "subtracting horn arm in its own plane: high levers' spreads shrink to ~29 deg (M1 notes)"
-      },
-      "zweihorn_pin_y0": {
-        "v": 91.5,
-        "unit": "mm",
-        "conf": "design",
-        "src": "pins reach into plane C from their arm planes"
+        "conf": "doc",
+        "src": "Three large gears behind the Magna Rota, A, B, C (NL183/465 p. 58, 61, 62: z 61, m 1.5, 5 mm brass, three spokes; NL183/466 PLAN p. 9, Lange 1958: B-C 91.38 apart). B on the crank's axis (drum 4), A and C on the carry levers' shafts 2.5 places either side (A on lever 6, C on lever 1: A, B, C from left to right as Lange labels them; which way his drawing faces is not certain, and it does not matter for the motion): the centre distance sqrt(91.25^2 + dz^2) matches Lange's 91.38. A, B and C must have equal teeth: drums and levers both turn once per crank turn (design/v1.3-notes.md).",
+        "note": "Module = centre distance / teeth: with the model's lever 6.125 above the drum axis (geometry.m1.lever_axis_z) the centre distance is 91.455, m 1.4993; Lehmann's lever is 4.9 above (91.38). Thickness 4 here (5 on the replica) to fit between the front panel and the base board."
       },
       "rear_wall_y": {
         "v": [
-          99.0,
-          102.0
+          68.0,
+          71.0
         ],
         "unit": "mm",
         "conf": "design",
-        "src": "full width; carries the front bar and window plate"
+        "src": "behind the carry group; the register about as deep as the carriage (2026-11-25; was 99-102)"
       },
       "carriage_floor": {
         "v": {
           "x_margin_right": 26.75,
           "x_margin_left": 50.75,
           "y": [
-            -109,
-            79
+            -104,
+            66.0
           ],
           "z": [
             4.3,
@@ -812,8 +811,20 @@
         },
         "unit": "mm",
         "conf": "design",
-        "src": "the carriage frame, 333 long (BADUR2026): from the hood's left end, 50.75 left of knob 7, to 26.75 right of knob 0, just right of digit 0's setting pinion; slides on the base plate. Modelled as a plate; the frame's 25 mm height is not.",
+        "src": "the carriage frame, 333 long (BADUR2026): from the hood's left end, 50.75 left of knob 7, to 26.75 right of knob 0, just right of digit 0's setting pinion; slides on the base plate. Modelled as a plate; the frame's 25 mm height is not. Since 0.6.0 it starts at y -104, behind the large gears.",
         "note": "NL183/465 p. 47 puts the replica's carriage walls 38.25 and 37.25 mm from the end drums (48.75 and 26.75 from the end knobs, p. 27). The model's floor ends at the knobs as photographed (60 mm left of knob 7) on the left, and 4 mm short of the right side wall's lead-screw notch on the right."
+      },
+      "carriage_rear": {
+        "v": {
+          "bearing_y": [
+            58.0,
+            61.0
+          ],
+          "drum_shaft_back": 62.5
+        },
+        "unit": "mm",
+        "conf": "design",
+        "src": "the drums' rear bearings just behind the drums' rearmost position (51.9 at setting 9, with the boss); the carriage ends in front of the register's rear wall (2026-11-25; was 74-78 and 80.5)."
       },
       "carriage_front_panel_y": {
         "v": [
@@ -827,89 +838,71 @@
       "carriage_front_panel_z": {
         "v": [
           -15.0,
-          94.0
+          82.0
         ],
         "unit": "mm",
         "conf": "design",
         "src": "front 111 mm high with the cover (BADUR2026; 121 from the photos before): it hangs below the carriage floor, in front of the base plate"
       },
-      "carriage_counter_section": {
+      "carriage_front_wall": {
         "v": {
-          "top_dx": 50.0,
-          "top_z": 84.0,
-          "step_dx": 112.0,
-          "end_dx": 137.75,
-          "step_z": 30.0,
-          "dial_from_knob0": 73.0,
-          "dial_radius": 34.75,
-          "dial_inner_radius": 22.5
+          "x0_dx": 13.3,
+          "y1": -95.0,
+          "top_z": 97.0,
+          "thickness": 2.0
         },
         "unit": "mm",
         "conf": "design",
-        "src": "right part of the carriage (photo overlay 2026-10-18): from digit 0 + top_dx its top is 12 mm lower (cover at top_z); full height to digit 0 + step_dx, then only the part above step_z to digit 0 + end_dx, so it passes over the frame's right end at offset 0 (step_z clears the lead screw). The revolution-counter dial plate sits on the lower top, dial_from_knob0 right of knob 0 (NL183/465 p. 51, 52: 73 from the 8th setting station to the dial centre; the photo fit gave 79) 2026-11-24: the hood ends 137.75 right of knob 0 (444 long, BADUR2026); the dial is the original's revolution-counter ring, 69.5 outside and 45 inside (BADUR2026), still static (the counter is v1.3.0, decision 0002).",
-        "note": "The dial plate is static: the counter is not modelled, the Magna Rota counts the turns."
+        "src": "The short wall along the front of the carriage's top (owner's schematic design/drawings/carriage-box-schematic.svg, from the photo of the original, Commons Leibniz_Rechenmaschine_(1690).jpg): it rises 13 above the top, from x0_dx right of the carriage's left end to the counter's section (top_dx), 17 deep (to y1); the Magna Rota's top (z 96.1) is just under its top, and the large gears behind the front panel (up to z 90) stand inside it. With it the front is 112 high (BADUR2026: 111). Sizes from the schematic at the Magna Rota's scale."
       },
-      "knob_plate_z": {
-        "v": 98.0,
+      "ripple_frame": {
+        "v": {
+          "ridge_width": 4.27,
+          "ridge_height": 1.1,
+          "thin_ridge_width": 3.0,
+          "thin_ridge_height": 0.8,
+          "samples": 6,
+          "base": 0.2,
+          "magna_rota_gap": 3.5
+        },
         "unit": "mm",
         "conf": "design",
-        "src": "on the carriage cover (z 94-96)"
+        "src": "The moulded frames on the carriage box (owner's schematic design/drawings/carriage-box-schematic.svg; photos of the original and TSD (02) of the replica): three convex ridges side by side, like an oil painting's frame; on the front: left of the Magna Rota, right of it to the counter's section, and round the counter section's L-shaped front; on the counter's top two thinner ridges on three sides (left, right, front; none at the back, TSD (02)). Ridges by eye: the schematic draws a frame as 6 bands, 12.8 wide (3 ridges, owner)."
+      },
+      "carriage_counter_section": {
+        "v": {
+          "top_dx": 33.0,
+          "top_z": 84.0,
+          "step_dx": 82.25,
+          "end_dx": 137.75,
+          "counter_dx": 82.25,
+          "step_z": 30.0,
+          "counter_dy": -1.0
+        },
+        "unit": "mm",
+        "conf": "design",
+        "src": "right part of the carriage (photo overlay 2026-10-18): from digit 0 + top_dx its top is 12 mm lower (cover at top_z); full height to digit 0 + step_dx, then only the part above step_z to digit 0 + end_dx, so it passes over the frame's right end at offset 0 (step_z clears the lead screw). The hood ends 137.75 right of knob 0 (444 long, BADUR2026). The revolution counter's centre is counter_dx right of the units drum: BADUR2026's plan view puts it 64 mm right of the 17th drive shaft, which is half a place (18.25) right of the units drum (design/v1.3-notes.md); the replica's was 96.4 (NL183/465 p. 51, 52: 73 from the 8th setting station). top_dx moved from 50 to 44 so the counter's black numbers clear the step. counter_dy: the counter's centre 1 mm in front of the knobs' line, so its numbers stay under the hood. 2026-11-25: top_dx 44 -> 40.5, so that the step's wall stands clear of the counter's dial plate (its edge 42.35 right of the units drum). 2026-11-26 (owner's schematic design/drawings/carriage-box-schematic.svg and the photo of the original): the whole top at top_z, the knobs' part too, behind a short wall at the front (carriage_front_wall); top_dx 40.5 -> 33 (the short wall ends there; room for the counter top's left frame); step_dx 112 -> 82.25, the L's corner under the counter's centre.",
+        "note": "top_dx and step_dx are photo estimates; counter_dx is from Badur's plan view."
+      },
+      "knob_plate_z": {
+        "v": 82.0,
+        "unit": "mm",
+        "conf": "design",
+        "src": "flush with the carriage cover (z 82-84, lowered 12 behind the short front wall, owner 2026-11-26), in a round hole of it 0.4 wider than the plate (photos of the original and the replica: the plates lie in the cover's plane)"
       },
       "magna_rota_center": {
         "v": {
-          "x": -137.0,
-          "z": 35.5
+          "drum": 4
         },
-        "unit": "mm",
-        "conf": "design",
-        "src": "162 mm left of knob 0 and in the middle of the carriage front, as in the photos (photo overlay 2026-10-18)"
+        "unit": "index",
+        "conf": "doc",
+        "src": "The crank and the Magna Rota sit on drum 4's axis (counted from the units, 0-based): BADUR2026's plan view; his carriage frame's one large bore, 'Lagerbuchse B', about 145 mm from its end, drum 4 being at 142.5 (design/v1.3-notes.md). Before 0.6.0: x -137, z 35.5 from the photos (3.75 places)."
       },
       "magna_rota_radius": {
-        "v": 63.0,
+        "v": 58.25,
         "unit": "mm",
-        "conf": "design",
-        "src": "126 mm diameter, 5 mm more than the carriage front's height, as in the front elevation (pars_mobilis.magna_rota.diameter; photo overlay 2026-10-18)"
-      },
-      "magna_rota_ring_y": {
-        "v": [
-          -117.0,
-          -114.5
-        ],
-        "unit": "mm",
-        "conf": "design",
-        "src": "ring with 10 holes, turns 36 deg per crank turn"
-      },
-      "magna_rota_hole_radius": {
-        "v": 55.0,
-        "unit": "mm",
-        "conf": "design",
-        "src": "pin circle 55 (was 50): holes near the rim, digit rings inside, so the stop finger only spans the edge-to-hole band (digit_labels)."
-      },
-      "magna_rota_ring_hole_radius": {
-        "v": 6.0,
-        "unit": "mm",
-        "conf": "design",
-        "src": "the main crank shaft (r 3) passes through the ring"
-      },
-      "magna_rota_gear_ratio": {
-        "v": 10,
-        "unit": "turns of crank per dial turn",
-        "conf": "design",
-        "src": "one hole per operation (Leupold: the pin stops the dial after m operations)"
-      },
-      "main_crank": {
-        "v": {
-          "radius": 60.0,
-          "arm_y": [
-            -129.5,
-            -128.0
-          ],
-          "knob_y": -148.0,
-          "knob_radius": 5.5
-        },
-        "unit": "mm",
-        "conf": "design",
-        "src": "crank in the middle of the Magna Rota; arm in front of the pin heads; knob 60 mm out, near the ring's rim (front elevation about 65 mm), above the case floor"
+        "conf": "doc",
+        "src": "BADUR2026 (measured on the original): Ø116.5"
       },
       "lead_screw": {
         "v": {
@@ -926,124 +919,180 @@
           "inner_left": 28.5,
           "inner_right": 34.0,
           "side_wall": 10.0,
-          "end_bar_left": 11.0,
-          "end_bar_right": 8.0
+          "end_bar_left": 11.0
         },
         "unit": "mm",
         "conf": "doc",
-        "src": "NL183/465 p. 13, 47, 107-110 (610 between the side walls; register digit 15 is 28.5 from the crank-side wall, digit 0 is 34 from the other), p. 95, 99 (side walls 10 thick), p. 93 (lower frame 629: end bars 11 on the crank side, 8 on the other)",
+        "src": "Current (v1.3.0): end_bar_left places the lead screw's start; the right end bar is not built. NL183/465 p. 13, 47, 107-110 (610 between the side walls; register digit 15 is 28.5 from the crank-side wall, digit 0 is 34 from the other), p. 95, 99 (side walls 10 thick), p. 93 (lower frame 629: end bars 11 on the crank side, 8 on the other)",
         "note": "The lower frame's plan view is drawn with the front at the top, so its right end bar (11) is on the crank side, the left in the front view."
       },
       "frame": {
         "v": {
           "y": [
-            -106.0,
+            -104.0,
             112.0
           ],
-          "side_wall_low_z": 26.0,
-          "side_wall_y_split": 10.0,
+          "side_wall_low_z": 24.5,
+          "side_wall_y_split": 15.0,
           "side_wall_top_z": 70.0,
-          "screw_start_dx": -14.5
+          "screw_start_dx": -14.5,
+          "lower_frame": {
+            "a": {
+              "y": [
+                -97.0,
+                -89.5
+              ],
+              "z": [
+                0.0,
+                19.0
+              ]
+            },
+            "b": {
+              "y": [
+                57.5,
+                65.0
+              ],
+              "z": [
+                0.0,
+                13.7
+              ]
+            },
+            "c": {
+              "y": [
+                90.0,
+                96.0
+              ],
+              "z": [
+                0.0,
+                20.0
+              ]
+            },
+            "detent_hole_radius": 2.2,
+            "detent_hole_depth": 2.5,
+            "side_wall_back_y": 100.0,
+            "side_wall_back_z": 30.0,
+            "feet_y": [
+              -90.0,
+              86.0
+            ]
+          },
+          "carriage_runners": {
+            "front": {
+              "y": [
+                -101.0,
+                -89.0
+              ],
+              "z": [
+                20.3,
+                22.3
+              ]
+            },
+            "rear": {
+              "y": [
+                58.0,
+                61.0
+              ],
+              "z": [
+                15.0,
+                22.0
+              ]
+            },
+            "pad_gap": 0.3,
+            "rear_shoe_lip_y": [
+              65.3,
+              66.8
+            ],
+            "right_x_dx": 33.5,
+            "shoe_y": [
+              -89.0,
+              -87.5
+            ],
+            "shoe_z": [
+              12.0,
+              22.3
+            ],
+            "catch_dx": 20.0,
+            "knob_radius": 5.0,
+            "knob_y": [
+              -100.6,
+              -97.6
+            ],
+            "knob_z": 12.0
+          },
+          "rear_beam_z": [
+            58.0,
+            72.0
+          ],
+          "register_front_bar_y": [
+            15.0,
+            18.0
+          ]
         },
         "unit": "mm",
         "conf": "design",
-        "src": "base plate = the lower frame (frame_x), 629 long. The side walls are low (z <= side_wall_low_z) in front of side_wall_y_split, where the carriage's counter section passes over them (its underside is at z 30), and rise to side_wall_top_z behind it, under the register cover's skirt; the replica's walls likewise have a low front part and a tall rear block (NL183/465 p. 95). The lead screw runs in a notch in each wall's low part (the replica's screw passes through the walls). It starts screw_start_dx left of the base, outside the case's left wall, where the end crank is (photos). The end crank's arm sits 0.5 mm outside the case's left wall (screw_start_dx follows the 755 mm case)."
+        "src": "Current (v1.3.0): no base plate; the lower frame is beams a, b, c between the side walls, which carry the feet (lower_frame), and the carriage rides on a and b (carriage_runners). History: base plate = the lower frame (frame_x), 629 long. The side walls are low (z <= side_wall_low_z) in front of side_wall_y_split, where the carriage's counter section passes over them (its underside is at z 30), and rise to side_wall_top_z behind it, under the register cover's skirt; the replica's walls likewise have a low front part and a tall rear block (NL183/465 p. 95). The lead screw runs in a notch in each wall's low part (the replica's screw passes through the walls). It starts screw_start_dx left of the base, outside the case's left wall, where the end crank is (photos). The end crank's arm sits 0.5 mm outside the case's left wall (screw_start_dx follows the 755 mm case). Since 0.6.0 the base starts at y -104, behind the carriage's large gears, which hang below it. side_wall_low_z lowered from 26 to 24.5 in 0.7.0, under the carriage frame's bearing bar (z 25.375). 2026-11-26 (owner; TSD (02), TSD (13) of the replica, the photo of the original): the frame as beams: the lower frame of two side beams (under the side walls, the feet under their ends), a middle and a back beam (lower_beam_width wide, 4 high; the carriage slides on the middle one); a front beam just in front of the lead screw between the side walls, over the carriage's floor (front_beam: 0.6 clear of the counter's star wheel K, 0.5 of the setting racks, 0.7 of the floor); the rear wall slimmed to a beam carrying the result and intermediate shafts' rear bearings (rear_beam_z), with a post at each end up to the window plate. 2026-11-26, after Lehmann's sheets (NL183/465 p. 94 'Rahmen Unterteil', 104, 108; p. 102 the slide's angles; p. 105, 107, 113 the carriage's frame bars) and TSD (02), (10), (13): the lower frame is three upright steel beams between the side walls, no plate: a at the front (here just in front of the lead screw; 8 detent holes 36.5 apart in its top, 'Rastbohrungen 8x'), b right behind the carriage, c under the pentagons; the side walls carry the feet. The carriage rides on a and b on four shoes (owner: not on long bars, which would drag): its front bar (the drive row's bearing bar) has a foot 1.3 over a, a shoe at each end resting on a (pad_gap) with a lip behind it, and the detent catch with its knob at the left; its rear bearings stand on a bar 1.3 over b with a shoe at each end the same way (carriage_runners). Our beams are lower than Lehmann's 25 (a 19, b 13.7) to pass under the drums, and a stands where our carriage leaves room (lower_frame)."
       },
       "casing": {
         "v": {
-          "wall": 8.0,
-          "floor": 8.0,
-          "inner_x": [
-            -596.0,
-            143.0
-          ],
-          "inner_y": [
-            -154.0,
-            120.0
-          ],
-          "front_height": 18.0,
-          "register_cover_z": [
-            86.0,
-            87.5
-          ],
-          "register_cover_y0": 10.0,
           "carriage_cover_z": [
-            94.0,
-            96.0
+            82.0,
+            84.0
           ],
           "carriage_cover_y": [
             -112.0,
-            4.0
+            -24.0
           ],
-          "carriage_wall_z0": 30.0,
-          "register_cover_skirt_z0": 72.0,
-          "floor_top_z": -60.0,
-          "wall_top_z": 140.0,
-          "bearer_length": 50.0,
-          "register_cover_y1": 102.5
+          "carriage_wall_z0": 30.0
         },
         "unit": "mm",
         "conf": "design",
-        "src": "2026-11-24: outer 755 long (BADUR2026: the original's wooden case), 290 wide; inside from 9 mm left of the base board to 5 mm right of the carriage hood at offset 0. The register cover ends over the rear wall (register_cover_y1): the larger pentagons (z up to 86.1) would cut through it if it reached the back of the case. They stay out of sight behind the case's back wall. Earlier: oak case with brass cover plates (machine_spec: oak case, polished brass). Outer 806 x 290 mm, 182 mm high without the lid: the photos of the original give about 800 mm long (photo overlay 2026-10-18, design/m2-notes.md); the secondary sources give 970 x 300 x 250 mm with the lid. The mechanism stands on two oak bearers (34 mm) so the carriage front and the Magna Rota hang below the base plate, as in the 1892 photo. The end crank is outside the left wall. Register cover above the Muldenrad tips (84.4) and the rear wall (85); carriage cover on the front panel, under the knob plates (98); low front wall keeps the Magna Rota visible. No lid. Carriage cover ends at y 4, in front of the result-wheel shafts (y >= 6). Main crank (2026-10-18): the crank rests pointing down, so its knob (lowest z -30 at radius 60 around z 35.5) sits at the bottom of its sweep whenever it is at rest. The case floor is lowered from -34 to -60, with taller bearers, and the front wall top sits at -42: the knob clears it by 12 mm and the floor by 30 mm, so a hand can follow it round. Before, the knob ran in a 6 mm slot behind a wall 16 mm higher than its lowest point."
+        "src": "Current (v1.3.0): only the carriage's cover (carriage_cover_z, carriage_cover_y) and its end walls (carriage_wall_z0) remain here; the oak case and the register cover were removed and their sizes dropped. History: 2026-11-24: outer 755 long (BADUR2026: the original's wooden case), 290 wide; inside from 9 mm left of the base board to 5 mm right of the carriage hood at offset 0. The register cover ends over the rear wall (register_cover_y1): the larger pentagons (z up to 86.1) would cut through it if it reached the back of the case. They stay out of sight behind the case's back wall. Earlier: oak case with brass cover plates (machine_spec: oak case, polished brass). Outer 806 x 290 mm, 182 mm high without the lid: the photos of the original give about 800 mm long (photo overlay 2026-10-18, design/m2-notes.md); the secondary sources give 970 x 300 x 250 mm with the lid. The mechanism stands on two oak bearers (34 mm) so the carriage front and the Magna Rota hang below the base plate, as in the 1892 photo. The end crank is outside the left wall. Register cover above the Muldenrad tips (84.4) and the rear wall (85); carriage cover on the front panel, under the knob plates (98); low front wall keeps the Magna Rota visible. No lid. Carriage cover ends at y 4, in front of the result-wheel shafts (y >= 6). Main crank (2026-10-18): the crank rests pointing down, so its knob (lowest z -30 at radius 60 around z 35.5) sits at the bottom of its sweep whenever it is at rest. The case floor is lowered from -34 to -60, with taller bearers, and the front wall top sits at -42: the knob clears it by 12 mm and the floor by 30 mm, so a hand can follow it round. Before, the knob ran in a 6 mm slot behind a wall 16 mm higher than its lowest point. 2026-11-25: the carriage hood's top ends at y -24 (88 deep, not 116 from the photos) so the result windows behind it can be read; the register cover reaches forward to -23.6, with the windows over the discs at its front."
       },
       "digit_labels": {
         "v": {
           "result_disc_r": 17.35,
           "result_rim": [
             0.4,
-            0.5
+            0.0
           ],
           "result_disc_y": [
-            59.2,
-            73.2
+            -21.93,
+            -13.93
           ],
-          "result_glyph_size": 14.3,
+          "result_glyph_size": 6.6,
           "window_y": [
-            59.6,
-            72.8
+            -21.83,
+            -14.03
           ],
           "window_half_x": 6.3,
           "window_rail_y": [
-            55.0,
-            75.5
+            -23.4,
+            -10.0
           ],
           "read_half_size": [
-            4.0,
-            4.0
+            3.0,
+            3.3
           ],
-          "cover_opening_y": [
-            58.2,
-            74.2
-          ],
-          "cover_opening_half_x": 7.3,
-          "setting_plate_r": 18.0,
+          "setting_plate_r": 17.4,
           "setting_glyph_r": 14.3,
           "setting_glyph_size": 6.6,
-          "pointer_r": 10.5,
-          "magna_glyph_size": 13.0,
-          "magna_black_dr": -10.0,
-          "magna_red_dr": -23.0
+          "result_dish": {
+            "recess_r": 16.0,
+            "face": 1.0,
+            "hub_r": 5.0,
+            "band_edge": 0.45
+          }
         },
         "unit": "mm",
         "conf": "design",
-        "src": "TEACHING DEVIATION for the digits, not a documented size; the discs themselves are the original's (result disc 17.35 + its 0.4 rim = Ø35.5, setting plate Ø36, BADUR2026): the sources give no digit sizes (Leupold 1727 only says the digits are inscribed). Enlarged so the digits read on the whole 16-digit machine. Digit height = 0.70 x glyph size. Result: 10.0 mm digits (was 4.3) on a disc r 17.5 (was 15), 14 mm wide (was 8), between the drum end at y 58 and the store horns at y 75; window 12.6 x 13.2 mm leaves about 3 mm of white beside and 1.6 mm above/below the digit, and neighbouring digits stay out of view; adjacent rims 1.2 mm apart. Setting dials: 4.6 mm digits (was 2.7) on r 14.3, plate r 18 (was 17; plates 1 mm apart on the 37 mm pitch), pointer 10.5. Magna Rota: 9.1 mm digits (was 4.2); rings from the edge: holes r 55, black digits r 45, red digits r 32, so the stop finger never covers a digit. M0/M1 slices keep their sizes. Setting plate radius 17.75: NL183/465 p. 35 (setting dial 35.5)."
+        "src": "The result discs are the original's: BADUR2026 Pos. 32 (Zaehlerrad): 35.5 across, a dish: a rim ring about 3 deep (35.5 outside, a 32 recess inside, open to the front as in Brandt's Abb. II 5), a thin face plate at its back and a hub, the digits on the rim ring's outer face, digits 2.7 high punched round the rim, at the front end of the result shafts (Lange 1958, NL183/466 PLAN p. 9; Badur's plan view). The setting dials' glyphs remain a teaching deviation. Before 0.9.0 the discs were 14 wide with 14.3 digits, behind the drums. TEACHING DEVIATION for the digits, not a documented size; the discs themselves are the original's (result disc 17.35 + its 0.4 rim = Ø35.5, setting plate Ø36, BADUR2026): the sources give no digit sizes (Leupold 1727 only says the digits are inscribed). Enlarged so the digits read on the whole 16-digit machine. Digit height = 0.70 x glyph size. Result: 10.0 mm digits (was 4.3) on a disc r 17.5 (was 15), 14 mm wide (was 8), between the drum end at y 58 and the store horns at y 75; window 12.6 x 13.2 mm leaves about 3 mm of white beside and 1.6 mm above/below the digit, and neighbouring digits stay out of view; adjacent rims 1.2 mm apart. Setting dials: 4.6 mm digits (was 2.7) on r 14.3, plate r 18 (was 17; plates 1 mm apart on the 37 mm pitch), pointer 10.5. Magna Rota: 9.1 mm digits (was 4.2); rings from the edge: holes r 55, black digits r 45, red digits r 32, so the stop finger never covers a digit. M0/M1 slices keep their sizes. Setting plate radius 17.75: NL183/465 p. 35 (setting dial 35.5). 2026-11-25 (owner: readable digits): the result dish is 8 deep, not Badur's 3, with digits 6.6 high on its rim (as on the setting dials), facing up at the window; everything behind the dishes (s and the Zweihorn, the drums through the receiving gear, the carry's planes, the frame bar, the ripple set, the rear wall, the pentagons, the register cover's end, the carriage's rear bearings and floor) moved 5 mm back to make room. No contact or mesh changes: only distances along the shafts (design/v1.3-notes.md). The digits are black on a white band round the rim (as v1.2.0's white discs, which read best), with a gold ring 0.45 wide left at each edge (design)."
       },
       "explode": {
         "v": {
-          "frame.case": [
-            0,
-            0,
-            -120
-          ],
           "frame.base": [
             0,
             0,
             -70
-          ],
-          "frame.register_cover": [
-            0,
-            0,
-            120
           ],
           "pi.window": [
             0,
@@ -1051,6 +1100,16 @@
             70
           ],
           "pi.carry_store.*": [
+            0,
+            50,
+            30
+          ],
+          "pi.five_horn_s.*": [
+            0,
+            50,
+            30
+          ],
+          "pi.five_horn_sr.*": [
             0,
             50,
             30
@@ -1070,17 +1129,7 @@
             -40,
             0
           ],
-          "pm.magna_plate": [
-            0,
-            -80,
-            0
-          ],
           "pm.magna_rota": [
-            0,
-            -95,
-            0
-          ],
-          "pm.magna_pin": [
             0,
             -95,
             0
@@ -1104,6 +1153,26 @@
             0,
             0,
             45
+          ],
+          "pm.counter_plate": [
+            0,
+            0,
+            40
+          ],
+          "pm.counter_ring": [
+            0,
+            0,
+            55
+          ],
+          "pm.counter_pin": [
+            0,
+            0,
+            70
+          ],
+          "pm.counter_pin_park": [
+            0,
+            0,
+            40
           ]
         },
         "unit": "mm",
@@ -1112,21 +1181,393 @@
       },
       "pentagon": {
         "v": {
-          "circumradius": 20.0,
+          "circumradius": 21.029,
           "y_rows": [
             [
-              104.0,
-              106.0
+              86.35,
+              87.85
             ],
             [
-              109.0,
-              111.0
+              96.85,
+              98.35
             ]
           ]
         },
         "unit": "mm",
         "conf": "doc",
-        "src": "BADUR2026 (measured on the original): pentagons 40 across the corners. Adjacent stores are only 36.5 apart, so the pentagons stand in two staggered rows, even digits in front, odd behind (Lange 1958 via NL183/466 PLAN p. 9: '15 pentagon plates in two staggered rows'; the GWLB CAD model shows the same). Behind the rear wall; their top edges (z 86.1) are level with the register cover (z 86-87.5), just behind its back edge, so the oak case hides them. On the original they appear to rise above the register (GWLB CAD model): their height there is not measured and is asked for v1.3.0 (decision 0002)."
+        "src": "BADUR2026 (measured on the original): pentagons 40 across the two side corners (BADUR2026 Pos. 22, \"Fuenfeck\", 1.5 thick), circumradius 21.03. Adjacent stores are only 36.5 apart, so the pentagons stand in two staggered rows, even digits in front, odd behind (Lange 1958 via NL183/466 PLAN p. 9: '15 pentagon plates in two staggered rows'; the GWLB CAD model shows the same). Behind the rear wall; their top edges (z 86.1) are level with the register cover (z 86-87.5), just behind its back edge, so the oak case hides them. On the original they appear to rise above the register (GWLB CAD model): their height there is not measured and is asked for v1.3.0 (decision 0002). 2026-11-25: placed as on Badur's assembly drawing (plan view, scaled by the 36.5 digit pitch): the two rows 10.5 apart, as his two intermediate shafts' lengths differ (Pos. 23/24: 82.5 and 93 from the front end to the pentagon's shoulder), the front row about 17.6 and the back row about 28.1 behind the middle of the rear wall the shafts come through; 1.5 thick (Pos. 22). The TSD photographs of Lehmann's replica show the same: the shafts stand well out of the rear wall, the two rows clearly apart."
+      },
+      "end_crank": {
+        "v": {
+          "drawing": "design/drawings/end-crank-details.svg",
+          "axis_centre": [
+            521.0,
+            87.0
+          ],
+          "bar": "Crank",
+          "bar_half_width": 8.0,
+          "sleeve": {
+            "x": [
+              474.0,
+              509.0
+            ],
+            "radius": 26.0
+          },
+          "axis": {
+            "x": [
+              509.0,
+              521.0
+            ],
+            "radius": 20.0
+          },
+          "boss": {
+            "x": [
+              474.0,
+              489.0
+            ],
+            "radius": 22.1,
+            "centre_y": 98.9
+          },
+          "cap": "CrankHead1",
+          "wood": "HandleWoodPart",
+          "ball": "HandleMetalBallHead",
+          "handle_axis_y": 279.0
+        },
+        "unit": "drawing units (front view: x to the right, y down)",
+        "conf": "design",
+        "src": "The end crank as the owner drew it (design/drawings/end-crank-details.svg, after Brandt's Abb. II 5): a hub on the lead screw's end (Axis, AxisSleeve), a bent steel bar (Crank) from a boss under the hub (CrankHead2) down and outward to a rounded cap (CrankHead1), and the main crank's turned oak handle with its gold ball on an axis parallel to the screw, pointing away from the machine. No source gives its sizes: the drawing is at the Magna Rota drawing's scale (its handle is the same, 234.5 units long), so the crank's radius is 68 mm (was 55) and the handle the main crank's. The drawing's axis end (axis_centre) is the screw's end, inside the case's left wall; the side views give the bar's thickness (bar_half_width) and the boss's and the hub's circles."
+      },
+      "feet": {
+        "v": {
+          "board": {
+            "margin": 20.0,
+            "thickness": 18.0
+          },
+          "pad": [
+            16.0,
+            3.0
+          ],
+          "block": [
+            60.0,
+            25.0
+          ],
+          "profile": [
+            [7.0, 0.0],
+            [7.0, 1.5],
+            [6.0, 4.0],
+            [5.25, 4.6],
+            [5.25, 15.0],
+            [7.0, 16.0],
+            [8.5, 18.5],
+            [8.5, 21.5],
+            [7.0, 24.0],
+            [3.5, 25.0],
+            [3.5, 28.0],
+            [5.0, 30.5],
+            [9.0, 33.0],
+            [14.0, 34.8],
+            [16.5, 36.0],
+            [18.0, 37.5],
+            [18.0, 38.5],
+            [16.5, 40.0]
+          ]
+        },
+        "unit": "mm (profile: [radius, depth below the base plate])",
+        "conf": "doc",
+        "src": "NL183/465 p. 25 ('Fuesse', brass, 2 x 2): a turned foot 40 high under its M6 thread: a collar 14 across, a neck 10.5, a bead 17 (14 shoulders), a neck 7 flaring into a dished base 33/36 across and 8 thick (the Commons photo 'Die Rechenmaschine von Leibniz (Nachbau) 2001 07' and TSD (13) show it). The curves between the drawn diameters by eye from the photo. Two under each side wall, at lower_frame.feet_y (frame). Under each foot a wooden block (block: side, height; TSD (03): the replica stands on four such blocks), as low as lets the end crank's handle clear the board (2.8; the owner, 2026-11-27: lower blocks look steadier). A steel pad (pad: side, thickness) under the side wall at each foot: the foot's collar (14 across) is wider than the wall (10). The blocks stand on a wooden board (board: its margin beyond the blocks on every side, thickness; the main crank's handle reaches over its front edge), as the replica does in its museum; the oak case is not rebuilt (the owner: its walls would hide the mechanism)."
+      },
+      "magna_rota_crank": {
+        "v": {
+          "drawing": "design/drawings/magna-rota-details.svg",
+          "front_ref": "UnderPlate2",
+          "rod": "Rod",
+          "wood": "HandleWoodPart_2",
+          "ball": "HandleMetalBallHead_2",
+          "side_plate_front_x": 880.0,
+          "side_axis_y": 471.0,
+          "rod_side_x": [
+            881.0,
+            893.0
+          ],
+          "centre": {
+            "radius": 5.5,
+            "front_x": 905.0
+          },
+          "handle_axis": {
+            "z": -51.0,
+            "radius": 4.8,
+            "front_x": 905.0,
+            "pin_radius": 3.2,
+            "pin_front_x": 917.0
+          },
+          "bolts": {
+            "x": 51.0,
+            "z": 10.8,
+            "shank_radius": 1.5,
+            "nut_radius": 3.0,
+            "nut_front_x": 896.0,
+            "head_radius": 2.3,
+            "head_centre_x": 897.5
+          }
+        },
+        "unit": "mm",
+        "conf": "design",
+        "src": "The Magna Rota's crank as the owner drew it (design/drawings/magna-rota-details.svg, after Brandt's Abb. II 5 and photos of the replica; shapes simplified): a steel rod across the plate from the top rim down past the centre, shaped round the centre and in a waist, ending in a ring round the handle's axis inside the rim; a turned oak handle on that axis, standing out to the front, with a gold (brass) ball at its end; the plates held by two bolts left and right, nuts in front (the drawing's side view draws them through the plates: bolts, the owner, 2026-11-26). No source gives these sizes: the drawing is scaled so that its plate is the measured 116.5 across (front_ref), its side view by the same scale from the brass plate's front face (side_plate_front_x); the rod's outline, the handle's and the ball's profiles are read from the drawing, the rest are the drawing's sizes in mm, or its side-view x positions (front_x). The plates keep their own thicknesses (magna_rota_plates). The bolts' heads behind the back plate are left out: the plates stand 0.6 in front of the carriage's panel."
+      },
+      "magna_rota_plates": {
+        "v": {
+          "drawing": "design/drawings/magna-rota.svg",
+          "ids": [
+            "MagnaRota_Plate1",
+            "MagnaRota_Plate2",
+            "MagnaRota_Plate3"
+          ],
+          "y": [
+            [
+              -117.5,
+              -116.1
+            ],
+            [
+              -115.85,
+              -115.1
+            ],
+            [
+              -114.85,
+              -112.6
+            ]
+          ],
+          "materials": [
+            "brass_satin",
+            "steel",
+            "steel"
+          ],
+          "tolerance": 0.08
+        },
+        "unit": "mm",
+        "conf": "design",
+        "src": "the Magna Rota: three plates of Ø116.5 (BADUR2026) fixed to the crank, front to back: the pierced brass plate (after Badur's saw template for Pos. 70 and the photo of the original), and two steel plates (his sheet 7; plate 3 is his Pos. 69, about 2.5 thick, fixed to a hub with three screws). The owner's drawing gives their outlines and holes; the thicknesses are by eye, with 0.25 between the plates so that they read as three (owner, 2026-11-26), and the order of the two steel plates is assumed (design/v1.3-notes.md). The front plate is satin brass, so its rim stands out from the polished front panel; its curves are flattened to within 0.08 mm."
+      },
+      "counter": {
+        "v": {
+          "ring_radius": [
+            22.5,
+            34.75
+          ],
+          "ring_z": [
+            0.2,
+            1.8
+          ],
+          "hole_path_radius": 28.625,
+          "hole_radius": 1.6,
+          "centre_z": [
+            0.0,
+            1.0
+          ],
+          "black_r": 37.5,
+          "red_r": 19.75,
+          "glyph_size": 4.5,
+          "pin_radius": 1.4,
+          "pin_z": [
+            0.6,
+            9.0
+          ],
+          "stop": {
+            "finger_z": [
+              6.8,
+              7.8
+            ],
+            "gap": 0.15,
+            "strip_r": [
+              6.6,
+              39.3
+            ],
+            "tip_width": 5.0
+          },
+          "spindle_radius": 3.0,
+          "park_r": 46.0,
+          "dial_plate_radius": 39.9,
+          "pin_skirt": {
+            "z": [
+              2.0,
+              3.0
+            ],
+            "radius": [
+              4.0,
+              1.6
+            ]
+          },
+          "pin_head": {
+            "radius": 2.9,
+            "centre_z": 7.3
+          },
+          "park_deg": -45.0
+        },
+        "unit": "mm",
+        "conf": "design",
+        "src": "Current (v1.3.0): the centre's numbers are black (black_glyphs, at red_r: the key names are historical), the ring's outer ones red (at black_r); the ring turns anticlockwise seen from above when adding (js/scene/m2Pose.js); the stop is centred at the top (90 deg). History: the revolution counter on the carriage's lower right top, laid out like the Dresden replica's (Commons Die_Rechenmaschine_von_Leibniz_(Nachbau)_2001_06.jpg): a steel ring Ø69.5 / Ø45 (BADUR2026) with 10 holes turns 36 deg a crank turn, clockwise seen from above when adding; a fixed outer circle of black 0-9 on the plate, running anticlockwise from 0 at the stop; a fixed inner circle of red 0-9 on the brass centre, running clockwise; a stop bracket at the top between 0 and 9, over the ring into the pin's plane; a parking place for the pin at the bottom. The pin set at black m reaches the stop after m turns (LEUPOLD1727's procedure; WALSDORF2014: pin at 0, read the count). z from the cover's top; radii from the dial's centre. dial_plate_radius (design): the outer number circle is engraved in the carriage's top; the model cuts that part of the top out as a ring of the counter's fixed plate (from the drive sleeve's hole to just beyond the numbers, which end at 39.75; the hood's top ends 40.1 behind the centre), flush with the top, so that the numbers keep their plate when the case and frame are hidden. 2026-11-26 (owner; Badur's photo of the original, the Commons photo 'Die Rechenmaschine von Leibniz (Nachbau) 2001 06', Brandt's Abb. II 5): the centre is a turned tower of five rings with a small ball on top; the pin a flat cone on the ring with a neck and a big round head, its stem in the hole; the stop a tapered steel strip, its wide end held by two screws on the plate beyond the ring at the top, raised over the ring, its tip held by a screw on the brass centre beside the tower. Sizes by eye from the photos (design); the strip's width at the holes' circle sets where the pin stops. The strip's wide end stands on the dial plate (to 39.3): beyond it, behind the counter, the register begins. 2026-11-26 (owner, the same photos): the stop stands at the top, centred, half a step from the holes and the numbers on both sides (inner 9 on its left and 0 on its right, outer 0 on its left and 9 on its right): the holes at 72 + 36 k deg, the inner digit k at 72 - 36 k, the outer at 108 + 36 k. The strip is a wedge pointing at the centre, as wide where the holes' circle crosses it as the gap between two holes less the pin and the gap, so a pin in the hole beside it rests against it: after m turns adding (its right edge) and after 9 - m turned back (its left edge); its tip narrows to tip_width on the brass centre. Then narrowed (owner): its sides 10 deg from its middle line, as on the photos, clear of the pin's head in the hole beside it (about 1 mm) and of the inner 9 and 0; a pin beside it after m turns meets it part-way through the next turn, as the ring steps, so that turn is refused (and turned back likewise after 9 - m). Then (owner): the pin's head must hit it (Badur: the pin 'hits the stop at the top'): the strip stands at the height of the head's widest part (finger_z), its sides set so that a pin in the hole beside it rests with its head against it (0.15 off): 11.9 deg off its middle line. The inner (centre's) numbers stand as far inside the ring as the outer ones outside it (owner): radius 19.75. Put away (owner), it stands on the top at the ring's front right (46 out at -45 deg), not at the front edge, its cone on the top and its stem in a hole of the top like the ring's."
+      },
+      "counter_train": {
+        "v": {
+          "mn_centre_distance": 30.7,
+          "driver": {
+            "pitch_teeth": 8,
+            "thickness_factor": 0.85,
+            "hub_radius": 4.0,
+            "tooth_deg": 195.2,
+            "y": [
+              -99.3,
+              -96.7
+            ],
+            "addendum": 0.8
+          },
+          "k": {
+            "teeth": 15,
+            "module": 3.0,
+            "thickness_factor": 0.85,
+            "y": [
+              -99.4,
+              -96.6
+            ]
+          },
+          "j": {
+            "teeth": 15,
+            "module": 2.25,
+            "thickness_factor": 0.85,
+            "y": [
+              -76.4,
+              -74.4
+            ]
+          },
+          "l": {
+            "teeth": 10,
+            "module": 2.25,
+            "tooth_height": 4.85,
+            "r": [
+              9.6,
+              11.75
+            ],
+            "disc_z_above_pitch": [
+              2.4,
+              4.9
+            ]
+          },
+          "m": {
+            "teeth": 10,
+            "module": 3.0,
+            "shift_mm": 0.35,
+            "z": [
+              75.5,
+              78.5
+            ]
+          },
+          "detent_snap_deg": 6.0,
+          "sleeve_radius": [
+            22.65,
+            24.2
+          ],
+          "k_axle_lugs_y": [
+            [
+              -94.0,
+              -91.0
+            ],
+            [
+              -45.5,
+              -42.5
+            ]
+          ],
+          "traverse": {
+            "width": 24.0,
+            "length": 68.0,
+            "z": [
+              70.0,
+              73.0
+            ]
+          },
+          "leaf_deg": 75.0
+        },
+        "unit": "mm",
+        "conf": "design",
+        "src": "BADUR2026 sheet 'Einzelteile 8' (private; facts only): Zahnrad J (Pos. 42) steel, z 15, m 2.25, tip 38; Zahnrad K (Pos. 43) steel, z 15, m 3, tip 51; Teilrad L (Pos. 44) brass, z 10 with a rack profile m 2.25 cut on its face (36 deg, 7.07 mm pitch, teeth 4.85 high), Ø23.5; Zahnrad M (Pos. 45) brass, z 10, m 3, profile shift +0.35 mm, centre distance to Rad N 30.7. His assembly drawing: M lies flat under the counter, about 31 from its centre towards the 17th shaft; the counter 64 from that shaft. Burkhardt 1897: a single tooth on the 17th shaft steps a steel star wheel (axis front to back) once a turn, which turns a flat brass wheel and the ring. Design values (no source): the single tooth (one tooth of an 8-tooth m 3 gear, as Lehmann's replica steps its counter with a one-lobe cam of tip radius 15.4), K and J's axis under L and M's (the single tooth and K a gear pair apart), the planes along the shaft, N (z 10, m 3, as the 30.7 requires), K's detent (a spring leaf, drawn rigid), the bracket and the bearings. The single tooth and K turn just in front of the units drum's setting head (which sweeps y -96.1 to -27 as the setting changes) and behind the carriage's bearing bar; J at L's front edge."
+      },
+      "store_shaft": {
+        "v": {
+          "square": 6.0,
+          "square_y": [
+            -10.2,
+            59.9
+          ],
+          "journal_radius": 2.5,
+          "rear_journal_radius": 1.8,
+          "cuts_y": [
+            [
+              -8.8,
+              13.8
+            ],
+            [
+              19.2,
+              36.8
+            ]
+          ],
+          "cut_flat": 3.5
+        },
+        "unit": "mm",
+        "conf": "doc",
+        "src": "BADUR2026 Pos. 23/24 ('Welle 6/7', the intermediate shafts, steel): Ø5 journals, a square middle part 6 across waisted to about 3.5 (R 100), an M3 end for the pentagon's nut. The TSD photos of Lehmann's replica show the same waisted steel bars between the result discs and the pentagons. Ours: the square part carries s, the five-horn p and the detent wheel (y -10.2 to 59.9), its four edges cut away by long concave cuts (the flats narrowing from 6 to 3.5 in the middle of each cut, as on the TSD and Commons photos of Lehmann's replica), short square ends left at the parts and the front bar (design: our register is longer than Badur's, so the square part is too); a Ø5 front journal; behind the square part a Ø3.6 journal through the ripple set's plane, the frame bar and the rear wall to the pentagon (design, 2026-11-26: Badur's Ø5 covered the hollows of the ripple set's star s', whose bottom lies at radius 2.1)."
+      },
+      "setting_handle": {
+        "v": {
+          "angle_deg": 45.0,
+          "radius": 7.0,
+          "strip": [
+            2.5,
+            5.0
+          ],
+          "gap_deg": [
+            -85.0,
+            50.0
+          ],
+          "pointer": {
+            "tail_half": 3.0,
+            "tail_height": 5.5,
+            "width": 5.0,
+            "tip_r": 11.5,
+            "thickness": 2.5,
+            "pin_r": 9.0,
+            "pin_radius": 1.0,
+            "pin_length": 2.0
+          },
+          "nut": {
+            "radius": 4.0,
+            "height": 1.7,
+            "bevel": 0.45,
+            "below_centre": 1.3,
+            "knurls": 28
+          },
+          "plate": {
+            "hole_radius": 1.15,
+            "window_r": [
+              10.5,
+              15.8
+            ],
+            "window_half_width": 3.3,
+            "cover_gap": 0.4
+          },
+          "disc": {
+            "radius": 16.2,
+            "gap": 0.8,
+            "thickness": 1.2,
+            "glyph_r": 13.4,
+            "tab_r": 17.0,
+            "tab_half_width": 1.0
+          },
+          "stop_r": [
+            16.6,
+            19.0
+          ]
+        },
+        "unit": "mm",
+        "conf": "design",
+        "src": "The setting knob as on the replica (NL183/465) and the original (Badur's photo of its left edge): the handle is Lehmann's 'Fingerhebel (fuer Einstellwerk) (Teil m/2)' (p. 23), one steel part: a strip 6 wide and 2.5 thick bent up into a hook about 17 across, a body on the axle's square, and a pointer arm with a pointed tip and a pin (2 across, 2 proud) underneath that drops into a hole beside each digit of the cover plate (p. 53, detail A: holes at radius 10, digits at 14); the lever is lifted by the hook, turned and set down (not animated). Under the plate a brass digit disc (p. 35, 'Ziffernscheibe (Teil n)', clamped to the axle) turns with the knob and shows the set digit through a square window in the plate in the middle of the blank between 9 and 0, which faces the back (p. 53; Leupold 1727, Jordan 1897, Badur's Abb. II 1). The stop (p. 38, 'Anschlag f. Fingerrad') is hidden under the plate: a fixed lug in the blank that a tab on the disc meets at 0 and at 9. Our sizes (design): angle_deg is where the pointer points at 0 (CCW from +x, 45: 0 just right of the window, digits clockwise); C radius 7 over the strip's middle (17 across outside), strip 2.5 x 5; the black arm 5 wide and 2.5 thick, pointed (90 deg) at 11.5, on a 6 x 6 body 5.5 high; the pin at 9 under the arm; holes 2.3 across at radius 9; window 6.6 wide, 10.5-15.8 from the axle (its corners inside the disc) (Lehmann 5 square, 9.75-14.75, scaled to our larger digits); the plate (r 17.4) lies in a round hole of the carriage's cover, flush with it, 0.4 clear all round; the disc, white like the result discs' bands outside the holes' radius (brass inside), 32.4 across and 1.2 thick, turns under it, 0.8 below, its digits as large as the plate's; the stop lug hangs from the cover's underside; the knurled bronze nut 8 across and 1.7 high, bevelled, on the axle just under the C's centre (photos)."
       }
     }
   },
@@ -1177,10 +1618,10 @@
       "note": "Carry mode 'simultaneous' (decision 0001). The phase follows from pars_mobilis.zweihorn.spread_original_outer: the horns pass at 33.5 deg (before the ribs) and 310.3 deg (after them). 9999 + 1 -> 9900 -> 0000 (thousands pentagon tilted) -> 10000, and 099 + 3 -> 002 -> 102, as GWLB and WALSDORF2014 describe."
     },
     "spring_from_store": {
-      "v": 45.0,
+      "v": 63.0,
       "unit": "deg",
-      "conf": "design",
-      "src": "once the store passes 45 deg the next wheel has finished its step; the detent spring then completes the store to 72 deg (Rastfedern, LUDWIG2006). Shortens a carry execution to ~10 deg of crank"
+      "conf": "doc",
+      "src": "BADUR2026 Pos. 20 (Rastrad): the detent wheel's notches lie 18 deg apart about each rest (0, +-18 per 72 deg sector), so an executed carry is held at 54 deg unless the Zweihorn pushes it past the point at 63 deg; the spring then completes it to 72. The Zweihorn pushes it to about 70.7 (params/carry-tables.json). Before 0.8.0: 45."
     }
   }
 }

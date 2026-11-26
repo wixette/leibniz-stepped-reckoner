@@ -1,0 +1,72 @@
+{
+  "generated_by": "tools/export-lever-phases.mjs",
+  "note": "World angle (deg, the simulator's frame) of each lever's adding and subtracting horn at theta = 0; the two turn together, so add - sub is the lever's spread.",
+  "simultaneous": [
+    {
+      "add": 131.121475,
+      "sub": 48.878525
+    },
+    {
+      "add": 131.121475,
+      "sub": 48.878525
+    },
+    {
+      "add": 131.121475,
+      "sub": 48.878525
+    },
+    {
+      "add": 131.121475,
+      "sub": 48.878525
+    },
+    {
+      "add": 131.121475,
+      "sub": 48.878525
+    },
+    {
+      "add": 131.121475,
+      "sub": 48.878525
+    },
+    {
+      "add": 131.121475,
+      "sub": 48.878525
+    },
+    {
+      "add": 131.121475,
+      "sub": 48.878525
+    }
+  ],
+  "ripple": [
+    {
+      "add": 153.49,
+      "sub": 26.51
+    },
+    {
+      "add": 147.46,
+      "sub": 32.54
+    },
+    {
+      "add": 141.43,
+      "sub": 38.57
+    },
+    {
+      "add": 135.4,
+      "sub": 44.6
+    },
+    {
+      "add": 129.37,
+      "sub": 50.63
+    },
+    {
+      "add": 123.34,
+      "sub": 56.66
+    },
+    {
+      "add": 117.31,
+      "sub": 62.69
+    },
+    {
+      "add": 111.28,
+      "sub": 68.72
+    }
+  ]
+}

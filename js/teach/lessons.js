@@ -133,9 +133,9 @@ const carry = {
     },
     {
       do: [{ theta: 360 }],
-      highlight: ["pm.zweihorn_add.0", "pm.zweihorn_add.1", "pm.zweihorn_add.2", "pm.zweihorn_add.3"],
+      highlight: ["pm.zweihorn.0", "pm.zweihorn.1", "pm.zweihorn.2", "pm.zweihorn.3"],
       context: [0, 1, 2, 3, 4].flatMap((k) => [`pi.carry_store.${k}`, `pi.sum_wheel.${k}`]),
-      callouts: [{ node: "pm.zweihorn_add.0", text: "l.carry.lever" }],
+      callouts: [{ node: "pm.zweihorn.0", text: "l.carry.lever" }],
       text: "l.carry.passedOn",
       expect: (m) => m.shownNumber() === 10000 && allLevel(m),
     },
@@ -192,7 +192,7 @@ const carryOriginal = {
     },
     {
       do: [{ theta: 360 }],
-      highlight: ["pi.carry_store.1", "pm.zweihorn_add.0", "pm.zweihorn_add.1"],
+      highlight: ["pi.carry_store.1", "pm.zweihorn.0", "pm.zweihorn.1"],
       context: [0, 1, 2, 3, 4].flatMap((k) => [`pi.carry_store.${k}`, `pi.sum_wheel.${k}`]),
       text: "l.carry.origWaits",
       expect: (m) => m.shownNumber() === 9900 && m.pending[1] === 1,
@@ -237,7 +237,7 @@ const carryOriginal = {
     },
     { view: "register", highlight: ["pi.window"], text: "l.carry.origRecap", expect: (m) => m.shownNumber() === 10000 && allLevel(m) },
     {
-      // the toolbar's Carry box (U30): back to the default, Lehmann's carry
+      // the toolbar's Carry box (U30): back to the default, the ripple carry
       view: "register",
       text: "l.carry.switch",
       task: {
@@ -277,9 +277,9 @@ const subtract = {
     },
     { view: "register", highlight: ["pi.window"], text: "l.sub.borrow" },
     {
-      view: "front",
-      highlight: ["pm.magna_rota"],
-      callouts: [{ node: "pm.magna_rota", text: "part.magna" }],
+      view: "counter",
+      highlight: ["pm.counter_ring"],
+      callouts: [{ node: "pm.counter_ring", text: "part.counter" }],
       text: "l.sub.red",
       expect: (m) => m.ringTurns === -1,
     },
@@ -340,14 +340,14 @@ const multiply = {
   steps: [
     { do: [{ reset: {} }], view: "knobs", highlight: ["pm.setting_dial.*"], text: "l.mul.intro", task: setInput(1709, 1790) },
     {
-      view: "front",
-      highlight: ["pm.magna_rota", "pm.magna_pin", "pm.magna_plate"],
-      callouts: [{ node: "pm.magna_plate", text: "l.mul.stop" }],
+      view: "counter",
+      highlight: ["pm.counter_ring", "pm.counter_pin", "pm.counter_plate"],
+      callouts: [{ node: "pm.counter_plate", text: "l.mul.stop", anchor: "stop_point", value: false }],
       text: "l.mul.pin5",
       task: { check: (m) => m.pin === 5 && m.offset === 0, solve: (m) => m.setPin(5), wrong: (m) => m.setPin(6), controls: ["pin"] },
     },
     {
-      highlight: ["pm.magna_rota", "pm.main_crank"],
+      highlight: ["pm.counter_ring", "pm.main_crank"],
       text: "l.mul.toStop",
       task: {
         check: (m) => m.pin === 5 && m.offset === 0 && m.blocked,
@@ -359,8 +359,8 @@ const multiply = {
     { view: "register", highlight: ["pi.window"], text: "l.mul.first", expect: (m) => m.shownNumber() === 8545 },
     { view: "overview", highlight: ["pm.carriage"], text: "l.mul.shift1", task: shiftTo(1, 2) },
     {
-      view: "front",
-      highlight: ["pm.magna_rota", "pm.magna_pin"],
+      view: "counter",
+      highlight: ["pm.counter_ring", "pm.counter_pin"],
       text: "l.mul.pin6",
       task: {
         check: (m) => m.offset === 1 && m.pin === 6 && m.blocked,
@@ -408,33 +408,35 @@ const divide = {
     { view: "knobs", highlight: ["pm.setting_dial.*"], text: "l.div.setDivisor", task: setInput(1709, 1790) },
     { view: "overview", highlight: ["pm.carriage"], text: "l.div.shift2", task: shiftTo(2, 1) },
     {
-      do: [{ pin: null }, { turn: -1, times: 3 }],
-      view: "front",
-      highlight: ["pm.magna_rota"],
+      // the pin beside the stop, at black 0: each subtraction moves it on one black number, so it
+      // counts them (K. Badur: for dividing, the pin goes in front of the inner circle's 0)
+      do: [{ pin: 0 }, { turn: -1, times: 3 }],
+      view: "counter",
+      highlight: ["pm.counter_ring"],
       text: "l.div.three",
       expect: (m) => m.ringTurns === -3 && registerValue(m) === 111085,
     },
     { do: [{ turn: -1 }], view: "register", highlight: ["pi.window"], text: "l.div.tooMany", expect: (m) => registerValue(m) < 0 },
     {
       do: [{ turn: 1 }],
-      view: "front",
-      highlight: ["pm.magna_rota"],
+      view: "counter",
+      highlight: ["pm.counter_ring"],
       text: "l.div.addBack",
       expect: (m) => m.ringTurns === -3 && registerValue(m) === 111085,
     },
     { view: "overview", highlight: ["pm.carriage"], text: "l.div.shift1", task: shiftTo(1, 0) },
     {
-      do: [{ pin: null }, { divideDigit: true }],
-      view: "front",
-      highlight: ["pm.magna_rota"],
+      do: [{ pin: 0 }, { divideDigit: true }],
+      view: "counter",
+      highlight: ["pm.counter_ring"],
       text: "l.div.six",
       expect: (m) => m.ringTurns === -6 && registerValue(m) === 8545,
     },
     { view: "overview", highlight: ["pm.carriage"], text: "l.div.shift0", task: shiftTo(0, 1) },
     {
-      do: [{ pin: null }, { divideDigit: true }],
-      view: "front",
-      highlight: ["pm.magna_rota"],
+      do: [{ pin: 0 }, { divideDigit: true }],
+      view: "counter",
+      highlight: ["pm.counter_ring"],
       text: "l.div.five",
       expect: (m) => m.ringTurns === -5 && registerValue(m) === 0,
     },

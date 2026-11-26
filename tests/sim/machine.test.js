@@ -1,4 +1,6 @@
+import tables from "../../params/carry-tables.json" with { type: "json" };
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { describe, it } from "node:test";
 import { DIGIT_PITCH, Machine } from "../../js/sim/machine.js";
 import { divide, multiply, registerValue } from "../../js/sim/operations.js";
@@ -125,6 +127,18 @@ describe("Machine (16-digit register, 8-digit carriage)", () => {
     assert.equal(registerValue(m), 999_999_999);
   });
 
+  it("the pin at red m (the hole of black 9 - m) runs back to the stop after m turns: subtracting m times", () => {
+    for (const red of [1, 5, 8, 9]) {
+      const m = new Machine();
+      m.setResult(10_000);
+      m.setNumber(7);
+      assert.equal(m.setPin(9 - red), true); // red 9 is the hole of black 0
+      assert.equal(m.runBackToStop(), red);
+      assert.equal(m.blockedBack, true);
+      assert.equal(m.shownNumber(), 10_000 - 7 * red);
+    }
+  });
+
   it("the pin lets the crank turn back 9 - m whole turns, then refuses", () => {
     for (const hole of [0, 3, 8, 9]) {
       const m = new Machine();
@@ -169,6 +183,23 @@ describe("Machine (16-digit register, 8-digit carriage)", () => {
     assert.equal(m.pending.every((p) => p === 0), true);
   });
 
+  it("simultaneous mode borrows as it carries, mirrored: 10000 − 1 shows 10099, then 19999, then 9999", () => {
+    const m = new Machine();
+    m.setMode("simultaneous");
+    m.setResult(10_000);
+    m.setNumber(1);
+    assert.equal(m.turn(-1), true);
+    assert.equal(m.shownNumber(), 10_099);
+    assert.deepEqual(m.pending.slice(0, 5), [0, -1, 0, 0, 0]); // the tens' borrow waits
+    m.setNumber(0);
+    assert.equal(m.turn(-1), true);
+    assert.equal(m.shownNumber(), 19_999);
+    assert.deepEqual(m.pending.slice(0, 5), [0, 0, 0, -1, 0]); // moved on two places
+    assert.equal(m.turn(-1), true);
+    assert.equal(m.shownNumber(), 9_999);
+    assert.equal(m.pending.every((p) => p === 0), true);
+  });
+
   it("simultaneous mode: the book's 099 + 3 shows 002, then 102 after one idle turn (WALSDORF2014)", () => {
     const m = new Machine();
     m.setMode("simultaneous");
@@ -197,12 +228,12 @@ describe("Machine (16-digit register, 8-digit carriage)", () => {
   });
 
   it("simultaneous mode: the horns are the original's 90 deg apart at their outer edges, and pass outside the ribs", () => {
-    const outer = M.ORIGINAL_SPREAD + 2 * (Math.asin(1 / 17) * 180) / Math.PI;
+    const outer = M.ORIGINAL_SPREAD + 2 * tables.horn_tip_half_angle;
     assert.ok(Math.abs(outer - 90) < 1e-9, `${outer}`);
     for (const dir of /** @type {const} */ ([1, -1])) {
       const [early, main] = M.leverPasses(0, "simultaneous", dir);
-      assert.ok(early + M.EXECUTION_TRAVEL < 78.75, `early pass ${early} done before the ribs`);
-      assert.ok(main > 281.25 && main + M.EXECUTION_TRAVEL < 360, `main pass ${main} after the ribs`);
+      assert.ok(early + M.executionTravel("simultaneous") < 78.75, `early pass ${early} done before the ribs`);
+      assert.ok(main > 281.25 && main + M.executionTravel("simultaneous") < 360, `main pass ${main} after the ribs`);
     }
   });
 
@@ -223,9 +254,125 @@ describe("Machine (16-digit register, 8-digit carriage)", () => {
     assert.equal(m.pending.every((p) => p === 0), true);
   });
 
+  it("ripple mode runs an 8-digit borrow chain through inside one turn", () => {
+    const m = new Machine();
+    m.setResult(100_000_000);
+    m.setNumber(1);
+    assert.equal(m.turn(-1), true);
+    assert.equal(m.shownNumber(), 99_999_999);
+    assert.equal(m.pending.every((p) => p === 0), true);
+  });
+
+  it("ripple mode at the carriage's last place carries through every lever into the top digit", () => {
+    const m = new Machine();
+    assert.equal(m.setOffset(m.maxOffset), true);
+    m.setNumber(99_999_999);
+    assert.equal(m.turn(1), true);
+    m.setNumber(1);
+    assert.equal(m.turn(1), true);
+    assert.equal(m.shownNumber(), 10 ** 15); // 99999999 × 10^7 + 10^7
+    assert.equal(m.pending.every((p) => p === 0), true);
+  });
+
+  it("ripple mode: units first, each lever after the one below has passed its carry on, all done inside the turn", () => {
+    const exec = M.executionTravel("ripple");
+    const transfer = M.transferTravel("ripple");
+    for (const dir of /** @type {const} */ ([1, -1])) {
+      for (let i = 0; i < 8; i++) {
+        const [early, main] = M.leverPasses(i, "ripple", dir);
+        assert.ok(early > 0 && early + exec < 78.75, `lever ${i}: early pass ${early} done before the ribs`);
+        assert.ok(main > 281.25 && main + exec < 360, `lever ${i}: main pass ${main} after the ribs, done by 360`);
+        if (i > 0) {
+          const [, below] = M.leverPasses(i - 1, "ripple", dir);
+          assert.ok(main - below >= transfer, `lever ${i} follows lever ${i - 1} after its transfer (${main - below})`);
+        }
+      }
+    }
+  });
+
+  it("the revolution counter steps a tenth of a turn once a turn, driven by the 17th shaft's single tooth", () => {
+    // the star wheel K is pushed one tooth (24 deg) while the single tooth passes it, then rests
+    for (const dir of /** @type {const} */ ([1, -1])) {
+      let last = 0;
+      for (let t = 0; t <= 360; t += 0.5) {
+        const s = M.counterStep(dir * t);
+        assert.ok(dir * s >= dir * last - 1e-9, `${dir}: monotonic at ${t}`);
+        last = s;
+      }
+      assert.ok(Math.abs(M.counterStep(dir * 90)) < 1e-12); // still before the tooth arrives
+      assert.ok(Math.abs(M.counterStep(dir * 300) - dir) < 1e-9); // the step done, before the turn ends
+    }
+    const m = new Machine();
+    m.setNumber(1);
+    m.setTheta(90);
+    assert.ok(Math.abs(m.machinePose().counterRing) < 1e-12);
+    m.setTheta(300);
+    assert.ok(Math.abs(m.machinePose().counterRing + 36) < 1e-9); // anticlockwise from above when adding (Badur)
+    m.setTheta(360);
+    assert.equal(m.ringTurns, 1);
+    assert.ok(Math.abs(m.machinePose().counterRing + 36) < 1e-9);
+  });
+
+  it("the lever phases the build draws each Zweihorn with are the simulator's (pnpm phases)", () => {
+    // each lever's Zweihorn is one part: build_m2.py puts its two horns the lever's spread apart
+    const file = JSON.parse(readFileSync(new URL("../../params/lever-phases.json", import.meta.url), "utf8"));
+    for (const mode of /** @type {const} */ (["simultaneous", "ripple"])) {
+      for (let j = 0; j < 8; j++) {
+        const ph = M.hornPhases(j, mode);
+        assert.ok(Math.abs(file[mode][j].add - ph.add) < 1e-5 && Math.abs(file[mode][j].sub - ph.sub) < 1e-5, `${mode} lever ${j}: run pnpm phases`);
+      }
+    }
+  });
+
+  it("ripple mode: every resting horn is at least 18 deg off the vertical, so the carriage shifts clear of waiting stores", () => {
+    // 2D study (design/v1.3-notes.md): a horn of the ripple set resting within 18 deg of the line
+    // to the store would meet a stored (waiting) five-horn s' as the carriage slides under it
+    const off = (/** @type {number} */ a) => Math.abs((((a - 90) % 360) + 540) % 360 - 180);
+    for (let i = 0; i < 8; i++) {
+      const ph = M.hornPhases(i, "ripple");
+      assert.ok(off(ph.add) >= 18 && off(ph.sub) >= 18, `lever ${i}: ${ph.add}, ${ph.sub}`);
+    }
+  });
+
+  it("ripple mode: a horn arriving while its store is still turning catches it from behind and brings it to 18", () => {
+    const c = tables.zweihorn_ripple.catch;
+    assert.ok(c && c.start < 0, "the ripple set has a catch lead-in");
+    assert.equal(M.catchCurve(0, "ripple"), null);
+    assert.equal(M.catchCurve(c.start - 0.1, "ripple"), null);
+    assert.equal(M.catchCurve(-1, "simultaneous"), null);
+    let last = -Infinity;
+    for (let t = c.start; t < 0; t += 0.05) {
+      const s = /** @type {number} */ (M.catchCurve(t, "ripple"));
+      assert.ok(s >= last - 1e-9 && s <= 18 + 1e-9, `t ${t}: ${s}`);
+      last = s;
+    }
+    assert.ok(last > 17.5, `${last}`);
+    // in a chain the next store is caught on its way up and reaches 18 before its lever's pass
+    const m = new Machine();
+    m.setResult(999);
+    m.setNumber(1);
+    const w1 = M.leverWindow(1, "ripple");
+    let caught = false;
+    for (let t = w1 + c.start; t <= w1; t += 0.1) {
+      m.setTheta(t);
+      const s = m.machinePose().register[1].store;
+      const h = M.catchCurve(t - w1, "ripple");
+      if (h !== null && s >= M.catchFrom("ripple") && s < 18) {
+        assert.ok(s >= h - 1e-6, `θ ${t}: store ${s} behind the horn ${h}`);
+        caught = true;
+      }
+    }
+    assert.ok(caught, "store 1 is caught in 999 + 1");
+    m.setTheta(w1);
+    assert.ok(Math.abs(m.machinePose().register[1].store - 18) < 0.5);
+    m.setTheta(360);
+    assert.equal(m.shownNumber(), 1000);
+  });
+
   it("refuses a turn in which a wheel would pass 9 twice while its first carry still waits", () => {
-    // Digit 9 receives store 8's waiting carry early in the turn (9 -> 0, store 9 stored), then
-    // the ribs and store 8's new carry take it past 9 again before lever 7 passes store 9.
+    // Store 8's carry waits. After the shift, lever 6's early pass executes it before the ribs,
+    // so wheel 9 passes 9 and store 9 takes a carry that waits for lever 7's pass (332 deg); but
+    // lever 6's main pass (326 deg) hands wheel 9 a second carry first: two carries in store 9.
     const m = new Machine();
     m.setResult(9_909_999_999);
     m.setNumber(99_999_999);

@@ -3,6 +3,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 /** @import * as THREE from "three" */
+import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 /**
@@ -17,7 +18,7 @@ export async function loadAsset(file) {
   }
   const ab = /** @type {ArrayBuffer} */ (buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength));
   // Node has no image decoder; acceptance checks use geometry and material names only.
-  const loader = new GLTFLoader().register(() => ({ name: "no_textures_in_node", loadTexture: () => Promise.resolve(/** @type {THREE.Texture} */ (/** @type {unknown} */ (null))) }));
+  const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).register(() => ({ name: "no_textures_in_node", loadTexture: () => Promise.resolve(/** @type {THREE.Texture} */ (/** @type {unknown} */ (null))) }));
   const gltf = await loader.parseAsync(ab, "");
   return gltf.scene;
 }
