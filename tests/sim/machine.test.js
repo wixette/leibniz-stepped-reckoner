@@ -78,6 +78,47 @@ describe("Machine (16-digit register, 8-digit carriage)", () => {
     }
   });
 
+  it("the original's carry multiplies 8 × 8 digits with no idle turns in between (Badur, after Wagner's protocol of 1706)", () => {
+    // Klaus Badur multiplied two 8-digit numbers on his replica built as the original, after a
+    // protocol by R. C. Wagner (1706), without finishing carries with 0 on the knobs in between
+    // (design/v1.4-notes.md, 2026-11-28); his book: only the last operation needs idle turns.
+    let seed = 1706;
+    /** @param {number} n */
+    const rnd = (n) => ((seed = (seed * 1103515245 + 12345) % 2 ** 31), Math.floor((seed / 2 ** 31) * n));
+    let leftBehind = 0;
+    for (let n = 0; n < 60; n++) {
+      const a = 10_000_000 + rnd(90_000_000);
+      const b = 10_000_000 + rnd(90_000_000);
+      const m = new Machine();
+      m.setMode("simultaneous");
+      m.setNumber(a);
+      String(b).split("").reverse().forEach((d, o) => {
+        m.setOffset(o);
+        for (let t = 0; t < Number(d); t++) {
+          // a carry waiting under the carriage is finished by the next turn, before or after
+          // its digit transfer: never more than a few wait at once, and no turn is refused
+          assert.ok(m.pending.filter(Boolean).length <= 3, `${a} × ${b}: carries pile up`);
+          assert.equal(m.turn(1), true, `${a} × ${b}: a turn refused at offset ${o}`);
+        }
+      });
+      assert.equal(BigInt(registerValue(m)), BigInt(a) * BigInt(b));
+      // at the end, idle turns finish the carries still under the carriage, two places a turn
+      m.setNumber(0);
+      for (let t = 0; t < 2; t++) m.turn(1);
+      assert.equal(m.pending.slice(m.offset).some(Boolean), false, `${a} × ${b}: idle turns left a carry under the carriage`);
+      // a carry the carriage left behind, below it, waits for the carriage to come back over it
+      const behind = m.pending.findIndex(Boolean);
+      if (behind >= 0) {
+        leftBehind++;
+        m.setOffset(behind);
+        m.turn(1);
+        m.turn(1);
+      }
+      assert.equal(m.shownText().replace(/^0+/, ""), String(BigInt(a) * BigInt(b)), `${a} × ${b}`);
+    }
+    assert.ok(leftBehind < 6, `carries left behind the carriage in ${leftBehind} of 60 products`);
+  });
+
   it("a carry above the carriage stays stored until the carriage is shifted over it", () => {
     const m = new Machine();
     m.setResult(999_999_999);
