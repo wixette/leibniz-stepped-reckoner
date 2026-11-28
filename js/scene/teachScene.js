@@ -134,7 +134,9 @@ export function viewSubjects(root) {
  * @type {[string, number][]}
  */
 export const PART_COLOURS = [
-  ["frame.*", 0x9aa0a8],
+  // the frame, and the feet with their pads (the board and blocks under them keep their wood)
+  ["frame.static", 0x9aa0a8],
+  ["frame.base", 0x9aa0a8],
   ["pi.window", 0xc9b79c],
   ["pm.carriage", 0xa7abb1],
   ["pm.carriage_cover", 0xc9b79c],
@@ -151,6 +153,7 @@ export const PART_COLOURS = [
   ["pm.zweihorn_r.*", 0xc27470],
   ["pi.sum_wheel.*", 0x6a88c2],
   ["pi.carry_store.*", 0x6fa57a],
+  ["frame.springs", 0x6fa57a], // the carry stores' detent springs, which hold their detent wheels
   ["pi.five_horn_s.*", 0x6db5c0],
   ["pi.five_horn_sr.*", 0x6db5c0],
   ["pm.magna_rota", 0xa8805a],
@@ -168,8 +171,11 @@ export const PART_COLOURS = [
   ["pm.counter_plate", 0xe5e7eb],
   ["pm.counter_frame", 0x8a8f98],
 ];
-/** Materials "Colour by part" leaves alone: the digits and the white bands they are printed on. */
-const KEEP_COLOUR = new Set(["ink_black", "ink_red", "enamel_white"]);
+/**
+ * Materials "Colour by part" leaves alone: the digits and the white bands they are printed on,
+ * and the dark wood of the board and blocks the machine stands on (the stand, not a part).
+ */
+export const KEEP_COLOUR = new Set(["ink_black", "ink_red", "enamel_white", "oak_dark"]);
 
 /** The parts a step points at glow amber: the page's one colour for "your turn" (U5). */
 const GLOW = new THREE.Color(0xffa31a);
@@ -236,8 +242,8 @@ export class Highlighter {
   }
 
   /**
-   * The colour of each mesh's kind of part (PART_COLOURS).
-   * @private
+   * The colour of each mesh's kind of part (PART_COLOURS); read by acceptance check A3-17.
+   * @readonly
    * @type {Map<THREE.Mesh, number>}
    */
   partColour = new Map();

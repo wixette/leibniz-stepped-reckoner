@@ -429,10 +429,11 @@ The machine can carry two ways (decision 0001): with the ripple carry, the defau
 
 ### U31 — Colour by part
 
-Inside the machine most moving parts are brass, as they are on the original, and in the inside views they glow amber besides: the parts at the back are hard to tell apart. The Views menu's **Colour by part** switch, under *Show the frame*, draws every kind of part in a colour of its own (`PART_COLOURS` in js/scene/teachScene.js): the drums orange, the result wheels with their Einzahn and ten-wheel blue, the carry stores (five-horn p, detent wheel, pentagon, shaft) green, the stars s and s' cyan, the Zweihörner red, the lever shafts with their long gears purple, the setting heads mustard, the counter and its drive pink, the large gears magenta, the Magna Rota and crank brown, the frame grey.
+Inside the machine most moving parts are brass, as they are on the original, and in the inside views they glow amber besides: the parts at the back are hard to tell apart. The Views menu's **Colour by part** switch, under *Show the frame*, draws every kind of part in a colour of its own (`PART_COLOURS` in js/scene/teachScene.js): the drums orange, the result wheels with their Einzahn and ten-wheel blue, the carry stores (five-horn p, detent wheel, pentagon, shaft) green, the stars s and s' cyan, the Zweihörner red, the lever shafts with their long gears purple, the setting heads mustard, the counter and its drive pink, the large gears magenta, the Magna Rota and crank brown, the frame and the feet grey, the carry stores' detent springs with the stores. The board and blocks the machine stands on keep their wood: they are its stand, not a part of it.
 
 - **Any time, in free play and in lessons.** It changes only the colours: highlighting, fading and the half-transparent pentagons of the inside views work on top of it, and a highlighted part glows in its own colour rather than amber, so its colour still says what it is.
 - **The numbers stay readable:** the digits and the white bands they are printed on keep their colours.
+- **Every part has its colour:** acceptance check A3-17 fails if a mesh keeps its own look in this mode, other than the digits, their bands and the stand's wood. (Until 1.4.0 the frame did: a pattern for numbered parts, `frame.*`, named it and matched nothing.)
 - The status line says what the colours are for, and to hover over a part for its name.
 
 ### U32 — Show the frame

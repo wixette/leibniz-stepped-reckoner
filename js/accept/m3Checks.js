@@ -7,7 +7,7 @@ import * as THREE from "three";
 import { applyM2Pose, CRANK_FORWARD, m2NodeNames, m2NodeValues } from "../scene/m2Pose.js";
 import { gltfName, Rig } from "../scene/rig.js";
 import { centreOnFreeArea, frame } from "../scene/framing.js";
-import { Exploder, Highlighter, findNodes, isShown, viewSubjects } from "../scene/teachScene.js";
+import { Exploder, Highlighter, KEEP_COLOUR, PART_COLOURS, findNodes, isShown, viewSubjects } from "../scene/teachScene.js";
 import { Machine } from "../sim/machine.js";
 import { MESSAGES } from "../l10n/all.js";
 import { LOCALES } from "../l10n/l10n.js";
@@ -552,6 +552,23 @@ export function runM3Checks(root) {
       if (!partInfo(gltfName("pm.counter_pin"), m, lang)?.value?.includes("4")) bad.push(`${lang}: pin value is not hole 4`);
     }
     return { passed: bad.length === 0, detail: bad.join("; ") || `${n} labels: names in words, values match the machine` };
+  });
+
+  run("A3-17", "Colour by part leaves no part in its own colours: every mesh has a part colour, or only materials the mode keeps (the digits, their bands, the stand's wood)", () => {
+    /** @type {string[]} */
+    const bad = [];
+    for (const [pattern] of PART_COLOURS) if (findNodes(root, pattern).length === 0) bad.push(`${pattern}: no such part`);
+    const h = new Highlighter(root);
+    let n = 0;
+    root.traverse((o) => {
+      const mesh = /** @type {THREE.Mesh} */ (o);
+      if (!mesh.isMesh) return;
+      n++;
+      if (h.partColour.has(mesh)) return;
+      const mats = (Array.isArray(mesh.material) ? mesh.material : [mesh.material]).map((m) => m.name);
+      if (!mats.every((m) => KEEP_COLOUR.has(m))) bad.push(`${mesh.parent?.name ?? mesh.name}: ${mats.join(", ")}`);
+    });
+    return { passed: bad.length === 0, detail: bad.join("; ") || `${n} meshes, each coloured or kept` };
   });
 
   run("A3-16", "Parts within a part's node have labels of their own: each named zone is a known part, and the label at its centre names it", () => {
