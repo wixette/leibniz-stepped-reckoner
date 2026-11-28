@@ -736,19 +736,17 @@ def build(p):
     # the gold J, at the rail's top
     jw, (jz0, jz1) = cat_["j"]["width"], cat_["j"]["z"]
     xb1 = hx + jw / 2.0                              # the bar's right edge (toward the carriage)
-    yj = f_ - cat_["j"]["reach"] - pvy               # the hook's centre line
     ro_ = cat_["j"]["hook_outer"]
+    yj = cat_["j"]["front_y"] + ro_ - pvy            # the hook's centre line
     ri_ = ro_ - jw
     hc = xb1 - ro_
     j_out = [(xb1 - jw, ys0 - 1.6), (xb1, ys0 - 1.6), (xb1, yj)]
     j_out += [(hc + ro_ * math.cos(math.radians(a)), yj + ro_ * math.sin(math.radians(a))) for a in range(0, -181, -20)]
     j_out += [(hc + ri_ * math.cos(math.radians(a)), yj + ri_ * math.sin(math.radians(a))) for a in range(-180, 1, 20)]
     mb.prism_holes(j_out, [], "XY", jz0, jz1, "brass_polished")
-    # its bar on over the stand to the head: a neck, then the round head in the pit
-    mb.prism(geom.rect(hx - jw / 2.0, head_y - 1.0, hx + jw / 2.0, ys0 - 1.6 + 0.01), "XY", jz0, jz1, "brass_polished")
-    neck = 0.55 * hr_
+    # its bar on over the stand to the head, a small round knob in the pit
+    mb.prism(geom.rect(hx - jw / 2.0, head_y, hx + jw / 2.0, ys0 - 1.6 + 0.01), "XY", jz0, jz1, "brass_polished")
     hz0, hz1 = cat_["head_z"]
-    mb.prism(geom.rect(hx - neck, head_y, hx + neck, head_y - 1.0 - 0.01), "XY", hz0, hz1, "brass_polished")
     mb.prism([(hx + u, head_y + w) for u, w in geom.circle(hr_, 16)], "XY", hz0, hz1, "brass_polished", smooth=True)
     # the post down the stand's front from the J, and the block on the stand
     pw, pdp = cat_["post"]["width"], cat_["post"]["depth"]
