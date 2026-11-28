@@ -1,6 +1,6 @@
 # Development
 
-How to run, check, change and release the simulator. The rules the code, the model and the tests follow are in [conventions.md](conventions.md), the page's design principles in [ui-design.md](ui-design.md), and the licences in [licensing.md](licensing.md).
+How to run, check, change and release the simulator. The rules the code, the model and the tests follow are in [conventions.md](conventions.md), the page's design principles in [ui-design.md](ui-design.md), and the licenses in [licensing.md](licensing.md).
 
 ## Running it
 
@@ -47,7 +47,7 @@ CI runs them on every push and pull request, together with the REUSE lint ([lice
 
 ## Versions and releases
 
-The version is kept in one place, `package.json`. Set it with `pnpm version <x.y.z>`, which also writes it into the pages' file names (see *Deploying behind a cache*) and does not commit or tag ([.npmrc](../.npmrc)). A release is developed on a branch named `dev-vX.Y.Z` (not `vX.Y.Z`, which would share its name with the release's tag) and merged by a pull request named for its version; it is tagged `vX.Y.Z` on GitHub, on the merge commit, and its changes are listed in [CHANGELOG.md](../CHANGELOG.md). Its discussions and decisions are logged on the branch, in `design/` (for 1.3.0, [v1.3-notes.md](../design/v1.3-notes.md)). Each push to `main` deploys the site to GitHub Pages once its tests have passed ([.github/workflows/pages.yml](../.github/workflows/pages.yml)).
+The version is kept in one place, `package.json`. Set it with `pnpm version <x.y.z>`, which also writes it into the pages' file names (see *Deploying behind a cache*) and does not commit or tag ([.npmrc](../.npmrc)). A release is developed on a branch named `dev-vX.Y.Z` (not `vX.Y.Z`, which would share its name with the release's tag) and merged by a pull request named for its version; it is tagged `vX.Y.Z` on GitHub, on the merge commit, and its changes are listed in [CHANGELOG.md](../CHANGELOG.md). Its discussions and decisions are logged on the branch, in `design/` (for 1.3.0, [v1.3-notes.md](../design/v1.3-notes.md); for the next, [v1.4-notes.md](../design/v1.4-notes.md)). Each push to `main` deploys the site to GitHub Pages once its tests have passed ([.github/workflows/pages.yml](../.github/workflows/pages.yml)).
 
 **Screenshots.** `pnpm shots` takes the release pictures ([tools/shots.mjs](../tools/shots.mjs)): the README's six (`view-whole`, `view-apart`, `view-drum`, `view-counter`, `free-play` and `lesson-carry`, copied by hand into `images/readme/`), and a set for posts: the Taken apart view from several sides and distances, the drum and carry views from several sides, the Magna Rota, and the multiplication lesson step by step. It serves the repository itself and drives headless Chrome, at 1600 × 900; view shots are the stage alone, with the dock hidden. `--lang en,zh` takes them in each language given, into `~/Downloads/leibniz-v<version>-media/shots/<lang>/` (or `--out <folder>`), and `--only <text>` only those whose name contains it. Chrome is found at its usual place, or set `CHROME` to its path.
 
@@ -73,15 +73,15 @@ A CDN must count the query string in its cache key (most do unless told not to).
 | Document | What it is |
 |---|---|
 | [research/REPORT.md](../research/REPORT.md) | Feasibility, confidence and the value check against existing resources |
-| [design/modelling-and-animation-plan.md](../design/modelling-and-animation-plan.md) | How the model is built and animated, with milestones M0–M4 and their acceptance tests |
+| [design/modeling-and-animation-plan.md](../design/modelling-and-animation-plan.md) | How the model is built and animated, with milestones M0–M4 and their acceptance tests |
 | [design/m0-notes.md](../design/m0-notes.md) … [m3-notes.md](../design/m3-notes.md) | What each milestone built and found, as recorded at the time |
-| [design/m4-notes.md](../design/m4-notes.md), [v1.3-notes.md](../design/v1.3-notes.md) | The releases after the milestones: 1.1.0, the dimensions from Lehmann's drawings; 1.3.0, the original after Badur's measurements, and the page around it (its discussions and decisions, as logged) |
-| [design/decisions/0001-carry-interpretation.md](../design/decisions/0001-carry-interpretation.md) | Which carry behaviour the simulator shows, and why |
+| [design/m4-notes.md](../design/m4-notes.md), [v1.3-notes.md](../design/v1.3-notes.md), [v1.4-notes.md](../design/v1.4-notes.md) | The releases after the milestones: 1.1.0, the dimensions from Lehmann's drawings; 1.3.0, the original after Badur's measurements, and the page around it; 1.4.0, Badur's base frame, lead screw and carriage detent (their discussions and decisions, as logged) |
+| [design/decisions/0001-carry-interpretation.md](../design/decisions/0001-carry-interpretation.md) | Which carry behavior the simulator shows, and why |
 | [design/decisions/0002-original-replica-and-releases.md](../design/decisions/0002-original-replica-and-releases.md) | Which machine the model follows, the original or Lehmann's replica, part by part, and what each release changes |
 | [params/machine.json](../params/machine.json) | Every dimension and angle, with its source and confidence |
 | [conventions.md](conventions.md) | Units, axes, part names, export, the self-test, testing, references |
 | [ui-design.md](ui-design.md) | The principles the page is laid out by, and its decisions (U1, U2, …) |
-| [licensing.md](licensing.md) | Licences and attribution |
+| [licensing.md](licensing.md) | Licenses and attribution |
 
 ## Folder layout
 

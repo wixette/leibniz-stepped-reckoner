@@ -63,6 +63,7 @@ const SINGLE = /** @type {const} */ ([
   ["pm.counter_leaf", "part.counterLeaf"],
   ["frame.springs", "part.detentSprings"],
   ["pm.magna_rota_detent", "part.magnaDetent"],
+  ["pm.carriage_catch", "part.detentCatch"],
 ]);
 
 /** The named parts within a part's node (the build's zones, glTF extras), by message key. */
@@ -81,7 +82,6 @@ export const ZONE_KEYS = /** @type {const} */ ([
   "part.longGear",
   "part.bearingBar",
   "part.leadNut",
-  "part.detentCatch",
   "part.slideShoe",
   "part.rearBearings",
   "part.beamFront",

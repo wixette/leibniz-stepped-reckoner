@@ -2,6 +2,26 @@
 
 What changed in each release. Versions follow `package.json` and are tagged `vX.Y.Z` ([docs/development.md](docs/development.md), *Versions and releases*). The design decisions cited (U1, U2, …) are in [docs/ui-design.md](docs/ui-design.md).
 
+## 1.4.0
+
+Klaus Badur, who measured the original and built his replica as it, looked at 1.3.0 and sent remarks on the frame and the carriage. This release builds them.
+
+**The machine**
+- The lead screw that shifts the carriage lies between the base frame's front and middle rails, as on the original: 18 mm across, its thread a cut groove, which drives the carriage through a follower pin in its nut. It passes through round holes in round lobes of the side walls.
+- The base frame is Klaus Badur's: three upright steel bars, 25 mm high, the front rail, a middle rail and the rear bar between the two rows of pentagons. The carriage rides on the front and middle rails, on a floor plate and a foot with shoes, its end bars joining them to the rear bearings. Lehmann's beam behind the carriage is gone.
+- The carriage's detent as on the original: eight brass inserts in the front rail's top edge, each with a rounded pit, and at the carriage's left end a sprung catch, a silver spring plate carrying a gold J-shaped catch, whose head rides out of its pit and drops into the next as the carriage moves. (On the original it is lifted by hand before a shift.)
+- The blocks under the feet are higher, so that the end crank's handle still clears the board.
+
+**The page**
+- *Color by part* colors the frame and the feet too; the board and blocks keep their wood.
+- The References: N. J. Lehmann's replicas carry in a little more than one turn, about 30° more, as Klaus Badur found on one of them; on the original only the last turn of a series needs idle turns, and Badur and Rottstedt multiplied two 8-digit numbers after a protocol of 1706 by Leibniz's assistant R. C. Wagner without finishing carries in between. In ten languages.
+- Hover labels for the detent catch and the front and middle rails follow the new frame.
+- English is spelled the US way (color, center, license, …) in the page, the README and the docs.
+
+**Development**
+- New tests: the original's carry multiplies 8 × 8 digits with no idle turns in between; the catch rides out of its pit and into the next; the nut's pin rides in the screw's groove; *Color by part* leaves no part uncolored (A3-17).
+- The detent inserts and the grooved screw are generated meshes; MeshBuilder gains flat polygons and plates in any plane.
+
 ## 1.3.0
 
 **The machine**

@@ -54,3 +54,7 @@ Until v1.1 the model followed N. J. Lehmann's Dresden replica (decision D1 in `d
 - **The pentagons:** placed in depth as on Badur's assembly drawing (two rows 10.5 apart); their height is still not measured.
 - **The default carry** stays the ripple carry, now with a pair of carry parts of our own design (decision 0001, last addendum).
 - **The exterior:** the oak case (A7 in v1.2.0) is removed. The machine stands as Lehmann's replica does in its museum: on turned brass feet under the frame's side walls, on wooden blocks on a board, with the frame of beams from his drawings and no cover over the register, as on the original. "The model already shows the oak case" in the table above no longer holds; a case may come back later.
+
+## Addendum 2026-11-28: the frame in 1.4.0
+
+Klaus Badur's reply to 1.3.0 (design/v1.4-notes.md, 2026-11-28) moves two more parts from Lehmann's replica to the original as he built it: the base frame, whose lead screw lies between its front and middle rails, its thread a cut groove, and the carriage's detent, a sprung catch dropping into pits in the front rail. Both follow his drawings and the photos; the 1.3.0 frame of beams after Lehmann's drawings is gone. The feet stay Lehmann's. The case stays out (the owner, 2026-11-28: users want to see the mechanism first); its rebuilding is postponed.

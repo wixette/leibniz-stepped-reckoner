@@ -260,6 +260,48 @@ class MeshBuilder:
                 self._add([a, d, c, b] if flip else [a, b, c, d], mi, False)
             start += m
 
+    def polygon(self, pts, normal, mat):
+        """A flat face, convex or not, from 3D points in one plane, facing `normal` (its winding
+        is set from it); triangulated with Blender's polygon filler."""
+        from mathutils import Vector
+        from mathutils.geometry import tessellate_polygon
+
+        n = Vector(normal).normalized()
+        ref = Vector((1, 0, 0)) if abs(n.x) < 0.9 else Vector((0, 1, 0))
+        u = n.cross(ref).normalized()
+        w = n.cross(u)
+        flat = [Vector((Vector(p).dot(u), Vector(p).dot(w), 0.0)) for p in pts]
+        mi = self._mat(mat)
+        base = len(self.verts)
+        self.verts.extend(tuple(p) for p in pts)
+        for a, b, c in tessellate_polygon([flat]):
+            pa, pb, pc = (Vector(pts[i]) for i in (a, b, c))
+            if (pb - pa).cross(pc - pa).dot(n) < 0:
+                b, c = c, b
+            self._add([base + a, base + b, base + c], mi, False)
+
+    def plate(self, pts, normal, thickness, mat):
+        """A thin plate: the flat outline `pts` (3D, convex or not) and its copy `thickness`
+        along `normal`, joined by its edges."""
+        from mathutils import Vector
+
+        n = Vector(normal).normalized()
+        back = [tuple(Vector(p) + n * thickness) for p in pts]
+        self.polygon(pts, tuple(-n), mat)
+        self.polygon(back, tuple(n), mat)
+        mi = self._mat(mat)
+        m = len(pts)
+        for i in range(m):
+            a, b = Vector(pts[i]), Vector(pts[(i + 1) % m])
+            quad = [tuple(a), tuple(b), tuple(Vector(back[(i + 1) % m])), tuple(Vector(back[i]))]
+            # facing out of the plate: away from its middle
+            mid = sum((Vector(p) for p in pts), Vector()) / m
+            out = ((a + b) / 2 - mid)
+            base = len(self.verts)
+            self.verts.extend(quad)
+            e = (b - a).cross(n)
+            self._add([base, base + 1, base + 2, base + 3] if e.dot(out) >= 0 else [base + 3, base + 2, base + 1, base], mi, False)
+
     def _add(self, face, mi, smooth):
         self.faces.append(face)
         self.mat_idx.append(mi)
