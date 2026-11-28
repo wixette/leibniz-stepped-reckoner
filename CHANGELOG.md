@@ -2,7 +2,7 @@
 
 What changed in each release. Versions follow `package.json` and are tagged `vX.Y.Z` ([docs/development.md](docs/development.md), *Versions and releases*). The design decisions cited (U1, U2, …) are in [docs/ui-design.md](docs/ui-design.md).
 
-## 1.4.0 (unreleased)
+## 1.4.0
 
 Klaus Badur, who measured the original and built his replica as it, looked at 1.3.0 and sent remarks on the frame and the carriage. This release builds them.
 
