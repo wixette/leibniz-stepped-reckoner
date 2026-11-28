@@ -44,12 +44,13 @@ DEFAULT_OUT = os.path.join(params.MACHINE_DIR, "assets", "m2-full-machine.glb")
 
 
 
-def lead_screw_with_groove(mb, length, r, w, d, lead, mat, per_turn=16):
+def lead_screw_with_groove(mb, length, r, w, d, lead, mat, per_turn=16, x0=0.0):
     """A screw along x from 0 to length, radius r, with one helical groove w wide (along x) and
     d deep, lead per turn: four helical surfaces (the land, the groove's bottom and its two
-    walls) and the two end faces. The groove's middle passes x = 0 at angle 0."""
+    walls) and the two end faces. The groove's middle passes x = x0 at angle 0 (angles from +y
+    toward +z), and x0 + lead / 4 at the top."""
     mi = mb._mat(mat)
-    t0, t1 = -1.0, length / lead
+    t0, t1 = -1.0 - x0 / lead, (length - x0) / lead
     n = int(math.ceil((t1 - t0) * per_turn))
     rb = r - d
 
@@ -70,7 +71,7 @@ def lead_screw_with_groove(mb, length, r, w, d, lead, mat, per_turn=16):
     for i in range(n):
         ta, tb = t0 + i / per_turn, t0 + (i + 1) / per_turn
         tha, thb = 2 * math.pi * ta, 2 * math.pi * tb
-        ca, cb = lead * ta, lead * tb                     # the groove's middle at each angle
+        ca, cb = x0 + lead * ta, x0 + lead * tb           # the groove's middle at each angle
         thm = (tha + thb) / 2.0
         radial = (0.0, math.cos(thm), math.sin(thm))
         quad([pt(ca + w / 2, tha, r), pt(ca + lead - w / 2, tha, r), pt(cb + lead - w / 2, thb, r), pt(cb + w / 2, thb, r)], radial)
@@ -597,7 +598,11 @@ def build(p):
     # end, outside the left wall)
     sx0, sx1 = base_x0 + fr["screw_start_dx"], in_x1 + sw
     mb = MeshBuilder()
-    lead_screw_with_groove(mb, sx1 - sx0, ls["radius"], ls["groove"]["width"], ls["groove"]["depth"], pitch_x, "steel")
+    # the groove passes under the nut's pin (on top of the screw, in the nut's middle) at rest;
+    # as the carriage moves a place the screw turns once, so the groove stays under the pin
+    pin_x = X[0] + ls["nut_x"][0] + (ls["nut_x"][1] - ls["nut_x"][0]) / 2.0
+    lead_screw_with_groove(mb, sx1 - sx0, ls["radius"], ls["groove"]["width"], ls["groove"]["depth"], pitch_x, "steel",
+                           x0=(pin_x - sx0 - pitch_x / 4.0) % pitch_x)
     # the end crank (the owner's drawing, design/drawings/end-crank-details.svg, at the Magna Rota
     # drawing's scale, so its handle is the main crank's): a hub on the screw's end, a bent bar
     # down and outward to a rounded cap, and the turned oak handle with its gold ball pointing away
@@ -724,7 +729,7 @@ def build(p):
     # the nut around the lead screw (four bars leave a square hole), between the units drum's
     # and the tens drum's setting heads, where nothing of the carriage comes low; a bracket from
     # the floor plate's back edge carries it
-    nx0, nx1, ny, nz, hole = X[0] - 27.0, X[0] - 13.0, ls["y"], ls["z"], ls["radius"] + 0.2
+    nx0, nx1, ny, nz, hole = X[0] + ls["nut_x"][0], X[0] + ls["nut_x"][1], ls["y"], ls["z"], ls["radius"] + 0.2
     z_nut = len(mb.verts)
     for r0 in (geom.rect(ny - hole - 3, nz - hole - 3, ny + hole + 3, nz - hole),
                geom.rect(ny - hole - 3, nz + hole, ny + hole + 3, nz + hole + 3),
@@ -732,6 +737,12 @@ def build(p):
                geom.rect(ny + hole, nz - hole, ny + hole + 3, nz + hole)):
         mb.prism(r0, "YZ", nx0, nx1, "brass_satin")
     mb.prism(geom.rect(nx0, fy1_ - 0.5, nx1, ny - hole - 3 + 0.5), "XY", nz + hole + 0.5, fz1_, "brass_satin")
+    # the follower pin in the nut's top bar, its tip in the screw's groove (a cut groove needs a
+    # pin, not a thread, to drive the carriage), and its head on the bar
+    pcx = (nx0 + nx1) / 2.0
+    pin_r, pin_tip = ls["pin"]["radius"], ls["radius"] - ls["groove"]["depth"] + ls["pin"]["tip_clear"]
+    mb.prism([(pcx + u, ny + w) for u, w in geom.circle(pin_r, 12)], "XY", nz + pin_tip, nz + hole + 3.0 + 0.6, "steel", smooth=True)
+    mb.prism([(pcx + u, ny + w) for u, w in geom.circle(pin_r + 0.8, 12)], "XY", nz + hole + 3.0 - 0.01, nz + hole + 3.0 + 0.6, "steel", smooth=True)
     czones.append(bl.zone(mb, z_nut, "part.leadNut"))
     x_pl = p.v(G + "setting.rack_pitch_line_x")
     pm_ = p.v(G + "setting.pinion_module")
