@@ -30,13 +30,13 @@ Space that is always there is for things that change while you watch. Things don
 
 The machine's own markings (the digits on its wheels and dials) stay as on the machine, and are not translated. The instrument around it (top bar, dock, labels, status line) is translated.
 
-### P6 — Unavailable is greyed and explained, never hidden
+### P6 — Unavailable is grayed and explained, never hidden
 
-A control that cannot be used right now stays where it is, greyed, and when used it answers in the status line with the reason: the crank is locked while the machine is taken apart; a lesson step asks for something else; the pin is on the stop.
+A control that cannot be used right now stays where it is, grayed, and when used it answers in the status line with the reason: the crank is locked while the machine is taken apart; a lesson step asks for something else; the pin is on the stop.
 
 ### P7 — One status line, always visible
 
-It says what just happened, and why something is greyed.
+It says what just happened, and why something is grayed.
 
 ### P8 — A link is a public contract
 
@@ -48,13 +48,13 @@ Same regions, same order, every feature. Nothing depends on hover or on a precis
 
 ### P10 — One component for each kind of thing
 
-Menu, dialog, icon button, tab, card, chip: each kind of control is one component, used the same way everywhere. They follow Material Design 3 (states, shapes, elevation, motion), in our own colours.
+Menu, dialog, icon button, tab, card, chip: each kind of control is one component, used the same way everywhere. They follow Material Design 3 (states, shapes, elevation, motion), in our own colors.
 
 Also:
 - **Icons are Material Symbols, inline SVG.** No icon fonts, and no fonts or scripts from a CDN: the page must not need any network but its own site (school networks block a lot). Fonts and icons are vendored like three.js (`pnpm vendor`).
 - **Every icon button has a tooltip and a screen-reader name**, both translated.
 - **Keyboard first-class:** every control is reachable with Tab, has a visible focus ring, and the dock's tabs follow the WAI-ARIA tabs pattern. The 3D view itself takes the focus: arrows turn it, + and − zoom (U24).
-- **Motion is short and optional:** camera flights and panel transitions honour `prefers-reduced-motion`.
+- **Motion is short and optional:** camera flights and panel transitions honor `prefers-reduced-motion`.
 
 ## Part 2 — The layout
 
@@ -88,42 +88,42 @@ The page is a fixed frame: top bar, stage (with the machine's toolbar floating a
 
 Opening the page gives a working machine at once: every control enabled, nothing to choose first. The dock opens on *Get started* the first time (and on the reader's last tab after that), inviting the tutorial without blocking the machine.
 
-Starting the tutorial or a lesson enters **course mode**: the step player takes the dock, the machine toolbar greys the controls the current step does not use (P6, the status line says why), and the top bar shows where you are (U27). Leaving (the top bar's ✕ Free play, the lesson's ✕, Finish, or opening another lesson) returns to free play with the machine as it is; a lesson left unfinished can be resumed at its step.
+Starting the tutorial or a lesson enters **course mode**: the step player takes the dock, the machine toolbar grays the controls the current step does not use (P6, the status line says why), and the top bar shows where you are (U27). Leaving (the top bar's ✕ Free play, the lesson's ✕, Finish, or opening another lesson) returns to free play with the machine as it is; a lesson left unfinished can be resumed at its step.
 
 ### U3 — Three dock tabs: Get started, Lessons, References
 
 - **Get started**: the tutorial in three short chapters: *What is it?* (the machine's story, with historical pictures), *What's inside?* (a tour of the parts in 3D, taking it apart), *Your first sum* (2 + 3, done by the reader).
-- **Lessons**: a path of seven lessons, each building on the one before (U6), with progress ticks remembered in the browser.
+- **Lessons**: a path of seven lessons, each building on the one before (U6), with progress check marks remembered in the browser.
 - **References**: where to see the machine and read more, grouped, each link with one line on why it is worth a click. It opens with a short text on the original and its replicas, and which of them the model follows (decision 0002). It ends with the credits, which About's *References* button opens.
 
 Free play has no tab: its controls are the machine toolbar, under the machine (P2).
 
 ### U4 — The machine's toolbar and the stage's own tools
 
-- **Machine toolbar** (floating at the stage's bottom, centred under the machine, U18): the number on the setting knobs, turn forward (+) and back (−) as one pair, carriage left and right with its place as another, boxed and named like the number box (U21), the revolution counter's pin (a dropdown box, U22) with a run to the stop on each side, backward and forward (U23), how the carry levers act (a dropdown box, U30), reset (U20), and the machine's sound on or off (U29). Icon plus short label where there is room, icons with tooltips where there is not (U18).
+- **Machine toolbar** (floating at the stage's bottom, centered under the machine, U18): the number on the setting knobs, turn forward (+) and back (−) as one pair, carriage left and right with its place as another, boxed and named like the number box (U21), the revolution counter's pin (a dropdown box, U22) with a run to the stop on each side, backward and forward (U23), how the carry levers act (a dropdown box, U30), reset (U20), and the machine's sound on or off (U29). Icon plus short label where there is room, icons with tooltips where there is not (U18).
 - **Readouts** sit on the stage's top edge: the result as on the machine, grouped in threes; the turns the revolution counter has counted (red when backward); the carriage's place.
-- **View controls** float at the stage's top right (U15): a Reset view button (⌂), a − / + zoom pair (U24) and the Views menu, whose button names the view on show. The menu holds the eight views (two of them inside views, U11, and Taken apart) and three switches, Show the frame (U32), Colour by part (U31) and Slow motion (U33). Opening the front, fading and taking apart follow the view (U14, U15). They change how the machine is *shown*, not its state, so they stay enabled in a lesson, except where a step depends on them.
+- **View controls** float at the stage's top right (U15): a Reset view button (⌂), a − / + zoom pair (U24) and the Views menu, whose button names the view on show. The menu holds the eight views (two of them inside views, U11, and Taken apart) and three switches, Show the frame (U32), Color by part (U31) and Slow motion (U33). Opening the front, fading and taking apart follow the view (U14, U15). They change how the machine is *shown*, not its state, so they stay enabled in a lesson, except where a step depends on them.
 
-### U5 — A dark Material 3 theme for a classroom: blue, with one colour per meaning
+### U5 — A dark Material 3 theme for a classroom: blue, with one color per meaning
 
-A dark scheme (the 8800's family): the 3D stage reads better on dark, and the brass and oak of the machine are the brightest, warmest things on screen. The interface around them is cool blue on blue-grey neutrals. Blue is the complement of the machine's gold, so the machine stands out from its frame instead of being echoed by it, and blue with amber highlights is the palette of science and school, not of luxury.
+A dark scheme (the 8800's family): the 3D stage reads better on dark, and the brass and oak of the machine are the brightest, warmest things on screen. The interface around them is cool blue on blue-gray neutrals. Blue is the complement of the machine's gold, so the machine stands out from its frame instead of being echoed by it, and blue with amber highlights is the palette of science and school, not of luxury.
 
 The first version used a brass-gold primary on warm neutrals to match the machine. It looked cohesive, but it read as luxury rather than as a classroom tool. The machine also blended into its own frame, and "your turn" was the same gold as everything else, so it did not stand out. A side-by-side trial of the two palettes settled it.
 
-**Each colour has one meaning**, everywhere it appears:
+**Each color has one meaning**, everywhere it appears:
 
-| Colour | Means | Where |
+| Color | Means | Where |
 |---|---|---|
-| Blue (primary) | The instrument: navigation, selection, where you are | The selected tab and its bar, links, the focus ring, filled buttons (Start, Next), the lesson's progress and current step, a lesson under way in another tab (dot), the course chip, ticks in menus, the result readout |
-| Blue-grey (secondary) | The machine's controls | The tonal buttons: + and −, the carriage's arrows, Run to stop and Run back to stop |
+| Blue (primary) | The instrument: navigation, selection, where you are | The selected tab and its bar, links, the focus ring, filled buttons (Start, Next), the lesson's progress and current step, a lesson under way in another tab (dot), the course chip, check marks in menus, the result readout |
+| Blue-gray (secondary) | The machine's controls | The tonal buttons: + and −, the carriage's arrows, Run to stop and Run back to stop |
 | Amber (attention) | Your turn | The glow on the control a step asks for, the task line's "Your turn", and in 3D the glow on the parts a step points at (the same hue) |
 | Green (success) | Done | The task line's "Done", a finished lesson's badge, the lesson-done icon |
 | Red (error) | Something was refused | A refused control's reason in the status line |
 | The machine's red | Counting backward | The turns readout when the crank turns back, as the counter's red digits do |
 
-- **The dock has three surface levels,** so its parts do not blur together in the dark: the tab bar is a raised band with a divider under it, the body is the darkest well the content sits in, and cards (a step, a lesson, Get started's welcome) are raised above it with a fine edge. Before, the tab bar, the body and the space around the content shared one colour, and only the cards differed, and only slightly.
-- **Hover and press are visible:** a control lightens by 14% under the pointer and 22% when pressed (Material's 8% and 12% barely showed on the blue-grey buttons). A dropdown box also lightens its fill on hover.
-- **Contrast:** every text colour on its background reaches at least 7:1 (WCAG AAA). The outlines of the setting boxes reach 5.4:1 against the toolbar.
+- **The dock has three surface levels,** so its parts do not blur together in the dark: the tab bar is a raised band with a divider under it, the body is the darkest well the content sits in, and cards (a step, a lesson, Get started's welcome) are raised above it with a fine edge. Before, the tab bar, the body and the space around the content shared one color, and only the cards differed, and only slightly.
+- **Hover and press are visible:** a control lightens by 14% under the pointer and 22% when pressed (Material's 8% and 12% barely showed on the blue-gray buttons). A dropdown box also lightens its fill on hover.
+- **Contrast:** every text color on its background reaches at least 7:1 (WCAG AAA). The outlines of the setting boxes reach 5.4:1 against the toolbar.
 - Type is Roboto Flex (Latin, Latin Extended, Greek, Cyrillic; CJK falls back to the system's Noto/PingFang/Hiragino/Malgun), with tabular figures for every number.
 
 *Rejected:* a light theme for now (the 3D stage reads better on dark; open question); several themes to choose from (one well-made theme is enough for the first release).
@@ -138,7 +138,7 @@ The first version used a brass-gold primary on warm neutrals to match the machin
 6. **Multiplying: 1709 × 365** — with the revolution counter's pin, in 14 turns.
 7. **Dividing: 623785 ÷ 1709** — subtracting until it goes below zero.
 
-Every lesson opens with what you will learn, has a task the reader does at least every few steps, and ends with a one-line recap and a *Next lesson* button. A task names the control to use, and that control is the only one not greyed.
+Every lesson opens with what you will learn, has a task the reader does at least every few steps, and ends with a one-line recap and a *Next lesson* button. A task names the control to use, and that control is the only one not grayed.
 
 ### U7 — Ten languages, one file each
 
@@ -146,20 +146,20 @@ The locales of the 8800 simulator: English, Español, Français, Deutsch, Italia
 
 ### U8 — The top bar: logo, title, the mode, and three icons
 
-Logo and title on the left; on the right the dock toggle, the language menu and About. About is a dialog with a title band (its name, and an ✕ to close it, as a dialog's title bar has; Escape and a click on the dimmed backdrop close it too): logo, version, one line on what the simulator is, the link to the source and the licences one per line, then two buttons: *References* and *Close*. It is kept short, as in the 8800 simulator: the credits (how the model was made, the sources, photographers and libraries) are at the end of the References tab, and *References* closes About and opens that tab at them. The developer pages are for developers and are not linked from the app (the README names them). It is the app's only dialog; another would take the same band.
+Logo and title on the left; on the right the dock toggle, the language menu and About. About is a dialog with a title band (its name, and an ✕ to close it, as a dialog's title bar has; Escape and a click on the dimmed backdrop close it too): logo, version, one line on what the simulator is, the link to the source and the licenses one per line, then two buttons: *References* and *Close*. It is kept short, as in the 8800 simulator: the credits (how the model was made, the sources, photographers and libraries) are at the end of the References tab, and *References* closes About and opens that tab at them. The developer pages are for developers and are not linked from the app (the README names them). It is the app's only dialog; another would take the same band.
 
 ### U9 — The 3D stage behaves like a 3D viewer
 
-Orbit by dragging, pan with the right button or two fingers, zoom with the wheel or a pinch, damped and limited so the machine cannot be lost; *Reset view* always brings it back, framed by U10. Hovering a part shows its name and live value; a part that can be operated shows a pointer cursor and what a click will do. The model loads with a progress indicator on the stage; until then the toolbar is greyed with the reason in the status line.
+Orbit by dragging, pan with the right button or two fingers, zoom with the wheel or a pinch, damped and limited so the machine cannot be lost; *Reset view* always brings it back, framed by U10. Hovering a part shows its name and live value; a part that can be operated shows a pointer cursor and what a click will do. The model loads with a progress indicator on the stage; until then the toolbar is grayed with the reason in the status line.
 
 ### U10 — Each view fits its parts into the stage's free area
 
 The readouts and the view controls on the stage's top edge float over the canvas. Every camera view frames its parts (the whole machine, or the parts of a close-up) in the **free area** below that band, by two rules:
 
-1. **Nothing covers the machine.** The fit uses the free area, not the whole canvas, so no readout, tool or the dock (which sits beside or under the canvas) ever hides part of it. The camera's centre is moved to the free area's centre (a view offset), so the machine sits in the middle of what is free, and orbiting pivots around it.
+1. **Nothing covers the machine.** The fit uses the free area, not the whole canvas, so no readout, tool or the dock (which sits beside or under the canvas) ever hides part of it. The camera's center is moved to the free area's center (a view offset), so the machine sits in the middle of what is free, and orbiting pivots around it.
 2. **Contain at 90%.** The parts are as large as they can be while all of them show: they fill 90% of whichever side of the free area runs out first. In a wide, flat stage that is the height; in a laptop's stage beside the dock, in a portrait or a phone's stage, usually the width or the height, whichever the machine's 2.3 : 1 silhouette meets first.
 
-The camera keeps each view's direction; the fit moves it only nearer or farther and sideways, measured on the corners of each part's own bounding box as the camera sees them. Not a bounding sphere, which would leave them smaller; and not one box around all the parts, whose far corners, seen at an angle, reach well beyond parts that do not fill a box (taken apart, the machine spreads into an L and came out at 68% and 9% off-centre). Acceptance check A3-14 measures every view on the parts' own geometry: about 90% of the limiting side, centred. The whole machine is fitted with its case whether the case is shown or not, so hiding the case does not move the camera; taken apart, it is fitted at its taken-apart size.
+The camera keeps each view's direction; the fit moves it only nearer or farther and sideways, measured on the corners of each part's own bounding box as the camera sees them. Not a bounding sphere, which would leave them smaller; and not one box around all the parts, whose far corners, seen at an angle, reach well beyond parts that do not fill a box (taken apart, the machine spreads into an L and came out at 68% and 9% off-center). Acceptance check A3-14 measures every view on the parts' own geometry: about 90% of the limiting side, centered. The whole machine is fitted with its case whether the case is shown or not, so hiding the case does not move the camera; taken apart, it is fitted at its taken-apart size.
 
 **Resizing refits; the reader's camera is the reader's.** While the camera is in a view the page chose (on load, from the Views menu, Reset view or a lesson step), a change of the stage's size (the window, the dock opened or closed, a phone turned) or taking the machine apart refits it at once. Once the reader turns, moves or zooms the camera, it stays where they put it until they choose a view or Reset view. Code: `js/scene/framing.js`, tested in `tests/scene/framing.test.js`.
 
@@ -240,9 +240,9 @@ Taking apart is a way of looking at the machine, like the close-ups: it has its 
 
 (As of 1.3.0: the Counter view and the Slow motion switch were added later, U33.)
 
-- **The button names the view on show** (the current one is ticked in the menu), since no pressed chip shows the state any more. On a phone it shrinks to its icons.
+- **The button names the view on show** (the current one is checked in the menu), since no pressed chip shows the state any more. On a phone it shrinks to its icons.
 - **Taken apart flies to its own framing** (U10, fitted to the parts in their taken-apart places) while the parts move out, so it always shows from a good angle, whatever the reader did to the camera. It locks the crank and the knobs (P6); the status line says to choose another view to put the machine back together. Any other view puts it together. In a lesson the step names `view: "apart"`, so steps now name only a subject and a view; it is refused while the machine is moving.
-- **Show the frame (formerly Show case) is a switch, not a view:** a checkbox after the views, with Colour by part and Slow motion. It is the reader's override (U13, U14).
+- **Show the frame (formerly Show case) is a switch, not a view:** a checkbox after the views, with Color by part and Slow motion. It is the reader's override (U13, U14).
 - **Reset view (⌂) is a separate button, because it means something else than Whole machine.** Whole machine is a place. Reset means "back to where I should be": in free play the whole machine with the case on, in a lesson the step's own view and presentation. It is one click, since undoing a bad orbit is the most common camera action.
 - **The bottom tool row is gone,** so only the top band limits the free area, and every view frames the machine a little larger (U10).
 - **The view stays when a course ends:** closing or finishing a lesson keeps the view on show, as free play shows it.
@@ -274,16 +274,16 @@ The dock had a fixed size, so the reader could not give the machine more room, o
 
 ### U18 — The toolbar floats under the machine, and the lesson brings its control
 
-With the dock on the right, the toolbar ran the full width under the stage, left-aligned, at the window's bottom-left corner: far from the machine, centred above it, and from the lesson text in the dock.
+With the dock on the right, the toolbar ran the full width under the stage, left-aligned, at the window's bottom-left corner: far from the machine, centered above it, and from the lesson text in the dock.
 
-- **The toolbar floats at the stage's bottom, centred under the machine,** as a compact bar like the view controls at the top right. It sits where the reader is already looking, and the 3D view gets the full height. The framing (U10) keeps the machine clear of it, and refits when the bar re-wraps (a longer language, a narrower stage). It wraps to two rows when the stage is narrow, and shows icons with tooltips on a phone.
-- **A step's task line shows the controls it asks for,** for example "Your turn [↺ Add]". Each button works the toolbar's own control, so the same locks, lesson rules and reasons apply (P6). It is greyed when that control is, and the toolbar still makes the asked-for control glow. In a lesson, the moment the reader most often hunts for a control, their eyes can stay in the dock. The number box is a button that puts the cursor in the toolbar's number field.
+- **The toolbar floats at the stage's bottom, centered under the machine,** as a compact bar like the view controls at the top right. It sits where the reader is already looking, and the 3D view gets the full height. The framing (U10) keeps the machine clear of it, and refits when the bar re-wraps (a longer language, a narrower stage). It wraps to two rows when the stage is narrow, and shows icons with tooltips on a phone.
+- **A step's task line shows the controls it asks for,** for example "Your turn [↺ Add]". Each button works the toolbar's own control, so the same locks, lesson rules and reasons apply (P6). It is grayed when that control is, and the toolbar still makes the asked-for control glow. In a lesson, the moment the reader most often hunts for a control, their eyes can stay in the dock. The number box is a button that puts the cursor in the toolbar's number field.
 
 *Rejected:* the controls in the top band beside the readouts (it would crowd the band that holds the numbers and the camera: top is state and camera, bottom is acting); the controls inside the dock (in free play the dock may be closed).
 
 ### U19 — The number box sets the knobs as you type
 
-The number typed into the box under the machine reached the knobs only on Enter, Tab or leaving the box: a hidden step, and on a phone, where there is no Tab and Enter is a keyboard key labelled "Return", not an obvious one.
+The number typed into the box under the machine reached the knobs only on Enter, Tab or leaving the box: a hidden step, and on a phone, where there is no Tab and Enter is a keyboard key labeled "Return", not an obvious one.
 
 - **The knobs follow every keystroke.** Typing 3 turns the units knob to 3, typing 30 brings the tens knob in. It is direct manipulation, like the machine itself, and the same as the other way round: clicking a knob updates the box at once.
 - **The status line waits** about 0.6 s after the last keystroke before it says "Knobs set to 30" (and, in a lesson, whether the step is done), so it does not change with each digit, and a screen reader does not read each one out. Enter, Tab or leaving the box says it at once.
@@ -295,9 +295,9 @@ The number typed into the box under the machine reached the knobs only on Enter,
 
 ### U20 — The crank's two buttons: its turning icons with + and −, an equal pair
 
-The buttons were labelled Add and Subtract, and Add was filled (the main action, in Material) while Subtract was tonal, so they looked like one active and one inactive button, which they are not. The words were also long in some languages ("Addieren / Subtrahieren", "Additionner / Soustraire").
+The buttons were labeled Add and Subtract, and Add was filled (the main action, in Material) while Subtract was tonal, so they looked like one active and one inactive button, which they are not. The words were also long in some languages ("Addieren / Subtrahieren", "Additionner / Soustraire").
 
-- **The labels are the crank's turning icon and the sign of what the turn does,** ↺ + and ↻ −: adding turns the crank anticlockwise seen from the front, as the model does. The signs are the same in every language, so the buttons are equally short in all ten. The icons keep them from reading as "make the number bigger or smaller": they say "turn forward: add", as the machine does (U16). The words stay in the tooltip and the accessible name ("Turn the crank forward once: adds the number on the knobs"). The minus is the true minus sign (−), larger than the body text.
+- **The labels are the crank's turning icon and the sign of what the turn does,** ↺ + and ↻ −: adding turns the crank counterclockwise seen from the front, as the model does. The signs are the same in every language, so the buttons are equally short in all ten. The icons keep them from reading as "make the number bigger or smaller": they say "turn forward: add", as the machine does (U16). The words stay in the tooltip and the accessible name ("Turn the crank forward once: adds the number on the knobs"). The minus is the true minus sign (−), larger than the body text.
 - **They are one joined pair, alike:** one crank, two ways. The carriage's left and right arrows are a joined pair too, with its place between them.
 - **The toolbar is consistent:** every machine operation is a tonal button. None looks like the default or the active one; in a lesson the step's own control is marked by the glow and its task-line button (U18). Reset, which clears the machine, is the one quiet text button, at the end of the operations (only the sound switch follows it, U29).
 - **The texts that named the buttons say "press +" or "press −"** (in the tutorial and the subtraction lesson, and in Get started), and the task line shows the same ↺ + and ↻ −.
@@ -317,14 +317,14 @@ The pin control was a tonal button with a circled-dot icon (meant as "a pin in a
 
 - **It is an outlined dropdown, boxed and named like the number box and the carriage (U21):** "Pin" on its border, the hole inside ("–" when the pin is out), and a ▾. The dot icon is gone. Its border lights while its menu is open.
 - **One rule for the toolbar:** what the reader *sets* is a box with its name on the border (the number on the knobs, the carriage's place, the pin's hole); what they *do* is a button (+ and −, run to stop, reset). The pin box and Run to stop stay side by side: one sets the stop, the other runs to it.
-- **Its menu** lists "Out", then which numbers to count by, *Adding (black)* or *Subtracting (red)*, then the holes 0 to 9 under a "Hole" heading, numbered in that circle, with the current one ticked. Since 1.3.0 the pin sits in the revolution counter's ring, whose every hole has a black number (adding: the crank stops after that many forward turns) and a red one, 9 minus it (turning back: after that many backward turns). Choosing the other circle with the pin in moves it to the same number there. The box shows the number, red when set by the red circle. Its accessible name says the setting ("Pin at black 5.", "Pin at red 3.", "Pin: out"), and its tooltip what the pin does.
+- **Its menu** lists "Out", then which numbers to count by, *Adding (black)* or *Subtracting (red)*, then the holes 0 to 9 under a "Hole" heading, numbered in that circle, with the current one checked. Since 1.3.0 the pin sits in the revolution counter's ring, whose every hole has a black number (adding: the crank stops after that many forward turns) and a red one, 9 minus it (turning back: after that many backward turns). Choosing the other circle with the pin in moves it to the same number there. The box shows the number, red when set by the red circle. Its accessible name says the setting ("Pin at black 5.", "Pin at red 3.", "Pin: out"), and its tooltip what the pin does.
 
 ### U23 — Run to stop is an icon, joined to the pin's box (and Run back to stop, since 1.3.0)
 
 Run to stop showed ⏩ and its words. The icon read as a video's fast-forward, and the words took room for a control that does something only once a pin is in.
 
 - **It is icon only, with →| (an arrow running into a bar): turn until the stop.** Since 1.3.0 a second button, |← on the box's other side, runs the crank backward to the stop, for the red numbers (subtracting a number of times, as dividing does).
-- **It is joined to the pin's box, like a split button:** the box sets the stop, the button runs the crank to it. On its own an icon is a guess; attached to "Pin" its meaning comes from the box. It is greyed when the box shows "–", or while the pin is on the stop, and says why when pressed (P6).
+- **It is joined to the pin's box, like a split button:** the box sets the stop, the button runs the crank to it. On its own an icon is a guess; attached to "Pin" its meaning comes from the box. It is grayed when the box shows "–", or while the pin is on the stop, and says why when pressed (P6).
 - **Its name stays** in the tooltip and the accessible name ("Turn the crank forward until the pin reaches the stop"), and the lesson task line still shows it with its words (U18).
 - **Reset keeps its word where there is room** (it drops to its icon on a narrow stage). Its ⟳ is easily taken for the view's Reset (⌂), and it clears the machine, so the word guards against a slip.
 
@@ -339,7 +339,7 @@ The wheel, a trackpad's pinch and a touch screen's pinch zoom the 3D view, withi
   - Home resets the view, as ⌂ does.
 
   Each press is a short animated step. Keys act only while the 3D view has the focus, so typing a number is never affected, and the browser's own Ctrl/⌘ shortcuts pass through. Its accessible name lists the keys, and the Get started panel names them too (Home aside: ⌂ is beside the zoom buttons).
-- **A joined zoom-out / zoom-in pair** (magnifying glasses with − and +, the usual zoom icons, not bare signs that could be read as the crank's + and −, U20) sits in the view controls at the top right, between ⌂ and the Views menu. Each press zooms by a factor of 1.25 towards the orbit's centre, in a short flight. A button greys at its limit; the limits are checked as the camera moves, whatever moved it.
+- **A joined zoom-out / zoom-in pair** (magnifying glasses with − and +, the usual zoom icons, not bare signs that could be read as the crank's + and −, U20) sits in the view controls at the top right, between ⌂ and the Views menu. Each press zooms by a factor of 1.25 toward the orbit's center, in a short flight. A button grays at its limit; the limits are checked as the camera moves, whatever moved it.
 - **A step by key or button is the reader's camera,** like a drag (U10): a resize no longer refits the view, and Reset view brings it back.
 
 *Rejected:* double-click or double-tap to zoom (a click on the machine already works its knobs and crank, so a double-click would turn a knob twice).
@@ -360,11 +360,11 @@ In a wide dock (below the machine on a large screen), a step looked unfinished. 
 - **A step is one card:** its picture, its text and its task line together. Back and Next sit under the card.
 - **The picture keeps its own shape,** never letterboxed, with rounded corners and its credit underneath.
 - **The card adapts to the dock's own width:** below about 640 px the picture sits above the text, the full width of the card; wider, it sits beside the text (two fifths and three fifths), up to 320 px tall. A tall picture, such as the 1727 engraving, stays upright beside the text.
-- **Text keeps a reading measure:** a step's text is at most about 68 characters a line, and every panel's content (Get started, the lessons, the references, a step) is centred at no more than 960 px in a wide dock.
+- **Text keeps a reading measure:** a step's text is at most about 68 characters a line, and every panel's content (Get started, the lessons, the references, a step) is centered at no more than 960 px in a wide dock.
 
 ### U27 — The mode is in the top bar: where you are, and the way back
 
-Free play or a lesson was shown only by a small tag at the right end of the status bar, which new readers did not notice. The only way back to free play was the small ✕ in the lesson's header. A reader who had started a lesson could not tell why controls were greyed, or how to get out.
+Free play or a lesson was shown only by a small tag at the right end of the status bar, which new readers did not notice. The only way back to free play was the small ✕ in the lesson's header. A reader who had started a lesson could not tell why controls were grayed, or how to get out.
 
 - **The top bar shows the mode, always, beside the title.** It is where an app shows its overall state, and the first place people look. The mode is the whole app's state (the dock, the camera, which controls work, the machine's starting state), not the toolbar's, and the toolbar has no room left.
 - **In free play, a quiet chip "Free play ▾".** Its menu offers "Resume: *lesson*, step *i* of *n*" when a lesson was left unfinished, "Start the tutorial" (or "again"), and "Choose a lesson…". Each of these brings the dock forward, opening it if it was closed.
@@ -377,18 +377,18 @@ Free play or a lesson was shown only by a small tag at the right end of the stat
   - the machine's own cues (the amber glow on the asked-for control and on the parts the step points at) work without the dock.
 
   *Rejected:* blocking the dock's close during a lesson.
-- **The 3D view is framed during a lesson:** a slim line (2 px) in the lesson chip's blue with a soft inner glow runs round its inside, so the mode is in sight where the eyes are. It is a shape rather than a colour change: the scene, its lighting and its background stay as they are, so the machine looks the same in both modes, and a colour-blind reader sees it as well. *Rejected:* a green background in lessons (green means done, U5; a tinted background changes how the brass reads; dark green and dark blue look alike to many colour-blind readers).
+- **The 3D view is framed during a lesson:** a slim line (2 px) in the lesson chip's blue with a soft inner glow runs round its inside, so the mode is in sight where the eyes are. It is a shape rather than a color change: the scene, its lighting and its background stay as they are, so the machine looks the same in both modes, and a color-blind reader sees it as well. *Rejected:* a green background in lessons (green means done, U5; a tinted background changes how the brass reads; dark green and dark blue look alike to many color-blind readers).
 - **The refusal says where the way out is:** a control a step does not use answers "…To use it freely, leave the lesson for free play (top bar)."
-- **On a phone** the bar cannot grow a second row (height is what a phone lacks), so it frees room instead: the title text goes (the logo stays; the full title is the page's title and is in About), the language button shows only its 文A (the current language is ticked in its menu), and a lesson shows only its step ("3/9", its name is in the dock's header) beside the ✕. Under 360 px the free-play chip also drops its icon, keeping its words and ▾. The mode's text is the one part of the bar that may shorten (with "…"); the ✕ never does. Checked in all ten languages at 320 and 375 px.
+- **On a phone** the bar cannot grow a second row (height is what a phone lacks), so it frees room instead: the title text goes (the logo stays; the full title is the page's title and is in About), the language button shows only its 文A (the current language is checked in its menu), and a lesson shows only its step ("3/9", its name is in the dock's header) beside the ✕. Under 360 px the free-play chip also drops its icon, keeping its words and ▾. The mode's text is the one part of the bar that may shorten (with "…"); the ✕ never does. Checked in all ten languages at 320 and 375 px.
 - **The status bar's mode tag is gone;** the status line keeps its messages.
 
 ### U28 — What can be selected and dragged
 
 Only buttons were protected: the logo could be dragged, and labels, chips, tabs, the title and the status bar could be dragged across and selected, as on a document. The page is an instrument, so it follows the platform's rules for apps.
 
-- **Chrome is neither selectable nor draggable:** the top bar (logo, title, mode, buttons), the stage's readout labels, view controls and 3D view, the toolbar, the dock's tabs and handle, menus, tooltips and labels, the dialog's title band, and the controls inside reading areas (Back and Next, the task line, the progress, the lesson list's buttons, links). The logo and its link are marked not draggable (Firefox ignores the CSS for that). A long press shows no image or link callout, and a tap shows no grey flash.
+- **Chrome is neither selectable nor draggable:** the top bar (logo, title, mode, buttons), the stage's readout labels, view controls and 3D view, the toolbar, the dock's tabs and handle, menus, tooltips and labels, the dialog's title band, and the controls inside reading areas (Back and Next, the task line, the progress, the lesson list's buttons, links). The logo and its link are marked not draggable (Firefox ignores the CSS for that). A long press shows no image or link callout, and a tap shows no gray flash.
 - **What is read stays selectable,** so a teacher can copy it into a worksheet: the dock's text (steps, captions, Get started, the lesson summaries, references), About's text, the status line's message, the readouts' values (the result), and whatever is typed in the number box.
-- **The lessons' pictures** can still be dragged or long-pressed, as content (each carries its credit and licence).
+- **The lessons' pictures** can still be dragged or long-pressed, as content (each carries its credit and license).
 
 ### U29 — The machine sounds; the interface does not
 
@@ -421,20 +421,20 @@ The machine is a mechanism of gears, racks and levers, and hearing it work tells
 
 The machine can carry two ways (decision 0001): with the ripple carry, the default, whose levers come one after another, units first, so a chain of carries runs through within one turn (a modern pair of carry parts of our design in place of two of the original's in each digit, design/v1.3-notes.md: not historical, and not Lehmann's); or like the original in Hannover, whose levers all act at once, so a carry made while carries are being passed on waits, its pentagon tilted, for another turn. The reader chooses in free play.
 
-- **It is a setting, so it is a box (U22's rule):** "Carry" on its border, a short word inside (*Ripple*, *Original*), and a ▾. Its menu names the two carries on one line each and says what each does on a second, smaller line; the current one is ticked. Its accessible name says the setting ("Carry: The original (Hannover)"), its tooltip what it chooses.
+- **It is a setting, so it is a box (U22's rule):** "Carry" on its border, a short word inside (*Ripple*, *Original*), and a ▾. Its menu names the two carries on one line each and says what each does on a second, smaller line; the current one is checked. Its accessible name says the setting ("Carry: The original (Hannover)"), its tooltip what it chooses.
 - **It sits after the pin, before Reset,** and the two stay together where the toolbar wraps: on a phone they make the last row (number, crank and sound; carriage and pin; carry and reset). The word inside is short so the box stays narrow (80–100 px); its minimum width keeps the longest name on its border (Japanese 繰り上がり) inside it. Reset's label goes below a 940 px stage and the separators below 820 px, so a 1280 px laptop with the dock and a 768 px tablet still have one row. A phone has three rows (it had two from 390 px): the toolbar's boxes are wider than two rows of a phone hold, and the carry's name should stay readable rather than become an icon.
-- **Only at rest, only in free play.** It changes the levers' phases, so it waits for the crank to stop; a lesson sets its own carry with each step's reset, so in a lesson the box is greyed like every control the step does not ask for. Reset keeps the choice; leaving a lesson keeps the machine as the lesson left it, the carry included, as for everything else.
+- **Only at rest, only in free play.** It changes the levers' phases, so it waits for the crank to stop; a lesson sets its own carry with each step's reset, so in a lesson the box is grayed like every control the step does not ask for. Reset keeps the choice; leaving a lesson keeps the machine as the lesson left it, the carry included, as for everything else.
 - The status line says what the choice means, and the carry set is exchanged at once: the original's horns and star s at the front, or the ripple set's at the back, behind the drums, visible in the Carry view. That view draws the pentagons half-transparent (their tilt still shows a stored carry), since the ripple set's star works right in front of them.
 
 
-### U31 — Colour by part
+### U31 — Color by part
 
-Inside the machine most moving parts are brass, as they are on the original, and in the inside views they glow amber besides: the parts at the back are hard to tell apart. The Views menu's **Colour by part** switch, under *Show the frame*, draws every kind of part in a colour of its own (`PART_COLOURS` in js/scene/teachScene.js): the drums orange, the result wheels with their Einzahn and ten-wheel blue, the carry stores (five-horn p, detent wheel, pentagon, shaft) green, the stars s and s' cyan, the Zweihörner red, the lever shafts with their long gears purple, the setting heads mustard, the counter and its drive pink, the large gears magenta, the Magna Rota and crank brown, the frame and the feet grey, the carry stores' detent springs with the stores. The board and blocks the machine stands on keep their wood: they are its stand, not a part of it.
+Inside the machine most moving parts are brass, as they are on the original, and in the inside views they glow amber besides: the parts at the back are hard to tell apart. The Views menu's **Color by part** switch, under *Show the frame*, draws every kind of part in a color of its own (`PART_COLOURS` in js/scene/teachScene.js): the drums orange, the result wheels with their Einzahn and ten-wheel blue, the carry stores (five-horn p, detent wheel, pentagon, shaft) green, the stars s and s' cyan, the Zweihörner red, the lever shafts with their long gears purple, the setting heads mustard, the counter and its drive pink, the large gears magenta, the Magna Rota and crank brown, the frame and the feet gray, the carry stores' detent springs with the stores. The board and blocks the machine stands on keep their wood: they are its stand, not a part of it.
 
-- **Any time, in free play and in lessons.** It changes only the colours: highlighting, fading and the half-transparent pentagons of the inside views work on top of it, and a highlighted part glows in its own colour rather than amber, so its colour still says what it is.
-- **The numbers stay readable:** the digits and the white bands they are printed on keep their colours.
-- **Every part has its colour:** acceptance check A3-17 fails if a mesh keeps its own look in this mode, other than the digits, their bands and the stand's wood. (Until 1.4.0 the frame did: a pattern for numbered parts, `frame.*`, named it and matched nothing.)
-- The status line says what the colours are for, and to hover over a part for its name.
+- **Any time, in free play and in lessons.** It changes only the colors: highlighting, fading and the half-transparent pentagons of the inside views work on top of it, and a highlighted part glows in its own color rather than amber, so its color still says what it is.
+- **The numbers stay readable:** the digits and the white bands they are printed on keep their colors.
+- **Every part has its color:** acceptance check A3-17 fails if a mesh keeps its own look in this mode, other than the digits, their bands and the stand's wood. (Until 1.4.0 the frame did: a pattern for numbered parts, `frame.*`, named it and matched nothing.)
+- The status line says what the colors are for, and to hover over a part for its name.
 
 ### U32 — Show the frame
 
@@ -446,7 +446,7 @@ With the frame off the reader wants the mechanism, and since v1.3.0 much of it s
 
 ### U33 — Slow motion
 
-The crank turns at 300° a second, so one turn takes 1.2 s, and the quick moments of a carry are over in a few frames: the single tooth turns a carry store by 18° in 0.065 s, and the ripple set's Zweihorn turns it on by 54° in 0.045 s. The reader who zooms in to watch them sees jumps. The Views menu's **Slow motion** switch, after *Colour by part*, plays every motion, crank turns and carriage shifts alike, at a quarter speed (about 5 s a turn; `SLOW_SPEED` in js/app/animator.js).
+The crank turns at 300° a second, so one turn takes 1.2 s, and the quick moments of a carry are over in a few frames: the single tooth turns a carry store by 18° in 0.065 s, and the ripple set's Zweihorn turns it on by 54° in 0.045 s. The reader who zooms in to watch them sees jumps. The Views menu's **Slow motion** switch, after *Color by part*, plays every motion, crank turns and carriage shifts alike, at a quarter speed (about 5 s a turn; `SLOW_SPEED` in js/app/animator.js).
 
 - **Any time, in free play and in lessons,** like the other switches: it changes only how fast the page shows the motion, not what the machine does, and a lesson step plays the same, only slower. A motion under way changes speed at once.
 - **The sounds follow the motion,** since they are struck by the parts as they pass, not by a clock.

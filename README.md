@@ -56,7 +56,7 @@ When you want more, the panel on the right holds a five-minute **tutorial** (*Ge
 
 **Clicking the machine:** click a knob to step its digit, or a digit on its dial to set it; click the crank to turn it forward, Shift-click to turn it back, or drag either crank round its axle; click a hole of the revolution counter (on the carriage's top right) to put the pin in, or the pin to take it out; click a result wheel to move the carriage under it.
 
-**The Views menu:** *Whole machine*, *Taken apart*, *Result*, *Setting knobs*, *Magna Rota*, *Counter*, and the two inside views, *Stepped drum* and *Carry*, which hide the frame and fade the parts around the ones they show while the machine keeps working. *Show the frame* puts the board and feet, the frame and the carriage's top, front panel and floor on or off: off, only the working parts are left. *Colour by part* gives every kind of part a colour of its own, and *Slow motion* plays every turn at a quarter speed. Taken apart, the machine cannot calculate; choose another view to put it back together.
+**The Views menu:** *Whole machine*, *Taken apart*, *Result*, *Setting knobs*, *Magna Rota*, *Counter*, and the two inside views, *Stepped drum* and *Carry*, which hide the frame and fade the parts around the ones they show while the machine keeps working. *Show the frame* puts the board and feet, the frame and the carriage's top, front panel and floor on or off: off, only the working parts are left. *Color by part* gives every kind of part a color of its own, and *Slow motion* plays every turn at a quarter speed. Taken apart, the machine cannot calculate; choose another view to put it back together.
 
 **Around the machine:** readouts at the top left (*Result*, the *Turns* the revolution counter has counted, red when backward, and the *Carriage*'s place); the top bar with the mode (*Free play*, or the lesson and its step), the panel button, the language menu and *About*; and a status line at the bottom that says what just happened, or why a control cannot be used right now.
 
@@ -64,7 +64,7 @@ When you want more, the panel on the right holds a five-minute **tutorial** (*Ge
 
 ## How it calculates, in seven lessons
 
-The **Lessons** tab teaches the machine in seven short lessons, from adding to dividing. Each is a few steps in the panel: some show you something, and some are your turn (the control to use glows amber, and *Next* unlocks when you have done it). You can leave a lesson for free play at any time and pick it up later; finished lessons get a tick.
+The **Lessons** tab teaches the machine in seven short lessons, from adding to dividing. Each is a few steps in the panel: some show you something, and some are your turn (the control to use glows amber, and *Next* unlocks when you have done it). You can leave a lesson for free play at any time and pick it up later; finished lessons get a check mark.
 
 ### 1. Adding: the stepped drum
 
@@ -106,7 +106,7 @@ Multiplying is adding again and again, one digit of the multiplier at a time. Pu
 
 Fourteen turns instead of 365 additions.
 
-<img src="images/readme/view-counter.jpg" alt="The Counter view two turns into 1709 × 5: the steel ring of ten holes between the black numbers on the centre and the red ones round it, the pin set at black 5 turned two holes toward the stop at the top" width="640">
+<img src="images/readme/view-counter.jpg" alt="The Counter view two turns into 1709 × 5: the steel ring of ten holes between the black numbers on the center and the red ones round it, the pin set at black 5 turned two holes toward the stop at the top" width="640">
 
 ### 7. Dividing: 623785 ÷ 1709
 
@@ -118,7 +118,7 @@ Use **Reset** before each one.
 
 - **Eight carries in one turn.** Set 99999999 (the largest number the knobs hold) and press **+**. Then set 1, choose the *Carry* view, and press **+** again: every pentagon tilts, the carries run along, and the result is 100000000. Choose *Original* in the *Carry* box and try it again: now the carries wait, and each further turn with 0 on the knobs finishes two of them.
 - **A carry in slow motion.** Set 9999 with **+**, then set 1. Choose the *Carry* view, switch on *Slow motion* in the Views menu and press **+**: the turn takes about five seconds, so you can follow each carry store's pentagon tilting and each carry lever passing the carry on. Point at a part to see its name.
-- **Every part in its own colour.** Switch off *Show the frame* and switch on *Colour by part* in the Views menu: the drums turn orange, the result wheels blue, the carry stores green, the carry levers red, and so on. Then turn the crank and orbit the machine to see which parts move together.
+- **Every part in its own color.** Switch off *Show the frame* and switch on *Color by part* in the Views menu: the drums turn orange, the result wheels blue, the carry stores green, the carry levers red, and so on. Then turn the crank and orbit the machine to see which parts move together.
 - **Times eleven without multiplying.** Set 12 and press **+**. Slide the carriage one place left (the carriage's left arrow) and press **+** again. 12 + 120 = 132 = 12 × 11.
 - **Times by the pin.** Set 25, put the pin at black 4 and press *Run to stop*: 100. Watch the revolution counter's ring carry the pin round to the stop, one hole a turn.
 - **Go below zero.** Set 1 and press **−**. What do the windows show, and why?
@@ -183,8 +183,8 @@ The machine's sounds are adapted from sound effects on [Pixabay](https://pixabay
 
 Built with [three.js](https://threejs.org) and [three-mesh-bvh](https://github.com/gkjohnson/three-mesh-bvh), the [Roboto Flex](https://fonts.google.com/specimen/Roboto+Flex) font and [Material Symbols](https://fonts.google.com/icons) icons.
 
-## Licence
+## License
 
 - **Code:** [Apache-2.0](LICENSE)
-- **Original content** (3D models, textures, research notes, lessons, docs, the screenshots in this README): [CC BY-SA 4.0](LICENSES/CC-BY-SA-4.0.txt); the two pictures credited above keep their own licences
-- **Third-party material** keeps its own licence, declared per path in [REUSE.toml](REUSE.toml) and summarised in [docs/licensing.md](docs/licensing.md)
+- **Original content** (3D models, textures, research notes, lessons, docs, the screenshots in this README): [CC BY-SA 4.0](LICENSES/CC-BY-SA-4.0.txt); the two pictures credited above keep their own licenses
+- **Third-party material** keeps its own license, declared per path in [REUSE.toml](REUSE.toml) and summarized in [docs/licensing.md](docs/licensing.md)
