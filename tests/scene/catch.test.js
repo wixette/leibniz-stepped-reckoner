@@ -7,13 +7,13 @@ import { Machine } from "../../js/sim/machine.js";
 const CATCH = machine.geometry.m2.frame.v.carriage_runners.catch;
 
 describe("The carriage's detent catch rides out of its pit by itself", () => {
-  it("rests in a pit on its two rounded mouth edges", () => {
-    const { width, mouth_fillet: e } = CATCH.pit;
+  it("rests in its half-circle pit, the pit's circle round it", () => {
+    const R = CATCH.pit.width / 2;
     const r = CATCH.head_radius;
-    // the head's centre where it touches both rounded edges, the margin clear
-    const rest = -e + Math.sqrt((r + e) ** 2 - (width / 2 + e) ** 2) + CATCH.margin;
-    assert.ok(Math.abs(catchHeadU(0) - rest) < 0.005);
-    assert.ok(catchHeadU(0) - r < 0, "its tip is inside the pit");
+    assert.ok(r < R, "a near-twin of the pit's circle, a little smaller");
+    // its centre on the rail's face, held off the pit's back by the margin
+    assert.ok(Math.abs(catchHeadU(0) - (r - R + CATCH.margin)) < 0.005);
+    assert.ok(catchHeadU(0) - r < -1, "its back half is in the pit");
   });
 
   it("is pushed out as the carriage moves, rides on the rail's face, and drops into the next pit", () => {

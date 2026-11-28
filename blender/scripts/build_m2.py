@@ -44,31 +44,45 @@ DEFAULT_OUT = os.path.join(params.MACHINE_DIR, "assets", "m2-full-machine.glb")
 
 
 
-def insert_with_pit(mb, g, f, t, zt, d, w, tn, r, pd, pz, mat, n_arc=6, m_back=2):
+def pit_half_width(s_, r, e):
+    """The detent pit's half width at depth s_ behind the rail's face (mm): a half circle r
+    centred on the face, its edges rounded into the face by e."""
+    xf = math.sqrt((r + e) ** 2 - e * e)
+    s1 = e * r / (r + e)
+    if s_ < s1:
+        return xf - math.sqrt(max(0.0, e * e - (e - s_) ** 2))
+    return math.sqrt(max(0.0, r * r - s_ * s_))
+
+
+def insert_with_pit(mb, g, f, t, zt, d, w, tn, r, e, pz, mat, n_arc=5, n_fillet=1, m_back=3):
     """A detent insert in the front rail's top-front edge (x along the rail, its middle at g; the
     rail's front face at y = f, its back at f + t; top at zt, d deep; w half wide at the top,
-    widening by tn per mm downward: a dovetail), with its pit: a slot r half wide, open to the
-    front and the top, pd back from the face and pz down from the top, its bottom round from the
-    front, its far end round from above and its back-bottom corner rounded from the side (the
-    owner's drawing after the photos): the solid swept by a ball r along the slot. All inside the
-    insert. One mesh, faces outward."""
-    zb, yc, zc = zt - d, f + pd - r, zt - pz + r
+    widening by tn per mm downward: a dovetail), with its pit (the owner, after the photos): from
+    above a half circle r centred on the face, its edges rounded into the face by e; a ball's
+    shape, so round-bottomed from the front and its back-bottom corner rounded from the side;
+    pz down from the top at its middle; all inside the insert. One mesh, faces outward."""
+    zb, zc = zt - d, zt - pz + r
     wb = w + d * tn
+    s1 = e * r / (r + e)
 
     def u_curve(rr):  # the pit's section across the rail at one depth: down, round, up
         return [(-rr, zt)] + [(rr * math.cos(math.pi + math.pi * k / n_arc), zc + rr * math.sin(math.pi + math.pi * k / n_arc)) for k in range(n_arc + 1)] + [(rr, zt)]
 
-    stations = [(f, r), (yc, r)] + [(yc + r * math.sin(math.pi / 2 * k / m_back), r * math.cos(math.pi / 2 * k / m_back)) for k in range(1, m_back + 1)]
+    depths = [s1 * k / n_fillet for k in range(n_fillet + 1)]
+    a1 = math.asin(s1 / r)
+    depths += [r * math.sin(a1 + (math.pi / 2 - a1) * k / m_back) for k in range(1, m_back + 1)]
+    stations = [(f + s_, pit_half_width(s_, r, e)) for s_ in depths]
+    yc = f
     secs = [[(g + x, y, z) for x, z in u_curve(rr)] for y, rr in stations]
     mi = mb._mat(mat)
-    for (ya, _), (yb, _), sa, sb in zip(stations, stations[1:], secs, secs[1:]):
+    for sa, sb in zip(secs, secs[1:]):
         for j in range(len(sa) - 1):
             quad = [sa[j], sa[j + 1], sb[j + 1], sb[j]]
-            # facing into the pit: toward its core (the slot's middle line, the ball's path)
+            # facing into the pit: toward its core (the ball's path, on the face line)
             cx = sum(q[0] for q in quad) / 4.0
             cy = sum(q[1] for q in quad) / 4.0
             cz = sum(q[2] for q in quad) / 4.0
-            core = (g, min(cy, yc), max(cz, zc))
+            core = (g, yc, max(cz, zc))
             a_, b_, c_ = quad[0], quad[1], quad[2]
             ab = (b_[0] - a_[0], b_[1] - a_[1], b_[2] - a_[2])
             ac = (c_[0] - a_[0], c_[1] - a_[1], c_[2] - a_[2])
@@ -462,10 +476,10 @@ def build(p):
     mb.prism_holes(beam_xz, [], "XZ", ay0, ay1, "steel")
     fzones.append(bl.zone(mb, z0_, "part.beamFront"))
     # each insert, brass, with its pit (insert_with_pit)
-    pa_, pe_, pd_, pz_d = cat_["pit"]["width"] / 2.0, cat_["pit"]["mouth_fillet"], cat_["pit"]["depth"], cat_["pit"]["z_depth"]
+    pa_, pe_, pz_d = cat_["pit"]["width"] / 2.0, cat_["pit"]["mouth_fillet"], cat_["pit"]["z_depth"]
     for g in pits:
         z0_ = len(mb.verts)
-        insert_with_pit(mb, g, ay0, ay1 - ay0, az1, id_, iw_, tn_, pa_, pd_, pz_d, "brass_polished")
+        insert_with_pit(mb, g, ay0, ay1 - ay0, az1, id_, iw_, tn_, pa_, pe_, pz_d, "brass_polished")
         fzones.append(bl.zone(mb, z0_, "part.beamFront"))
     for key, zkey in (("b", "part.beamMiddle"), ("c", "part.beamBack")):
         z0_ = len(mb.verts)
@@ -647,13 +661,15 @@ def build(p):
         mb.prism(geom.rect(sx_, lfa["y"][0] - 1.5, sx_ + 8.0, sy0_ + 0.01), "XY", pz_, fz0_ + 0.01, "brass_satin")
         mb.prism(geom.rect(sx_, lfa["y"][0] - 1.5, sx_ + 8.0, lfa["y"][0] - 0.3), "XY", sz0_, pz_ + 0.01, "brass_satin")   # a lip in front of the beam too
         czones.append(bl.zone(mb, z0_, "part.slideShoe"))
-    # the hanger under the carriage's left end that the catch's stand is fixed to (its root),
-    # down from the underside of the carriage's box, in front of the rail
+    # the hanger the catch's stand is fixed to (its root): a post in front of the rail, down from
+    # an arm that runs at the foot's height to the foot, at the bearing bar's left end
     spr_ = cat_["spring"]
     cx_ = catch_x                                     # the catch's head, over its pit (offset 0)
     pvx = cx_ + spr_["root_dx"]
     pvy = spr_["y_front"] + spr_["thickness"] / 2.0
-    mb.prism(geom.rect(pvx + 0.3, spr_["y_front"], pvx + 5.0, lfa["y"][0] - 0.3), "XY", spr_["z"][0], cat_["hanger_top_z"] + 0.01, "brass_satin")
+    hy1 = lfa["y"][0] - 0.3                           # 0.3 in front of the rail's face
+    mb.prism(geom.rect(pvx + 0.3, spr_["y_front"], pvx + 5.0, hy1), "XY", spr_["z"][0], fz1_, "brass_satin")
+    mb.prism(geom.rect(pvx + 0.3, fy0_, bx0 + 3.0, hy1), "XY", fz0_, fz1_, "brass_satin")
     # its rear bearings stand on a bar riding on the frame's beam b
     (ry0_, ry1_), (rz0_, rz1_) = cr_["rear"]["y"], cr_["rear"]["z"]
     z0_ = len(mb.verts)
@@ -708,13 +724,16 @@ def build(p):
     # the angle the pit's shape gives (js/scene/m2Pose.js catchAngle; head_u below is its sum).
     # Built in its node's frame, the origin at the root.
     def head_u(dx):
-        r, a_, e_, d_ = cat_["head_radius"], pa_, pe_, pd_
+        # the same outline as js/scene/m2Pose.js PIT_EDGE: the face, the rounding, the half circle
+        r, a_, e_ = cat_["head_radius"], pa_, pe_
+        xf = math.sqrt((a_ + e_) ** 2 - e_ * e_)
+        t1 = math.atan2(e_, xf)
         pts = []
         for sgn in (-1, 1):
-            pts += [(sgn * (a_ + e_ - e_ * math.cos(math.pi / 2 * i / 64)), -e_ + e_ * math.sin(math.pi / 2 * i / 64)) for i in range(65)]
-            pts += [(sgn * a_, -e_ - (d_ - e_) * i / 16) for i in range(17)]
-            pts += [(sgn * (a_ + e_ + p.v("layout.digit_pitch") / 2.0 * i / 200), 0.0) for i in range(201)]
-        face = r if abs(dx) >= a_ + e_ else -math.inf
+            pts += [(sgn * (xf + p.v("layout.digit_pitch") / 2.0 * i / 200), 0.0) for i in range(201)]
+            pts += [(sgn * (xf + e_ * math.cos(math.pi / 2 + (math.pi / 2 - t1) * i / 32)), -e_ + e_ * math.sin(math.pi / 2 + (math.pi / 2 - t1) * i / 32)) for i in range(33)]
+            pts += [(sgn * a_ * math.cos(t1 + (math.pi / 2 - t1) * i / 64), -a_ * math.sin(t1 + (math.pi / 2 - t1) * i / 64)) for i in range(65)]
+        face = r if abs(dx) >= xf else -math.inf
         return max([face] + [y + math.sqrt(r * r - (x - dx) ** 2) for x, y in pts if r * r - (x - dx) ** 2 > 0]) + cat_["margin"]
     mb = MeshBuilder()
     hr_ = cat_["head_radius"]
@@ -741,13 +760,13 @@ def build(p):
     ri_ = ro_ - jw
     hc = xb1 - ro_
     j_out = [(xb1 - jw, ys0 - 1.6), (xb1, ys0 - 1.6), (xb1, yj)]
-    j_out += [(hc + ro_ * math.cos(math.radians(a)), yj + ro_ * math.sin(math.radians(a))) for a in range(0, -181, -20)]
-    j_out += [(hc + ri_ * math.cos(math.radians(a)), yj + ri_ * math.sin(math.radians(a))) for a in range(-180, 1, 20)]
+    j_out += [(hc + ro_ * math.cos(math.radians(a)), yj + ro_ * math.sin(math.radians(a))) for a in range(0, -181, -30)]
+    j_out += [(hc + ri_ * math.cos(math.radians(a)), yj + ri_ * math.sin(math.radians(a))) for a in range(-180, 1, 30)]
     mb.prism_holes(j_out, [], "XY", jz0, jz1, "brass_polished")
     # its bar on over the stand to the head, a small round knob in the pit
     mb.prism(geom.rect(hx - jw / 2.0, head_y, hx + jw / 2.0, ys0 - 1.6 + 0.01), "XY", jz0, jz1, "brass_polished")
     hz0, hz1 = cat_["head_z"]
-    mb.prism([(hx + u, head_y + w) for u, w in geom.circle(hr_, 16)], "XY", hz0, hz1, "brass_polished", smooth=True)
+    mb.prism([(hx + u, head_y + w) for u, w in geom.circle(hr_, 12)], "XY", hz0, hz1, "brass_polished", smooth=True)
     # the post down the stand's front from the J, and the block on the stand
     pw, pdp = cat_["post"]["width"], cat_["post"]["depth"]
     bw, (bz0c, bz1c) = cat_["block"]["width"], cat_["block"]["z"]

@@ -55,20 +55,27 @@ const PITCH = machine.layout.digit_pitch.v;
 /**
  * The outline of the front rail around a pit, seen from above (mm): x along the rail from the
  * pit's middle, u forward of the rail's front face (the rail is at u <= 0, but for the pit).
- * Its two mouth edges are rounded (mouth_fillet); its walls run back to its depth.
+ * The pit is a half circle, as wide as the slot, centred on the face; a small rounding
+ * (mouth_fillet) joins it to the face at each side.
  * @type {[number, number][]}
  */
 const PIT_EDGE = (() => {
-  const a = CATCH.pit.width / 2, e = CATCH.pit.mouth_fillet, d = CATCH.pit.depth;
+  const R = CATCH.pit.width / 2, e = CATCH.pit.mouth_fillet;
+  const xf = Math.sqrt((R + e) ** 2 - e * e); // where the rounding meets the face
+  const t1 = Math.atan2(e, xf); // where it meets the half circle, from the face line
   /** @type {[number, number][]} */
   const pts = [];
   for (const s of [-1, 1]) {
-    for (let i = 0; i <= 64; i++) {
-      const t = (Math.PI / 2) * (i / 64);
-      pts.push([s * (a + e - e * Math.cos(t)), -e + e * Math.sin(t)]); // the rounded mouth edge
+    for (let i = 0; i <= 200; i++) pts.push([s * (xf + (PITCH / 2) * (i / 200)), 0]); // the face
+    for (let i = 0; i <= 32; i++) {
+      // the rounding: a circle e about (xf, -e), from the face to the half circle
+      const ang = Math.PI / 2 + (Math.PI / 2 - t1) * (i / 32); // from straight up to toward the centre
+      pts.push([s * (xf + e * Math.cos(ang)), -e + e * Math.sin(ang)]);
     }
-    for (let i = 0; i <= 16; i++) pts.push([s * a, -e - (d - e) * (i / 16)]); // the wall
-    for (let i = 0; i <= 200; i++) pts.push([s * (a + e + (PITCH / 2) * (i / 200)), 0]); // the face
+    for (let i = 0; i <= 64; i++) {
+      const t = t1 + (Math.PI / 2 - t1) * (i / 64); // the half circle, from the rounding to its back
+      pts.push([s * R * Math.cos(t), -R * Math.sin(t)]);
+    }
   }
   return pts;
 })();
@@ -84,7 +91,8 @@ const PIT_EDGE = (() => {
 export function catchHeadU(dx) {
   const r = CATCH.head_radius;
   // over the flat face, the head stands one radius out of it
-  let u = Math.abs(dx) >= CATCH.pit.width / 2 + CATCH.pit.mouth_fillet ? r : -Infinity;
+  const xf = Math.sqrt((CATCH.pit.width / 2 + CATCH.pit.mouth_fillet) ** 2 - CATCH.pit.mouth_fillet ** 2);
+  let u = Math.abs(dx) >= xf ? r : -Infinity;
   for (const [x, y] of PIT_EDGE) {
     const h = r * r - (x - dx) * (x - dx);
     if (h > 0) u = Math.max(u, y + Math.sqrt(h));
