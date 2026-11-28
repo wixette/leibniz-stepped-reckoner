@@ -1,27 +1,42 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { catchLift, m2NodeValues } from "../../js/scene/m2Pose.js";
+import machine from "../../params/machine.json" with { type: "json" };
+import { catchDeflection, catchHeadU, m2NodeValues } from "../../js/scene/m2Pose.js";
 import { Machine } from "../../js/sim/machine.js";
 
-describe("The carriage's detent catch", () => {
-  it("rests in its groove at a place, and is lifted whenever the carriage is between places", () => {
-    const m = new Machine();
-    assert.equal(catchLift(m), 0);
-    assert.equal(m2NodeValues(m)["pm.carriage_catch"], 0);
-    m.setCarriagePos(0.5);
-    assert.equal(catchLift(m), 1, "over the rail, between two grooves");
-    assert.ok(m2NodeValues(m)["pm.carriage_catch"] > 0);
-    m.setCarriagePos(1);
-    assert.equal(catchLift(m), 0);
+const CATCH = machine.geometry.m2.frame.v.carriage_runners.catch;
+
+describe("The carriage's detent catch rides out of its pit by itself", () => {
+  it("rests in a pit on its two rounded mouth edges", () => {
+    const { width, mouth_fillet: e } = CATCH.pit;
+    const r = CATCH.head_radius;
+    // the head's centre where it touches both rounded edges, the margin clear
+    const rest = -e + Math.sqrt((r + e) ** 2 - (width / 2 + e) ** 2) + CATCH.margin;
+    assert.ok(Math.abs(catchHeadU(0) - rest) < 0.005);
+    assert.ok(catchHeadU(0) - r < 0, "its tip is inside the pit");
   });
 
-  it("follows the animator's lift at a place, within 0..1, and Reset drops it", () => {
+  it("is pushed out as the carriage moves, rides on the rail's face, and drops into the next pit", () => {
     const m = new Machine();
-    m.catchLift = 0.4;
-    assert.equal(catchLift(m), 0.4);
-    m.catchLift = 1.7;
-    assert.equal(catchLift(m), 1);
-    m.reset();
-    assert.equal(catchLift(m), 0);
+    assert.equal(catchDeflection(m), 0);
+    let last = 0;
+    for (const f of [0.01, 0.02, 0.04, 0.06]) {
+      m.setCarriagePos(f);
+      const d = catchDeflection(m);
+      assert.ok(d >= last, `deflection grows out of the pit (${f})`);
+      last = d;
+    }
+    const out = CATCH.head_radius + CATCH.margin - catchHeadU(0);
+    m.setCarriagePos(0.5);
+    assert.ok(Math.abs(catchDeflection(m) - out) < 1e-9, "on the face between two pits");
+    m.setCarriagePos(1);
+    assert.equal(catchDeflection(m), 0, "in the next pit");
+    assert.equal(m2NodeValues(m)["pm.carriage_catch"], 0);
+    m.setCarriagePos(1.5);
+    assert.ok(m2NodeValues(m)["pm.carriage_catch"] > 0, "the catch turns forward about its spring's root");
+  });
+
+  it("is the same on both sides of a pit", () => {
+    for (const dx of [0.3, 0.8, 1.5, 2.2]) assert.ok(Math.abs(catchHeadU(dx) - catchHeadU(-dx)) < 1e-9);
   });
 });

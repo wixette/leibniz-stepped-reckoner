@@ -49,18 +49,87 @@ export function m2NodeNames(R, C) {
  */
 export const CRANK_FORWARD = { "pm.main_crank": -1, "frame.lead_screw": 1 };
 
-/** How far the carriage's detent catch turns to lift its pin clear of the front rail (deg). */
-const CATCH_LIFT_DEG = machine.geometry.m2.frame.v.carriage_runners.catch.lift_deg;
+const CATCH = machine.geometry.m2.frame.v.carriage_runners.catch;
+const PITCH = machine.layout.digit_pitch.v;
 
 /**
- * How far the detent catch is lifted (0..1): as the animator lifts it, and fully while the
- * carriage stands between two places, where its pin would be over the rail, not in a groove.
+ * The outline of the front rail around a pit, seen from above (mm): x along the rail from the
+ * pit's middle, u forward of the rail's front face (the rail is at u <= 0, but for the pit).
+ * Its two mouth edges are rounded (mouth_fillet); its walls run back to its depth.
+ * @type {[number, number][]}
+ */
+const PIT_EDGE = (() => {
+  const a = CATCH.pit.width / 2, e = CATCH.pit.mouth_fillet, d = CATCH.pit.depth;
+  /** @type {[number, number][]} */
+  const pts = [];
+  for (const s of [-1, 1]) {
+    for (let i = 0; i <= 64; i++) {
+      const t = (Math.PI / 2) * (i / 64);
+      pts.push([s * (a + e - e * Math.cos(t)), -e + e * Math.sin(t)]); // the rounded mouth edge
+    }
+    for (let i = 0; i <= 16; i++) pts.push([s * a, -e - (d - e) * (i / 16)]); // the wall
+    for (let i = 0; i <= 200; i++) pts.push([s * (a + e + (PITCH / 2) * (i / 200)), 0]); // the face
+  }
+  return pts;
+})();
+
+/**
+ * How far forward of the rail's face the catch's round head stands, its centre dx from the
+ * pit's middle (mm): the head rests on the pit's two rounded mouth edges, and as the carriage
+ * moves it rides up an edge, along the face and into the next pit. Nothing lifts it: the shape
+ * does, against its spring (K. Badur: a sprung catch; the owner: it rides out by itself).
+ * @param {number} dx
+ * @returns {number}
+ */
+export function catchHeadU(dx) {
+  const r = CATCH.head_radius;
+  // over the flat face, the head stands one radius out of it
+  let u = Math.abs(dx) >= CATCH.pit.width / 2 + CATCH.pit.mouth_fillet ? r : -Infinity;
+  for (const [x, y] of PIT_EDGE) {
+    const h = r * r - (x - dx) * (x - dx);
+    if (h > 0) u = Math.max(u, y + Math.sqrt(h));
+  }
+  return u + CATCH.margin;
+}
+
+/**
+ * How far the detent catch turns forward about its spring's root (radians), at the carriage's
+ * position: the smallest angle at which its round head, where its arc about the root takes it
+ * (forward, and a little sideways), clears the pit (catchHeadU). Nothing but the pit's shape
+ * moves it.
  * @param {Machine} m
  * @returns {number}
  */
-export function catchLift(m) {
-  const between = Math.abs(m.carriagePos - Math.round(m.carriagePos)) > 1e-9;
-  return between ? 1 : Math.min(1, Math.max(0, m.catchLift));
+export function catchAngle(m) {
+  // the head's centre from the root: L toward the carriage's left end, h back toward the rail
+  // (the root is on the spring plate, in front of the head)
+  const L = CATCH.spring.root_dx;
+  const u0 = catchHeadU(0);
+  const h = machine.geometry.m2.frame.v.lower_frame.a.y[0] - u0 - (CATCH.spring.y_front + CATCH.spring.thickness / 2);
+  // the head's place along the rail from the pit's middle: the carriage leftward of its place
+  // as the offset grows; the root is to the head's right (+x)
+  const along = -(m.carriagePos - Math.round(m.carriagePos)) * PITCH;
+  /** @param {number} a */
+  const clear = (a) => u0 + L * Math.sin(a) + h * (1 - Math.cos(a)) >= catchHeadU(along + L * (1 - Math.cos(a)) - h * Math.sin(a));
+  if (clear(0)) return 0;
+  let lo = 0, hi = Math.asin(Math.min(1, (CATCH.head_radius + 1) / L));
+  for (let i = 0; i < 40; i++) {
+    const mid = (lo + hi) / 2;
+    if (clear(mid)) hi = mid;
+    else lo = mid;
+  }
+  return hi;
+}
+
+/**
+ * How far forward of its rest the catch's head stands (mm).
+ * @param {Machine} m
+ * @returns {number}
+ */
+export function catchDeflection(m) {
+  const a = catchAngle(m);
+  const h = machine.geometry.m2.frame.v.lower_frame.a.y[0] - catchHeadU(0) - (CATCH.spring.y_front + CATCH.spring.thickness / 2);
+  return CATCH.spring.root_dx * Math.sin(a) + h * (1 - Math.cos(a));
 }
 
 /**
@@ -93,7 +162,8 @@ export function m2NodeValues(m) {
     "pm.counter_k": (2 / 3) * p.counterRing,
     "pm.counter_l": p.counterRing,
     "pm.counter_n": ring,
-    "pm.carriage_catch": CATCH_LIFT_DEG * catchLift(m),
+    // the catch turns about its spring's root (approximating the spring's bending)
+    "pm.carriage_catch": THREE.MathUtils.radToDeg(catchAngle(m)),
   };
   p.register.forEach((r, k) => {
     out[`pi.sum_wheel.${k}`] = -r.wheel;

@@ -43,6 +43,60 @@ from lib.bl import MeshBuilder  # noqa: E402
 DEFAULT_OUT = os.path.join(params.MACHINE_DIR, "assets", "m2-full-machine.glb")
 
 
+
+def insert_with_pit(mb, g, f, t, zt, d, w, tn, r, pd, pz, mat, n_arc=6, m_back=2):
+    """A detent insert in the front rail's top-front edge (x along the rail, its middle at g; the
+    rail's front face at y = f, its back at f + t; top at zt, d deep; w half wide at the top,
+    widening by tn per mm downward: a dovetail), with its pit: a slot r half wide, open to the
+    front and the top, pd back from the face and pz down from the top, its bottom round from the
+    front, its far end round from above and its back-bottom corner rounded from the side (the
+    owner's drawing after the photos): the solid swept by a ball r along the slot. All inside the
+    insert. One mesh, faces outward."""
+    zb, yc, zc = zt - d, f + pd - r, zt - pz + r
+    wb = w + d * tn
+
+    def u_curve(rr):  # the pit's section across the rail at one depth: down, round, up
+        return [(-rr, zt)] + [(rr * math.cos(math.pi + math.pi * k / n_arc), zc + rr * math.sin(math.pi + math.pi * k / n_arc)) for k in range(n_arc + 1)] + [(rr, zt)]
+
+    stations = [(f, r), (yc, r)] + [(yc + r * math.sin(math.pi / 2 * k / m_back), r * math.cos(math.pi / 2 * k / m_back)) for k in range(1, m_back + 1)]
+    secs = [[(g + x, y, z) for x, z in u_curve(rr)] for y, rr in stations]
+    mi = mb._mat(mat)
+    for (ya, _), (yb, _), sa, sb in zip(stations, stations[1:], secs, secs[1:]):
+        for j in range(len(sa) - 1):
+            quad = [sa[j], sa[j + 1], sb[j + 1], sb[j]]
+            # facing into the pit: toward its core (the slot's middle line, the ball's path)
+            cx = sum(q[0] for q in quad) / 4.0
+            cy = sum(q[1] for q in quad) / 4.0
+            cz = sum(q[2] for q in quad) / 4.0
+            core = (g, min(cy, yc), max(cz, zc))
+            a_, b_, c_ = quad[0], quad[1], quad[2]
+            ab = (b_[0] - a_[0], b_[1] - a_[1], b_[2] - a_[2])
+            ac = (c_[0] - a_[0], c_[1] - a_[1], c_[2] - a_[2])
+            nrm = (ab[1] * ac[2] - ab[2] * ac[1], ab[2] * ac[0] - ab[0] * ac[2], ab[0] * ac[1] - ab[1] * ac[0])
+            if abs(nrm[0]) + abs(nrm[1]) + abs(nrm[2]) < 1e-12:
+                a_, b_, c_ = quad[0], quad[2], quad[3]
+                ab = (b_[0] - a_[0], b_[1] - a_[1], b_[2] - a_[2])
+                ac = (c_[0] - a_[0], c_[1] - a_[1], c_[2] - a_[2])
+                nrm = (ab[1] * ac[2] - ab[2] * ac[1], ab[2] * ac[0] - ab[0] * ac[2], ab[0] * ac[1] - ab[1] * ac[0])
+            into = (core[0] - cx, core[1] - cy, core[2] - cz)
+            if nrm[0] * into[0] + nrm[1] * into[1] + nrm[2] * into[2] < 0:
+                quad = quad[::-1]
+            base = len(mb.verts)
+            mb.verts.extend(quad)
+            mb._add([base, base + 1, base + 2, base + 3], mi, False)
+    # the front face with the pit's mouth, open at the top
+    front = [(g - wb, f, zb), (g + wb, f, zb), (g + w, f, zt)] + secs[0][::-1] + [(g - w, f, zt)]
+    mb.polygon(front, (0, -1, 0), mat)
+    # the top with the pit's opening: a capsule open to the front
+    left = [(p[0][0], p[0][1], zt) for p in secs]
+    right = [(p[-1][0], p[-1][1], zt) for p in secs]
+    top = [(g - w, f, zt)] + left + right[::-1][1:] + [(g + w, f, zt), (g + w, f + t, zt), (g - w, f + t, zt)]
+    mb.polygon(top, (0, 0, 1), mat)
+    mb.polygon([(g - wb, f + t, zb), (g - w, f + t, zt), (g + w, f + t, zt), (g + wb, f + t, zb)], (0, 1, 0), mat)
+    mb.polygon([(g - wb, f, zb), (g - wb, f + t, zb), (g + wb, f + t, zb), (g + wb, f, zb)], (0, 0, -1), mat)
+    mb.polygon([(g - wb, f, zb), (g - w, f, zt), (g - w, f + t, zt), (g - wb, f + t, zb)], (-1, 0, tn), mat)
+    mb.polygon([(g + wb, f, zb), (g + wb, f + t, zb), (g + w, f + t, zt), (g + w, f, zt)], (1, 0, tn), mat)
+
 def ang(dx, dz):
     return math.degrees(math.atan2(dz, dx))
 
@@ -387,21 +441,32 @@ def build(p):
     fzones = [bl.zone(mb, z0_, "part.rearBeam")]
     # the lower frame (NL183/465 p. 94 'Rahmen Unterteil'; TSD (02), (10)): three upright steel
     # beams between the side walls, no plate. The carriage rides on a and b. a, just in front of
-    # the lead screw, has the 8 detent grooves across its top, one under the carriage's catch at
-    # each place (p. 108 'Rastbohrungen 8x', 36.5 apart; grooves, '8 Rastnuten', on the original
-    # after K. Badur, 2026-11-28); b stands right behind the carriage; c under the pentagons
+    # the lead screw, has the 8 detent pits, one at the carriage's catch at each place (p. 108
+    # 'Rastbohrungen 8x', 36.5 apart; on the original '8 Rastnuten', K. Badur 2026-11-28, cut in
+    # brass inserts glued into the rail, his base-frame sheet); b stands right behind the
+    # carriage; c under the pentagons
     lf = fr["lower_frame"]
     cr_ = fr["carriage_runners"]
     (ay0, ay1), (az0, az1) = lf["a"]["y"], lf["a"]["z"]
-    hd_, gw_ = lf["detent_groove_depth"], lf["detent_groove_width"]
-    catch_x = X[C - 1] - dr["bearing_bar_x_margins"][0] + cr_["catch_dx"]
-    grooves = sorted(catch_x - p.v("layout.digit_pitch") * k for k in range(C))
+    cat_ = cr_["catch"]
+    x_end = X[C - 1] - p.v(M2 + "carriage_floor")["x_margin_left"]   # the carriage's left end (offset 0)
+    catch_x = x_end + cat_["head_dx"]
+    pits = sorted(catch_x - p.v("layout.digit_pitch") * k for k in range(C))
+    iw_, id_ = cat_["insert"]["width"] / 2.0, cat_["insert"]["depth"]
+    tn_ = math.tan(math.radians(cat_["insert"]["dovetail_deg"]))
     z0_ = len(mb.verts)
-    mb.prism(geom.rect(in_x0, ay0, in_x1, ay1), "XY", az0, az1 - hd_, "steel")
-    edges_ = [in_x0] + [e for g in grooves for e in (g - gw_ / 2.0, g + gw_ / 2.0)] + [in_x1]
-    for u0_, u1_ in zip(edges_[::2], edges_[1::2]):
-        mb.prism(geom.rect(u0_, ay0, u1_, ay1), "XY", az1 - hd_ - 0.01, az1, "steel")
+    beam_xz = [(in_x0, az0), (in_x1, az0), (in_x1, az1)]
+    for g in reversed(pits):                       # the steel rail, with a dovetail for each insert
+        beam_xz += [(g + iw_, az1), (g + iw_ + id_ * tn_, az1 - id_), (g - iw_ - id_ * tn_, az1 - id_), (g - iw_, az1)]
+    beam_xz.append((in_x0, az1))
+    mb.prism_holes(beam_xz, [], "XZ", ay0, ay1, "steel")
     fzones.append(bl.zone(mb, z0_, "part.beamFront"))
+    # each insert, brass, with its pit (insert_with_pit)
+    pa_, pe_, pd_, pz_d = cat_["pit"]["width"] / 2.0, cat_["pit"]["mouth_fillet"], cat_["pit"]["depth"], cat_["pit"]["z_depth"]
+    for g in pits:
+        z0_ = len(mb.verts)
+        insert_with_pit(mb, g, ay0, ay1 - ay0, az1, id_, iw_, tn_, pa_, pd_, pz_d, "brass_polished")
+        fzones.append(bl.zone(mb, z0_, "part.beamFront"))
     for key, zkey in (("b", "part.beamMiddle"), ("c", "part.beamBack")):
         z0_ = len(mb.verts)
         mb.prism(geom.rect(in_x0, lf[key]["y"][0], in_x1, lf[key]["y"][1]), "XY", lf[key]["z"][0], lf[key]["z"][1], "steel")
@@ -571,12 +636,7 @@ def build(p):
     (fy0_, fy1_), (fz0_, fz1_) = cr_["front"]["y"], cr_["front"]["z"]
     rx_ = X[0] + cr_["right_x_dx"]
     mb.prism(geom.rect(bx0, fz0_, rx_, bz0), "XZ", by0, by1, "brass_satin")
-    cat_ = cr_["catch"]
-    cx_ = bx0 + cr_["catch_dx"]
-    pin_y = (lfa["y"][0] + lfa["y"][1]) / 2.0          # the pin over the middle of beam a
-    # a slot in the foot for the catch's pin (it swings a little toward the free end as it lifts)
-    pin_slot = geom.rect(cx_ - cat_["pin_radius"] - 1.4, pin_y - cat_["pin_radius"] - 0.6, cx_ + cat_["pin_radius"] + 0.6, pin_y + cat_["pin_radius"] + 0.6)
-    mb.prism_holes(geom.rect(bx0, fy0_, rx_, fy1_), [pin_slot], "XY", fz0_, fz1_, "brass_satin")
+    mb.prism(geom.rect(bx0, fy0_, rx_, fy1_), "XY", fz0_, fz1_, "brass_satin")
     bar_zone = bl.zone(mb, z_bar, "part.bearingBar")
     (sy0_, sy1_), (sz0_, sz1_) = cr_["shoe_y"], cr_["shoe_z"]
     # the shoes: pads resting on the beam (the foot itself stands 1 mm clear), lips behind it
@@ -587,11 +647,13 @@ def build(p):
         mb.prism(geom.rect(sx_, lfa["y"][0] - 1.5, sx_ + 8.0, sy0_ + 0.01), "XY", pz_, fz0_ + 0.01, "brass_satin")
         mb.prism(geom.rect(sx_, lfa["y"][0] - 1.5, sx_ + 8.0, lfa["y"][0] - 0.3), "XY", sz0_, pz_ + 0.01, "brass_satin")   # a lip in front of the beam too
         czones.append(bl.zone(mb, z0_, "part.slideShoe"))
-    # the catch's two lugs on the foot, either side of the lever, with the pivot's bore
-    (ly0c, ly1c), (lz0c, lz1c) = cat_["lever_y"], cat_["lever_z"]
-    pvx, pvz = cx_ + cat_["pivot_dx"], (lz0c + lz1c) / 2.0
-    for ya, yb in ((ly0c - 0.3 - cat_["lug_y"], ly0c - 0.3), (ly1c + 0.3, ly1c + 0.3 + cat_["lug_y"])):
-        mb.prism_holes(geom.rect(pvx - 3.0, fz1_ - 0.01, pvx + 3.0, pvz + 3.0), [[(u + pvx, w + pvz) for u, w in geom.circle(1.5, 16)]], "XZ", ya, yb, "brass_satin")
+    # the hanger under the carriage's left end that the catch's stand is fixed to (its root),
+    # down from the underside of the carriage's box, in front of the rail
+    spr_ = cat_["spring"]
+    cx_ = catch_x                                     # the catch's head, over its pit (offset 0)
+    pvx = cx_ + spr_["root_dx"]
+    pvy = spr_["y_front"] + spr_["thickness"] / 2.0
+    mb.prism(geom.rect(pvx + 0.3, spr_["y_front"], pvx + 5.0, lfa["y"][0] - 0.3), "XY", spr_["z"][0], cat_["hanger_top_z"] + 0.01, "brass_satin")
     # its rear bearings stand on a bar riding on the frame's beam b
     (ry0_, ry1_), (rz0_, rz1_) = cr_["rear"]["y"], cr_["rear"]["z"]
     z0_ = len(mb.verts)
@@ -636,22 +698,65 @@ def build(p):
     bl.set_motion(carriage, "translate", (1, 0, 0), "Carriage (pars mobilis)", "Schlitten (pars mobilis)", unit="mm")
     bl.parent(carriage, root)
 
-    # the detent catch (K. Badur, 2026-11-28: a sprung lever with a pin, fixed to the carriage,
-    # lifted by hand before a shift): a steel lever over the foot, turning about a front-back pin
-    # in the lugs; its pin goes down through the foot into a groove of beam a, and its free end,
-    # toward the carriage's left end, carries a knob to lift it by. Built in its node's frame,
-    # the origin on the pivot; the rig lifts it by lift_deg (js/scene/m2Pose.js).
+    # the detent catch (K. Badur, 2026-11-28: a sprung catch on the carriage; his assembly
+    # drawing's plan view; the owner's three-view drawing after TSD (05)): the silver stand, a
+    # spring plate in front of the rail fixed at its root to the hanger, pointed toward the left
+    # with its triangle tip bent forward; in front of it the gold J: a block on the stand, a post
+    # rising above the stand's top edge, and the flat J at the rail's top, its bar crossing over
+    # the stand to the round head in a pit, its hook curling left in front. The carriage's motion
+    # pushes the head out of the pit against the stand: the rig turns the catch about the root by
+    # the angle the pit's shape gives (js/scene/m2Pose.js catchAngle; head_u below is its sum).
+    # Built in its node's frame, the origin at the root.
+    def head_u(dx):
+        r, a_, e_, d_ = cat_["head_radius"], pa_, pe_, pd_
+        pts = []
+        for sgn in (-1, 1):
+            pts += [(sgn * (a_ + e_ - e_ * math.cos(math.pi / 2 * i / 64)), -e_ + e_ * math.sin(math.pi / 2 * i / 64)) for i in range(65)]
+            pts += [(sgn * a_, -e_ - (d_ - e_) * i / 16) for i in range(17)]
+            pts += [(sgn * (a_ + e_ + p.v("layout.digit_pitch") / 2.0 * i / 200), 0.0) for i in range(201)]
+        face = r if abs(dx) >= a_ + e_ else -math.inf
+        return max([face] + [y + math.sqrt(r * r - (x - dx) ** 2) for x, y in pts if r * r - (x - dx) ** 2 > 0]) + cat_["margin"]
     mb = MeshBuilder()
-    pr_, end_ = cat_["pin_radius"], cat_["end_dx"] - cat_["pivot_dx"]   # the free end, from the pivot
-    pin_dx = -cat_["pivot_dx"]                                            # the pin, from the pivot
-    hz0, hz1 = lz0c - pvz, lz1c - pvz
-    lever_xz = [(end_, hz0), (0.0, hz0)] + [(1.25 * math.cos(a), 1.25 * math.sin(a)) for a in (math.radians(d) for d in range(-90, 91, 30))] + [(0.0, hz1), (end_, hz1)]
-    mb.prism(lever_xz, "XZ", ly0c, ly1c, "steel")
-    mb.prism(geom.circle(1.2, 16), "XZ", ly0c - 0.3 - cat_["lug_y"] - 0.4, ly1c + 0.3 + cat_["lug_y"] + 0.4, "steel", smooth=True)   # the pivot pin
-    mb.prism([(u + pin_dx, w + pin_y) for u, w in geom.circle(pr_, 16)], "XY", cat_["pin_bottom_z"] - pvz, hz0 + 0.01, "steel", smooth=True)
-    mb.prism([(u + end_ + 2.5, w + (ly0c + ly1c) / 2.0) for u, w in geom.circle(cat_["knob_radius"], 20)], "XY", hz1 - 0.01, cat_["knob_top_z"] - pvz, "brass_polished", smooth=True)
-    catch = mb.build("pm.carriage_catch", col, (pvx, 0.0, pvz))
-    bl.set_motion(catch, "rotate", (0, 1, 0), "Carriage detent catch (sprung; lifted before a shift)", "Rasthebel des Schlittens (federnd; vor dem Verschieben angehoben)")
+    hr_ = cat_["head_radius"]
+    f_ = lfa["y"][0]                                   # the rail's front face
+    head_y = f_ - head_u(0.0) - pvy                   # the head's centre, from the root
+    hx = -spr_["root_dx"]                             # the head, from the root
+    t_, (sz0c, sz1c) = spr_["thickness"], spr_["z"]
+    ys0, ys1 = -t_ / 2.0, t_ / 2.0                    # the stand's front and back faces
+    # the stand: straight from the root, then slanting to the triangle tip
+    sx_s, sx_t = hx + spr_["straight_dx"] - 0.0, hx + spr_["slant_dx"]
+    zm, th = (sz0c + sz1c) / 2.0, spr_["tip_half_height"]
+    stand = [(0.0, sz0c), (0.0, sz1c), (sx_s, sz1c), (sx_t, zm + th), (sx_t, zm - th), (sx_s, sz0c)]
+    mb.prism(stand, "XZ", ys0, ys1, "steel")
+    # its triangle tip, bent forward about the slant's end
+    bend = math.radians(spr_["tip_bend_deg"])
+    tl = spr_["slant_dx"] - spr_["tip_dx"]
+    tip3 = [(sx_t, ys0, zm - th), (sx_t, ys0, zm + th), (sx_t - tl * math.cos(bend), ys0 - tl * math.sin(bend), zm)]
+    mb.plate(tip3, (math.sin(bend), math.cos(bend), 0.0), t_, "steel")
+    # the gold J, at the rail's top
+    jw, (jz0, jz1) = cat_["j"]["width"], cat_["j"]["z"]
+    xb1 = hx + jw / 2.0                              # the bar's right edge (toward the carriage)
+    yj = f_ - cat_["j"]["reach"] - pvy               # the hook's centre line
+    ro_ = cat_["j"]["hook_outer"]
+    ri_ = ro_ - jw
+    hc = xb1 - ro_
+    j_out = [(xb1 - jw, ys0 - 1.6), (xb1, ys0 - 1.6), (xb1, yj)]
+    j_out += [(hc + ro_ * math.cos(math.radians(a)), yj + ro_ * math.sin(math.radians(a))) for a in range(0, -181, -20)]
+    j_out += [(hc + ri_ * math.cos(math.radians(a)), yj + ri_ * math.sin(math.radians(a))) for a in range(-180, 1, 20)]
+    mb.prism_holes(j_out, [], "XY", jz0, jz1, "brass_polished")
+    # its bar on over the stand to the head: a neck, then the round head in the pit
+    mb.prism(geom.rect(hx - jw / 2.0, head_y - 1.0, hx + jw / 2.0, ys0 - 1.6 + 0.01), "XY", jz0, jz1, "brass_polished")
+    neck = 0.55 * hr_
+    hz0, hz1 = cat_["head_z"]
+    mb.prism(geom.rect(hx - neck, head_y, hx + neck, head_y - 1.0 - 0.01), "XY", hz0, hz1, "brass_polished")
+    mb.prism([(hx + u, head_y + w) for u, w in geom.circle(hr_, 16)], "XY", hz0, hz1, "brass_polished", smooth=True)
+    # the post down the stand's front from the J, and the block on the stand
+    pw, pdp = cat_["post"]["width"], cat_["post"]["depth"]
+    bw, (bz0c, bz1c) = cat_["block"]["width"], cat_["block"]["z"]
+    mb.prism(geom.rect(xb1 - pw, ys0 - pdp, xb1, ys0 + 0.01), "XY", bz0c, jz0 + 0.01, "brass_polished")
+    mb.prism(geom.rect(xb1 - bw, ys0 - pdp, xb1, ys0 + 0.01), "XY", bz0c, bz1c, "brass_polished")
+    catch = mb.build("pm.carriage_catch", col, (pvx, pvy, 0.0))
+    bl.set_motion(catch, "rotate", (0, 0, 1), "Carriage detent catch (sprung; rides out of its pit as the carriage moves)", "Rasthebel des Schlittens (federnd; gleitet beim Verschieben aus der Rast)")
     bl.parent(catch, carriage)
 
     # front panel (hideable)

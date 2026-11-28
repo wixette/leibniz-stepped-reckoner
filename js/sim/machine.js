@@ -125,12 +125,6 @@ export class Machine {
   /** Carriage position used for drawing; equals offset at rest, fractional while shifting. */
   carriagePos = 0;
   /**
-   * The carriage's detent catch, drawn only: in its groove (0) or lifted clear (1). The operator
-   * lifts it by hand before a shift (K. Badur); the animator lifts it around each shift, and a
-   * carriage between two places is drawn with it lifted whatever this says (js/scene/m2Pose.js).
-   */
-  catchLift = 0;
-  /**
    * Revolution counter: the pin's hole (0..9, by its black number) or null, and turns counted
    * since the pin was last set.
    * @type {number | null}
@@ -169,7 +163,6 @@ export class Machine {
     this.turns = 0;
     this.offset = 0;
     this.carriagePos = 0;
-    this.catchLift = 0;
     this.pin = null;
     this.ringTurns = 0;
   }
