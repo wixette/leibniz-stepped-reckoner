@@ -530,11 +530,20 @@ def build(p):
     fzones.append(bl.zone(mb, z0_, "part.registerBar"))
     for bx in (in_x0, in_x1 - 3.0):
         mb.prism(geom.rect(bx, fb1, bx + 3.0, wall0), "XY", zs - 4.5, zs + 4.5, "brass_satin")
-    ny0, ny1, nz = ls["y"] - ls["radius"] - 2.5, ls["y"] + ls["radius"] + 2.5, ls["z"] - ls["radius"] - 2.5
+    # each side wall's low front part has a round lobe about the lead screw's axis, and the screw
+    # runs through a round hole in its middle (the photo of Lehmann's replica 'Die Rechenmaschine
+    # von Leibniz (Nachbau) 2001 02'; Badur's end plates have the screw's bushes): the lobe as
+    # large as reaches the wall's foot, rising a little above its top edge
     ysp, zlow = fr["side_wall_y_split"], fr["side_wall_low_z"]
+    lr_, hr_w = ls["z"], ls["radius"] + ls["wall_hole_clear"]
+    dyl = math.sqrt(max(0.0, lr_ * lr_ - (zlow - ls["z"]) ** 2))
+    a0 = math.degrees(math.atan2(zlow - ls["z"], dyl))
+    bump = [(ls["y"] + lr_ * math.cos(math.radians(a)), ls["z"] + lr_ * math.sin(math.radians(a))) for a in [a0 + (180.0 - 2 * a0) * k / 12 for k in range(13)]]
+    low_part = [(fr["y"][0], 0.0), (ysp, 0.0), (ysp, zlow)] + bump + [(fr["y"][0], zlow)]
+    hole_w = [(ls["y"] + u, ls["z"] + w) for u, w in geom.circle(hr_w, 32)]
     for wx0 in (in_x0 - sw, in_x1):
-        for r0 in (geom.rect(fr["y"][0], 0.0, ysp, nz), geom.rect(fr["y"][0], nz, ny0, zlow),
-                   geom.rect(ny1, nz, ysp, zlow), geom.rect(ysp, 0.0, wall0, fr["side_wall_top_z"]),
+        mb.prism_holes(low_part, [hole_w], "YZ", wx0, wx0 + sw, "brass_satin")
+        for r0 in (geom.rect(ysp, 0.0, wall0, fr["side_wall_top_z"]),
                    geom.rect(wall0, 0.0, fr["lower_frame"]["side_wall_back_y"], fr["lower_frame"]["side_wall_back_z"])):
             mb.prism(r0, "YZ", wx0, wx0 + sw, "brass_satin")
     # the detent springs of the intermediate shafts (assembly drawing, section N-O: a leaf with a
