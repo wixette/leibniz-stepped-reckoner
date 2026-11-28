@@ -277,7 +277,7 @@ export default {
   "part.detentCatch": "Trinquete (mantiene el carro en su posición; en el original se levanta a mano antes de desplazarlo)",
   "part.slideShoe": "Patín del carro",
   "part.rearBearings": "Cojinetes traseros de los ejes de los tambores",
-  "part.beamFront": "Viga delantera (agujeros de retén del carro)",
+  "part.beamFront": "Viga delantera (el carro se desliza sobre ella; muescas para su trinquete)",
   "part.beamMiddle": "Viga central (el carro se desliza sobre ella)",
   "part.beamBack": "Viga trasera",
   "part.registerBar": "Barra delantera del registro",

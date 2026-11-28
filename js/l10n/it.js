@@ -277,7 +277,7 @@ export default {
   "part.detentCatch": "Nottolino di arresto (tiene il carrello al suo posto; nell’originale si solleva a mano prima di spostarlo)",
   "part.slideShoe": "Pattino del carrello",
   "part.rearBearings": "Supporti posteriori degli alberi dei tamburi",
-  "part.beamFront": "Traversa anteriore (fori di arresto del carrello)",
+  "part.beamFront": "Traversa anteriore (il carrello vi scorre sopra; tacche per il suo nottolino di arresto)",
   "part.beamMiddle": "Traversa centrale (il carrello vi scorre sopra)",
   "part.beamBack": "Traversa posteriore",
   "part.registerBar": "Barra anteriore del totalizzatore",

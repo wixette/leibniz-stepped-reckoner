@@ -277,7 +277,7 @@ export default {
   "part.detentCatch": "止め爪（キャリッジを位置に保つ。実物では、動かす前に手で外す）",
   "part.slideShoe": "キャリッジの滑り金",
   "part.rearBearings": "段付き歯車の軸の後ろ軸受け",
-  "part.beamFront": "前の梁（キャリッジの止め穴）",
+  "part.beamFront": "前の梁（キャリッジがその上を滑る。止め爪が入るくぼみ）",
   "part.beamMiddle": "中央の梁（キャリッジがその上を滑る）",
   "part.beamBack": "後ろの梁",
   "part.registerBar": "結果部の前のバー",

@@ -277,7 +277,7 @@ export default {
   "part.detentCatch": "Cliquet d'arrêt (tient le chariot à sa place ; sur l’original, levé à la main avant de déplacer le chariot)",
   "part.slideShoe": "Patin du chariot",
   "part.rearBearings": "Paliers arrière des arbres des cylindres",
-  "part.beamFront": "Traverse avant (trous d'arrêt du chariot)",
+  "part.beamFront": "Traverse avant (le chariot y glisse ; crans pour son cliquet d'arrêt)",
   "part.beamMiddle": "Traverse du milieu (le chariot y glisse)",
   "part.beamBack": "Traverse arrière",
   "part.registerBar": "Barre avant du totalisateur",

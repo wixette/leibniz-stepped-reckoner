@@ -277,7 +277,7 @@ export default {
   "part.detentCatch": "멈춤 걸쇠(캐리지를 제자리에 고정. 원본에서는 옮기기 전에 손으로 들어 올림)",
   "part.slideShoe": "캐리지의 미끄럼 슈",
   "part.rearBearings": "계단 바퀴 축의 뒤 베어링",
-  "part.beamFront": "앞 들보(캐리지의 멈춤 구멍)",
+  "part.beamFront": "앞 들보(캐리지가 그 위를 미끄러짐. 멈춤 걸쇠가 들어가는 홈)",
   "part.beamMiddle": "가운데 들보(캐리지가 그 위를 미끄러짐)",
   "part.beamBack": "뒤 들보",
   "part.registerBar": "결과부의 앞 막대",

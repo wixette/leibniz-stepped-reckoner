@@ -75,7 +75,7 @@ A CDN must count the query string in its cache key (most do unless told not to).
 | [research/REPORT.md](../research/REPORT.md) | Feasibility, confidence and the value check against existing resources |
 | [design/modeling-and-animation-plan.md](../design/modelling-and-animation-plan.md) | How the model is built and animated, with milestones M0–M4 and their acceptance tests |
 | [design/m0-notes.md](../design/m0-notes.md) … [m3-notes.md](../design/m3-notes.md) | What each milestone built and found, as recorded at the time |
-| [design/m4-notes.md](../design/m4-notes.md), [v1.3-notes.md](../design/v1.3-notes.md) | The releases after the milestones: 1.1.0, the dimensions from Lehmann's drawings; 1.3.0, the original after Badur's measurements, and the page around it (its discussions and decisions, as logged) |
+| [design/m4-notes.md](../design/m4-notes.md), [v1.3-notes.md](../design/v1.3-notes.md), [v1.4-notes.md](../design/v1.4-notes.md) | The releases after the milestones: 1.1.0, the dimensions from Lehmann's drawings; 1.3.0, the original after Badur's measurements, and the page around it; 1.4.0, Badur's base frame, lead screw and carriage detent (their discussions and decisions, as logged) |
 | [design/decisions/0001-carry-interpretation.md](../design/decisions/0001-carry-interpretation.md) | Which carry behavior the simulator shows, and why |
 | [design/decisions/0002-original-replica-and-releases.md](../design/decisions/0002-original-replica-and-releases.md) | Which machine the model follows, the original or Lehmann's replica, part by part, and what each release changes |
 | [params/machine.json](../params/machine.json) | Every dimension and angle, with its source and confidence |

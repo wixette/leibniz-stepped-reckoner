@@ -277,7 +277,7 @@ export default {
   "part.detentCatch": "Trava (segura o carro na sua posição; no original, levantada à mão antes de deslocá-lo)",
   "part.slideShoe": "Patim do carro",
   "part.rearBearings": "Mancais traseiros dos eixos dos tambores",
-  "part.beamFront": "Viga dianteira (furos de trava do carro)",
+  "part.beamFront": "Viga dianteira (o carro desliza sobre ela; entalhes para a sua trava)",
   "part.beamMiddle": "Viga do meio (o carro desliza sobre ela)",
   "part.beamBack": "Viga traseira",
   "part.registerBar": "Barra dianteira do registrador",

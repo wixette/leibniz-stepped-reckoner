@@ -277,7 +277,7 @@ export default {
   "part.detentCatch": "定位卡銷（把滑架固定在位；原機上移動滑架前要用手抬起）",
   "part.slideShoe": "滑架滑靴",
   "part.rearBearings": "步進輪軸的後軸承",
-  "part.beamFront": "前橫梁（滑架的定位孔）",
+  "part.beamFront": "前橫梁（滑架在其上滑動；定位卡銷落入的凹槽）",
   "part.beamMiddle": "中橫梁（滑架在其上滑動）",
   "part.beamBack": "後橫梁",
   "part.registerBar": "結果部的前橫條",
