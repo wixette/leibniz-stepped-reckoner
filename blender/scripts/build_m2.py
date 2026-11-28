@@ -44,6 +44,44 @@ DEFAULT_OUT = os.path.join(params.MACHINE_DIR, "assets", "m2-full-machine.glb")
 
 
 
+def lead_screw_with_groove(mb, length, r, w, d, lead, mat, per_turn=16):
+    """A screw along x from 0 to length, radius r, with one helical groove w wide (along x) and
+    d deep, lead per turn: four helical surfaces (the land, the groove's bottom and its two
+    walls) and the two end faces. The groove's middle passes x = 0 at angle 0."""
+    mi = mb._mat(mat)
+    t0, t1 = -1.0, length / lead
+    n = int(math.ceil((t1 - t0) * per_turn))
+    rb = r - d
+
+    def pt(x, th, rr):
+        return (min(max(x, 0.0), length), rr * math.cos(th), rr * math.sin(th))
+
+    def quad(q, out):
+        a_, b_, c_ = q[0], q[1], q[2]
+        ab = [b_[k] - a_[k] for k in range(3)]
+        ac = [c_[k] - a_[k] for k in range(3)]
+        nrm = (ab[1] * ac[2] - ab[2] * ac[1], ab[2] * ac[0] - ab[0] * ac[2], ab[0] * ac[1] - ab[1] * ac[0])
+        if nrm[0] * out[0] + nrm[1] * out[1] + nrm[2] * out[2] < 0:
+            q = q[::-1]
+        base = len(mb.verts)
+        mb.verts.extend(q)
+        mb._add([base, base + 1, base + 2, base + 3], mi, True)
+
+    for i in range(n):
+        ta, tb = t0 + i / per_turn, t0 + (i + 1) / per_turn
+        tha, thb = 2 * math.pi * ta, 2 * math.pi * tb
+        ca, cb = lead * ta, lead * tb                     # the groove's middle at each angle
+        thm = (tha + thb) / 2.0
+        radial = (0.0, math.cos(thm), math.sin(thm))
+        quad([pt(ca + w / 2, tha, r), pt(ca + lead - w / 2, tha, r), pt(cb + lead - w / 2, thb, r), pt(cb + w / 2, thb, r)], radial)
+        quad([pt(ca - w / 2, tha, rb), pt(ca + w / 2, tha, rb), pt(cb + w / 2, thb, rb), pt(cb - w / 2, thb, rb)], radial)
+        quad([pt(ca - w / 2, tha, rb), pt(ca - w / 2, tha, r), pt(cb - w / 2, thb, r), pt(cb - w / 2, thb, rb)], (1.0, 0.0, 0.0))
+        quad([pt(ca + w / 2, tha, rb), pt(ca + w / 2, tha, r), pt(cb + w / 2, thb, r), pt(cb + w / 2, thb, rb)], (-1.0, 0.0, 0.0))
+    ring = [(r * math.cos(2 * math.pi * k / 24), r * math.sin(2 * math.pi * k / 24)) for k in range(24)]
+    mb.polygon([(0.0, y, z) for y, z in ring], (-1, 0, 0), mat)
+    mb.polygon([(length, y, z) for y, z in ring], (1, 0, 0), mat)
+
+
 def pit_half_width(s_, r, e):
     """The detent pit's half width at depth s_ behind the rail's face (mm): a half circle r
     centred on the face, its edges rounded into the face by e."""
@@ -555,17 +593,11 @@ def build(p):
     bl.set_anchors(base, "table", [(0.0, 0.0, table_z)])
     bl.parent(base, root)
 
-    # lead screw with a helical ridge, and the end crank (left end, outside the case wall)
+    # the lead screw with its cut groove (K. Badur: a filed thread groove), and the end crank (left
+    # end, outside the left wall)
     sx0, sx1 = base_x0 + fr["screw_start_dx"], in_x1 + sw
     mb = MeshBuilder()
-    mb.prism(geom.circle(ls["radius"], 24), "YZ", 0.0, sx1 - sx0, "steel", smooth=True)
-    turns = (sx1 - sx0) / pitch_x
-    nseg = int(turns * 16)
-    for i in range(nseg):
-        a = 2 * math.pi * i / 16
-        xa = (sx1 - sx0) * i / nseg
-        cy, cz = (ls["radius"] + 0.6) * math.cos(a), (ls["radius"] + 0.6) * math.sin(a)
-        mb.prism(geom.rect(cy - 0.9, cz - 0.9, cy + 0.9, cz + 0.9), "YZ", xa, xa + (sx1 - sx0) / nseg + 0.3, "steel")
+    lead_screw_with_groove(mb, sx1 - sx0, ls["radius"], ls["groove"]["width"], ls["groove"]["depth"], pitch_x, "steel")
     # the end crank (the owner's drawing, design/drawings/end-crank-details.svg, at the Magna Rota
     # drawing's scale, so its handle is the main crank's): a hub on the screw's end, a bent bar
     # down and outward to a rounded cap, and the turned oak handle with its gold ball pointing away
@@ -642,60 +674,64 @@ def build(p):
     bx0, bx1 = X[C - 1] - dr["bearing_bar_x_margins"][0], X[0] + dr["bearing_bar_x_margins"][1]
     czones, z_bar = [], len(mb.verts)       # the hover's names for the carriage's own parts
     mb.prism(geom.rect(bx0, bz0, bx1, bz1), "XZ", by0, by1, "brass_satin")
-    # its foot riding on the frame's beam a, with a guide shoe behind the beam at each end and the
-    # detent catch at the left (a node of its own, below); within the side walls (its right end
-    # stops before the right wall, which the bar itself passes over)
+    # the carriage rides on the base frame's front and middle rails (K. Badur's base frame, Pos. 1;
+    # design/v1.4-notes.md): a floor plate from the bearing bar back over the front rail, a foot
+    # over the middle rail, each with a shoe at both ends (a pad resting on the rail, lips in
+    # front of it and behind it), and an end bar at each end of the carriage joining them to the
+    # rear bearings' bar, as the original's carriage frame is a rectangle
     cr_ = fr["carriage_runners"]
-    lfa = fr["lower_frame"]["a"]
+    lfa, lfb = fr["lower_frame"]["a"], fr["lower_frame"]["b"]
     (fy0_, fy1_), (fz0_, fz1_) = cr_["front"]["y"], cr_["front"]["z"]
     rx_ = X[0] + cr_["right_x_dx"]
-    mb.prism(geom.rect(bx0, fz0_, rx_, bz0), "XZ", by0, by1, "brass_satin")
-    mb.prism(geom.rect(bx0, fy0_, rx_, fy1_), "XY", fz0_, fz1_, "brass_satin")
+    ci0, ci1 = cx0 + 0.3, cx1 - 0.3                  # 0.3 inside the carriage's ends (the cover's faces)
+    mb.prism(geom.rect(ci0, fy0_, rx_, fy1_), "XY", fz0_, fz1_, "brass_satin")
     bar_zone = bl.zone(mb, z_bar, "part.bearingBar")
     (sy0_, sy1_), (sz0_, sz1_) = cr_["shoe_y"], cr_["shoe_z"]
-    # the shoes: pads resting on the beam (the foot itself stands 1 mm clear), lips behind it
-    pz_ = lfa["z"][1] + cr_["pad_gap"]
-    for sx_ in (bx0 + 2.0, rx_ - 10.0):
-        z0_ = len(mb.verts)
-        mb.prism(geom.rect(sx_, sy0_, sx_ + 8.0, sy1_), "XY", sz0_, sz1_, "brass_satin")
-        mb.prism(geom.rect(sx_, lfa["y"][0] - 1.5, sx_ + 8.0, sy0_ + 0.01), "XY", pz_, fz0_ + 0.01, "brass_satin")
-        mb.prism(geom.rect(sx_, lfa["y"][0] - 1.5, sx_ + 8.0, lfa["y"][0] - 0.3), "XY", sz0_, pz_ + 0.01, "brass_satin")   # a lip in front of the beam too
-        czones.append(bl.zone(mb, z0_, "part.slideShoe"))
-    # the hanger the catch's stand is fixed to (its root): a post in front of the rail, down from
-    # an arm that runs at the foot's height to the foot, at the bearing bar's left end
-    spr_ = cat_["spring"]
-    cx_ = catch_x                                     # the catch's head, over its pit (offset 0)
-    pvx = cx_ + spr_["root_dx"]
-    pvy = spr_["y_front"] + spr_["thickness"] / 2.0
-    hy1 = lfa["y"][0] - 0.3                           # 0.3 in front of the rail's face
-    mb.prism(geom.rect(pvx + 0.3, spr_["y_front"], pvx + 5.0, hy1), "XY", spr_["z"][0], fz1_, "brass_satin")
-    mb.prism(geom.rect(pvx + 0.3, fy0_, bx0 + 3.0, hy1), "XY", fz0_, fz1_, "brass_satin")
-    # its rear bearings stand on a bar riding on the frame's beam b
+    gap_ = cr_["pad_gap"]
+
+    def shoes(rail, x_list, z_foot, behind=None):
+        # a pad on the rail's top under the foot, a lip in front of the rail and one behind it
+        (r0, r1), rt = rail["y"], rail["z"][1]
+        b0, b1 = behind if behind else (r1 + 0.5, r1 + 2.0)
+        for sx_ in x_list:
+            z0_ = len(mb.verts)
+            mb.prism(geom.rect(sx_, r0 - 1.5, sx_ + 8.0, b1), "XY", rt + gap_, z_foot + 0.01, "brass_satin")
+            mb.prism(geom.rect(sx_, r0 - 1.5, sx_ + 8.0, r0 - 0.3), "XY", sz0_, rt + gap_ + 0.01, "brass_satin")
+            mb.prism(geom.rect(sx_, b0, sx_ + 8.0, b1), "XY", sz0_, rt + gap_ + 0.01, "brass_satin")
+            czones.append(bl.zone(mb, z0_, "part.slideShoe"))
+    shoes(lfa, (bx0 + 2.0, rx_ - 10.0), fz0_, (sy0_, sy1_))
+    (my0_, my1_), (mz0_, mz1_) = cr_["middle"]["y"], cr_["middle"]["z"]
+    mb.prism(geom.rect(ci0, my0_, ci1, my1_), "XY", mz0_, mz1_, "brass_satin")
+    shoes(lfb, (cx0 + 6.0, cx1 - 14.0), mz0_, (lfb["y"][1] + 0.3, my1_))
+    # its rear bearings stand on a bar at the back, carried by the end bars
     (ry0_, ry1_), (rz0_, rz1_) = cr_["rear"]["y"], cr_["rear"]["z"]
     z0_ = len(mb.verts)
     mb.prism(geom.rect(cx0, ry0_, cx1, ry1_), "XY", rz0_, rz1_, "brass_satin")
     rear_zone = bl.zone(mb, z0_, "part.rearBearings")
-    # its two shoes on beam b, like the front ones: a pad on the beam, a lip behind it
-    lfb = fr["lower_frame"]["b"]
-    pzb = lfb["z"][1] + cr_["pad_gap"]
-    ly0_, ly1_ = cr_["rear_shoe_lip_y"]
-    for sx_ in (cx0 + 2.0, cx1 - 10.0):
-        z0_ = len(mb.verts)
-        mb.prism(geom.rect(sx_, lfb["y"][0] - 1.5, sx_ + 8.0, ly1_), "XY", pzb, rz0_ + 0.01, "brass_satin")
-        mb.prism(geom.rect(sx_, lfb["y"][0] - 1.5, sx_ + 8.0, lfb["y"][0] - 0.3), "XY", lfb["z"][1] - 6.0, pzb + 0.01, "brass_satin")   # and in front of it
-        mb.prism(geom.rect(sx_, ly0_, sx_ + 8.0, ly1_), "XY", lfb["z"][1] - 6.0, pzb + 0.01, "brass_satin")
-        czones.append(bl.zone(mb, z0_, "part.slideShoe"))
-    # nut around the lead screw (four bars leave a square hole), between the units drum's and
-    # the tens drum's setting heads
-    nx0, nx1, ny, nz, hole = X[0] - 30.0, X[0] - 6.0, ls["y"], ls["z"], ls["radius"] + 2.0
+    ew_, (ez0_, ez1_) = cr_["end_bar"]["width"], cr_["end_bar"]["z"]
+    for ex0_ in (ci0, ci1 - ew_):
+        mb.prism(geom.rect(ex0_, fy0_, ex0_ + ew_, ry1_), "XY", ez0_, ez1_, "brass_satin")
+        mb.prism(geom.rect(ex0_, ry0_, ex0_ + ew_, ry1_), "XY", rz0_, ez0_ + 0.01, "brass_satin")
+    # the post the catch's stand is fixed to (its root), down from the floor plate in front of
+    # the rail
+    spr_ = cat_["spring"]
+    cx_ = catch_x                                     # the catch's head, over its pit (offset 0)
+    pvx = cx_ + spr_["root_dx"]
+    rail_top = lfa["z"][1]
+    sy_front = lfa["y"][0] - spr_["gap"] - spr_["thickness"]   # the stand's front face
+    pvy = sy_front + spr_["thickness"] / 2.0
+    mb.prism(geom.rect(pvx + 0.3, sy_front, pvx + 5.0, lfa["y"][0] - 0.3), "XY", rail_top - spr_["z_below_top"][0], fz0_ + 0.01, "brass_satin")
+    # the nut around the lead screw (four bars leave a square hole), between the units drum's
+    # and the tens drum's setting heads, where nothing of the carriage comes low; a bracket from
+    # the floor plate's back edge carries it
+    nx0, nx1, ny, nz, hole = X[0] - 27.0, X[0] - 13.0, ls["y"], ls["z"], ls["radius"] + 0.2
     z_nut = len(mb.verts)
-    for r0 in (geom.rect(ny - hole - 4, nz - hole - 4, ny + hole + 4, nz - hole),
-               geom.rect(ny - hole - 4, nz + hole, ny + hole + 4, nz + hole + 4),
-               geom.rect(ny - hole - 4, nz - hole, ny - hole, nz + hole),
-               geom.rect(ny + hole, nz - hole, ny + hole + 4, nz + hole)):
+    for r0 in (geom.rect(ny - hole - 3, nz - hole - 3, ny + hole + 3, nz - hole),
+               geom.rect(ny - hole - 3, nz + hole, ny + hole + 3, nz + hole + 3),
+               geom.rect(ny - hole - 3, nz - hole, ny - hole, nz + hole),
+               geom.rect(ny + hole, nz - hole, ny + hole + 3, nz + hole)):
         mb.prism(r0, "YZ", nx0, nx1, "brass_satin")
-    # (the nut hangs from the foot over beam a)
-    mb.prism(geom.rect(nx0, fy1_ - 0.5, nx1, ny - hole - 4 + 0.5), "XY", fz0_, fz1_, "brass_satin")
+    mb.prism(geom.rect(nx0, fy1_ - 0.5, nx1, ny - hole - 3 + 0.5), "XY", nz + hole + 0.5, fz1_, "brass_satin")
     czones.append(bl.zone(mb, z_nut, "part.leadNut"))
     x_pl = p.v(G + "setting.rack_pitch_line_x")
     pm_ = p.v(G + "setting.pinion_module")
@@ -740,7 +776,8 @@ def build(p):
     f_ = lfa["y"][0]                                   # the rail's front face
     head_y = f_ - head_u(0.0) - pvy                   # the head's centre, from the root
     hx = -spr_["root_dx"]                             # the head, from the root
-    t_, (sz0c, sz1c) = spr_["thickness"], spr_["z"]
+    below = lambda pair: (rail_top - pair[0], rail_top - pair[1])   # heights given below the rail's top
+    t_, (sz0c, sz1c) = spr_["thickness"], below(spr_["z_below_top"])
     ys0, ys1 = -t_ / 2.0, t_ / 2.0                    # the stand's front and back faces
     # the stand: straight from the root, then slanting to the triangle tip
     sx_s, sx_t = hx + spr_["straight_dx"] - 0.0, hx + spr_["slant_dx"]
@@ -753,10 +790,10 @@ def build(p):
     tip3 = [(sx_t, ys0, zm - th), (sx_t, ys0, zm + th), (sx_t - tl * math.cos(bend), ys0 - tl * math.sin(bend), zm)]
     mb.plate(tip3, (math.sin(bend), math.cos(bend), 0.0), t_, "steel")
     # the gold J, at the rail's top
-    jw, (jz0, jz1) = cat_["j"]["width"], cat_["j"]["z"]
+    jw, (jz0, jz1) = cat_["j"]["width"], below(cat_["j"]["z_below_top"])
     xb1 = hx + jw / 2.0                              # the bar's right edge (toward the carriage)
     ro_ = cat_["j"]["hook_outer"]
-    yj = cat_["j"]["front_y"] + ro_ - pvy            # the hook's centre line
+    yj = f_ - cat_["j"]["reach"] + ro_ - pvy         # the hook's centre line
     ri_ = ro_ - jw
     hc = xb1 - ro_
     j_out = [(xb1 - jw, ys0 - 1.6), (xb1, ys0 - 1.6), (xb1, yj)]
@@ -765,11 +802,11 @@ def build(p):
     mb.prism_holes(j_out, [], "XY", jz0, jz1, "brass_polished")
     # its bar on over the stand to the head, a small round knob in the pit
     mb.prism(geom.rect(hx - jw / 2.0, head_y, hx + jw / 2.0, ys0 - 1.6 + 0.01), "XY", jz0, jz1, "brass_polished")
-    hz0, hz1 = cat_["head_z"]
+    hz0, hz1 = below(cat_["head_z_below_top"])
     mb.prism([(hx + u, head_y + w) for u, w in geom.circle(hr_, 12)], "XY", hz0, hz1, "brass_polished", smooth=True)
     # the post down the stand's front from the J, and the block on the stand
     pw, pdp = cat_["post"]["width"], cat_["post"]["depth"]
-    bw, (bz0c, bz1c) = cat_["block"]["width"], cat_["block"]["z"]
+    bw, (bz0c, bz1c) = cat_["block"]["width"], below(cat_["block"]["z_below_top"])
     mb.prism(geom.rect(xb1 - pw, ys0 - pdp, xb1, ys0 + 0.01), "XY", bz0c, jz0 + 0.01, "brass_polished")
     mb.prism(geom.rect(xb1 - bw, ys0 - pdp, xb1, ys0 + 0.01), "XY", bz0c, bz1c, "brass_polished")
     catch = mb.build("pm.carriage_catch", col, (pvx, pvy, 0.0))

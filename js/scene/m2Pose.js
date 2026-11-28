@@ -50,6 +50,12 @@ export function m2NodeNames(R, C) {
 export const CRANK_FORWARD = { "pm.main_crank": -1, "frame.lead_screw": 1 };
 
 const CATCH = machine.geometry.m2.frame.v.carriage_runners.catch;
+/**
+ * How far behind the stand's root (its plate's middle) the catch's head stands, toward the rail,
+ * with the head u0 forward of the rail's face (mm).
+ * @param {number} u0
+ */
+const CATCH_H = (u0) => CATCH.spring.gap + CATCH.spring.thickness / 2 - u0;
 const PITCH = machine.layout.digit_pitch.v;
 
 /**
@@ -113,7 +119,7 @@ export function catchAngle(m) {
   // (the root is on the spring plate, in front of the head)
   const L = CATCH.spring.root_dx;
   const u0 = catchHeadU(0);
-  const h = machine.geometry.m2.frame.v.lower_frame.a.y[0] - u0 - (CATCH.spring.y_front + CATCH.spring.thickness / 2);
+  const h = CATCH_H(u0);
   // the head's place along the rail from the pit's middle: the carriage leftward of its place
   // as the offset grows; the root is to the head's right (+x)
   const along = -(m.carriagePos - Math.round(m.carriagePos)) * PITCH;
@@ -136,7 +142,7 @@ export function catchAngle(m) {
  */
 export function catchDeflection(m) {
   const a = catchAngle(m);
-  const h = machine.geometry.m2.frame.v.lower_frame.a.y[0] - catchHeadU(0) - (CATCH.spring.y_front + CATCH.spring.thickness / 2);
+  const h = CATCH_H(catchHeadU(0));
   return CATCH.spring.root_dx * Math.sin(a) + h * (1 - Math.cos(a));
 }
 
