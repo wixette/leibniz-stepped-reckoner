@@ -1,6 +1,7 @@
 // Maps a Machine pose to motion values per glTF node (Blender names) for the M2 model.
-// Shared by the main page, page 03, the acceptance tests and the pose exporter for the Blender sweep.
+// Shared by the main page, the acceptance tests and the pose exporter for the Blender sweep.
 
+import machine from "../../params/machine.json" with { type: "json" };
 import * as THREE from "three";
 /** @import { Machine } from "../sim/machine.js" */
 import { gltfName, Rig } from "./rig.js";
@@ -26,6 +27,7 @@ export function m2NodeNames(R, C) {
     "pm.counter_k": "pm.counter_k",
     "pm.counter_l": "pm.counter_l",
     "pm.counter_n": "pm.counter_n",
+    "pm.carriage_catch": "pm.carriage_catch",
   };
   for (let k = 0; k < R; k++) {
     for (const base of ["pi.sum_wheel", "pi.carry_store", "pi.five_horn_s", "pi.five_horn_sr"]) names[`${base}.${k}`] = `${base}.${k}`;
@@ -46,6 +48,20 @@ export function m2NodeNames(R, C) {
  * @type {Record<string, 1 | -1>}
  */
 export const CRANK_FORWARD = { "pm.main_crank": -1, "frame.lead_screw": 1 };
+
+/** How far the carriage's detent catch turns to lift its pin clear of the front rail (deg). */
+const CATCH_LIFT_DEG = machine.geometry.m2.frame.v.carriage_runners.catch.lift_deg;
+
+/**
+ * How far the detent catch is lifted (0..1): as the animator lifts it, and fully while the
+ * carriage stands between two places, where its pin would be over the rail, not in a groove.
+ * @param {Machine} m
+ * @returns {number}
+ */
+export function catchLift(m) {
+  const between = Math.abs(m.carriagePos - Math.round(m.carriagePos)) > 1e-9;
+  return between ? 1 : Math.min(1, Math.max(0, m.catchLift));
+}
 
 /**
  * @param {Machine} m
@@ -77,6 +93,7 @@ export function m2NodeValues(m) {
     "pm.counter_k": (2 / 3) * p.counterRing,
     "pm.counter_l": p.counterRing,
     "pm.counter_n": ring,
+    "pm.carriage_catch": CATCH_LIFT_DEG * catchLift(m),
   };
   p.register.forEach((r, k) => {
     out[`pi.sum_wheel.${k}`] = -r.wheel;

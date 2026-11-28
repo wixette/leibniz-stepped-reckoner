@@ -577,7 +577,7 @@ export function runM3Checks(root) {
         if (got !== k) bad.push(`${o.name}: the centre of ${k} reads ${got}`);
       });
     });
-    for (const k of ["part.counterStop", "part.pentagon", "part.einzahn", "part.fingerLever", "part.detentCatch", "part.beamFront"]) {
+    for (const k of ["part.counterStop", "part.pentagon", "part.einzahn", "part.fingerLever", "part.slideShoe", "part.beamFront"]) {
       let found = false;
       root.traverse((o) => (found ||= (/** @type {{ zone_keys?: string }} */ (o.userData)).zone_keys?.split(",").includes(k) ?? false));
       if (!found) bad.push(`no zone ${k}`);

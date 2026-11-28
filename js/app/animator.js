@@ -11,6 +11,8 @@ import { applyAction } from "../teach/player.js";
 
 const DEG_PER_SEC = 300;
 const PLACES_PER_SEC = 1.2;
+/** How long lifting the carriage's detent catch takes, before a shift, and lowering it after (s). */
+const CATCH_SECONDS = 0.15;
 /** The slow-motion switch's speed, a fraction of the normal one (about 5 s a crank turn). */
 export const SLOW_SPEED = 0.25;
 
@@ -78,6 +80,7 @@ export class Animator {
     this.seq = null;
     this.cur = null;
     this.onDone = null;
+    this.machine.catchLift = 0; // a shift cut short: the catch drops (a carriage between places is drawn lifted)
   }
 
   /**
@@ -113,11 +116,21 @@ export class Animator {
     const m = this.machine;
     let done = false;
     if ("shift" in cur) {
-      const d = cur.shift - m.carriagePos;
-      const s = PLACES_PER_SEC * dt;
-      const next = Math.abs(d) <= s ? cur.shift : m.carriagePos + Math.sign(d) * s;
-      if (!m.setCarriagePos(next)) done = true;
-      done ||= next === cur.shift;
+      // lift the detent catch out of its groove, move the carriage, drop the catch again
+      const lift = dt / CATCH_SECONDS;
+      if (m.carriagePos !== cur.shift && m.catchLift < 1) m.catchLift = Math.min(1, m.catchLift + lift);
+      else if (m.carriagePos !== cur.shift) {
+        const d = cur.shift - m.carriagePos;
+        const s = PLACES_PER_SEC * dt;
+        const next = Math.abs(d) <= s ? cur.shift : m.carriagePos + Math.sign(d) * s;
+        if (!m.setCarriagePos(next)) {
+          done = true;
+          m.catchLift = 0;
+        }
+      } else {
+        m.catchLift = Math.max(0, m.catchLift - lift);
+        done = m.catchLift === 0;
+      }
     } else {
       const target = cur.theta;
       /** @type {1 | -1} */

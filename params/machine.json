@@ -967,8 +967,8 @@
                 20.0
               ]
             },
-            "detent_hole_radius": 2.2,
-            "detent_hole_depth": 2.5,
+            "detent_groove_width": 4.4,
+            "detent_groove_depth": 2.5,
             "side_wall_back_y": 100.0,
             "side_wall_back_z": 30.0,
             "feet_y": [
@@ -1012,12 +1012,24 @@
               22.3
             ],
             "catch_dx": 20.0,
-            "knob_radius": 5.0,
-            "knob_y": [
-              -100.6,
-              -97.6
-            ],
-            "knob_z": 12.0
+            "catch": {
+              "pin_radius": 1.2,
+              "pin_bottom_z": 17.5,
+              "lever_y": [
+                -96.0,
+                -90.5
+              ],
+              "lever_z": [
+                23.0,
+                25.5
+              ],
+              "pivot_dx": 22.0,
+              "end_dx": -14.0,
+              "lug_y": 1.5,
+              "knob_radius": 2.2,
+              "knob_top_z": 31.0,
+              "lift_deg": 8.0
+            }
           },
           "rear_beam_z": [
             58.0,
@@ -1030,7 +1042,7 @@
         },
         "unit": "mm",
         "conf": "design",
-        "src": "Current (v1.3.0): no base plate; the lower frame is beams a, b, c between the side walls, which carry the feet (lower_frame), and the carriage rides on a and b (carriage_runners). History: base plate = the lower frame (frame_x), 629 long. The side walls are low (z <= side_wall_low_z) in front of side_wall_y_split, where the carriage's counter section passes over them (its underside is at z 30), and rise to side_wall_top_z behind it, under the register cover's skirt; the replica's walls likewise have a low front part and a tall rear block (NL183/465 p. 95). The lead screw runs in a notch in each wall's low part (the replica's screw passes through the walls). It starts screw_start_dx left of the base, outside the case's left wall, where the end crank is (photos). The end crank's arm sits 0.5 mm outside the case's left wall (screw_start_dx follows the 755 mm case). Since 0.6.0 the base starts at y -104, behind the carriage's large gears, which hang below it. side_wall_low_z lowered from 26 to 24.5 in 0.7.0, under the carriage frame's bearing bar (z 25.375). 2026-11-26 (owner; TSD (02), TSD (13) of the replica, the photo of the original): the frame as beams: the lower frame of two side beams (under the side walls, the feet under their ends), a middle and a back beam (lower_beam_width wide, 4 high; the carriage slides on the middle one); a front beam just in front of the lead screw between the side walls, over the carriage's floor (front_beam: 0.6 clear of the counter's star wheel K, 0.5 of the setting racks, 0.7 of the floor); the rear wall slimmed to a beam carrying the result and intermediate shafts' rear bearings (rear_beam_z), with a post at each end up to the window plate. 2026-11-26, after Lehmann's sheets (NL183/465 p. 94 'Rahmen Unterteil', 104, 108; p. 102 the slide's angles; p. 105, 107, 113 the carriage's frame bars) and TSD (02), (10), (13): the lower frame is three upright steel beams between the side walls, no plate: a at the front (here just in front of the lead screw; 8 detent holes 36.5 apart in its top, 'Rastbohrungen 8x'), b right behind the carriage, c under the pentagons; the side walls carry the feet. The carriage rides on a and b on four shoes (owner: not on long bars, which would drag): its front bar (the drive row's bearing bar) has a foot 1.3 over a, a shoe at each end resting on a (pad_gap) with a lip behind it, and the detent catch with its knob at the left; its rear bearings stand on a bar 1.3 over b with a shoe at each end the same way (carriage_runners). Our beams are lower than Lehmann's 25 (a 19, b 13.7) to pass under the drums, and a stands where our carriage leaves room (lower_frame)."
+        "src": "Current (v1.3.0): no base plate; the lower frame is beams a, b, c between the side walls, which carry the feet (lower_frame), and the carriage rides on a and b (carriage_runners). History: base plate = the lower frame (frame_x), 629 long. The side walls are low (z <= side_wall_low_z) in front of side_wall_y_split, where the carriage's counter section passes over them (its underside is at z 30), and rise to side_wall_top_z behind it, under the register cover's skirt; the replica's walls likewise have a low front part and a tall rear block (NL183/465 p. 95). The lead screw runs in a notch in each wall's low part (the replica's screw passes through the walls). It starts screw_start_dx left of the base, outside the case's left wall, where the end crank is (photos). The end crank's arm sits 0.5 mm outside the case's left wall (screw_start_dx follows the 755 mm case). Since 0.6.0 the base starts at y -104, behind the carriage's large gears, which hang below it. side_wall_low_z lowered from 26 to 24.5 in 0.7.0, under the carriage frame's bearing bar (z 25.375). 2026-11-26 (owner; TSD (02), TSD (13) of the replica, the photo of the original): the frame as beams: the lower frame of two side beams (under the side walls, the feet under their ends), a middle and a back beam (lower_beam_width wide, 4 high; the carriage slides on the middle one); a front beam just in front of the lead screw between the side walls, over the carriage's floor (front_beam: 0.6 clear of the counter's star wheel K, 0.5 of the setting racks, 0.7 of the floor); the rear wall slimmed to a beam carrying the result and intermediate shafts' rear bearings (rear_beam_z), with a post at each end up to the window plate. 2026-11-26, after Lehmann's sheets (NL183/465 p. 94 'Rahmen Unterteil', 104, 108; p. 102 the slide's angles; p. 105, 107, 113 the carriage's frame bars) and TSD (02), (10), (13): the lower frame is three upright steel beams between the side walls, no plate: a at the front (here just in front of the lead screw; 8 detent holes 36.5 apart in its top, 'Rastbohrungen 8x', since 2026-11-28 grooves across it, as K. Badur describes the original's ('8 Rastnuten')), b right behind the carriage, c under the pentagons; the side walls carry the feet. The carriage rides on a and b on four shoes (owner: not on long bars, which would drag): its front bar (the drive row's bearing bar) has a foot 1.3 over a, a shoe at each end resting on a (pad_gap) with a lip behind it, and the detent catch at the left (catch, 2026-11-28 after K. Badur: a sprung lever on the carriage's foot whose pin drops into one of 8 grooves across a's top, 36.5 apart, lifted by hand before a shift; it pivots about a front-back axis pivot_dx right of its pin, the free end with a knob end_dx from the pin, toward the carriage's left end, so the pin rises almost straight out of its groove; lift_deg lifts the pin about 3 mm, 0.8 clear of the rail); its rear bearings stand on a bar 1.3 over b with a shoe at each end the same way (carriage_runners). Our beams are lower than Lehmann's 25 (a 19, b 13.7) to pass under the drums, and a stands where our carriage leaves room (lower_frame)."
       },
       "casing": {
         "v": {
